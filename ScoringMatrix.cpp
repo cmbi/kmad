@@ -1,14 +1,12 @@
 //ScoringMatrix class implementation
+#include "ScoringMatrix.h"
+#include "SubstitutionMatrix.h"
+#include "Profile.h"
+#include "findVal.h"
 #include <iostream>
 #include <string>
 #include <vector>
 #include <sstream>
-#include "ScoringMatrix.h"
-#include "SubstitutionMatrix.h"
-#include "Profile.h"
-#include "UsefulStuff.h"
-using namespace std;
-extern UsefulStuff util;
 /*constructor
 	arguments:
 		s1size - length of the 1st sequence
@@ -16,14 +14,15 @@ extern UsefulStuff util;
 		pen - gap opening penalty
 */
 //constructor
-ScoringMatrix::ScoringMatrix(int s1size,int s2size, int pen){
-	iLength = s1size;
-	jLength = s2size;	
-	gapOpening = double(pen);
-	gapExtension = double(-1);
-	gapOpeningHorizontal = gapOpening;
-	gapExtensionHorizontal = gapExtension;
-	vector<double> row(jLength+1,0);
+ScoringMatrix::ScoringMatrix(int s1size,int s2size, int pen)
+:	iLength(s1size),
+	jLength(s2size),	
+	gapOpening(double(pen)),
+	gapExtension(double(-1)),
+	gapOpeningHorizontal(gapOpening),
+	gapExtensionHorizontal(gapExtension)
+{
+	std::vector<double> row(jLength+1,0);
 	matrixV.assign(iLength+1, row);
 	matrixG.assign(iLength+1, row);
 	matrixH.assign(iLength+1, row);
@@ -32,22 +31,33 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, int pen){
 ScoringMatrix::~ScoringMatrix(){
 //	cout <<  "DESTROYING SCORING MATRIX\n";
 }
-ScoringMatrix::ScoringMatrix(ScoringMatrix& that){
-	iLength = that.iLength;		
-	jLength = that.jLength;
-	gapOpening = that.gapOpening;
-	gapExtension = that.gapExtension;
-	gapOpeningHorizontal = gapOpening;
-	gapExtensionHorizontal = gapExtension;
-	matrixV = that.matrixV;
-	matrixG = that.matrixG;
-	matrixH = that.matrixH;
+ScoringMatrix::ScoringMatrix(ScoringMatrix& that)
+:	iLength(that.iLength),		
+	jLength(that.jLength),
+	gapOpening(that.gapOpening),
+	gapExtension(that.gapExtension),
+	gapOpeningHorizontal(gapOpening),
+	gapExtensionHorizontal(gapExtension),
+	matrixV(that.matrixV),
+	matrixG(that.matrixG),
+	matrixH(that.matrixH)
+{
+}
+ScoringMatrix ScoringMatrix::operator=(ScoringMatrix& that){
+	ScoringMatrix newScoringMat(that.iLength,that.jLength,that.gapOpening);
+	newScoringMat.gapExtension = double(-1);
+	newScoringMat.gapOpeningHorizontal = gapOpening;
+	newScoringMat.gapExtensionHorizontal = gapExtension;
+	newScoringMat.matrixV = that.matrixV;
+	newScoringMat.matrixG = that.matrixG;
+	newScoringMat.matrixH = that.matrixH;
+	return newScoringMat;
 }
 //function calculateScoresProfile - calculates scoring matrix for sequences s1 and s2 using profile prf instead of a substitution matrix
-void ScoringMatrix::calculateScores(string s2, Profile& prf, int debug){
-	string s1(prf.getMatrix().at(0).size()+1,'A');	//makes a pseudosequence of the length of the profile+1 (poly-A)
-	s2 = string("0").append(s2);
-	string s1String,s2String;
+void ScoringMatrix::calculateScores(std::string s2, Profile& prf, int debug){
+	std::string s1(prf.getMatrix().at(0).size()+1,'A');	//makes a pseudosequence of the length of the profile+1 (poly-A)
+	s2 = std::string("0").append(s2);
+	std::string s1String,s2String;
 	for (int i = 1; i < matrixV.size(); i++){
 		matrixV.at(i).at(0) = -10000000; //infinity
 		matrixH.at(i).at(0) = -10000000;
@@ -67,7 +77,7 @@ void ScoringMatrix::calculateScores(string s2, Profile& prf, int debug){
 			score1 = matrixV.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j));
 			score2 = matrixG.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j));
 			score3 = matrixH.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j));
-			matrixV[i][j] = util.maxValue(score1,score2,score3);
+			matrixV[i][j] = findVal::maxValue(score1,score2,score3);
 			///G
 			score1 = matrixV.at(i-1).at(j) + gapOpening;
 			score2 = matrixG.at(i-1).at(j) + gapExtension;
@@ -80,7 +90,7 @@ void ScoringMatrix::calculateScores(string s2, Profile& prf, int debug){
 	}
 }
 //function findBestScore - returns alignment score with positions in the scoring matrix: [score, i, j] (must be either in the last row or in the last column of the scoring matrix)
-vector<int> ScoringMatrix::findBestScore(){
+std::vector<int> ScoringMatrix::findBestScore(){
 	int maxI = matrixV.size()-1;
 	int maxJ = matrixV.at(0).size()-1;
 	int n = maxI;
@@ -102,7 +112,7 @@ vector<int> ScoringMatrix::findBestScore(){
 			maxJ = i;
 		}
 	}
-	vector<int> resArr;
+	std::vector<int> resArr;
 	if (maxIval > maxJval){			//max score is in the last row
 		resArr.push_back(maxI);
 		resArr.push_back(m);
@@ -114,22 +124,22 @@ vector<int> ScoringMatrix::findBestScore(){
 	return resArr;
 }
 //function getVec - returns scoring matrix
-vector< vector<double> > ScoringMatrix::getVec(){
+std::vector< std::vector<double> > ScoringMatrix::getVec(){
 	return matrixV;
 }
 //function nwAlignment - performs a sequence vs profile(/pseudoprofile) needleman wunsch alignment
 //vector<string> 
-void ScoringMatrix::nwAlignment(vector<string> *result,string s2, Profile& prf,bool verbose){
-	string s1(prf.getMatrix()[0].size()+1,'A');
-	s2 = string("0").append(s2);
-	string newS1 = "";
-	string newS2 = "";
-	vector<string> ali;
-	string newChar1="";	
-	string newChar2="";	
+void ScoringMatrix::nwAlignment(std::vector<std::string> *result,std::string s2, Profile& prf,bool verbose){
+	std::string s1(prf.getMatrix()[0].size()+1,'A');
+	s2 = std::string("0").append(s2);
+	std::string newS1 = "";
+	std::string newS2 = "";
+	std::vector<std::string> ali;
+	std::string newChar1="";	
+	std::string newChar2="";	
 	int i = s1.length()-1;
 	int j = s2.length()-1;
-	string currentMatrix = "V";
+	std::string currentMatrix = "V";
 	int iteratorM = 10;
 	//if bestScore isn't in the lower right corner, then add gaps to newS1 or newS2
 	if (findBestScore().at(0) != matrixV.size()-1 || findBestScore().at(1) != matrixV.at(0).size()-1){
@@ -183,7 +193,7 @@ void ScoringMatrix::nwAlignment(vector<string> *result,string s2, Profile& prf,b
 		newS2 = newChar2.append(newS2);
 	}
 	if (verbose){
-		cout << newS1 << endl << newS2 << endl << endl;
+		std::cout << newS1 << "\n" << newS2 << "\n\n";
 	}
 	ali.push_back(newS1);
 	ali.push_back(newS2);

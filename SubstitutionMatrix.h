@@ -13,7 +13,8 @@ public:
 private:
 	//functions
 	//variables
+/*
 	std::vector<char> alphabet;
-	std::vector< std::vector<int> > simScores;
+	std::vector< std::vector<int> > simScores;*/
 	int testInt;
 };

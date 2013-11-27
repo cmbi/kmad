@@ -7,12 +7,13 @@ public:
 	Profile(std::vector< std::vector<double> >); //constructor
 	Profile();
 	Profile(Profile&); //copy constructor
+	Profile operator=(const Profile&);
 //	Profile& operator=(Profile&);
 	~Profile();
 	void buildPseudoProfile(std::vector< std::string >&, const std::vector<bool>&, SubstitutionMatrix&);
 	//getters//
 	std::string getConsensusSequence();
-	std::vector< std::vector<double> > getMatrix();
+	std::vector< std::vector<double> > getMatrix() const;
 	double getElement(int, char);
 	double getElement(int, int);
 	void printProfile(int,int);

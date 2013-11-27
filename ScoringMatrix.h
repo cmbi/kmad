@@ -7,6 +7,7 @@ public:
 	ScoringMatrix(int,int,int); //constructor
 	~ScoringMatrix();
 	ScoringMatrix(ScoringMatrix&);
+	ScoringMatrix operator=(ScoringMatrix&);
 	void fillMatrix(std::string, std::string);
 	void calculateScores(std::string,Profile&,int);
 //	std::vector<std::string> 

@@ -3,15 +3,11 @@
 using namespace std;
 
 int main(){
-	vector<double> hello;
-	hello.push_back(0);
-	hello.push_back(0);
-	hello.push_back(3);
-	hello[-1]++;
-	for (int i = 0; i < hello.size();i++){
-		cout << hello.at(i)<< "\n";
-		cout << hello[i]<< "\n";
-	}
-	cout << hello[-1] << endl;
-	
+	const vector<int> a;
+	a = {1,2};
+	const vector< vector<int> > hello={{1,2},{2,3}};
+	cout << hello.at(1).at(1);	
+	hello[1][1] = 10;
+	cout << hello.at(1).at(1);	
+
 }
