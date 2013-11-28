@@ -1,6 +1,6 @@
 //Profile class implementation
 #include "Profile.h"
-#include "SubstitutionMatrix.h"
+#include "substitutionMatrix.h"
 #include "vecUtil.h"
 #include "misc.h"
 #include <string>
@@ -32,14 +32,14 @@ void Profile::createProfile(std::vector<std::string>& alignment,const std::vecto
 	vecUtil::transposeVec(prfMatrix);
 }
 //builds a pseudo-profile from the profile itself and the substitution matrix with appropriate weights
-void Profile::buildPseudoProfile(std::vector<std::string>& alignment, const std::vector<bool>& sequenceIdentity, SubstitutionMatrix& sbst){
+void Profile::buildPseudoProfile(std::vector<std::string>& alignment, const std::vector<bool>& sequenceIdentity){
 	createProfile(alignment,sequenceIdentity);
 	std::vector< std::vector<double> > newProfile;
 	for (int i = 0; i < prfMatrix[0].size(); i++){
 		std::vector< std::vector<double> > columnsToAdd;
 		for(int j = 0; j < prfMatrix.size(); j++){
 			if (prfMatrix.at(j).at(i) != 0){
-				std::vector<double> columnForJ = vecUtil::convertIntVectorToDoubleVector(sbst.getColumn(j));
+				std::vector<double> columnForJ = vecUtil::convertIntVectorToDoubleVector(substitutionMatrix::getColumn(j));
 				vecUtil::multiplyVectorByAScalar(columnForJ, prfMatrix.at(j).at(i));
 				columnsToAdd.push_back(columnForJ);
 			}
@@ -74,7 +74,7 @@ void Profile::countOccurences(std::vector< std::vector<double> >& result,std::ve
 						}
 					}
 					else{	
-						int aAcidInt = misc::findAminoAcidsNo(seqChar);
+						int aAcidInt = substitutionMatrix::findAminoAcidsNo(seqChar);
 						profileColumn.at(aAcidInt)++;				
 					}
 				}
@@ -110,7 +110,7 @@ double Profile::getElement(int position, char aAcid){
 		}
 	}
 	else {	
-		int aAcidint = misc::findAminoAcidsNo(aAcid);
+		int aAcidint = substitutionMatrix::findAminoAcidsNo(aAcid);
 		result = prfMatrix.at(aAcidint).at(position);
 	}
 	return result;

@@ -1,8 +1,9 @@
-OBJECTS = MSA.o Sequences.o ScoringMatrix.o SubstitutionMatrix.o Profile.o misc.o txtProc.o vecUtil.o findVal.o
+OBJECTS = MSA.o Sequences.o ScoringMatrix.o substitutionMatrix.o Profile.o misc.o txtProc.o vecUtil.o findVal.o
 
 
 MSA: $(OBJECTS)
-	clang++ -std=c++11 -stdlib=libc++ -o $@ $(OBJECTS)
+	clang++ -std=c++11 -stdlib=libc++ -o $@ $(OBJECTS) /Users/joanna/Documents/MASTER_THESIS/software/boost/stage/lib/libboost_program_options.a
+
 
 MSA.o: MSA.cpp 
 	clang++ -std=c++11 -stdlib=libc++ -c MSA.cpp 
@@ -13,8 +14,8 @@ Sequences.o: Sequences.h  Sequences.cpp
 ScoringMatrix.o: ScoringMatrix.h ScoringMatrix.cpp
 	clang++ -std=c++11 -stdlib=libc++ -c ScoringMatrix.cpp 
 
-SubstitutionMatrix.o: SubstitutionMatrix.h SubstitutionMatrix.cpp
-	clang++ -std=c++11 -stdlib=libc++ -c SubstitutionMatrix.cpp
+substitutionMatrix.o: substitutionMatrix.h substitutionMatrix.cpp
+	clang++ -std=c++11 -stdlib=libc++ -c substitutionMatrix.cpp
 Profile.o: Profile.h Profile.cpp
 	clang++ -std=c++11 -stdlib=libc++ -c Profile.cpp 
 misc.o: misc.h misc.cpp

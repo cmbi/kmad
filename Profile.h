@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-class SubstitutionMatrix;
 class Profile{
 public:
 	Profile(std::vector< std::vector<double> >); //constructor
@@ -10,7 +9,7 @@ public:
 	Profile operator=(const Profile&);
 //	Profile& operator=(Profile&);
 	~Profile();
-	void buildPseudoProfile(std::vector< std::string >&, const std::vector<bool>&, SubstitutionMatrix&);
+	void buildPseudoProfile(std::vector< std::string >&, const std::vector<bool>&);
 	//getters//
 	std::string getConsensusSequence();
 	std::vector< std::vector<double> > getMatrix() const;

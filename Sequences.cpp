@@ -2,7 +2,7 @@
 #include "Sequences.h"
 #include "Profile.h"
 #include "ScoringMatrix.h"
-#include "SubstitutionMatrix.h"
+#include "substitutionMatrix.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -26,9 +26,8 @@ Sequences Sequences::operator=(Sequences& that){
 	return newSequences;
 }
 //function performMSA - returns ready alignment, with gaps cut out from the first sequence and so on...
-std::vector<std::string> Sequences::performMSA(Profile *outputProfile,int penalty, bool verbose){
-	SubstitutionMatrix blosum = SubstitutionMatrix();
-	Profile pseudoProfile(blosum.convertToProfileFormat(sequences.at(0).at(1))); //IMPLEMENT convertToProfileFormat // psuedoProfile - it's the one that will later be combined profile and sbst matrix
+std::vector<std::string> Sequences::performMSA(Profile *outputProfile,int penalty, std::string verbose){
+	Profile pseudoProfile(substitutionMatrix::convertToProfileFormat(sequences.at(0).at(1))); //IMPLEMENT convertToProfileFormat // psuedoProfile - it's the one that will later be combined profile and sbst matrix
 	std::vector<std::string> alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector<std::string> alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
 	alignmentWithoutLowercase.push_back(sequences.at(0).at(1));
@@ -48,8 +47,8 @@ std::vector<std::string> Sequences::performMSA(Profile *outputProfile,int penalt
 			sequenceIdentity.push_back(true);
 		}
 		else sequenceIdentity.push_back(false);	
-		pseudoProfile.buildPseudoProfile(alignmentWithoutLowercase, sequenceIdentity, blosum);
-		if (verbose) pseudoProfile.printProfile();
+		pseudoProfile.buildPseudoProfile(alignmentWithoutLowercase, sequenceIdentity);
+		if (verbose!="0") pseudoProfile.printProfile();
 	}
 	*outputProfile = pseudoProfile;
 	return alignmentWithLowercase;		
@@ -101,7 +100,7 @@ void Sequences::removeGaps(std::string *alignmentWithLowercase, std::string *ali
 	*alignmentWithoutLowercase = newS2;
 }
 //function alignPairwise
-void Sequences::alignPairwise(std::string *alNoLower,std::string *alWithLower,std::string seq2, Profile& prf, int penalty, int deb, bool verbose){
+void Sequences::alignPairwise(std::string *alNoLower,std::string *alWithLower,std::string seq2, Profile& prf, int penalty, int deb, std::string verbose){
 	int profileLength = prf.getMatrix().at(0).size();
 	std::string tmpResultWithLowercase;
 	std::string tmpResultWithoutLowercase;

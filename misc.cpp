@@ -4,13 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-/* function combinePairwiseAlignments
-arguments: 
-	vector<string> al1 - multiple alignment
-	vector<string> al2 - pairwise alignment
-returns:
-	vector<string>  - multiple alignment with one added sequence
-*/
+//addSequenceToMultipleAlignment - throw it out?
 void misc::addSequenceToMultipleAlignment( std::vector<std::string>& al1, std::vector<std::string> al2){    ///al1 - multiple alignment, al2 - pairwise alignment
 	int i = 0;
 	int j = 0;
@@ -47,18 +41,6 @@ void misc::addSequenceToMultipleAlignment( std::vector<std::string>& al1, std::v
 		}
 	}
 	al1 = result;
-}
-//function findAminoAcidsNo - finds index of the given char aa amino acid
-int misc::findAminoAcidsNo(char aa){
-	char alphabetArr[] = { 'A','R','N','D','C','Q','E','G','H','I','L','K','M','F','P','S','T','W','Y','V' };
-	int aAcidint = -1;
-	for (int i = 0; i < 20; i++){
-		if (aa == alphabetArr[i]){
-			aAcidint = i;
-			break;
-		}
-	}
-	return aAcidint;
 }
 //function countTrueValuesInVector
 int misc::countTrueValuesInVector(const std::vector<bool>& vec){

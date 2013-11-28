@@ -1,6 +1,6 @@
 //ScoringMatrix class implementation
 #include "ScoringMatrix.h"
-#include "SubstitutionMatrix.h"
+#include "substitutionMatrix.h"
 #include "Profile.h"
 #include "findVal.h"
 #include <iostream>
@@ -128,8 +128,7 @@ std::vector< std::vector<double> > ScoringMatrix::getVec(){
 	return matrixV;
 }
 //function nwAlignment - performs a sequence vs profile(/pseudoprofile) needleman wunsch alignment
-//vector<string> 
-void ScoringMatrix::nwAlignment(std::vector<std::string> *result,std::string s2, Profile& prf,bool verbose){
+void ScoringMatrix::nwAlignment(std::vector<std::string> *result,std::string s2, Profile& prf,std::string verbose){
 	std::string s1(prf.getMatrix()[0].size()+1,'A');
 	s2 = std::string("0").append(s2);
 	std::string newS1 = "";
@@ -192,7 +191,7 @@ void ScoringMatrix::nwAlignment(std::vector<std::string> *result,std::string s2,
 		newS1 = newChar1.append(newS1);
 		newS2 = newChar2.append(newS2);
 	}
-	if (verbose){
+	if (verbose!="0"){
 		std::cout << newS1 << "\n" << newS2 << "\n\n";
 	}
 	ali.push_back(newS1);
