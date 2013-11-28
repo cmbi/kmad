@@ -10,8 +10,10 @@ public:
 	ScoringMatrix operator=(ScoringMatrix&);
 	void fillMatrix(std::string, std::string);
 	void calculateScores(std::string,Profile&,int);
+	void calculateScores(std::vector<std::string>,Profile&,int);
 //	std::vector<std::string> 
 	void nwAlignment(std::vector<std::string>*,std::string,Profile&, std::string);
+	void nwAlignment(std::vector<std::vector<std::string> >*,std::vector<std::string>,Profile&, std::string);
 	std::vector<int> findBestScore();
 	std::vector< std::vector<double> > getVec(); //getter
 private:

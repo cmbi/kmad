@@ -70,3 +70,20 @@ void vecUtil::printDoubleVector(const std::vector<double>& vec){
 	}
 	std::cout << "\n";
 }
+std::vector<std::string> vecUtil::flatten(const std::vector<std::vector<std::string> >& vec){
+	std::vector<std::string> result;
+	for (int i = 0; i < vec.size();i++){
+		std::string newSeq = "";
+		for(int j = 0; j < vec[i].size(); i++){
+			newSeq.append(&vec[i][j][0]);
+		}
+		result.push_back(newSeq);
+	}
+	return result;
+}
+std::vector<std::string> vecUtil::push_front(std::vector<std::string> vec, std::string newElement){
+	reverse(vec.begin(),vec.end());
+	vec.push_back(newElement);
+	reverse(vec.begin(),vec.end());
+	return vec;
+}

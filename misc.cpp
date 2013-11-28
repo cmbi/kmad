@@ -52,3 +52,11 @@ int misc::countTrueValuesInVector(const std::vector<bool>& vec){
 	}
 	return result;
 }
+std::vector<std::string> misc::pseudoSequence(int seqLength){
+	std::vector<std::string> result(seqLength, "AAAA");
+	return result;
+}
+void misc::printEncodedSeq(const std::vector<std::string>& sequence){
+	for (int i = 0; i < sequence.size();i++) std::cout << sequence[i][0];	
+	std::cout << "\n";
+}

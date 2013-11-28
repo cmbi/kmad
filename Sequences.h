@@ -1,11 +1,14 @@
 #include <iostream>
 #include <vector>
 class Profile;
+class FeaturesProfile;
 class Sequences{
 public:
 	//constructor, copy constructor, destructor, operator=
 	Sequences(std::vector< std::vector<std::string> >);
+	Sequences(std::vector< std::vector< std::vector<std::string> > >);
 	Sequences(Sequences&);
+	Sequences();
 	~Sequences();
 	Sequences operator=(Sequences&);
 	//
@@ -13,14 +16,20 @@ public:
 	//getters
 	std::vector< std::vector<std::string> > getSequences();
 	std::vector<std::string> performMSA(Profile*,int,std::string);
+	std::vector<std::string> performMSAencoded(Profile*,FeaturesProfile*,int,std::string);
 private:
 	//functions
 	void removeGaps(std::string *,std::string *,std::vector<std::string> &);
+	void removeGaps(std::vector<std::string> *,std::vector<std::string> *,std::vector<std::vector<std::string> >&);
 	void alignPairwise(std::string *,std::string *, std::string, Profile&, int, int,std::string);
+	void alignPairwise(std::vector<std::string> *,std::vector<std::string> *, std::vector<std::string>, Profile&, int, int,std::string);
 	std::vector< std::vector<std::string> > sequences;	
+	std::vector< std::vector< std::vector<std::string> > >sequencesEncoded;	
 	double calcIdentity(const std::string&);
+	double calcIdentity(const std::vector<std::string>&);
 	double countIdenticalResidues(std::vector<std::string>&);
 	//variables 
 	int seqNr;
 	int firstSequenceSize;
+	
 };

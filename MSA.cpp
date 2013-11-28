@@ -6,14 +6,14 @@
 #include <string>
 namespace po = boost::program_options;
 int main(int argc, char *argv[]){
-	int gapPen;
-	std::string filename;
-	std::string verboseMode;
+	int gapPen,codonLength;
+	std::string filename,verboseMode;
 	po::options_description desc("Allowed options");
 	desc.add_options()
     		("help", "produce help message")
     		("i", po::value<std::string>(&filename), "input file name")
 		("g", po::value<int>(&gapPen), "gap opening penalty")
+		("c", po::value<int>(&codonLength)->implicit_value(4)->default_value(1),"codon length")
 		("v",po::value<std::string>(&verboseMode)->implicit_value("1")->default_value("0"),"verbose mode")
 	;
 	po::variables_map vm;
@@ -23,8 +23,13 @@ int main(int argc, char *argv[]){
     		std::cout << desc << "\n";
     		return 1;
 	}
-	Sequences rawSequences(txtProc::processFASTA(filename));			//read data from file
-	Profile prf;										//this prf will be useful for next rounds of alignments
-	std::vector<std::string> multipleAlignment(rawSequences.performMSA(&prf,gapPen,verboseMode));	//create multiple sequence alignment	
-	txtProc::writeAlignmentToFile(multipleAlignment,rawSequences.getSequences(),filename);	//write multiple alignment to a file
+	if (codonLength > 1) {
+		Sequences rawSequences(txtProc::processFASTA(filename,codonLength));
+	}
+	else {
+		Sequences rawSequences(txtProc::processFASTA(filename));			//read data from file
+		Profile prf;										//this prf will be useful for next rounds of alignments
+		std::vector<std::string> multipleAlignment(rawSequences.performMSA(&prf,gapPen,verboseMode));	//create multiple sequence alignment	
+		txtProc::writeAlignmentToFile(multipleAlignment,rawSequences.getSequences(),filename);	//write multiple alignment to a file
+	}
 }

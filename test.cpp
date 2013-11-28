@@ -1,10 +1,8 @@
-#include "boost/program_options.hpp"
 #include <iostream>
-#include <iterator>
-#include <algorithm>
+#include <vector>
+int main(){
+	std::vector<std::string> myvector ={"a","s","i","a"};
+	std::reverse(myvector.begin(),myvector.end());
+	for (int i = 0; i < myvector.size(); i++) std::cout << myvector.at(i) << "\n";
 
-int main()
-{
-	namespace po = boost::program_options; 
-    	po::options_description desc("Options");	
 }

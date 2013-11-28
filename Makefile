@@ -13,7 +13,8 @@ Sequences.o: Sequences.h  Sequences.cpp
 
 ScoringMatrix.o: ScoringMatrix.h ScoringMatrix.cpp
 	clang++ -std=c++11 -stdlib=libc++ -c ScoringMatrix.cpp 
-
+FeaturesProfile.o: FeaturesProfile.h FeaturesProfile.cpp
+	clang++ -std=c++11 -stdlib=libc++ -c FeaturesProfile.cpp
 substitutionMatrix.o: substitutionMatrix.h substitutionMatrix.cpp
 	clang++ -std=c++11 -stdlib=libc++ -c substitutionMatrix.cpp
 Profile.o: Profile.h Profile.cpp
