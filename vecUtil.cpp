@@ -75,14 +75,9 @@ std::vector<std::string> vecUtil::flatten(const std::vector<std::vector<std::str
 	for (int i = 0; i < vec.size();i++){
 		std::string newSeq = "";
 		for(int j = 0; j < vec[i].size(); j++){
-			char newChar = vec[i][j][0];
-		//	newSeq.append(&newChar);
-		//	newSeq.append(&vec[i][j][0]);
-			newSeq+=newChar;
-			std::cout << vec[i][j][0] << "\n";
+			newSeq+=vec[i][j][0];
 		}
 		result.push_back(newSeq);
-		std::cout << newSeq << "\n";
 	}
 	return result;
 }

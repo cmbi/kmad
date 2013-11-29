@@ -1,5 +1,6 @@
 //ScoringMatrix class implementation
 #include "ScoringMatrix.h"
+#include "FeaturesProfile.h"
 #include "substitutionMatrix.h"
 #include "Profile.h"
 #include "findVal.h"
@@ -92,7 +93,7 @@ void ScoringMatrix::calculateScores(std::string s2, Profile& prf, int debug){
 	}
 }
 //function calculateScoresProfile - calculates scoring matrix for sequences s1 and s2 using profile prf instead of a substitution matrix ENCODED SEQUENCES
-void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, int debug){
+void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, FeaturesProfile& featPrf,int debug){
 	std::vector<std::string> s1 = misc::pseudoSequence(prf.getMatrix()[0].size()+1); //creating polyA pseudoSequence representing the profile, to know later where are the gaps in the profile
 	s2 = vecUtil::push_front(s2,"-AAA");
 	std::string s1String,s2String;
@@ -112,9 +113,9 @@ void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, i
 	for (int i = 1; i < matrixV.size();i++){
 		for (int j = 1; j < matrixV.at(i).size(); j++){
 			///V
-			score1 = matrixV.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j)[0]);
-			score2 = matrixG.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j)[0]);
-			score3 = matrixH.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j)[0]);
+			score1 = matrixV.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j)[0]) + featPrf.getScore(i-1,s2.at(j));
+			score2 = matrixG.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j)[0]) + featPrf.getScore(i-1,s2.at(j));
+			score3 = matrixH.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j)[0]) + featPrf.getScore(i-1,s2.at(j));
 			matrixV[i][j] = findVal::maxValue(score1,score2,score3);
 			///G
 			score1 = matrixV.at(i-1).at(j) + gapOpening;
@@ -237,7 +238,7 @@ void ScoringMatrix::nwAlignment(std::vector<std::string> *result,std::string s2,
 	*result = ali;
 }
 //function nwAlignment - performs a sequence vs profile(/pseudoprofile) needleman wunsch alignment ENCODED SEQUNCES
-void ScoringMatrix::nwAlignment(std::vector<std::vector<std::string> > *result,std::vector<std::string> s2, Profile& prf,std::string verbose){
+void ScoringMatrix::nwAlignment(std::vector<std::vector<std::string> > *result,std::vector<std::string> s2, Profile& prf, FeaturesProfile& featPrf,std::string verbose){
 	std::vector<std::string> s1 = misc::pseudoSequence(prf.getMatrix()[0].size()+1); //creating polyA pseudoSequence representing the profile, to know later where are the gaps in the profile
 	//std::string s1(prf.getMatrix()[0].size()+1,'A');
 	s2 = vecUtil::push_front(s2,"-AAA");
@@ -272,11 +273,11 @@ void ScoringMatrix::nwAlignment(std::vector<std::vector<std::string> > *result,s
 		if (i > 0 && j > 0 && currentMatrix == "V"){	//match/mismatch
 			newChar1 = s1.at(i);
 			newChar2 = s2.at(j);
-			if (matrixV.at(i).at(j) != matrixV.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j)[0])){
-				if( i > 0 && j > 0 && matrixV.at(i).at(j) == matrixG.at(i-1).at(j-1)+prf.getElement(i-1,s2.at(j)[0])){
+			if (matrixV.at(i).at(j) != matrixV.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j)[0]) + featPrf.getScore(i-1,s2.at(j))){
+				if( i > 0 && j > 0 && matrixV.at(i).at(j) == matrixG.at(i-1).at(j-1)+prf.getElement(i-1,s2.at(j)[0]) + featPrf.getScore(i-1,s2.at(j))){
 					currentMatrix = "G";	
 				}
-				else if(i > 0 && j > 0 && matrixV.at(i).at(j) == matrixH.at(i-1).at(j-1)+prf.getElement(i-1,s2.at(j)[0])){
+				else if(i > 0 && j > 0 && matrixV.at(i).at(j) == matrixH.at(i-1).at(j-1)+prf.getElement(i-1,s2.at(j)[0]) + featPrf.getScore(i-1,s2.at(j))){
 					currentMatrix = "H";
 				}
 			}

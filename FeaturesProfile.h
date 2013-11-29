@@ -7,7 +7,7 @@ public:
 	FeaturesProfile();
 	double getElement(int, std::string);
 	double getElement(int, int);	
-	double getScore(std::string,int);
+	double getScore(int,std::string);
 	void printProfile();
 	void createProfile(const std::vector< std::vector<std::string> >&,const std::vector<bool>&);
 private:

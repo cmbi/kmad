@@ -23,7 +23,7 @@ private:
 	void removeGaps(std::string *,std::string *,std::vector<std::string> &);
 	void removeGaps(std::vector<std::string> *,std::vector<std::string> *,std::vector<std::vector<std::string> >&);
 	void alignPairwise(std::string *,std::string *, std::string, Profile&, int, int,std::string);
-	void alignPairwise(std::vector<std::string> *,std::vector<std::string> *, std::vector<std::string>, Profile&, int, int,std::string);
+	void alignPairwise(std::vector<std::string> *,std::vector<std::string> *, std::vector<std::string>, Profile&, FeaturesProfile&, int, int,std::string);
 	std::vector< std::vector<std::string> > sequences;	
 	std::vector< std::vector< std::vector<std::string> > > sequencesEncoded;	
 	double calcIdentity(const std::string&);
