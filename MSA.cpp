@@ -1,4 +1,5 @@
 #include "Sequences.h"
+#include "FeaturesProfile.h"
 #include "Profile.h"
 #include "txtProc.h"
 #include <boost/program_options.hpp>
@@ -25,6 +26,11 @@ int main(int argc, char *argv[]){
 	}
 	if (codonLength > 1) {
 		Sequences rawSequences(txtProc::processFASTA(filename,codonLength));
+		Profile prf;										//this prf will be useful for next rounds of alignments
+		FeaturesProfile fprf;
+		std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(&prf,&fprf,gapPen,verboseMode));	//create multiple sequence alignment	
+		std::vector<std::vector<std::vector<std::string> > > encSeq = rawSequences.getEncodedSequences();
+		txtProc::writeAlignmentToFile(multipleAlignment,encSeq,filename);	//write multiple alignment to a file
 	}
 	else {
 		Sequences rawSequences(txtProc::processFASTA(filename));			//read data from file

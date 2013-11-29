@@ -7,8 +7,7 @@
 #include <iostream>
 #include <vector>
 Profile::Profile(std::vector< std::vector<double> > mat)
-:	prfMatrix(mat)
-{
+:	prfMatrix(mat){
 }
 Profile::Profile(){
 }

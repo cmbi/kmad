@@ -35,11 +35,9 @@ std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(st
 }
 //convert to profile format - creates a matrix 20 x sequence length, where nth column is a column from sbstMatrix for the amino acid on position n in the sequence ENCODED SEQUENCES
 std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(std::vector<std::string> sequence){
-	std::cout << "hej\n"; 
 	std::vector< std::vector<double> > result(sequence.size());
 	for (int i = 0; i < result.size(); i++){
 		int aAcidInt = findAminoAcidsNo(sequence[i][0]);
-		std::cout << aAcidInt << "\n";
 		result.at(i)=vecUtil::convertIntVectorToDoubleVector(simScores.at(aAcidInt));//adds a column to the result(converted from int to double)
 	}
 	vecUtil::transposeVec(result);

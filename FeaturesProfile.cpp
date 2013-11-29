@@ -1,25 +1,25 @@
+#include "FeaturesProfile.h"
+#include "vecUtil.h"
 #include <iostream>
 #include <string>
 #include <vector>
-#include "FeaturesProfile.h"
-#include "UsefulStuff.h"
-using namespace std;
-extern UsefulStuff util;
-FeaturesProfile::FeaturesProfile(vector< vector<double> > vec){
-	prfMatrix = vec;
-	listOfFeatures.push_back("phosphN");
+namespace {
+	std::vector<std::string>listOfFeatures = {"phosphN"};
+}
+FeaturesProfile::FeaturesProfile(std::vector< std::vector<double> > vec)
+:	prfMatrix(vec){
 }
 FeaturesProfile::FeaturesProfile(){
 }
-void FeaturesProfile::createProfile(const vector< vector<string> >& alignment, const vector<bool>& sequenceIdentity){
+void FeaturesProfile::createProfile(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity){
 	expandListOfFeatures(alignment,sequenceIdentity);
 	countOccurences(alignment,sequenceIdentity);
-	util.transposeVec(prfMatrix);
+	vecUtil::transposeVec(prfMatrix);
 }
-void FeaturesProfile::countOccurences(const vector< vector<string> >& alignment, const vector<bool>& sequenceIdentity){
-	vector<vector<double> > tmpResult;
+void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity){
+	std::vector<std::vector<double> > tmpResult;
 	for (int i = 0; i < alignment[0].size();i++){
-		vector<double> profileColumn(listOfFeatures.size(),0);
+		std::vector<double> profileColumn(listOfFeatures.size(),0);
 		for (int j = 0; j < alignment.size();j++){
 			if (sequenceIdentity.at(j)){
 				for(int k = 1; k < 4; k++){
@@ -30,7 +30,7 @@ void FeaturesProfile::countOccurences(const vector< vector<string> >& alignment,
 	} 
 }
 //function getScore - returns score for the entire codon on nth position
-double FeaturesProfile::getScore(string codon, int position){
+double FeaturesProfile::getScore(std::string codon, int position){
 	double result = 0;
 	for (int i = 1; i < 4; i++){
 		result+=getElement(position,name(codon,i));	
@@ -38,14 +38,14 @@ double FeaturesProfile::getScore(string codon, int position){
 	return result;
 }
 //returns score for 1 feature on nth position
-double FeaturesProfile::getElement(int position, string featName){
+double FeaturesProfile::getElement(int position, std::string featName){
 	int featuresIndex = findFeaturesIndex(featName);
 	return prfMatrix.at(featuresIndex).at(position);	
 }
 double FeaturesProfile::getElement(int position, int featuresIndex){
 	return prfMatrix.at(featuresIndex).at(position);
 }
-int FeaturesProfile::findFeaturesIndex(string featName){
+int FeaturesProfile::findFeaturesIndex(std::string featName){
 	int featuresIndex;
 	for (int i = 0; i < listOfFeatures.size();i++){
 		if (featName == listOfFeatures[i]){
@@ -55,8 +55,8 @@ int FeaturesProfile::findFeaturesIndex(string featName){
 	}
 	return featuresIndex;
 }
-string FeaturesProfile::name(string codon, int featureType){
-	string name;
+std::string FeaturesProfile::name(std::string codon, int featureType){
+	std::string name;
 	if (featureType == 2){
 		name="phosph";
 	}
@@ -67,7 +67,7 @@ string FeaturesProfile::name(string codon, int featureType){
 	return name;
 }
 //function expandListOfFeatures - expand it by domains and motifs found in alignment
-void FeaturesProfile::expandListOfFeatures(const vector< vector<string> >& alignment, const vector<bool>& sequenceIdentity){
+void FeaturesProfile::expandListOfFeatures(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity){
 /*
 	string featureToAdd;
 	for (int i = 0; i < sequenceIdentity.size(); i++){

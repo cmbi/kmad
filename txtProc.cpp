@@ -95,3 +95,12 @@ void txtProc::writeAlignmentToFile(std::vector<std::string> sequences,std::vecto
 		outputFile << sequencesWithNames.at(i).at(0)<< "\n" << sequences.at(i) << "\n";
 	}
 }
+//function writeAlignmentToFile ENCODED SEQUENCES
+void txtProc::writeAlignmentToFile(std::vector<std::string> sequences,std::vector< std::vector< std::vector<std::string> > > sequencesWithNames, std::string filename){
+	std::stringstream sstr;
+	sstr << filename << "_al";
+	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
+	for (int i = 0; i < sequences.size() ;i++){
+		outputFile << sequencesWithNames.at(i).at(0).at(0)<< "\n" << sequences.at(i) << "\n";
+	}
+}

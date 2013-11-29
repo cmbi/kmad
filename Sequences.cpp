@@ -66,7 +66,7 @@ std::vector<std::string> Sequences::performMSA(Profile *outputProfile,int penalt
 }
 //function performMSA for ENCODED SEQUENCES
 std::vector<std::string> Sequences::performMSAencoded(Profile *outputProfile,FeaturesProfile *outputFeaturesProfile, int penalty, std::string verbose){
-	Profile pseudoProfile(substitutionMatrix::convertToProfileFormat(sequences.at(0).at(1))); //overload convertToProfileFormat - so that it takes vector<string> instead of string
+	Profile pseudoProfile(substitutionMatrix::convertToProfileFormat(sequencesEncoded.at(0).at(1))); //overload convertToProfileFormat - so that it takes vector<string> instead of string
 	std::vector< std::vector<std::string> > alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector< std::vector<std::string> > alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
 	alignmentWithoutLowercase.push_back(sequencesEncoded.at(0).at(1));
@@ -115,6 +115,9 @@ double Sequences::calcIdentity(const std::vector<std::string>& alignedSequence){
 //function getSequences
 std::vector< std::vector<std::string> > Sequences::getSequences(){
 	return sequences;
+}
+std::vector< std::vector<std::vector<std::string> > > Sequences::getEncodedSequences(){
+	return sequencesEncoded;
 }
 //function removeGaps - takes pairwise alignment vector<string>, removes characters from the 2nd sequence that match gaps from 1st seq and returns vector<string> of 2 elements, where the 1st one is 2nd sequence with cut out chars and 2nd one is 2nd sequence with cut out chars and lowercase chars before and after that
 void Sequences::removeGaps(std::string *alignmentWithLowercase, std::string *alignmentWithoutLowercase, std::vector<std::string>& alignment){
