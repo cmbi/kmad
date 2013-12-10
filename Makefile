@@ -1,4 +1,4 @@
-OBJECTS = MSA.o Sequences.o ScoringMatrix.o FeaturesProfile.o substitutionMatrix.o Profile.o misc.o txtProc.o vecUtil.o findVal.o
+OBJECTS = MSA.o Sequences.o ScoringMatrix.o FeaturesProfile.o Profile.o substitutionMatrix.o misc.o txtProc.o vecUtil.o findVal.o
 
 
 MSA: $(OBJECTS)
@@ -11,10 +11,10 @@ ScoringMatrix.o: ScoringMatrix.h ScoringMatrix.cpp
 	clang++ -std=c++11 -stdlib=libc++ -c ScoringMatrix.cpp 
 FeaturesProfile.o: FeaturesProfile.h FeaturesProfile.cpp
 	clang++ -std=c++11 -stdlib=libc++ -c FeaturesProfile.cpp
-substitutionMatrix.o: substitutionMatrix.h substitutionMatrix.cpp
-	clang++ -std=c++11 -stdlib=libc++ -c substitutionMatrix.cpp
 Profile.o: Profile.h Profile.cpp
 	clang++ -std=c++11 -stdlib=libc++ -c Profile.cpp 
+substitutionMatrix.o: substitutionMatrix.h substitutionMatrix.cpp
+	clang++ -std=c++11 -stdlib=libc++ -c substitutionMatrix.cpp
 misc.o: misc.h misc.cpp
 	clang++ -std=c++11 -stdlib=libc++ -c misc.cpp
 txtProc.o: txtProc.h txtProc.cpp

@@ -50,16 +50,17 @@ std::vector<std::string> Sequences::performMSA(Profile *outputProfile,int penalt
 	std::string alWithLower;
 	bool flag = false;
 	for (int i = 1; i < seqNr; i++){
+		pseudoProfile.printProfile();
 		alignPairwise(&alNoLower,&alWithLower,sequences.at(i).at(1),pseudoProfile,penalty,i,verbose);
 		alignmentWithoutLowercase.push_back(alNoLower);
 		alignmentWithLowercase.push_back(alWithLower);
 		double identity = calcIdentity(alNoLower);
-		if (identity > 0.5){
+		if (identity > 0.8){
 			sequenceIdentity.push_back(true);
 		}
 		else sequenceIdentity.push_back(false);	
 		pseudoProfile.buildPseudoProfile(alignmentWithoutLowercase, sequenceIdentity);
-		if (verbose!="0") pseudoProfile.printProfile();
+		//if (verbose!="0") pseudoProfile.printProfile();
 	}
 	*outputProfile = pseudoProfile;
 	return alignmentWithLowercase;		
@@ -75,14 +76,17 @@ std::vector<std::string> Sequences::performMSAencoded(Profile *outputProfile,Fea
 	std::vector<bool> sequenceIdentity; 					//'true' stored for every sequence which identity with the 1st one is higher than 80%, only based on these profile will be built
 	sequenceIdentity.push_back(true);					//we always want to build profile based on the first seqeunce
 	FeaturesProfile featProfile;
+	featProfile.expandListOfFeatures(sequencesEncoded.at(0).at(1));
 	featProfile.createProfile(alignmentWithoutLowercase,sequenceIdentity); 	//create features profile based on the 1st seq
-	featProfile.printProfile();
+	//featProfile.printProfile();
 	std::vector<std::string> alNoLower;
 	std::vector<std::string> alWithLower;
+	std::cout << "features profile: " << std::endl;
+	featProfile.printProfile();
 	bool flag = false;
 	for (int i = 1; i < seqNr; i++){
 		featProfile.createProfile(alignmentWithoutLowercase,sequenceIdentity); 	//create features profile based on the 1st seq
-		featProfile.printProfile();
+		//featProfile.printProfile();
 		alignPairwise(&alNoLower,&alWithLower,sequencesEncoded.at(i).at(1),pseudoProfile,featProfile,penalty,i,verbose);
 		alignmentWithoutLowercase.push_back(alNoLower);
 		alignmentWithLowercase.push_back(alWithLower);
@@ -96,6 +100,7 @@ std::vector<std::string> Sequences::performMSAencoded(Profile *outputProfile,Fea
 	}
 	*outputProfile = pseudoProfile;
 	return vecUtil::flatten(alignmentWithLowercase);		
+	//return vecUtil::flattenWithoutFeatures(alignmentWithLowercase);		
 }
 //function calcIdentity
 double Sequences::calcIdentity(const std::string& alignedSequence){

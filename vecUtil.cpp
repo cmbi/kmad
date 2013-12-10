@@ -2,6 +2,11 @@
 #include <iostream>
 #include <vector>
 #include <string>
+//function contains
+bool vecUtil::contains(std::vector<std::string>& vec, std::string x){
+	if (std::find(vec.begin(),vec.end(),x) != vec.end()) return true;
+	else return false;
+}
 //function transposeVec
 void vecUtil::transposeVec(std::vector< std::vector<int> >& vec){
 	std::vector< std::vector<int> > newVec;
@@ -70,12 +75,23 @@ void vecUtil::printDoubleVector(const std::vector<double>& vec){
 	}
 	std::cout << "\n";
 }
-std::vector<std::string> vecUtil::flatten(const std::vector<std::vector<std::string> >& vec){
+std::vector<std::string> vecUtil::flattenWithoutFeatures(const std::vector<std::vector<std::string> >& vec){
 	std::vector<std::string> result;
 	for (int i = 0; i < vec.size();i++){
 		std::string newSeq = "";
 		for(int j = 0; j < vec[i].size(); j++){
 			newSeq+=vec[i][j][0];
+		}
+		result.push_back(newSeq);
+	}
+	return result;
+}
+std::vector<std::string> vecUtil::flatten(const std::vector<std::vector<std::string> >& vec){
+	std::vector<std::string> result;
+	for (int i = 0; i < vec.size();i++){
+		std::string newSeq = "";
+		for(int j = 0; j < vec[i].size(); j++){
+			newSeq+=vec[i][j];
 		}
 		result.push_back(newSeq);
 	}

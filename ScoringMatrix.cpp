@@ -48,7 +48,6 @@ ScoringMatrix::ScoringMatrix(ScoringMatrix& that)
 }
 ScoringMatrix ScoringMatrix::operator=(ScoringMatrix& that){
 	ScoringMatrix newScoringMat(that.iLength,that.jLength,that.gapOpening);
-	newScoringMat.gapExtension = double(-1);
 	newScoringMat.gapOpeningHorizontal = gapOpening;
 	newScoringMat.gapExtensionHorizontal = gapExtension;
 	newScoringMat.matrixV = that.matrixV;

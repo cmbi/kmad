@@ -1,10 +1,11 @@
 #include "FeaturesProfile.h"
 #include "vecUtil.h"
+#include "misc.h"
 #include <iostream>
 #include <string>
 #include <vector>
 namespace {
-	std::vector<std::string>listOfFeatures = {"phosphN"};
+	std::vector<std::string>listOfFeatures = {"phosphN", "domain0"};
 }
 FeaturesProfile::FeaturesProfile(std::vector< std::vector<double> > vec)
 :	prfMatrix(vec){
@@ -12,28 +13,35 @@ FeaturesProfile::FeaturesProfile(std::vector< std::vector<double> > vec)
 FeaturesProfile::FeaturesProfile(){
 }
 void FeaturesProfile::createProfile(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity){
-	expandListOfFeatures(alignment,sequenceIdentity);
 	countOccurences(alignment,sequenceIdentity);
 	vecUtil::transposeVec(prfMatrix);
 }
 void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity){
 	std::vector<std::vector<double> > tmpResult;
+	int trueSequences = misc::countTrueValuesInVector(sequenceIdentity);
 	char nothing = 'A';
 	for (int i = 0; i < alignment[0].size();i++){
 		std::vector<double> profileColumn(listOfFeatures.size(),0);
 		for (int j = 0; j < alignment.size();j++){
 			if (sequenceIdentity.at(j)){
 				for(int k = 1; k < 4; k++){
-						char alChar = alignment[j][i][k];
-						if (alChar != nothing){
-							int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
-							if (featIndex != -1){
-								profileColumn.at(featIndex)+=10;
+					char alChar = alignment[j][i][k];
+					if (alChar != nothing){
+						int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
+						if (featIndex != -1){
+							if (k==3){
+								profileColumn.at(featIndex)+=15;
+							}
+							else if (k==2){
+								profileColumn.at(featIndex)+=3;
+								profileColumn.at(1)-=3;
 							}
 						}
+					}
 				}
 			}
 		}
+		vecUtil::divideVectorByAScalar(profileColumn,trueSequences);
 		tmpResult.push_back(profileColumn);
 	} 
 	prfMatrix = tmpResult;
@@ -74,32 +82,26 @@ std::string FeaturesProfile::name(std::string codon, int featureType){
 	if (featureType == 3){
 		name="phosph";
 	}
-	else if (featureType == 1){
+	else if (featureType == 2){
 		name="domain";
 	}
 	name.push_back(codon.at(featureType));
 	return name;
 }
 //function expandListOfFeatures - expand it by domains and motifs found in the alignment
-void FeaturesProfile::expandListOfFeatures(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity){
-/*
-	string featureToAdd;
-	for (int i = 0; i < sequenceIdentity.size(); i++){
-		if (sequenceIdentity[i]){
-			for (int j = 0; j < alignment.at(i).size(); j++){
-				for (int k = 1; k < 4; k++){
-					if (alignment.at(i).at(k) != "A"){
-						if (k==3){		//PTMs are coded by 3rd char
-							if (alignment.at(i).at(k)=="N"){
-								featureToAdd = "phosphN";
-							}
-						}
-					}
-				}
+void FeaturesProfile::expandListOfFeatures(const std::vector< std::string >& sequence){
+	std::string featureToAdd="";
+	char nothing = 'A';
+	for (int j = 0; j < sequence.size(); j++){
+		char alChar = sequence.at(j).at(2);
+		if (alChar != nothing){  										//means there is a domain on jth residue
+			featureToAdd = "domain";
+			featureToAdd += alChar;
+			if (!vecUtil::contains(listOfFeatures,featureToAdd)){	//check whether this element is already in the list
+				listOfFeatures.push_back(featureToAdd);
 			}
 		}
 	}
-*/
 }
 void FeaturesProfile::printProfile(){
 	for (int i = 0; i < prfMatrix.size(); i++){
