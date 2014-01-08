@@ -226,3 +226,6 @@ void Profile::printProfile(){
 		std::cout << "\n";
 	}
 }
+void Profile::setMatrix(std::vector<std::vector<double> > newMatrix){
+	prfMatrix = newMatrix;
+}

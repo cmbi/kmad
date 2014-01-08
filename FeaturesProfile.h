@@ -9,6 +9,7 @@ public:
 	double getElement(int, int);	
 	double getScore(int,std::string);
 	std::vector<std::vector<double> > getMatrix();
+	void setMatrix(std::vector<std::vector<double> >);
 	void printProfile();
 	void createProfile(const std::vector< std::vector<std::string> >&,const std::vector<bool>&, const std::vector<double>&, bool);
 	void expandListOfFeatures(const std::vector<std::string>&);

@@ -38,14 +38,18 @@ int main(int argc, char *argv[]){
 			//FeaturesProfile fprf;
 			std::vector<std::vector<double> > prf, fprf;
 			std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(&prf,&fprf,gapPen,verboseMode,weightsModeOn));	//create multiple sequence alignment	
+
 			std::vector<std::vector<std::vector<std::string> > > encSeq = rawSequences.getEncodedSequences();
 			std::string outputPrefix1 = "crap1_step1";
 			//txtProc::writeAlignmentWithoutCodeToFile(multipleAlignment,encSeq,outputPrefix1);						//write multiple alignment to a fileA
 			txtProc::writeAlignmentToFile(multipleAlignment,encSeq,outputPrefix1);						//write multiple alignment to a fileA
 			Profile prof(prf);
 			FeaturesProfile fprof(fprf);
-			std::cout << "MSA rozmiar prf: " << prof.getMatrix().size() << std::endl;
-			std::vector<std::string> multipleAlignment2ndRound(rawSequences.performMSAnextRound(prof,fprof,gapPen,verboseMode,weightsModeOn));
+			std::vector<std::string> multipleAlignment2ndRound;
+			for (int i = 10; i > 0; i--){
+				double cutoff = 1/i;
+				multipleAlignment2ndRound=rawSequences.performMSAnextRound(&prof,&fprof,gapPen,verboseMode,weightsModeOn,cutoff);
+			}
 			//txtProc::writeAlignmentWithoutCodeToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
 			txtProc::writeAlignmentToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
 		}

@@ -144,4 +144,6 @@ void FeaturesProfile::printProfile(){
 std::vector<std::vector<double> > FeaturesProfile::getMatrix(){
 	return prfMatrix;
 }
-
+void FeaturesProfile::setMatrix(std::vector<std::vector<double> > newMatrix){
+	prfMatrix = newMatrix;
+}

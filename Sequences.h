@@ -18,7 +18,7 @@ public:
 	std::vector< std::vector< std::vector<std::string> > > getEncodedSequences();
 	std::vector<std::string> performMSA(Profile*,int,std::string);
 	std::vector<std::string> performMSAencoded(std::vector<std::vector<double> >*,std::vector<std::vector<double> >*,int,std::string, bool);
-	std::vector<std::string> performMSAnextRound(Profile&,FeaturesProfile&,int,std::string, bool, double);
+	std::vector<std::string> performMSAnextRound(Profile*,FeaturesProfile*,int,std::string, bool, double);
 private:
 	//functions
 	void removeGaps(std::string *,std::string *,std::vector<std::string> &);
