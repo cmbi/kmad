@@ -41,6 +41,13 @@ void vecUtil::divideVectorByAScalar(std::vector<double>& vec, int scalar){
 	}
 	vec = result;
 }
+void vecUtil::divideVectorByAScalar(std::vector<double>& vec, double scalar){
+	std::vector<double> result;
+	for (int i = 0; i < vec.size(); i++){
+		result.push_back(vec[i]/scalar);	
+	}
+	vec = result;
+}
 void vecUtil::multiplyVectorByAScalar(std::vector<double>& vec, double scalar){
 	std::vector<double> result;
 	for (int i = 0; i < vec.size(); i++){
@@ -102,4 +109,11 @@ std::vector<std::string> vecUtil::push_front(std::vector<std::string> vec, std::
 	vec.push_back(newElement);
 	reverse(vec.begin(),vec.end());
 	return vec;
+}
+double vecUtil::sum(const std::vector<double>& vec){
+	double sum = 0;
+	for (int i = 0; i < vec.size(); i++){
+		sum += vec[i];
+	}
+	return sum;
 }

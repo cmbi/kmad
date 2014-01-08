@@ -12,9 +12,39 @@ FeaturesProfile::FeaturesProfile(std::vector< std::vector<double> > vec)
 }
 FeaturesProfile::FeaturesProfile(){
 }
-void FeaturesProfile::createProfile(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity){
-	countOccurences(alignment,sequenceIdentity);
+void FeaturesProfile::createProfile(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity, const std::vector<double>& sequenceIdentityValues, bool weightsModeOn){
+	if (weightsModeOn) countOccurences(alignment, sequenceIdentityValues);
+	else countOccurences(alignment,sequenceIdentity);
 	vecUtil::transposeVec(prfMatrix);
+}
+//fucntion countOccurences - with weights mode on
+void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string> >& alignment, const std::vector<double>& sequenceIdentityValues){
+	std::vector<std::vector<double> > tmpResult;
+	double identitiesSum = vecUtil::sum(sequenceIdentityValues);
+	char nothing = 'A';
+	for (int i = 0; i < alignment[0].size();i++){
+		std::vector<double> profileColumn(listOfFeatures.size(),0);
+		for (int j = 0; j < alignment.size();j++){
+				for(int k = 1; k < 4; k++){
+					char alChar = alignment[j][i][k];
+					if (alChar != nothing){
+						int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
+						if (featIndex != -1){
+							if (k==3){
+								profileColumn.at(featIndex)+=15*sequenceIdentityValues.at(j);
+							}
+							else if (k==2){
+								profileColumn.at(featIndex)+=3*sequenceIdentityValues.at(j);
+								profileColumn.at(1)-=3*sequenceIdentityValues.at(j);
+							}
+						}
+					}
+				}
+		}
+		vecUtil::divideVectorByAScalar(profileColumn,identitiesSum);
+		tmpResult.push_back(profileColumn);
+	} 
+	prfMatrix = tmpResult;
 }
 void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity){
 	std::vector<std::vector<double> > tmpResult;
@@ -110,5 +140,8 @@ void FeaturesProfile::printProfile(){
 		}
 		std::cout << std::endl;
 	}
+}
+std::vector<std::vector<double> > FeaturesProfile::getMatrix(){
+	return prfMatrix;
 }
 

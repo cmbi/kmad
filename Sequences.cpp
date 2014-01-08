@@ -45,7 +45,7 @@ std::vector<std::string> Sequences::performMSA(Profile *outputProfile,int penalt
 	alignmentWithLowercase.push_back(sequences.at(0).at(1));
 	std::vector<std::string> tmpAlignment;
 	std::vector<bool> sequenceIdentity; 			//'true' stored for every sequence which identity with the 1st one is higher than 80%, only based on these profile will be built
-	sequenceIdentity.push_back(true);		//we always want to build profile based on the first seqeunce
+	sequenceIdentity.push_back(true);		//to build the first profile based only on the first sequence
 	std::string alNoLower;
 	std::string alWithLower;
 	bool flag = false;
@@ -55,7 +55,7 @@ std::vector<std::string> Sequences::performMSA(Profile *outputProfile,int penalt
 		alignmentWithoutLowercase.push_back(alNoLower);
 		alignmentWithLowercase.push_back(alWithLower);
 		double identity = calcIdentity(alNoLower);
-		if (identity > 0.8){
+		if (identity > 0){
 			sequenceIdentity.push_back(true);
 		}
 		else sequenceIdentity.push_back(false);	
@@ -66,7 +66,7 @@ std::vector<std::string> Sequences::performMSA(Profile *outputProfile,int penalt
 	return alignmentWithLowercase;		
 }
 //function performMSA for ENCODED SEQUENCES
-std::vector<std::string> Sequences::performMSAencoded(Profile *outputProfile,FeaturesProfile *outputFeaturesProfile, int penalty, std::string verbose){
+std::vector<std::string> Sequences::performMSAencoded(std::vector<std::vector<double> >* outputProfile,std::vector<std::vector<double> >* outputFeaturesProfile, int penalty, std::string verbose, bool weightsModeOn){
 	Profile pseudoProfile(substitutionMatrix::convertToProfileFormat(sequencesEncoded.at(0).at(1))); 
 	std::vector< std::vector<std::string> > alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector< std::vector<std::string> > alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
@@ -74,31 +74,58 @@ std::vector<std::string> Sequences::performMSAencoded(Profile *outputProfile,Fea
 	alignmentWithLowercase.push_back(sequencesEncoded.at(0).at(1));
 	std::vector< std::vector<std::string> > tmpAlignment;
 	std::vector<bool> sequenceIdentity; 					//'true' stored for every sequence which identity with the 1st one is higher than 80%, only based on these profile will be built
-	sequenceIdentity.push_back(true);					//we always want to build profile based on the first seqeunce
+	std::vector<double> sequenceIdentityValues;
+	sequenceIdentity.push_back(true);					//to build the first profile based only on the first seqeunce
+	sequenceIdentityValues.push_back(1);					//first sequence has 100% identity with itself
 	FeaturesProfile featProfile;
 	featProfile.expandListOfFeatures(sequencesEncoded.at(0).at(1));
-	featProfile.createProfile(alignmentWithoutLowercase,sequenceIdentity); 	//create features profile based on the 1st seq
+	featProfile.createProfile(alignmentWithoutLowercase,sequenceIdentity,sequenceIdentityValues,weightsModeOn); 	//create features profile based on the 1st seq
 	//featProfile.printProfile();
+	std::cout << "hi!" << std::endl;
 	std::vector<std::string> alNoLower;
 	std::vector<std::string> alWithLower;
-	std::cout << "features profile: " << std::endl;
-	featProfile.printProfile();
 	bool flag = false;
 	for (int i = 1; i < seqNr; i++){
-		featProfile.createProfile(alignmentWithoutLowercase,sequenceIdentity); 	//create features profile based on the 1st seq
+		featProfile.printProfile();
+		featProfile.createProfile(alignmentWithoutLowercase,sequenceIdentity,sequenceIdentityValues,weightsModeOn); 	//create features profile based on the 1st seq
+		std::cout << "hello!" << std::endl;
 		//featProfile.printProfile();
 		alignPairwise(&alNoLower,&alWithLower,sequencesEncoded.at(i).at(1),pseudoProfile,featProfile,penalty,i,verbose);
 		alignmentWithoutLowercase.push_back(alNoLower);
 		alignmentWithLowercase.push_back(alWithLower);
 		double identity = calcIdentity(alNoLower);
-		if (identity > 0.5){
+		if (identity > 0.8){
 			sequenceIdentity.push_back(true);
 		}
 		else sequenceIdentity.push_back(false);	
-		pseudoProfile.buildPseudoProfile(alignmentWithoutLowercase, sequenceIdentity);
+		sequenceIdentityValues.push_back(identity);
+		pseudoProfile.buildPseudoProfile(alignmentWithoutLowercase, sequenceIdentity, sequenceIdentityValues,weightsModeOn);
 		if (verbose!="0") pseudoProfile.printProfile();
+		std::cout << i << std::endl;
 	}
-	*outputProfile = pseudoProfile;
+	//outputProfile = Profile(&pseudoProfile.getMatrix());
+	*outputProfile = pseudoProfile.getMatrix();
+	*outputFeaturesProfile = featProfile.getMatrix();
+	return vecUtil::flatten(alignmentWithLowercase);		
+	//return vecUtil::flattenWithoutFeatures(alignmentWithLowercase);		
+}
+std::vector<std::string> Sequences::performMSAnextRound(Profile& outputProfile,FeaturesProfile& outputFeaturesProfile, int penalty, std::string verbose, bool weightsModeOn, double identityCutoff){
+	std::vector< std::vector<std::string> > alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
+	std::vector< std::vector<std::string> > alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
+	alignmentWithoutLowercase.push_back(sequencesEncoded.at(0).at(1));
+	alignmentWithLowercase.push_back(sequencesEncoded.at(0).at(1));
+	std::vector< std::vector<std::string> > tmpAlignment;
+	std::vector<std::string> alNoLower;
+	std::vector<std::string> alWithLower;
+	std::cout << "rozmiar profilu: " << outputProfile.getMatrix().size() << std::endl;
+	bool flag = false;
+	for (int i = 1; i < seqNr; i++){
+		alignPairwise(&alNoLower,&alWithLower,sequencesEncoded.at(i).at(1),outputProfile,outputFeaturesProfile,penalty,i,verbose);
+		alignmentWithoutLowercase.push_back(alNoLower);
+		alignmentWithLowercase.push_back(alWithLower);
+		if (verbose!="0") outputProfile.printProfile();
+	}
+	//*outputProfile = pseudoProfile; // later - change it so that it writes to outputProfile profile based on new alignment(same to features)
 	return vecUtil::flatten(alignmentWithLowercase);		
 	//return vecUtil::flattenWithoutFeatures(alignmentWithLowercase);		
 }
