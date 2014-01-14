@@ -32,8 +32,11 @@ void Profile::createProfile(std::vector<std::string>& alignment,const std::vecto
 }
 //calculate the alignment profile ENCODED SEQUENCES
 void Profile::createProfile(std::vector< std::vector<std::string> >& alignment,const std::vector<bool>& sequenceIdentity, const std::vector<double>& sequenceIdentityValues, bool weightsModeOn){
-	if (weightsModeOn) countOccurences(prfMatrix,alignment,sequenceIdentity);
-	else countOccurences(prfMatrix,alignment,sequenceIdentity, sequenceIdentityValues);
+	if (weightsModeOn){
+		countOccurences(prfMatrix,alignment,sequenceIdentity,sequenceIdentityValues);
+		std::cout << "weights on: " << weightsModeOn << std::endl;
+	}
+	else countOccurences(prfMatrix,alignment,sequenceIdentity);
 	vecUtil::transposeVec(prfMatrix);
 }
 //builds a pseudo-profile from the profile itself and the substitution matrix with appropriate weights
@@ -211,8 +214,8 @@ double Profile::getElement(int aAcidInt, int position){
 //function printProfile(int,int) - prints only columns from boundStart to boundEnd
 void Profile::printProfile(int boundStart, int boundEnd){
 	for (int i = boundStart; i < boundEnd; i++){
-		for (int j = 0; j < prfMatrix.at(0).size();j++){
-			std::cout << prfMatrix.at(i).at(j) << " ";
+		for (int j = 0; j < prfMatrix.size();j++){
+			std::cout << prfMatrix.at(j).at(i) << " ";
 		}
 		std::cout << "\n";
 	}

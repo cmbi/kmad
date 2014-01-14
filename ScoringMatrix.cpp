@@ -30,6 +30,19 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, int pen)
 	matrixG.assign(iLength+1, row);
 	matrixH.assign(iLength+1, row);
 }
+ScoringMatrix::ScoringMatrix(int s1size,int s2size, int pen, double extensionPenalty)
+:	iLength(s1size),
+	jLength(s2size),	
+	gapOpening(double(pen)),
+	gapExtension(double(extensionPenalty)),
+	gapOpeningHorizontal(gapOpening),
+	gapExtensionHorizontal(gapExtension)
+{
+	std::vector<double> row(jLength+1,0);
+	matrixV.assign(iLength+1, row);
+	matrixG.assign(iLength+1, row);
+	matrixH.assign(iLength+1, row);
+}
 //destructor
 ScoringMatrix::~ScoringMatrix(){
 //	cout <<  "DESTROYING SCORING MATRIX\n";
