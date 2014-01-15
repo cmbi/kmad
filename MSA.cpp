@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
     		("input,i", po::value<std::string>(&filename), "input file name")
     		("output,o", po::value<std::string>(&outputPrefix), "output file prefix")
 		("gap_penalty,g", po::value<int>(&gapPen), "gap opening penalty")
-		("gap_extension,e",po::value<double>(&gapExt)->default_value(1.),"gap extension penalty")
+		("gap_extension,e",po::value<double>(&gapExt)->default_value(-1.),"gap extension penalty")
 		("codon_length,c", po::value<int>(&codonLength)->implicit_value(4)->default_value(1),"codon length")
 		("phosph,p", po::value<int>(&phosphScore)->default_value(15),"score for aligning phosphoryated residues")
 		("domain,d", po::value<int>(&domainScore)->default_value(2),"score for aligning domains")
@@ -56,7 +56,6 @@ int main(int argc, char *argv[]){
 			
 			multipleAlignment2ndRound=rawSequences.performMSAnextRound(&prof,&fprof,gapPen,gapExt,verboseMode,weightsModeOn,0);
 			txtProc::writeAlignmentToFile(multipleAlignment2ndRound,encSeq,"profile0cutoff");						//write multiple alignment to a fileA
-			prof.printProfile(0,1);
 			txtProc::writeAlignmentToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
 		}
 		else {

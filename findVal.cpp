@@ -13,6 +13,17 @@ int findVal::maxValue(int int1,int int2,int int3){
 	}
 	return m;
 }
+//function maxValueOf3 - finds maximum value from 3 doubles
+double findVal::maxValueDoubles(double double1,double double2,double double3){
+	double m = double1;
+	if (double2 > double1 && double2 > double3){
+		m = double2;
+	}
+	else if (double3 > double1){
+		m = double3;
+	}
+	return m;
+}
 // function maxValue - finds maximum value from an array of ints
 int findVal::maxValue(int arrayOfInts[], int arraySize){
 	int m = arrayOfInts[0];

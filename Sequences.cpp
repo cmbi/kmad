@@ -87,7 +87,7 @@ std::vector<std::string> Sequences::performMSAencoded(std::vector<std::vector<do
 		alignmentWithoutLowercase.push_back(alNoLower);
 		alignmentWithLowercase.push_back(alWithLower);
 		double identity = calcIdentity(alNoLower);
-		if (identity > 0.8){
+		if (identity > 0.95){
 			sequenceIdentity.push_back(true);
 		}
 		else sequenceIdentity.push_back(false);	

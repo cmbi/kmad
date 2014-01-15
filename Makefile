@@ -25,3 +25,5 @@ findVal.o: findVal.h findVal.cpp
 	clang++ -std=c++11 -stdlib=libc++ -c findVal.cpp
 clean: 
 	rm -f *.o MSA *.h.gch
+install:
+	cp MSA /usr/local/bin
