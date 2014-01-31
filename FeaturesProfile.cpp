@@ -60,12 +60,12 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 						int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
 						if (featIndex != -1){
 							if (k==3){
-								//profileColumn.at(featIndex)+=15;
 								profileColumn.at(featIndex)+=0;
+								//profileColumn.at(featIndex)+=0;
 							}
 							else if (k==2){
-								//profileColumn.at(featIndex)+=3;
-							//	profileColumn.at(1)-=3;
+								profileColumn.at(featIndex)+=0;
+								profileColumn.at(1)-=0;
 							}
 						}
 					}

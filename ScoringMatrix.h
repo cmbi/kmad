@@ -5,8 +5,8 @@ class Profile;
 class FeaturesProfile;
 class ScoringMatrix{
 public:
-	ScoringMatrix(int,int,int); //constructor
-	ScoringMatrix(int,int,int,double); //constructor
+	ScoringMatrix(int,int,double); //constructor
+	ScoringMatrix(int,int,double,double); //constructor
 	~ScoringMatrix();
 	ScoringMatrix(ScoringMatrix&);
 	ScoringMatrix operator=(ScoringMatrix&);

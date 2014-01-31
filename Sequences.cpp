@@ -37,7 +37,7 @@ Sequences Sequences::operator=(Sequences& that){
 	return newSequences;
 }
 //function performMSA - returns ready alignment, with gaps cut out from the first sequence and so on...
-std::vector<std::string> Sequences::performMSA(Profile *outputProfile,int penalty, std::string verbose){
+std::vector<std::string> Sequences::performMSA(Profile *outputProfile,double penalty, std::string verbose){
 	Profile pseudoProfile(substitutionMatrix::convertToProfileFormat(sequences.at(0).at(1))); //IMPLEMENT convertToProfileFormat // psuedoProfile - it's the one that will later be combined profile and sbst matrix
 	std::vector<std::string> alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector<std::string> alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
@@ -65,7 +65,7 @@ std::vector<std::string> Sequences::performMSA(Profile *outputProfile,int penalt
 	return alignmentWithLowercase;		
 }
 //function performMSA for ENCODED SEQUENCES
-std::vector<std::string> Sequences::performMSAencoded(std::vector<std::vector<double> >* outputProfile,std::vector<std::vector<double> >* outputFeaturesProfile, int penalty, double extensionPenalty, std::string verbose, bool weightsModeOn){
+std::vector<std::string> Sequences::performMSAencoded(std::vector<std::vector<double> >* outputProfile,std::vector<std::vector<double> >* outputFeaturesProfile, double penalty, double extensionPenalty, std::string verbose, bool weightsModeOn){
 	Profile pseudoProfile(substitutionMatrix::convertToProfileFormat(sequencesEncoded.at(0).at(1))); 
 	std::vector< std::vector<std::string> > alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector< std::vector<std::string> > alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
@@ -100,7 +100,7 @@ std::vector<std::string> Sequences::performMSAencoded(std::vector<std::vector<do
 	*outputFeaturesProfile = featProfile.getMatrix();
 	return vecUtil::flatten(alignmentWithLowercase);		
 }
-std::vector<std::string> Sequences::performMSAnextRound(Profile* outputProfile,FeaturesProfile* outputFeaturesProfile, int penalty, double extensionPenalty,std::string verbose, bool weightsModeOn, double identityCutoff){
+std::vector<std::string> Sequences::performMSAnextRound(Profile* outputProfile,FeaturesProfile* outputFeaturesProfile, double penalty, double extensionPenalty,std::string verbose, bool weightsModeOn, double identityCutoff){
 	std::vector< std::vector<std::string> > alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector< std::vector<std::string> > alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
 	alignmentWithoutLowercase.push_back(sequencesEncoded.at(0).at(1));
@@ -228,7 +228,7 @@ void Sequences::removeGaps(std::vector<std::string> *alignmentWithLowercase, std
 	*alignmentWithoutLowercase = newS2;
 }
 //function alignPairwise
-void Sequences::alignPairwise(std::string *alNoLower,std::string *alWithLower,std::string seq2, Profile& prf, int penalty, int deb, std::string verbose){
+void Sequences::alignPairwise(std::string *alNoLower,std::string *alWithLower,std::string seq2, Profile& prf, double penalty, int deb, std::string verbose){
 	int profileLength = prf.getMatrix().at(0).size();
 	std::string tmpResultWithLowercase;
 	std::string tmpResultWithoutLowercase;
@@ -241,7 +241,7 @@ void Sequences::alignPairwise(std::string *alNoLower,std::string *alWithLower,st
 	*alWithLower = tmpResultWithLowercase;
 }
 //function alignPairwise for ENCODED SEQUENCES
-void Sequences::alignPairwise(std::vector<std::string> *alNoLower,std::vector<std::string> *alWithLower,std::vector<std::string> seq2, Profile& prf, FeaturesProfile& featPrf, int penalty, double extensionPenalty,int deb, std::string verbose){
+void Sequences::alignPairwise(std::vector<std::string> *alNoLower,std::vector<std::string> *alWithLower,std::vector<std::string> seq2, Profile& prf, FeaturesProfile& featPrf, double penalty, double extensionPenalty,int deb, std::string verbose){
 	int profileLength = prf.getMatrix().at(0).size();
 	std::vector<std::string > tmpResultWithLowercase;
 	std::vector<std::string > tmpResultWithoutLowercase;

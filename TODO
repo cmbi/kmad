@@ -1,0 +1,4 @@
+find out how decreasing gaps with each round affects the alignment
+^first find a bug, why is every second char a gap when mode == decreasingPenalties??
+^the bug seems to be fixed, but better watch out
+

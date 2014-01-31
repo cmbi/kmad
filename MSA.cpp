@@ -7,8 +7,8 @@
 #include <string>
 namespace po = boost::program_options;
 int main(int argc, char *argv[]){
-	int gapPen,codonLength, phosphScore,domainScore;
-	double identityCutOff, gapExt;
+	int codonLength, phosphScore,domainScore;
+	double identityCutOff, gapExt, gapPen;
 	bool weightsModeOn;
 	std::string filename,verboseMode,outputPrefix;
 	po::options_description desc("Allowed options");
@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
     		("help,h", "produce help message")
     		("input,i", po::value<std::string>(&filename), "input file name")
     		("output,o", po::value<std::string>(&outputPrefix), "output file prefix")
-		("gap_penalty,g", po::value<int>(&gapPen), "gap opening penalty")
+		("gap_penalty,g", po::value<double>(&gapPen), "gap opening penalty")
 		("gap_extension,e",po::value<double>(&gapExt)->default_value(-1.),"gap extension penalty")
 		("codon_length,c", po::value<int>(&codonLength)->implicit_value(4)->default_value(1),"codon length")
 		("phosph,p", po::value<int>(&phosphScore)->default_value(15),"score for aligning phosphoryated residues")
@@ -48,8 +48,9 @@ int main(int argc, char *argv[]){
 			Profile prof(prf);
 			FeaturesProfile fprof(fprf);
 			std::vector<std::string> multipleAlignment2ndRound;
-			for (int i = 10; i > 0; i--){
-				double cutoff = 1/i;
+			for (int i = 10; i >= 5; i--){
+				double cutoff = i/10;
+				gapPen = gapPen * 2/3 + gapPen*i/30;
 				multipleAlignment2ndRound=rawSequences.performMSAnextRound(&prof,&fprof,gapPen,gapExt,verboseMode,weightsModeOn,cutoff);
 			}
 			//txtProc::writeAlignmentWithoutCodeToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA

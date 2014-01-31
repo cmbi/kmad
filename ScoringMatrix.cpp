@@ -17,7 +17,7 @@
 		pen - gap opening penalty
 */
 //constructor
-ScoringMatrix::ScoringMatrix(int s1size,int s2size, int pen)
+ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen)
 :	iLength(s1size),
 	jLength(s2size),	
 	gapOpening(double(pen)),
@@ -30,7 +30,7 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, int pen)
 	matrixG.assign(iLength+1, row);
 	matrixH.assign(iLength+1, row);
 }
-ScoringMatrix::ScoringMatrix(int s1size,int s2size, int pen, double extensionPenalty)
+ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen, double extensionPenalty)
 :	iLength(s1size),
 	jLength(s2size),	
 	gapOpening(double(pen)),
@@ -92,7 +92,7 @@ void ScoringMatrix::calculateScores(std::string s2, Profile& prf, int debug){
 			score1 = matrixV.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j));
 			score2 = matrixG.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j));
 			score3 = matrixH.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j));
-			matrixV[i][j] = findVal::maxValue(score1,score2,score3);
+			matrixV[i][j] = findVal::maxValueDoubles(score1,score2,score3);
 			///G
 			score1 = matrixV.at(i-1).at(j) + gapOpening;
 			score2 = matrixG.at(i-1).at(j) + gapExtension;
