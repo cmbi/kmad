@@ -109,6 +109,7 @@ void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, F
 	std::vector<std::string> s1 = misc::pseudoSequence(prf.getMatrix()[0].size()+1); //creating polyA pseudoSequence representing the profile, to know later where are the gaps in the profile
 	s2 = vecUtil::push_front(s2,"-AAA");
 	std::string s1String,s2String;
+	std::cout << "gapOpening: " << gapOpening << std::endl;
 	for (int i = 1; i < matrixV.size(); i++){
 		matrixV.at(i).at(0) = -10000000; //infinity
 		matrixH.at(i).at(0) = -10000000;

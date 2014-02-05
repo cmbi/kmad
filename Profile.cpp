@@ -116,6 +116,7 @@ void Profile::countOccurences(std::vector< std::vector<double> >& result,std::ve
 	int trueSequences = misc::countTrueValuesInVector(sequenceIdentity);
 	for (int i = 0; i < alignment[0].size(); i++){
 		std::vector<double> profileColumn(20,0);
+		int nonGaps = 0;
 		for (int j = 0; j < alignment.size(); j++){
 			if (sequenceIdentity.at(j)){			//is it a sequence that I want to count in? (with identity > cutoff)
 				char seqChar(alignment.at(j).at(i)[0]);
@@ -137,10 +138,12 @@ void Profile::countOccurences(std::vector< std::vector<double> >& result,std::ve
 						int aAcidInt = substitutionMatrix::findAminoAcidsNo(seqChar);
 						profileColumn.at(aAcidInt)++;				
 					}
+					nonGaps++;
 				}
 			}
 		}
-		vecUtil::divideVectorByAScalar(profileColumn,trueSequences);
+		//vecUtil::divideVectorByAScalar(profileColumn,trueSequences);
+		vecUtil::divideVectorByAScalar(profileColumn,nonGaps);
 		tmpResult.push_back(profileColumn);
 	}
 	result = tmpResult;

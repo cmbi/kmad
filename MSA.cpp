@@ -48,14 +48,18 @@ int main(int argc, char *argv[]){
 			Profile prof(prf);
 			FeaturesProfile fprof(fprf);
 			std::vector<std::string> multipleAlignment2ndRound;
-			for (int i = 10; i >= 5; i--){
+			double gapPenDecreasing;
+			for (int i = 10; i >= 0; i--){
 				double cutoff = i/10;
-				gapPen = gapPen * 2/3 + gapPen*i/30;
+				//gapPenDecreasing = gapPen * 1/2 + gapPen*i/20;
+				//std::cout << gapPen << std::endl;
 				multipleAlignment2ndRound=rawSequences.performMSAnextRound(&prof,&fprof,gapPen,gapExt,verboseMode,weightsModeOn,cutoff);
+				//multipleAlignment2ndRound=rawSequences.performMSAnextRound(&prof,&fprof,gapPenDecreasing,gapExt,verboseMode,weightsModeOn,cutoff);
 			}
 			//txtProc::writeAlignmentWithoutCodeToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
-			
+			gapPenDecreasing = gapPen * 1/2;
 			multipleAlignment2ndRound=rawSequences.performMSAnextRound(&prof,&fprof,gapPen,gapExt,verboseMode,weightsModeOn,0);
+			//multipleAlignment2ndRound=rawSequences.performMSAnextRound(&prof,&fprof,gapPenDecreasing,gapExt,verboseMode,weightsModeOn,0);
 			txtProc::writeAlignmentToFile(multipleAlignment2ndRound,encSeq,"profile0cutoff");						//write multiple alignment to a fileA
 			txtProc::writeAlignmentToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
 		}
