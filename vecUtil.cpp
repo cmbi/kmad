@@ -117,3 +117,25 @@ double vecUtil::sum(const std::vector<double>& vec){
 	}
 	return sum;
 }
+std::vector<double> vecUtil::average(std::vector< std::vector<double> > vec){
+	std::vector<double> result;
+	for (int i = 0; i < vec[0].size(); i++){
+		double sum = 0;
+		for(int j = 0; j < vec.size();j++){
+			sum += vec[j][i];
+		}
+		result.push_back(sum/vec.size());
+	}
+	return result;
+}
+std::vector<double> vecUtil::average(std::vector< std::vector<int> > vec){
+	std::vector<double> result;
+	for (int i = 0; i < vec[0].size(); i++){
+		double sum = 0;
+		for(int j = 0; j < vec.size();j++){
+			sum += vec[j][i];
+		}
+		result.push_back(sum/vec.size());
+	}
+	return result;
+}

@@ -36,9 +36,28 @@ std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(st
 //convert to profile format - creates a matrix 20 x sequence length, where nth column is a column from sbstMatrix for the amino acid on position n in the sequence ENCODED SEQUENCES
 std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(std::vector<std::string> sequence){
 	std::vector< std::vector<double> > result(sequence.size());
+	std::vector<std::vector<int> > newSbstRow;
 	for (int i = 0; i < result.size(); i++){
-		int aAcidInt = findAminoAcidsNo(sequence[i][0]);
-		result.at(i)=vecUtil::convertIntVectorToDoubleVector(simScores.at(aAcidInt));//adds a column to the result(converted from int to double)
+		if (sequence[i][0] == 'B'){
+			newSbstRow.clear();
+			newSbstRow.push_back(simScores.at(2));
+			newSbstRow.push_back(simScores.at(3));
+			result.at(i) = vecUtil::average(newSbstRow);
+		}
+		else if (sequence[i][0] == 'Z'){
+			newSbstRow.clear();
+			newSbstRow.push_back(simScores.at(6));
+			newSbstRow.push_back(simScores.at(7));
+			result.at(i) = vecUtil::average(newSbstRow);
+
+		}
+		else if (sequence[i][0] == 'X'){
+			result.at(i) = vecUtil::average(simScores);
+		}
+		else{
+			int aAcidInt = findAminoAcidsNo(sequence[i][0]);
+			result.at(i)=vecUtil::convertIntVectorToDoubleVector(simScores.at(aAcidInt));//adds a column to the result(converted from int to double)
+		}
 	}
 	vecUtil::transposeVec(result);
 	return result;

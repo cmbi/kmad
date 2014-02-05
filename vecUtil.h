@@ -16,4 +16,7 @@ namespace vecUtil{
 	std::vector<std::string> flattenWithoutFeatures(const std::vector<std::vector<std::string> >&);
 	std::vector<std::string> flatten(const std::vector<std::vector<std::string> >&);
 	std::vector<std::string> push_front(std::vector<std::string>,std::string);
+	std::vector<double> average(std::vector<std::vector<double> >);
+	std::vector<double> average(std::vector<std::vector<int> >);
+
 }
