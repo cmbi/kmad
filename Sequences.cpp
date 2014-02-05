@@ -65,7 +65,7 @@ std::vector<std::string> Sequences::performMSA(Profile *outputProfile,double pen
 	return alignmentWithLowercase;		
 }
 //function performMSA for ENCODED SEQUENCES
-std::vector<std::string> Sequences::performMSAencoded(std::vector<std::vector<double> >* outputProfile,std::vector<std::vector<double> >* outputFeaturesProfile, double penalty, double extensionPenalty, std::string verbose, bool weightsModeOn){
+std::vector<std::string> Sequences::performMSAencoded(std::vector<std::vector<double> >* outputProfile,std::vector<std::vector<double> >* outputFeaturesProfile, double penalty, double extensionPenalty, std::string verbose, bool weightsModeOn, int dom, int phosph){
 	Profile pseudoProfile(substitutionMatrix::convertToProfileFormat(sequencesEncoded.at(0).at(1))); 
 	std::vector< std::vector<std::string> > alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector< std::vector<std::string> > alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
@@ -76,7 +76,7 @@ std::vector<std::string> Sequences::performMSAencoded(std::vector<std::vector<do
 	std::vector<double> sequenceIdentityValues;
 	sequenceIdentity.push_back(true);					//to build the first profile based only on the first seqeunce
 	sequenceIdentityValues.push_back(1);					//first sequence has 100% identity with itself
-	FeaturesProfile featProfile;
+	FeaturesProfile featProfile(dom,phosph);
 	featProfile.expandListOfFeatures(sequencesEncoded.at(0).at(1));
 	featProfile.createProfile(alignmentWithoutLowercase,sequenceIdentity,sequenceIdentityValues,weightsModeOn); 	//create features profile based on the 1st seq
 	std::vector<std::string> alNoLower;
@@ -100,7 +100,8 @@ std::vector<std::string> Sequences::performMSAencoded(std::vector<std::vector<do
 	*outputFeaturesProfile = featProfile.getMatrix();
 	return vecUtil::flatten(alignmentWithLowercase);		
 }
-std::vector<std::string> Sequences::performMSAnextRound(Profile* outputProfile,FeaturesProfile* outputFeaturesProfile, double penalty, double extensionPenalty,std::string verbose, bool weightsModeOn, double identityCutoff){
+//perform next round of MSA (good for all rounds except for the first one - you need a profile)
+std::vector<std::string> Sequences::performMSAnextRound(Profile* outputProfile,FeaturesProfile* outputFeaturesProfile, double penalty, double extensionPenalty,std::string verbose, bool weightsModeOn, double identityCutoff,int dom, int phosph){
 	std::vector< std::vector<std::string> > alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector< std::vector<std::string> > alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
 	alignmentWithoutLowercase.push_back(sequencesEncoded.at(0).at(1));
@@ -112,7 +113,7 @@ std::vector<std::string> Sequences::performMSAnextRound(Profile* outputProfile,F
 	std::vector<double> sequenceIdentityValues;
 	sequenceIdentity.push_back(true);					//to build the first profile based only on the first seqeunce
 	sequenceIdentityValues.push_back(1);					//first sequence has 100% identity with itself
-	FeaturesProfile featProfile(outputFeaturesProfile->getMatrix());
+	FeaturesProfile featProfile(outputFeaturesProfile->getMatrix(),dom,phosph);
 	Profile pseudoProfile(outputProfile->getMatrix());	
 	bool flag = false;
 	for (int i = 1; i < seqNr; i++){

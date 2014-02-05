@@ -3,8 +3,8 @@
 #include <vector>
 class FeaturesProfile{
 public:
-	FeaturesProfile(std::vector< std::vector<double> >);
-	FeaturesProfile();
+	FeaturesProfile(std::vector< std::vector<double> >,int,int);
+	FeaturesProfile(int, int);
 	double getElement(int, std::string);
 	double getElement(int, int);	
 	double getScore(int,std::string);
@@ -19,4 +19,6 @@ private:
 	void countOccurences(const std::vector< std::vector<std::string> >&,const std::vector<double>&);
 	int findFeaturesIndex(std::string);
 	std::string name(std::string,int);
+	int domainScore;
+	int phosphScore;
 };

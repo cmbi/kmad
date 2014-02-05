@@ -20,9 +20,9 @@ int main(int argc, char *argv[]){
 		("gap_extension,e",po::value<double>(&gapExt)->default_value(-1.),"gap extension penalty")
 		("codon_length,c", po::value<int>(&codonLength)->implicit_value(4)->default_value(1),"codon length")
 		("phosph,p", po::value<int>(&phosphScore)->default_value(15),"score for aligning phosphoryated residues")
-		("domain,d", po::value<int>(&domainScore)->default_value(2),"score for aligning domains")
+		("domain,d", po::value<int>(&domainScore)->default_value(3),"score for aligning domains")
 		("weights,w", po::value<bool>(&weightsModeOn)->implicit_value(true)->default_value(false),"all sequences contribute to the profile with weights(=similarity)")
-		("identity", po::value<double>(&identityCutOff)->default_value(0.8),"identity cut off for sequences included in profile")
+		("identity", po::value<double>(&identityCutOff)->default_value(0.8, "0.8"),"identity cut off for sequences included in profile")
 		("verbose,v",po::value<std::string>(&verboseMode)->implicit_value("1")->default_value("0"),"verbose mode")
 	;	
 	po::variables_map vm;
@@ -35,32 +35,26 @@ int main(int argc, char *argv[]){
 	if (vm.count("input") && vm.count("gap_penalty")){
 		if (codonLength > 1) {
 			Sequences rawSequences(txtProc::processFASTA(filename,codonLength));
-			//Profile prf;													//this prf will be useful for next rounds of alignments
-			//FeaturesProfile fprf;
 			std::cout << weightsModeOn << std::endl;
 			std::vector<std::vector<double> > prf, fprf;
-			std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(&prf,&fprf,gapPen,gapExt,verboseMode,weightsModeOn));	//create multiple sequence alignment	
+			std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(&prf,&fprf,gapPen,gapExt,verboseMode,weightsModeOn,domainScore,phosphScore));	//create multiple sequence alignment	
 
 			std::vector<std::vector<std::vector<std::string> > > encSeq = rawSequences.getEncodedSequences();
-			std::string outputPrefix1 = "crap1_step1";
-			//txtProc::writeAlignmentWithoutCodeToFile(multipleAlignment,encSeq,outputPrefix1);						//write multiple alignment to a fileA
-			txtProc::writeAlignmentToFile(multipleAlignment,encSeq,outputPrefix1);						//write multiple alignment to a fileA
 			Profile prof(prf);
-			FeaturesProfile fprof(fprf);
+			FeaturesProfile fprof(fprf,domainScore,phosphScore);
 			std::vector<std::string> multipleAlignment2ndRound;
 			double gapPenDecreasing;
 			for (int i = 10; i >= 0; i--){
 				double cutoff = i/10;
 				//gapPenDecreasing = gapPen * 1/2 + gapPen*i/20;
 				//std::cout << gapPen << std::endl;
-				multipleAlignment2ndRound=rawSequences.performMSAnextRound(&prof,&fprof,gapPen,gapExt,verboseMode,weightsModeOn,cutoff);
+				multipleAlignment2ndRound=rawSequences.performMSAnextRound(&prof,&fprof,gapPen,gapExt,verboseMode,weightsModeOn,cutoff,domainScore,phosphScore);
 				//multipleAlignment2ndRound=rawSequences.performMSAnextRound(&prof,&fprof,gapPenDecreasing,gapExt,verboseMode,weightsModeOn,cutoff);
 			}
 			//txtProc::writeAlignmentWithoutCodeToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
 			gapPenDecreasing = gapPen * 1/2;
-			multipleAlignment2ndRound=rawSequences.performMSAnextRound(&prof,&fprof,gapPen,gapExt,verboseMode,weightsModeOn,0);
+			multipleAlignment2ndRound=rawSequences.performMSAnextRound(&prof,&fprof,gapPen,gapExt,verboseMode,weightsModeOn,0,domainScore,phosphScore);
 			//multipleAlignment2ndRound=rawSequences.performMSAnextRound(&prof,&fprof,gapPenDecreasing,gapExt,verboseMode,weightsModeOn,0);
-			txtProc::writeAlignmentToFile(multipleAlignment2ndRound,encSeq,"profile0cutoff");						//write multiple alignment to a fileA
 			txtProc::writeAlignmentToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
 		}
 		else {

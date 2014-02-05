@@ -7,10 +7,16 @@
 namespace {
 	std::vector<std::string>listOfFeatures = {"phosphN", "domain0"};
 }
-FeaturesProfile::FeaturesProfile(std::vector< std::vector<double> > vec)
-:	prfMatrix(vec){
+FeaturesProfile::FeaturesProfile(std::vector< std::vector<double> > vec, int dom, int phosph)
+:	prfMatrix(vec),
+	domainScore(dom),
+	phosphScore(phosph)
+	{
 }
-FeaturesProfile::FeaturesProfile(){
+FeaturesProfile::FeaturesProfile(int dom, int phosph)
+:	domainScore(dom),
+	phosphScore(phosph)
+	{
 }
 void FeaturesProfile::createProfile(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity, const std::vector<double>& sequenceIdentityValues, bool weightsModeOn){
 	if (weightsModeOn) countOccurences(alignment, sequenceIdentityValues);
@@ -31,11 +37,11 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 						int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
 						if (featIndex != -1){
 							if (k==3){
-								profileColumn.at(featIndex)+=15*sequenceIdentityValues.at(j);
+								profileColumn.at(featIndex)+=phosphScore * sequenceIdentityValues.at(j);
 							}
 							else if (k==2){
-								profileColumn.at(featIndex)+=3*sequenceIdentityValues.at(j);
-								profileColumn.at(1)-=3*sequenceIdentityValues.at(j);
+								profileColumn.at(featIndex) += domainScore * sequenceIdentityValues.at(j);
+								profileColumn.at(1) -= domainScore * sequenceIdentityValues.at(j);
 							}
 						}
 					}
@@ -60,12 +66,11 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 						int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
 						if (featIndex != -1){
 							if (k==3){
-								profileColumn.at(featIndex)+=0;
-								//profileColumn.at(featIndex)+=0;
+								profileColumn.at(featIndex) += phosphScore;
 							}
 							else if (k==2){
-								profileColumn.at(featIndex)+=0;
-								profileColumn.at(1)-=0;
+								profileColumn.at(featIndex) += domainScore;
+								profileColumn.at(1)-= domainScore;
 							}
 						}
 					}

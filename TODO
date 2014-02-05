@@ -1,4 +1,7 @@
-find out how decreasing gaps with each round affects the alignment
-^first find a bug, why is every second char a gap when mode == decreasingPenalties??
-^the bug seems to be fixed, but better watch out
 
+1)find out how decreasing gaps with each round affects the alignment
+^this thing helps, but changing the normalization helps even more, maybe decreasing gaps won't be needed
+
+2)fix the thing with X,B,Z!
+
+3)start with SLiMs
