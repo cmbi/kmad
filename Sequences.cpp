@@ -37,7 +37,7 @@ Sequences Sequences::operator=(Sequences& that){
 	return newSequences;
 }
 //function performMSA - returns ready alignment, with gaps cut out from the first sequence and so on...
-std::vector<std::string> Sequences::performMSA(Profile *outputProfile,double penalty, std::string verbose){
+std::vector<std::string> Sequences::performMSA(Profile& outputProfile,double penalty, std::string verbose){
 	Profile pseudoProfile(substitutionMatrix::convertToProfileFormat(sequences.at(0).at(1))); //IMPLEMENT convertToProfileFormat // psuedoProfile - it's the one that will later be combined profile and sbst matrix
 	std::vector<std::string> alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector<std::string> alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
@@ -61,11 +61,11 @@ std::vector<std::string> Sequences::performMSA(Profile *outputProfile,double pen
 		pseudoProfile.buildPseudoProfile(alignmentWithoutLowercase, sequenceIdentity);
 		//if (verbose!="0") pseudoProfile.printProfile();
 	}
-	*outputProfile = pseudoProfile;
+	outputProfile = pseudoProfile;
 	return alignmentWithLowercase;		
 }
 //function performMSA for ENCODED SEQUENCES
-std::vector<std::string> Sequences::performMSAencoded(std::vector<std::vector<double> >* outputProfile,std::vector<std::vector<double> >* outputFeaturesProfile, double penalty, double extensionPenalty, std::string verbose, bool weightsModeOn, int dom, int phosph, int codon_length, std::vector<double>* identities){
+std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, FeaturesProfile& outputFeaturesProfile, double penalty, double extensionPenalty, std::string verbose, bool weightsModeOn, int dom, int phosph, int codon_length, std::vector<double>* identities){
 	Profile pseudoProfile(substitutionMatrix::convertToProfileFormat(sequencesEncoded.at(0).at(1))); 
 	std::vector< std::vector<std::string> > alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector< std::vector<std::string> > alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
@@ -98,12 +98,14 @@ std::vector<std::string> Sequences::performMSAencoded(std::vector<std::vector<do
 	}
 	featProfile.createProfile(alignmentWithoutLowercase,sequenceIdentity,sequenceIdentityValues,weightsModeOn); 	//create features profile based on the 1st seq
 	pseudoProfile.buildPseudoProfile(alignmentWithoutLowercase, sequenceIdentity, sequenceIdentityValues,weightsModeOn);
-	*outputProfile = pseudoProfile.getMatrix();
-	*outputFeaturesProfile = featProfile.getMatrix();
+	//*outputProfile = pseudoProfile;
+	//*outputFeaturesProfile = featProfile;
+	outputProfile = pseudoProfile;
+	outputFeaturesProfile = featProfile;
 	return vecUtil::flatten(alignmentWithLowercase);		
 }
 //perform next round of MSA (good for all rounds except for the first one - you need a profile)
-std::vector<std::string> Sequences::performMSAnextRound(Profile* outputProfile,FeaturesProfile* outputFeaturesProfile, double penalty, double extensionPenalty,std::string verbose, bool weightsModeOn, double identityCutoff,int dom, int phosph, int codon_length, std::vector<double> identities){
+std::vector<std::string> Sequences::performMSAnextRound(Profile& outputProfile,FeaturesProfile& outputFeaturesProfile, double penalty, double extensionPenalty,std::string verbose, bool weightsModeOn, double identityCutoff,int dom, int phosph, int codon_length, std::vector<double> identities){
 	std::vector< std::vector<std::string> > alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector< std::vector<std::string> > alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
 	alignmentWithoutLowercase.push_back(sequencesEncoded.at(0).at(1));
@@ -113,11 +115,13 @@ std::vector<std::string> Sequences::performMSAnextRound(Profile* outputProfile,F
 	std::vector<std::string> alWithLower;
 	std::vector<bool> sequenceIdentity; 					//'true' stored for every sequence which identity with the 1st one is higher than 80%, only based on these profile will be built
 	sequenceIdentity.push_back(true);					//to build the first profile based only on the first seqeunce
-	FeaturesProfile featProfile(*outputFeaturesProfile);
-	Profile pseudoProfile(outputProfile->getMatrix());	
+	FeaturesProfile featProfile(outputFeaturesProfile);
+	//Profile pseudoProfile(outputProfile.getMatrix());	
+	Profile pseudoProfile(outputProfile);	
 	bool flag = false;
 	for (int i = 1; i < seqNr; i++){
-		alignPairwise(&alNoLower,&alWithLower,sequencesEncoded.at(i).at(1),pseudoProfile,featProfile,penalty,extensionPenalty,i,verbose, codon_length);
+		//alignPairwise(&alNoLower,&alWithLower,sequencesEncoded.at(i).at(1),pseudoProfile,featProfile,penalty,extensionPenalty,i,verbose, codon_length);
+		alignPairwise(&alNoLower,&alWithLower,sequencesEncoded.at(i).at(1),outputProfile,featProfile,penalty,extensionPenalty,i,verbose, codon_length);
 		alignmentWithoutLowercase.push_back(alNoLower);
 		alignmentWithLowercase.push_back(alWithLower);
 		if (identities.at(i) > identityCutoff){
@@ -128,8 +132,8 @@ std::vector<std::string> Sequences::performMSAnextRound(Profile* outputProfile,F
 	featProfile.createProfile(alignmentWithoutLowercase, sequenceIdentity,identities, weightsModeOn); 	//create features profile based on the 1st seq
 	pseudoProfile.buildPseudoProfile(alignmentWithoutLowercase, sequenceIdentity, identities, weightsModeOn);
 	if (verbose!="0") pseudoProfile.printProfile();
-	outputProfile->setMatrix(pseudoProfile.getMatrix());
-	outputFeaturesProfile->setMatrix(featProfile.getMatrix());
+	outputProfile.setMatrix(pseudoProfile.getMatrix());
+	outputFeaturesProfile.setMatrix(featProfile.getMatrix());
 	return vecUtil::flatten(alignmentWithLowercase);		
 }
 //function calcIdentity
@@ -142,7 +146,7 @@ double Sequences::calcIdentity(const std::string& alignedSequence){
 	}
 	return identicalResidues/double(firstSequenceSize);
 }
-//function calcIdentity for ENCODED SEQUENCES						CHANGE IT SO THAT IT WORKS FOR ENCODED
+//function calcIdentity for ENCODED SEQUENCES
 double Sequences::calcIdentity(const std::vector<std::string>& alignedSequence){
 	double identicalResidues=0;
 	for (int i = 0; i < alignedSequence.size(); i++){

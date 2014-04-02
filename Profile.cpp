@@ -16,10 +16,12 @@ Profile::Profile(){
 Profile::Profile(Profile& that){
 	prfMatrix = that.getMatrix();
 }
+/*
 Profile Profile::operator=(const Profile& that){
 	Profile prfNew(that.getMatrix());
 	return prfNew;
 }
+*/
 Profile::~Profile(){
 	//cout << "DESTROYING PROFILE OBJECT\n";
 }
