@@ -6,6 +6,8 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <sstream>
+#include <fstream>
 Profile::Profile(std::vector< std::vector<double> > mat)
 :	prfMatrix(mat){
 }

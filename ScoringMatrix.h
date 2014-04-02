@@ -14,7 +14,7 @@ public:
 	void calculateScores(std::string,Profile&,int);
 	void calculateScores(std::vector<std::string>,Profile&,FeaturesProfile&,int);
 	void nwAlignment(std::vector<std::string>*,std::string,Profile&, std::string);
-	void nwAlignment(std::vector<std::vector<std::string> >*,std::vector<std::string>,Profile&,FeaturesProfile&,std::string);
+	void nwAlignment(std::vector<std::vector<std::string> >*,std::vector<std::string>,Profile&,FeaturesProfile&,std::string,int);
 	std::vector<int> findBestScore();
 	std::vector< std::vector<double> > getVec(); //getter
 private:

@@ -13,6 +13,10 @@ namespace vecUtil{
 	double sum(const std::vector<double>&);
 	std::vector<double> convertIntVectorToDoubleVector(std::vector<int>);
 	void printDoubleVector(const std::vector<double>&);
+	double singleAverage(std::vector<std::vector<double> >);
+	double max(std::vector<std::vector<double> >);
+	double min(std::vector<std::vector<double> >);
+	double median(std::vector<std::vector<double> >);
 	std::vector<std::string> flattenWithoutFeatures(const std::vector<std::vector<std::string> >&);
 	std::vector<std::string> flatten(const std::vector<std::vector<std::string> >&);
 	std::vector<std::string> push_front(std::vector<std::string>,std::string);

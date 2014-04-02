@@ -1,4 +1,7 @@
 //ScoringMatrix class implementation
+//
+//responsible for pairwise alignments
+//creates scoring matrix, backtraces alignment path, etc.
 #include "ScoringMatrix.h"
 #include "FeaturesProfile.h"
 #include "substitutionMatrix.h"
@@ -6,6 +9,7 @@
 #include "findVal.h"
 #include "misc.h"
 #include "vecUtil.h"
+#include "txtProc.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -272,10 +276,11 @@ void ScoringMatrix::nwAlignment(std::vector<std::string> *result,std::string s2,
 	*result = ali;
 }
 //function nwAlignment - performs a sequence vs profile(/pseudoprofile) needleman wunsch alignment ENCODED SEQUNCES
-void ScoringMatrix::nwAlignment(std::vector<std::vector<std::string> > *result,std::vector<std::string> s2, Profile& prf, FeaturesProfile& featPrf,std::string verbose){
+void ScoringMatrix::nwAlignment(std::vector<std::vector<std::string> > *result,std::vector<std::string> s2, Profile& prf, FeaturesProfile& featPrf,std::string verbose, int codon_length){
 	std::vector<std::string> s1 = misc::pseudoSequence(prf.getMatrix()[0].size()+1); //creating polyA pseudoSequence representing the profile, to know later where are the gaps in the profile
 	//std::string s1(prf.getMatrix()[0].size()+1,'A');
-	s2 = vecUtil::push_front(s2,"-AAA");
+	std::string gap_code = txtProc::gapCode(codon_length);
+	s2 = vecUtil::push_front(s2,gap_code);
 	std::vector<std::string> newS1;
 	std::vector<std::string> newS2;
 	std::vector<std::vector<std::string> > ali;
@@ -291,12 +296,12 @@ void ScoringMatrix::nwAlignment(std::vector<std::vector<std::string> > *result,s
 		j = findBestScore().at(1);
 		for (int k = s1.size()-1; k > i; k--){
 			newChar1 = s1.at(k);
-			newChar2 = "-AAA";
+			newChar2 = gap_code;
 			newS1.push_back(newChar1);
 			newS2.push_back(newChar2);
 		}
 		for (int k = s2.size()-1; k > j; k--){
-			newChar1 = "-AAA";
+			newChar1 = gap_code;
 			newChar2 = s2.at(k);
 			newS2.push_back(newChar2);
 			newS1.push_back(newChar1);
@@ -320,13 +325,13 @@ void ScoringMatrix::nwAlignment(std::vector<std::vector<std::string> > *result,s
 		}
 		else if (i > 0 && currentMatrix == "G"){	//gap in seq2
 			newChar1 = s1.at(i);
-			newChar2 = "-AAA";
+			newChar2 = gap_code;
 			if (matrixG.at(i).at(j) == matrixV.at(i-1).at(j) + gapOpening)
 				currentMatrix = "V";
 			i--;
 		}
 		else if (j > 0 && currentMatrix == "H"){	//gap in profile
-			newChar1 = "-AAA";
+			newChar1 = gap_code;
 			newChar2 = s2.at(j);
 			if (matrixH.at(i).at(j) == matrixV.at(i).at(j-1) + gapOpeningHorizontal){
 				currentMatrix = "V";

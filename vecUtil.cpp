@@ -128,6 +128,7 @@ std::vector<double> vecUtil::average(std::vector< std::vector<double> > vec){
 	}
 	return result;
 }
+//calculate average for every column in vector 
 std::vector<double> vecUtil::average(std::vector< std::vector<int> > vec){
 	std::vector<double> result;
 	for (int i = 0; i < vec[0].size(); i++){
@@ -138,4 +139,56 @@ std::vector<double> vecUtil::average(std::vector< std::vector<int> > vec){
 		result.push_back(sum/vec.size());
 	}
 	return result;
+}
+//claculate average for vector of vectors of doubles
+double vecUtil::singleAverage(std::vector<std::vector<double> > vec){
+	double sum = 0;
+	for (int i = 0; i < vec.size();i++){
+		for (int j = 0; j < vec[0].size();j++){
+			sum += vec[i][j];
+		}
+	}
+	sum = sum / (vec.size()*vec[0].size());
+	return sum;
+}
+double vecUtil::max(std::vector<std::vector<double> > vec){
+	double max = -1000;
+	for (int i = 0; i < vec.size();i++){
+		for (int j = 0; j < vec[0].size();j++){
+			if (max < vec[i][j]){
+				max = vec[i][j];
+			}
+		}
+	}
+	return max;
+}
+double vecUtil::min(std::vector<std::vector<double> > vec){
+	double min = 1000000;
+	for (int i = 0; i < vec.size();i++){
+		for (int j = 0; j < vec[0].size();j++){
+			if (min > vec[i][j]){
+				min = vec[i][j];
+			}
+		}
+	}
+	return min;
+}
+double vecUtil::median(std::vector<std::vector<double> > vec){
+	std::vector<double> sorted;
+	for (int i = 0; i < vec.size();i++){
+		for(int j = 0; j < vec[0].size();j++){
+			sorted.push_back(vec[i][j]);
+		}
+	}	
+	double tmp;
+	for (int i = 0; i < sorted.size();i++){
+		for(int j = i; j < sorted.size();j++){
+			if (sorted[j]> sorted[j+1]){
+				tmp = sorted[j];
+				sorted[j] = sorted[j+1];
+				sorted[j+1] = tmp;
+			}	
+		}
+	}
+	return sorted[int(sorted.size()/2)];
 }

@@ -3,12 +3,19 @@
 #include <vector>
 class FeaturesProfile{
 public:
-	FeaturesProfile(std::vector< std::vector<double> >,int,int);
+	FeaturesProfile(std::vector< std::vector<double> >,int,int, std::vector<std::string>, std::vector<double>);
 	FeaturesProfile(int, int);
+//	FeaturesProfile(const FeaturesProfile&);
+	//getters
 	double getElement(int, std::string);
 	double getElement(int, int);	
 	double getScore(int,std::string);
 	std::vector<std::vector<double> > getMatrix();
+	std::vector<std::string> getMotifsIDs();
+	std::vector<double> getMotifsProbs();
+	double getDomainScore();
+	double getPhosphScore();
+	//setters
 	void setMatrix(std::vector<std::vector<double> >);
 	void printProfile();
 	void createProfile(const std::vector< std::vector<std::string> >&,const std::vector<bool>&, const std::vector<double>&, bool);
@@ -21,4 +28,6 @@ private:
 	std::string name(std::string,int);
 	int domainScore;
 	int phosphScore;
+	std::vector<std::string> motifs_ids;
+	std::vector<double> motifs_probs;
 };

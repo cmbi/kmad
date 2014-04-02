@@ -1,23 +1,32 @@
 #include "FeaturesProfile.h"
 #include "vecUtil.h"
+#include "txtProc.h"
 #include "misc.h"
 #include <iostream>
 #include <string>
 #include <vector>
 namespace {
-	std::vector<std::string>listOfFeatures = {"phosphN", "domain0"};
+	std::vector<std::string> listOfFeatures = {"phosphN", "domain0", "motif0"};
 }
-FeaturesProfile::FeaturesProfile(std::vector< std::vector<double> > vec, int dom, int phosph)
+FeaturesProfile::FeaturesProfile(std::vector< std::vector<double> > vec, int dom, int phosph, std::vector<std::string> m_ids, std::vector<double> m_probs)
 :	prfMatrix(vec),
 	domainScore(dom),
-	phosphScore(phosph)
+	phosphScore(phosph),
+	motifs_ids(m_ids),
+	motifs_probs(m_probs)
 	{
 }
+
 FeaturesProfile::FeaturesProfile(int dom, int phosph)
 :	domainScore(dom),
 	phosphScore(phosph)
 	{
 }
+/*
+FeaturesProfile::FeaturesProfile(const FeaturesProfile& prof){
+	this->domainScore = prof.domainScore;
+}
+*/
 void FeaturesProfile::createProfile(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity, const std::vector<double>& sequenceIdentityValues, bool weightsModeOn){
 	if (weightsModeOn) countOccurences(alignment, sequenceIdentityValues);
 	else countOccurences(alignment,sequenceIdentity);
@@ -129,14 +138,25 @@ void FeaturesProfile::expandListOfFeatures(const std::vector< std::string >& seq
 	std::string featureToAdd="";
 	char nothing = 'A';
 	for (int j = 0; j < sequence.size(); j++){
-		char alChar = sequence.at(j).at(2);
-		if (alChar != nothing){  										//means there is a domain on jth residue
+		char domainCode = sequence.at(j).at(2);
+		//std::string motifCode = txtProc::charToString(sequence[j].at(1));
+		//motifCode.push_back(sequence[j].at(2));
+		if (domainCode != nothing){  										//means there is a domain on jth residue
 			featureToAdd = "domain";
-			featureToAdd += alChar;
+			featureToAdd += domainCode;
 			if (!vecUtil::contains(listOfFeatures,featureToAdd)){	//check whether this element is already in the list
 				listOfFeatures.push_back(featureToAdd);
 			}
 		}
+	}
+	for (int i = 0; i < motifs_ids.size();i++){
+		std::string motifCode = motifs_ids[i];
+		featureToAdd = "motif";	
+		featureToAdd += motifCode;
+		listOfFeatures.push_back(featureToAdd);
+	}
+	for (int i =0;i < motifs_ids.size(); i++){
+		std::cout << "ids "<< motifs_ids[i] << std::endl;  
 	}
 }
 void FeaturesProfile::printProfile(){
@@ -149,6 +169,18 @@ void FeaturesProfile::printProfile(){
 }
 std::vector<std::vector<double> > FeaturesProfile::getMatrix(){
 	return prfMatrix;
+}
+std::vector<std::string> FeaturesProfile::getMotifsIDs(){
+	return motifs_ids;
+}
+std::vector<double> FeaturesProfile::getMotifsProbs(){
+	return motifs_probs;
+}
+double FeaturesProfile::getDomainScore(){
+	return domainScore;
+}
+double FeaturesProfile::getPhosphScore(){
+	return phosphScore;
 }
 void FeaturesProfile::setMatrix(std::vector<std::vector<double> > newMatrix){
 	prfMatrix = newMatrix;
