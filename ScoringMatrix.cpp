@@ -142,29 +142,7 @@ void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, F
 			score2 = matrixH.at(i).at(j-1) + gapExtensionHorizontal;
 			matrixH[i][j] = (score1 > score2) ? score1 : score2;
 		}
-	}/*
-	int max = 10;
-	std::cout << "MATRIX V: " <<std::endl;
-	for(int i = 0; i < max; i++){
-		for (int j = 0; j < max; j++){
-			std::cout << matrixV.at(i).at(j)<< " ";
-		}
-		std::cout << std::endl;
 	}
-	std::cout << "MATRIX G: " <<std::endl;
-	for(int i = 0; i < max; i++){
-		for (int j = 0; j < max; j++){
-			std::cout << matrixG.at(i).at(j)<< " ";
-		}
-		std::cout << std::endl;
-	}
-	std::cout << "MATRIX H: " <<std::endl;
-	for(int i = 0; i < max; i++){
-		for (int j = 0; j < max; j++){
-			std::cout << matrixH.at(i).at(j)<< " ";
-		}
-		std::cout << std::endl;
-	}*/
 }
 //function findBestScore - returns alignment score with positions in the scoring matrix: [score, i, j] (must be either in the last row or in the last column of the scoring matrix)
 std::vector<int> ScoringMatrix::findBestScore(){

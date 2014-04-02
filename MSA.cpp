@@ -42,13 +42,13 @@ int main(int argc, char *argv[]){
 			Profile prf;
 			FeaturesProfile fprf(domainScore,phosphScore);
 			//first round of the alignment - all vs 1st
-			std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,domainScore,phosphScore,codonLength,&identities));
+			std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,domainScore,phosphScore,codonLength,identities));
 			std::vector<std::vector<std::vector<std::string> > > encSeq = rawSequences.getEncodedSequences();
 			Profile prof = prf;
 			FeaturesProfile fprof = fprf;
 			std::vector<std::string> multipleAlignment2ndRound;
 			double gapPenDecreasing;
-			for (int i = 10; i >= 7; i--){
+			for (int i = 10; i >= 0; i--){
 				double cutoff = i/10;
 				//gapPenDecreasing = -3.-4.*i/10;
 				//std::cout << gapPenDecreasing << std::endl;
