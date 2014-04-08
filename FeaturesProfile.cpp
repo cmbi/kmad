@@ -49,6 +49,7 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 						motifCode.push_back(alignment[j][i][k]);
 						motifCode.push_back(alignment[j][i][k+1]);
 						int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
+						double prob = motifs_prob(motifCode);
 					}
 				}
 		}
@@ -56,6 +57,16 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 		tmpResult.push_back(profileColumn);
 	} 
 	prfMatrix = tmpResult;
+}
+double FeaturesProfile::motifs_prob(std::string m_id){
+	double prob;
+	for (int i = 0; i < motifs_ids.size(); i++){
+		if (motifs_ids[i] == m_id) {
+			prob = motifs_probs[i];
+			break;
+		} 
+	}
+	return prob;
 }
 void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity, int codon_length){
 	std::vector<std::vector<double> > tmpResult;
@@ -85,6 +96,9 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 						motifCode.push_back(alignment[j][i][k]);
 						motifCode.push_back(alignment[j][i][k+1]);
 						int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
+						double prob = motifs_prob(motifCode);
+
+
 					}
 				}
 			}

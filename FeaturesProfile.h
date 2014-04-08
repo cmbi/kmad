@@ -22,6 +22,7 @@ private:
 	std::vector< std::vector<double> > prfMatrix;
 	void countOccurences(const std::vector< std::vector<std::string> >&,const std::vector<bool>&, int);
 	void countOccurences(const std::vector< std::vector<std::string> >&,const std::vector<double>&, int);
+	double motifs_prob(std::string);
 	int findFeaturesIndex(std::string);
 	std::string name(std::string,int);
 	int domainScore;

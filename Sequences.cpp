@@ -7,27 +7,14 @@
 #include <iostream>
 #include <string>
 #include <vector>
-// 1st constructor - assigns s to vector< vector<string> > sequences - [[seqName,sequence],...]
-Sequences::Sequences(std::vector< std::vector<std::string> > s){
-	sequences = s;
-	seqNr = s.size(); 
-	firstSequenceSize = s.at(0).at(1).size();
-}
 //constructor for ENCODED SEQUENCES
 Sequences::Sequences(std::vector< std::vector< std::vector<std::string> > > s){
 	sequencesEncoded = s;
 	seqNr = s.size(); 
 	firstSequenceSize = s.at(0).at(1).size();
 }
-Sequences::Sequences(Sequences& that){
-	sequences = that.sequences;
-	sequencesEncoded = that.sequencesEncoded;
-	seqNr = that.seqNr;
-	firstSequenceSize = that.firstSequenceSize;
-}
-Sequences::Sequences(){}
 //function performMSA for ENCODED SEQUENCES
-std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, FeaturesProfile& outputFeaturesProfile, double penalty, double extensionPenalty, std::string verbose, bool weightsModeOn, int dom, int phosph, int codon_length, std::vector<double>& identities){
+std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, FeaturesProfile& outputFeaturesProfile, double penalty, double extensionPenalty, std::string verbose, bool weightsModeOn, int dom, int phosph, int motif, int codon_length, std::vector<double>& identities){
 	outputProfile = Profile(substitutionMatrix::convertToProfileFormat(sequencesEncoded.at(0).at(1))); 
 	std::vector< std::vector<std::string> > alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector< std::vector<std::string> > alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
@@ -57,7 +44,7 @@ std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, Fe
 	return vecUtil::flatten(alignmentWithLowercase);		
 }
 //perform next round of MSA (good for all rounds except for the first one - you need a profile)
-std::vector<std::string> Sequences::performMSAnextRound(Profile& outputProfile,FeaturesProfile& outputFeaturesProfile, double penalty, double extensionPenalty,std::string verbose, bool weightsModeOn, double identityCutoff,int dom, int phosph, int codon_length, std::vector<double> identities){
+std::vector<std::string> Sequences::performMSAnextRound(Profile& outputProfile,FeaturesProfile& outputFeaturesProfile, double penalty, double extensionPenalty,std::string verbose, bool weightsModeOn, double identityCutoff,int dom, int phosph, int motif,int codon_length, std::vector<double> identities){
 	std::vector< std::vector<std::string> > alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector< std::vector<std::string> > alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
 	alignmentWithoutLowercase.push_back(sequencesEncoded.at(0).at(1));

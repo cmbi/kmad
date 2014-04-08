@@ -4,17 +4,14 @@ class Profile;
 class FeaturesProfile;
 class Sequences{
 public:
-	//constructor, copy constructor, destructor, operator=
-	Sequences(std::vector< std::vector<std::string> >);
+	//constructor
 	Sequences(std::vector< std::vector< std::vector<std::string> > >);
-	Sequences(Sequences&);
-	Sequences();
 	//getters
 	std::vector< std::vector<std::string> > getSequences();
 	std::vector< std::vector< std::vector<std::string> > > getEncodedSequences();
 	//main functionality
-	std::vector<std::string> performMSAencoded(Profile&,FeaturesProfile&,double,double,std::string, bool,int,int,int, std::vector<double>&);
-	std::vector<std::string> performMSAnextRound(Profile&,FeaturesProfile&,double,double,std::string, bool, double,int,int,int, std::vector<double>);
+	std::vector<std::string> performMSAencoded(Profile&,FeaturesProfile&,double,double,std::string, bool,int,int,int,int, std::vector<double>&);
+	std::vector<std::string> performMSAnextRound(Profile&,FeaturesProfile&,double,double,std::string, bool, double,int,int,int,int, std::vector<double>);
 
 private:
 	//functions

@@ -9,7 +9,7 @@
 #include <string>
 namespace po = boost::program_options;
 int main(int argc, char *argv[]){
-	int codonLength, phosphScore,domainScore;
+	int codonLength, phosphScore,domainScore, motifScore;
 	double identityCutOff, gapExt, gapPen;
 	bool weightsModeOn;
 	std::string filename,verboseMode,outputPrefix;
@@ -23,6 +23,7 @@ int main(int argc, char *argv[]){
 		("codon_length,c", po::value<int>(&codonLength)->implicit_value(4)->default_value(1),"codon length")
 		("phosph,p", po::value<int>(&phosphScore)->default_value(15),"score for aligning phosphoryated residues")
 		("domain,d", po::value<int>(&domainScore)->default_value(3),"score for aligning domains")
+		("motif, m", po::value<int>(&motifScore),"probability multiplier for motifs")
 		("weights,w", po::value<bool>(&weightsModeOn)->implicit_value(true)->default_value(false),"all sequences contribute to the profile with weights(=similarity)")
 		("identity", po::value<double>(&identityCutOff)->default_value(0.8, "0.8"),"identity cut off for sequences included in profile")
 		("verbose,v",po::value<std::string>(&verboseMode)->implicit_value("1")->default_value("0"),"verbose mode");
@@ -34,14 +35,14 @@ int main(int argc, char *argv[]){
     		std::cout << desc << std::endl;
     		return 1;
 	}
-	if (vm.count("input") && vm.count("gap_penalty") && misc::checkParameters(codonLength,phosphScore,domainScore,gapExt,gapPen,weightsModeOn,identityCutOff)){
+	if (vm.count("input") && vm.count("gap_penalty") && misc::checkParameters(codonLength,phosphScore,domainScore,motifScore,gapExt,gapPen,weightsModeOn,identityCutOff)){
 		std::vector<std::string> motifs_ids;
 		std::vector<double> motifs_probs, identities;
 		Sequences rawSequences(txtProc::processFASTA(filename,codonLength, &motifs_ids, &motifs_probs));
 		Profile prf;
 		FeaturesProfile fprf(domainScore,phosphScore, motifs_ids, motifs_probs);
 		//first round of the alignment - all vs 1st
-		std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,domainScore,phosphScore,codonLength,identities));
+		std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,domainScore,phosphScore,motifScore,codonLength,identities));
 		std::vector<std::vector<std::vector<std::string> > > encSeq = rawSequences.getEncodedSequences();
 		Profile prof = prf;
 		FeaturesProfile fprof = fprf;
@@ -51,13 +52,13 @@ int main(int argc, char *argv[]){
 			double cutoff = i/10;
 			//gapPenDecreasing = -3.-4.*i/10;
 			//std::cout << gapPenDecreasing << std::endl;
-			multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,cutoff,domainScore,phosphScore,codonLength,identities);
-			//multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPenDecreasing,gapExt,verboseMode,weightsModeOn,cutoff,domainScore,phosphScore);
+			multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,cutoff,domainScore,phosphScore,motifScore,codonLength,identities);
+			//multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPenDecreasing,gapExt,verboseMode,weightsModeOn,cutoff,domainScore,phosphScore,motifScore);
 		}
 		//txtProc::writeAlignmentWithoutCodeToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
 		//gapPenDecreasing = -2;
 		txtProc::writeVector(prof.getMatrix(),"dist2");
-		multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,0,domainScore,phosphScore,codonLength, identities);
+		multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,0,domainScore,phosphScore,motifScore,codonLength, identities);
 		//multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPenDecreasing,gapExt,verboseMode,weightsModeOn,0,domainScore,phosphScore);
 		txtProc::writeAlignmentToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
 	}

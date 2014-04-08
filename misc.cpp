@@ -22,7 +22,7 @@ void misc::printEncodedSeq(const std::vector<std::string>& sequence){
 	for (int i = 0; i < sequence.size();i++) std::cout << sequence[i][0];	
 	std::cout << "\n";
 }
-bool misc::checkParameters(int codonLength,int phosph,int domain,double gep,double gop,bool weightsOn,double cutoff){
+bool misc::checkParameters(int codonLength,int phosph,int domain,int motif,double gep,double gop,bool weightsOn,double cutoff){
 	bool alright = true;
 	if (codonLength < 1 || codonLength > 10){
 		alright = false;
@@ -32,7 +32,7 @@ bool misc::checkParameters(int codonLength,int phosph,int domain,double gep,doub
 		alright = false;
 		std::cout << "ohhh maaaan! you set gap penalty value(s) to positive (or zero), what were you thinking??" << std::endl;
 	}
-	else if (phosph < 0 || domain < 0){
+	else if (phosph < 0 || domain < 0 || motif < 0){
 		alright = false;
 		std::cout << "you're penalizining alignment of domains and/or phosphorylations - that's not the way to go";
 	}

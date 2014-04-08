@@ -2,17 +2,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-//function maxValueOf3 - finds maximum value from 3 ints
-int findVal::maxValue(int int1,int int2,int int3){
-	int m = int1;
-	if (int2 > int1 && int2 > int3){
-		m = int2;
-	}
-	else if (int3 > int1){
-		m = int3;
-	}
-	return m;
-}
 //function maxValueOf3 - finds maximum value from 3 doubles
 double findVal::maxValueDoubles(double double1,double double2,double double3){
 	double m = double1;
@@ -21,16 +10,6 @@ double findVal::maxValueDoubles(double double1,double double2,double double3){
 	}
 	else if (double3 > double1){
 		m = double3;
-	}
-	return m;
-}
-// function maxValue - finds maximum value from an array of ints
-int findVal::maxValue(int arrayOfInts[], int arraySize){
-	int m = arrayOfInts[0];
-	for (int i = 0; i < arraySize; i++){
-		if (arrayOfInts[i]>m){
-			m=arrayOfInts[i];
-		}
 	}
 	return m;
 }
