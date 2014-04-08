@@ -34,13 +34,6 @@ void vecUtil::transposeVec(std::vector< std::vector<double> >& vec){
 	}
 	vec = newVec;
 }
-void vecUtil::divideVectorByAScalar(std::vector<double>& vec, int scalar){
-	std::vector<double> result;
-	for (int i = 0; i < vec.size(); i++){
-		result.push_back(vec[i]/scalar);	
-	}
-	vec = result;
-}
 void vecUtil::divideVectorByAScalar(std::vector<double>& vec, double scalar){
 	std::vector<double> result;
 	for (int i = 0; i < vec.size(); i++){

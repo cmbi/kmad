@@ -32,6 +32,7 @@ int substitutionMatrix::getElement(char char1,char char2){
 	}
 	return simScores.at(index1).at(index2);
 }
+/*
 //convert to profile format - creates a matrix 20 x sequence length, where nth column is a column from sbstMatrix for the amino acid on position n in the sequence
 std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(std::string sequence){
 	std::vector< std::vector<double> > result(sequence.size());
@@ -42,6 +43,7 @@ std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(st
 	vecUtil::transposeVec(result);
 	return result;
 }
+*/
 //convert to profile format - creates a matrix 20 x sequence length, where nth column is a column from sbstMatrix for the amino acid on position n in the sequence ENCODED SEQUENCES
 std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(std::vector<std::string> sequence){
 	std::vector< std::vector<double> > result(sequence.size());

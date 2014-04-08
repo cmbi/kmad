@@ -43,6 +43,13 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 							}
 						}
 					}
+					//has to be separate from domains and phosphorylations because it takes up 2 chars
+					if (k == 4){
+						std::string motifCode = "";
+						motifCode.push_back(alignment[j][i][k]);
+						motifCode.push_back(alignment[j][i][k+1]);
+						int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
+					}
 				}
 		}
 		vecUtil::divideVectorByAScalar(profileColumn,identitiesSum);
@@ -71,6 +78,13 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 								profileColumn.at(1)-= domainScore;
 							}
 						}
+					}
+					//has to be separate from domains and phosphorylations because it takes up 2 chars
+					if (k == 4){
+						std::string motifCode = "";
+						motifCode.push_back(alignment[j][i][k]);
+						motifCode.push_back(alignment[j][i][k+1]);
+						int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
 					}
 				}
 			}
@@ -115,11 +129,17 @@ std::string FeaturesProfile::name(std::string codon, int featureType){
 	std::string name;
 	if (featureType == 3){
 		name="phosph";
+		name.push_back(codon.at(featureType));
 	}
 	else if (featureType == 2){
 		name="domain";
+		name.push_back(codon.at(featureType));
 	}
-	name.push_back(codon.at(featureType));
+	else if (featureType == 4){
+		name="motif";
+		name.push_back(codon.at(featureType));
+		name.push_back(codon.at(featureType+1));
+	}
 	return name;
 }
 //function expandListOfFeatures - expand it by domains and motifs found in the alignment

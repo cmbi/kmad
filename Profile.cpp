@@ -17,11 +17,6 @@ Profile::Profile(){
 std::vector< std::vector<double> > Profile::getMatrix() const{
 	return prfMatrix;
 }
-//calculate the alignment profile
-void Profile::createProfile(std::vector<std::string>& alignment,const std::vector<bool>& sequenceIdentity){
-	countOccurences(prfMatrix,alignment,sequenceIdentity);
-	vecUtil::transposeVec(prfMatrix);
-}
 //calculate the alignment profile ENCODED SEQUENCES
 void Profile::createProfile(std::vector< std::vector<std::string> >& alignment,const std::vector<bool>& sequenceIdentity, const std::vector<double>& sequenceIdentityValues, bool weightsModeOn){
 	if (weightsModeOn){
@@ -30,24 +25,6 @@ void Profile::createProfile(std::vector< std::vector<std::string> >& alignment,c
 	}
 	else countOccurences(prfMatrix,alignment,sequenceIdentity);
 	vecUtil::transposeVec(prfMatrix);
-}
-//builds a pseudo-profile from the profile itself and the substitution matrix with appropriate weights
-void Profile::buildPseudoProfile(std::vector<std::string>& alignment, const std::vector<bool>& sequenceIdentity){
-	createProfile(alignment,sequenceIdentity);
-	std::vector< std::vector<double> > newProfile;
-	for (int i = 0; i < prfMatrix[0].size(); i++){
-		std::vector< std::vector<double> > columnsToAdd;
-		for(int j = 0; j < prfMatrix.size(); j++){
-			if (prfMatrix.at(j).at(i) != 0){
-				std::vector<double> columnForJ = vecUtil::convertIntVectorToDoubleVector(substitutionMatrix::getColumn(j));
-				vecUtil::multiplyVectorByAScalar(columnForJ, prfMatrix.at(j).at(i));
-				columnsToAdd.push_back(columnForJ);
-			}
-		}
-		newProfile.push_back(vecUtil::addUp(columnsToAdd));	//add up columns from substitution matrix for amino acids seen on ith position(times occurence/totalNrOfSeq))
-	}
-	vecUtil::transposeVec(newProfile);
-	prfMatrix = newProfile;
 }
 //builds a pseudo-profile from the profile itself and the substitution matrix with appropriate weights for ENCODED SEQUENCES
 void Profile::buildPseudoProfile(std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity, const std::vector<double>& sequenceIdentityValues, bool weightsModeOn){
@@ -66,41 +43,6 @@ void Profile::buildPseudoProfile(std::vector< std::vector<std::string> >& alignm
 	}
 	vecUtil::transposeVec(newProfile);
 	prfMatrix = newProfile;
-}
-//function countOccurences returns matrix with occurences of each amino acid on each position normalized by the number of sequences
-void Profile::countOccurences(std::vector< std::vector<double> >& result,std::vector<std::string>& alignment,const std::vector<bool>& sequenceIdentity){
-	std::vector< std::vector<double> > tmpResult;
-	int trueSequences = misc::countTrueValuesInVector(sequenceIdentity);
-	for (int i = 0; i < alignment[0].size(); i++){
-		std::vector<double> profileColumn(20,0);
-		for (int j = 0; j < alignment.size(); j++){
-			if (sequenceIdentity.at(j)){			//is it a sequence that I want to count in? (with identity > cutoff)
-				char seqChar(alignment.at(j).at(i));
-				if (seqChar != '-'){
-					if (seqChar == 'B'){ 		//either D or N, so I'll add half a point to both
-						profileColumn.at(2)+=0.5;
-						profileColumn.at(3)+=0.5;
-					}
-					else if (seqChar == 'Z'){ 	//either D or N, so I'll add half a point to both
-						profileColumn.at(6)+=0.5;
-						profileColumn.at(7)+=0.5;
-					}
-					else if (seqChar == 'X'){
-						for (int k = 0; k < profileColumn.size();k++){
-							profileColumn.at(k)+=0.05;
-						}
-					}
-					else{	
-						int aAcidInt = substitutionMatrix::findAminoAcidsNo(seqChar);
-						profileColumn.at(aAcidInt)++;				
-					}
-				}
-			}
-		}
-		vecUtil::divideVectorByAScalar(profileColumn,trueSequences);
-		tmpResult.push_back(profileColumn);
-	}
-	result = tmpResult;
 }
 //function countOccurences returns matrix with occurences of each amino acid on each position normalized by the number of sequences ENCODED SEQUENCES
 void Profile::countOccurences(std::vector< std::vector<double> >& result,std::vector< std::vector<std::string> >& alignment,const std::vector<bool>& sequenceIdentity){
