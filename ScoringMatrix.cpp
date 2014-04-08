@@ -21,19 +21,6 @@
 		pen - gap opening penalty
 */
 //constructor
-ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen)
-:	iLength(s1size),
-	jLength(s2size),	
-	gapOpening(double(pen)),
-	gapExtension(double(-1)),
-	gapOpeningHorizontal(gapOpening),
-	gapExtensionHorizontal(gapExtension)
-{
-	std::vector<double> row(jLength+1,0);
-	matrixV.assign(iLength+1, row);
-	matrixG.assign(iLength+1, row);
-	matrixH.assign(iLength+1, row);
-}
 ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen, double extensionPenalty)
 :	iLength(s1size),
 	jLength(s2size),	
@@ -62,15 +49,6 @@ ScoringMatrix::ScoringMatrix(ScoringMatrix& that)
 	matrixG(that.matrixG),
 	matrixH(that.matrixH)
 {
-}
-ScoringMatrix ScoringMatrix::operator=(ScoringMatrix& that){
-	ScoringMatrix newScoringMat(that.iLength,that.jLength,that.gapOpening);
-	newScoringMat.gapOpeningHorizontal = gapOpening;
-	newScoringMat.gapExtensionHorizontal = gapExtension;
-	newScoringMat.matrixV = that.matrixV;
-	newScoringMat.matrixG = that.matrixG;
-	newScoringMat.matrixH = that.matrixH;
-	return newScoringMat;
 }
 //function calculateScoresProfile - calculates scoring matrix for sequences s1 and s2 using profile prf instead of a substitution matrix
 void ScoringMatrix::calculateScores(std::string s2, Profile& prf, int debug){

@@ -5,11 +5,9 @@ class Profile;
 class FeaturesProfile;
 class ScoringMatrix{
 public:
-	ScoringMatrix(int,int,double); //constructor
 	ScoringMatrix(int,int,double,double); //constructor
 	~ScoringMatrix();
 	ScoringMatrix(ScoringMatrix&);
-	ScoringMatrix operator=(ScoringMatrix&);
 	void fillMatrix(std::string, std::string);
 	void calculateScores(std::string,Profile&,int);
 	void calculateScores(std::vector<std::string>,Profile&,FeaturesProfile&,int);

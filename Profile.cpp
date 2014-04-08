@@ -13,18 +13,6 @@ Profile::Profile(std::vector< std::vector<double> > mat)
 }
 Profile::Profile(){
 }
-Profile::Profile(Profile& that){
-	prfMatrix = that.getMatrix();
-}
-/*
-Profile Profile::operator=(const Profile& that){
-	Profile prfNew(that.getMatrix());
-	return prfNew;
-}
-*/
-Profile::~Profile(){
-	//cout << "DESTROYING PROFILE OBJECT\n";
-}
 //function getMatrix - returns profile matrix (double)
 std::vector< std::vector<double> > Profile::getMatrix() const{
 	return prfMatrix;

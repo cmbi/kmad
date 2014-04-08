@@ -39,8 +39,9 @@ int main(int argc, char *argv[]){
 			std::vector<std::string> motifs_ids;
 			std::vector<double> motifs_probs, identities;
 			Sequences rawSequences(txtProc::processFASTA(filename,codonLength, &motifs_ids, &motifs_probs));
+			std::cout << "motifs_ids size: " << motifs_ids.size() << std::endl;
 			Profile prf;
-			FeaturesProfile fprf(domainScore,phosphScore);
+			FeaturesProfile fprf(domainScore,phosphScore, motifs_ids, motifs_probs);
 			//first round of the alignment - all vs 1st
 			std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,domainScore,phosphScore,codonLength,identities));
 			std::vector<std::vector<std::vector<std::string> > > encSeq = rawSequences.getEncodedSequences();
@@ -65,7 +66,7 @@ int main(int argc, char *argv[]){
 		else {
 			Sequences rawSequences(txtProc::processFASTA(filename));							//read data from file
 			Profile prf;													//this prf will be useful for next rounds of alignments
-			std::vector<std::string> multipleAlignment(rawSequences.performMSA(prf,gapPen,verboseMode));			//create multiple sequence alignment
+			std::vector<std::string> multipleAlignment(rawSequences.performMSA(prf,gapPen,gapExt,verboseMode));			//create multiple sequence alignment
 			txtProc::writeAlignmentToFile(multipleAlignment,rawSequences.getSequences(),outputPrefix);				//write multiple alignment to a file
 		}
 	}

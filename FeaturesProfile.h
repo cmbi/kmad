@@ -3,9 +3,7 @@
 #include <vector>
 class FeaturesProfile{
 public:
-	FeaturesProfile(std::vector< std::vector<double> >,int,int, std::vector<std::string>, std::vector<double>);
-	FeaturesProfile(int, int);
-//	FeaturesProfile(const FeaturesProfile&);
+	FeaturesProfile(int, int, std::vector<std::string>, std::vector<double>);
 	//getters
 	double getElement(int, std::string);
 	double getElement(int, int);	

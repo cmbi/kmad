@@ -8,25 +8,14 @@
 namespace {
 	std::vector<std::string> listOfFeatures = {"phosphN", "domain0", "motif0"};
 }
-FeaturesProfile::FeaturesProfile(std::vector< std::vector<double> > vec, int dom, int phosph, std::vector<std::string> m_ids, std::vector<double> m_probs)
-:	prfMatrix(vec),
-	domainScore(dom),
+//constructor, creates empty profile, takes domain and phosphorylation scores(dom, phosph) and motifs' ids and probabilities(m_ids, m_probs)
+FeaturesProfile::FeaturesProfile(int dom, int phosph, std::vector<std::string> m_ids, std::vector<double> m_probs)
+:	domainScore(dom),
 	phosphScore(phosph),
 	motifs_ids(m_ids),
 	motifs_probs(m_probs)
 	{
 }
-
-FeaturesProfile::FeaturesProfile(int dom, int phosph)
-:	domainScore(dom),
-	phosphScore(phosph)
-	{
-}
-/*
-FeaturesProfile::FeaturesProfile(const FeaturesProfile& prof){
-	this->domainScore = prof.domainScore;
-}
-*/
 void FeaturesProfile::createProfile(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity, const std::vector<double>& sequenceIdentityValues, bool weightsModeOn){
 	if (weightsModeOn) countOccurences(alignment, sequenceIdentityValues);
 	else countOccurences(alignment,sequenceIdentity);
@@ -136,11 +125,10 @@ std::string FeaturesProfile::name(std::string codon, int featureType){
 //function expandListOfFeatures - expand it by domains and motifs found in the alignment
 void FeaturesProfile::expandListOfFeatures(const std::vector< std::string >& sequence){
 	std::string featureToAdd="";
+	std::cout << motifs_ids.size() << std::endl;
 	char nothing = 'A';
 	for (int j = 0; j < sequence.size(); j++){
 		char domainCode = sequence.at(j).at(2);
-		//std::string motifCode = txtProc::charToString(sequence[j].at(1));
-		//motifCode.push_back(sequence[j].at(2));
 		if (domainCode != nothing){  										//means there is a domain on jth residue
 			featureToAdd = "domain";
 			featureToAdd += domainCode;
