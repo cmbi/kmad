@@ -16,20 +16,20 @@ FeaturesProfile::FeaturesProfile(int dom, int phosph, std::vector<std::string> m
 	motifs_probs(m_probs)
 	{
 }
-void FeaturesProfile::createProfile(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity, const std::vector<double>& sequenceIdentityValues, bool weightsModeOn){
-	if (weightsModeOn) countOccurences(alignment, sequenceIdentityValues);
-	else countOccurences(alignment,sequenceIdentity);
+void FeaturesProfile::createProfile(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity, const std::vector<double>& sequenceIdentityValues, bool weightsModeOn, int codon_length){
+	if (weightsModeOn) countOccurences(alignment, sequenceIdentityValues, codon_length);
+	else countOccurences(alignment,sequenceIdentity, codon_length);
 	vecUtil::transposeVec(prfMatrix);
 }
 //fucntion countOccurences - with weights mode on
-void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string> >& alignment, const std::vector<double>& sequenceIdentityValues){
+void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string> >& alignment, const std::vector<double>& sequenceIdentityValues, int codon_length){
 	std::vector<std::vector<double> > tmpResult;
 	double identitiesSum = vecUtil::sum(sequenceIdentityValues);
 	char nothing = 'A';
 	for (int i = 0; i < alignment[0].size();i++){
 		std::vector<double> profileColumn(listOfFeatures.size(),0);
 		for (int j = 0; j < alignment.size();j++){
-				for(int k = 1; k < 4; k++){
+				for(int k = 1; k < codon_length; k++){
 					char alChar = alignment[j][i][k];
 					if (alChar != nothing){
 						int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
@@ -50,7 +50,7 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 	} 
 	prfMatrix = tmpResult;
 }
-void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity){
+void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity, int codon_length){
 	std::vector<std::vector<double> > tmpResult;
 	int trueSequences = misc::countTrueValuesInVector(sequenceIdentity);
 	char nothing = 'A';
@@ -58,7 +58,7 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 		std::vector<double> profileColumn(listOfFeatures.size(),0);
 		for (int j = 0; j < alignment.size();j++){
 			if (sequenceIdentity.at(j)){
-				for(int k = 1; k < 4; k++){
+				for(int k = 1; k < codon_length; k++){
 					char alChar = alignment[j][i][k];
 					if (alChar != nothing){
 						int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
@@ -83,7 +83,7 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 //function getScore - returns score for the entire codon on nth position
 double FeaturesProfile::getScore(int position,std::string codon){
 	double result = 0;
-	for (int i = 1; i < 4; i++){				//adds up scores from each feature (=each position from codon)
+	for (int i = 1; i < codon.size(); i++){				//adds up scores from each feature (=each position from codon)
 		result+=getElement(position,name(codon,i));	
 	}
 	return result;
@@ -123,17 +123,18 @@ std::string FeaturesProfile::name(std::string codon, int featureType){
 	return name;
 }
 //function expandListOfFeatures - expand it by domains and motifs found in the alignment
-void FeaturesProfile::expandListOfFeatures(const std::vector< std::string >& sequence){
+void FeaturesProfile::expandListOfFeatures(const std::vector< std::string >& sequence, int codon_length){
 	std::string featureToAdd="";
-	std::cout << motifs_ids.size() << std::endl;
 	char nothing = 'A';
-	for (int j = 0; j < sequence.size(); j++){
-		char domainCode = sequence.at(j).at(2);
-		if (domainCode != nothing){  										//means there is a domain on jth residue
-			featureToAdd = "domain";
-			featureToAdd += domainCode;
-			if (!vecUtil::contains(listOfFeatures,featureToAdd)){	//check whether this element is already in the list
-				listOfFeatures.push_back(featureToAdd);
+	if (codon_length >= 3){
+		for (int j = 0; j < sequence.size(); j++){
+			char domainCode = sequence.at(j).at(2);
+			if (domainCode != nothing){  										//means there is a domain on jth residue
+				featureToAdd = "domain";
+				featureToAdd += domainCode;
+				if (!vecUtil::contains(listOfFeatures,featureToAdd)){	//check whether this element is already in the list
+					listOfFeatures.push_back(featureToAdd);
+				}
 			}
 		}
 	}
@@ -142,9 +143,6 @@ void FeaturesProfile::expandListOfFeatures(const std::vector< std::string >& seq
 		featureToAdd = "motif";	
 		featureToAdd += motifCode;
 		listOfFeatures.push_back(featureToAdd);
-	}
-	for (int i =0;i < motifs_ids.size(); i++){
-		std::cout << "ids "<< motifs_ids[i] << std::endl;  
 	}
 }
 void FeaturesProfile::printProfile(){

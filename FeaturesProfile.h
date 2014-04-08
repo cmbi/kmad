@@ -16,12 +16,12 @@ public:
 	//setters
 	void setMatrix(std::vector<std::vector<double> >);
 	void printProfile();
-	void createProfile(const std::vector< std::vector<std::string> >&,const std::vector<bool>&, const std::vector<double>&, bool);
-	void expandListOfFeatures(const std::vector<std::string>&);
+	void createProfile(const std::vector< std::vector<std::string> >&,const std::vector<bool>&, const std::vector<double>&, bool, int);
+	void expandListOfFeatures(const std::vector<std::string>&, int);
 private:
 	std::vector< std::vector<double> > prfMatrix;
-	void countOccurences(const std::vector< std::vector<std::string> >&,const std::vector<bool>&);
-	void countOccurences(const std::vector< std::vector<std::string> >&,const std::vector<double>&);
+	void countOccurences(const std::vector< std::vector<std::string> >&,const std::vector<bool>&, int);
+	void countOccurences(const std::vector< std::vector<std::string> >&,const std::vector<double>&, int);
 	int findFeaturesIndex(std::string);
 	std::string name(std::string,int);
 	int domainScore;

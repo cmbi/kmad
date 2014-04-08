@@ -69,8 +69,8 @@ std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, Fe
 	std::vector<bool> sequenceIdentity; 					//'true' stored for every sequence which identity with the 1st one is higher than 80%, only based on these profile will be built
 	identities.push_back(1); // identity of the 1st one to itself
 	sequenceIdentity.push_back(true);					//to build the first profile based only on the first seqeunce
-	outputFeaturesProfile.expandListOfFeatures(sequencesEncoded.at(0).at(1));
-	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,sequenceIdentity,identities,weightsModeOn); 	//create features profile based on the 1st seq
+	outputFeaturesProfile.expandListOfFeatures(sequencesEncoded.at(0).at(1), codon_length);
+	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,sequenceIdentity,identities,weightsModeOn,codon_length); 	//create features profile based on the 1st seq
 	std::vector<std::string> alNoLower; //pairwise alignment without lowercase characters
 	std::vector<std::string> alWithLower; //pairwise alignment with lowercase characters where chars were removed
 	for (int i = 1; i < seqNr; i++){
@@ -85,7 +85,7 @@ std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, Fe
 		else sequenceIdentity.push_back(false);	
 		if (verbose!="0") outputProfile.printProfile();
 	}
-	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,sequenceIdentity,identities,weightsModeOn); 	//create features profile based on the 1st seq
+	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,sequenceIdentity,identities,weightsModeOn,codon_length); 	//create features profile based on the 1st seq
 	outputProfile.buildPseudoProfile(alignmentWithoutLowercase, sequenceIdentity,identities,weightsModeOn);
 	return vecUtil::flatten(alignmentWithLowercase);		
 }
@@ -108,7 +108,7 @@ std::vector<std::string> Sequences::performMSAnextRound(Profile& outputProfile,F
 		}
 		else sequenceIdentity.push_back(false);	
 	}
-	outputFeaturesProfile.createProfile(alignmentWithoutLowercase, sequenceIdentity,identities, weightsModeOn); 	//create features profile based on the 1st seq
+	outputFeaturesProfile.createProfile(alignmentWithoutLowercase, sequenceIdentity,identities, weightsModeOn, codon_length);//create features profile based on the 1st seq
 	outputProfile.buildPseudoProfile(alignmentWithoutLowercase, sequenceIdentity, identities, weightsModeOn);
 	if (verbose!="0") outputProfile.printProfile();
 	return vecUtil::flatten(alignmentWithLowercase);		
@@ -220,7 +220,7 @@ void Sequences::alignPairwise(std::vector<std::string> &alNoLower,std::vector<st
 	int profileLength = prf.getMatrix().at(0).size();
 	std::vector< std::vector<std::string> > alignment;
 	ScoringMatrix scores(profileLength,seq2.size(),penalty,extensionPenalty);
-	scores.calculateScores(seq2, prf, featPrf,deb);
+	scores.calculateScores(seq2, prf, featPrf,deb, codon_length);
 	scores.nwAlignment(&alignment,seq2,prf,featPrf,verbose, codon_length);
 	removeGaps(alWithLower,alNoLower,alignment); 
 }

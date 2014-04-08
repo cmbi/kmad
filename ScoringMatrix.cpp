@@ -34,22 +34,6 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen, double extension
 	matrixG.assign(iLength+1, row);
 	matrixH.assign(iLength+1, row);
 }
-//destructor
-ScoringMatrix::~ScoringMatrix(){
-//	cout <<  "DESTROYING SCORING MATRIX\n";
-}
-ScoringMatrix::ScoringMatrix(ScoringMatrix& that)
-:	iLength(that.iLength),		
-	jLength(that.jLength),
-	gapOpening(that.gapOpening),
-	gapExtension(that.gapExtension),
-	gapOpeningHorizontal(gapOpening),
-	gapExtensionHorizontal(gapExtension),
-	matrixV(that.matrixV),
-	matrixG(that.matrixG),
-	matrixH(that.matrixH)
-{
-}
 //function calculateScoresProfile - calculates scoring matrix for sequences s1 and s2 using profile prf instead of a substitution matrix
 void ScoringMatrix::calculateScores(std::string s2, Profile& prf, int debug){
 	std::string s1(prf.getMatrix().at(0).size()+1,'A');	//makes a pseudosequence of the length of the profile+1 (poly-A)
@@ -87,9 +71,11 @@ void ScoringMatrix::calculateScores(std::string s2, Profile& prf, int debug){
 	}
 }
 //function calculateScoresProfile - calculates scoring matrix for sequences s1 and s2 using profile prf instead of a substitution matrix ENCODED SEQUENCES
-void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, FeaturesProfile& featPrf,int debug){
+void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, FeaturesProfile& featPrf,int debug, int codon_length){
 	std::vector<std::string> s1 = misc::pseudoSequence(prf.getMatrix()[0].size()+1); //creating polyA pseudoSequence representing the profile, to know later where are the gaps in the profile
-	s2 = vecUtil::push_front(s2,"-AAA");
+	//s2 = vecUtil::push_front(s2,"-AAA");
+	s2 = vecUtil::push_front(s2,txtProc::gapCode(codon_length));
+	//std::string gap_code = txtProc::gapCode(codon_length);
 	std::string s1String,s2String;
 	for (int i = 1; i < matrixV.size(); i++){
 		matrixV.at(i).at(0) = -10000000; //infinity
