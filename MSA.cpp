@@ -7,6 +7,7 @@
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <string>
+#include <saturn.h>
 namespace po = boost::program_options;
 int main(int argc, char *argv[]){
 	int codonLength, phosphScore,domainScore, motifScore;
@@ -40,9 +41,9 @@ int main(int argc, char *argv[]){
 		std::vector<double> motifs_probs, identities;
 		Sequences rawSequences(txtProc::processFASTA(filename,codonLength, &motifs_ids, &motifs_probs));
 		Profile prf;
-		FeaturesProfile fprf(domainScore,phosphScore, motifs_ids, motifs_probs);
+		FeaturesProfile fprf(domainScore,phosphScore,motifScore,motifs_ids,motifs_probs);
 		//first round of the alignment - all vs 1st
-		std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,domainScore,phosphScore,motifScore,codonLength,identities));
+		std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,codonLength,identities));
 		std::vector<std::vector<std::vector<std::string> > > encSeq = rawSequences.getEncodedSequences();
 		Profile prof = prf;
 		FeaturesProfile fprof = fprf;
@@ -52,14 +53,14 @@ int main(int argc, char *argv[]){
 			double cutoff = i/10;
 			//gapPenDecreasing = -3.-4.*i/10;
 			//std::cout << gapPenDecreasing << std::endl;
-			multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,cutoff,domainScore,phosphScore,motifScore,codonLength,identities);
+			multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,cutoff,codonLength,identities);
 			//multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPenDecreasing,gapExt,verboseMode,weightsModeOn,cutoff,domainScore,phosphScore,motifScore);
 		}
 		//txtProc::writeAlignmentWithoutCodeToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
 		//gapPenDecreasing = -2;
 		txtProc::writeVector(prof.getMatrix(),"dist2");
-		multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,0,domainScore,phosphScore,motifScore,codonLength, identities);
-		//multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPenDecreasing,gapExt,verboseMode,weightsModeOn,0,domainScore,phosphScore);
+		multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,0,codonLength, identities);
+		//multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPenDecreasing,gapExt,verboseMode,weightsModeOn,0,codonLength, identities);
 		txtProc::writeAlignmentToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
 	}
 	else{

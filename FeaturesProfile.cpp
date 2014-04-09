@@ -9,9 +9,10 @@ namespace {
 	std::vector<std::string> listOfFeatures = {"phosphN", "domain0", "motif0"};
 }
 //constructor, creates empty profile, takes domain and phosphorylation scores(dom, phosph) and motifs' ids and probabilities(m_ids, m_probs)
-FeaturesProfile::FeaturesProfile(int dom, int phosph, std::vector<std::string> m_ids, std::vector<double> m_probs)
+FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, std::vector<std::string> m_ids, std::vector<double> m_probs)
 :	domainScore(dom),
 	phosphScore(phosph),
+	motifScore(motif),
 	motifs_ids(m_ids),
 	motifs_probs(m_probs)
 	{
@@ -41,16 +42,17 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 								profileColumn.at(featIndex) += domainScore * sequenceIdentityValues.at(j);
 								profileColumn.at(1) -= domainScore * sequenceIdentityValues.at(j);
 							}
+							else if (k == 4){
+								std::string motifCode = "";
+								motifCode.push_back(alignment[j][i][k]);
+								motifCode.push_back(alignment[j][i][k+1]);
+								int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
+								double prob = motifs_prob(motifCode);
+								profileColumn.at(featIndex) += motifScore * prob * sequenceIdentityValues.at(j);
+							}
 						}
 					}
 					//has to be separate from domains and phosphorylations because it takes up 2 chars
-					if (k == 4){
-						std::string motifCode = "";
-						motifCode.push_back(alignment[j][i][k]);
-						motifCode.push_back(alignment[j][i][k+1]);
-						int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
-						double prob = motifs_prob(motifCode);
-					}
 				}
 		}
 		vecUtil::divideVectorByAScalar(profileColumn,identitiesSum);
@@ -88,18 +90,17 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 								profileColumn.at(featIndex) += domainScore;
 								profileColumn.at(1)-= domainScore;
 							}
+							else if (k == 4){
+								std::string motifCode = "";
+								motifCode.push_back(alignment[j][i][k]);
+								motifCode.push_back(alignment[j][i][k+1]);
+							//	int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
+								double prob = motifs_prob(motifCode);
+								profileColumn.at(featIndex) += motifScore * prob;
+							}
 						}
 					}
 					//has to be separate from domains and phosphorylations because it takes up 2 chars
-					if (k == 4){
-						std::string motifCode = "";
-						motifCode.push_back(alignment[j][i][k]);
-						motifCode.push_back(alignment[j][i][k+1]);
-						int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
-						double prob = motifs_prob(motifCode);
-
-
-					}
 				}
 			}
 		}
@@ -111,8 +112,13 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 //function getScore - returns score for the entire codon on nth position
 double FeaturesProfile::getScore(int position,std::string codon){
 	double result = 0;
-	for (int i = 1; i < codon.size(); i++){				//adds up scores from each feature (=each position from codon)
-		result+=getElement(position,name(codon,i));	
+	for (int i = 1; i < codon.size()-1; i++){				//adds up scores from each feature (=each position from codon)
+		result+=getElement(position,name(codon,i));
+		double tmp = getElement(position, name(codon,i));
+		if (name(codon,i)[0]=='m' && tmp != 0){
+			std::cout << name(codon,i) << std::endl;
+			//std::cout << getElement(position, name(codon,i)) << std::endl;
+		}
 	}
 	return result;
 }
@@ -122,6 +128,11 @@ double FeaturesProfile::getElement(int position, std::string featName){
 	int result;
 	if (featuresIndex == -1) result = 0;
 	else result = prfMatrix.at(featuresIndex).at(position);	
+	/*
+	if (featName == "motifA"){
+		std::cout << featName << " " << result << std::endl;
+	}
+	*/
 	return result;
 }
 double FeaturesProfile::getElement(int position, int featuresIndex){
@@ -152,7 +163,10 @@ std::string FeaturesProfile::name(std::string codon, int featureType){
 	else if (featureType == 4){
 		name="motif";
 		name.push_back(codon.at(featureType));
-		name.push_back(codon.at(featureType+1));
+
+		if (codon.at(featureType+1) != 'A'){
+			name.push_back(codon.at(featureType+1));
+		}
 	}
 	return name;
 }

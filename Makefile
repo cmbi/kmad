@@ -2,7 +2,7 @@ OBJECTS = MSA.o Sequences.o ScoringMatrix.o FeaturesProfile.o Profile.o substitu
 
 
 MSA: $(OBJECTS)
-	clang++ -std=c++11 -stdlib=libc++ -o $@ $(OBJECTS) /Users/joanna/Documents/MASTER_THESIS/software/boost/stage/lib/libboost_program_options.a
+	clang++ -std=c++11 -stdlib=libc++ -o $@ $(OBJECTS) /Users/joanna/Documents/MASTER_THESIS/software/boost/stage/lib/libboost_program_options.a -lSaturn -finstrument-functions
 MSA.o: MSA.cpp 
 	clang++ -std=c++11 -stdlib=libc++ -c MSA.cpp 
 Sequences.o: Sequences.h  Sequences.cpp

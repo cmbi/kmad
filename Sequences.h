@@ -10,8 +10,8 @@ public:
 	std::vector< std::vector<std::string> > getSequences();
 	std::vector< std::vector< std::vector<std::string> > > getEncodedSequences();
 	//main functionality
-	std::vector<std::string> performMSAencoded(Profile&,FeaturesProfile&,double,double,std::string, bool,int,int,int,int, std::vector<double>&);
-	std::vector<std::string> performMSAnextRound(Profile&,FeaturesProfile&,double,double,std::string, bool, double,int,int,int,int, std::vector<double>);
+	std::vector<std::string> performMSAencoded(Profile&,FeaturesProfile&,double,double,std::string, bool,int, std::vector<double>&);
+	std::vector<std::string> performMSAnextRound(Profile&,FeaturesProfile&,double,double,std::string, bool, double,int, std::vector<double>);
 
 private:
 	//functions
