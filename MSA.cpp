@@ -7,7 +7,6 @@
 #include <boost/program_options.hpp>
 #include <iostream>
 #include <string>
-#include <saturn.h>
 namespace po = boost::program_options;
 int main(int argc, char *argv[]){
 	int codonLength, phosphScore,domainScore, motifScore;
@@ -24,7 +23,7 @@ int main(int argc, char *argv[]){
 		("codon_length,c", po::value<int>(&codonLength)->implicit_value(4)->default_value(1),"codon length")
 		("phosph,p", po::value<int>(&phosphScore)->default_value(15),"score for aligning phosphoryated residues")
 		("domain,d", po::value<int>(&domainScore)->default_value(3),"score for aligning domains")
-		("motif, m", po::value<int>(&motifScore),"probability multiplier for motifs")
+		("motif,m", po::value<int>(&motifScore),"probability multiplier for motifs")
 		("weights,w", po::value<bool>(&weightsModeOn)->implicit_value(true)->default_value(false),"all sequences contribute to the profile with weights(=similarity)")
 		("identity", po::value<double>(&identityCutOff)->default_value(0.8, "0.8"),"identity cut off for sequences included in profile")
 		("verbose,v",po::value<std::string>(&verboseMode)->implicit_value("1")->default_value("0"),"verbose mode");
@@ -50,9 +49,8 @@ int main(int argc, char *argv[]){
 		std::vector<std::string> multipleAlignment2ndRound;
 		double gapPenDecreasing;
 		for (int i = 10; i >= 0; i--){
-			double cutoff = i/10;
+			double cutoff = double(i)/10;
 			//gapPenDecreasing = -3.-4.*i/10;
-			//std::cout << gapPenDecreasing << std::endl;
 			multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,cutoff,codonLength,identities);
 			//multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPenDecreasing,gapExt,verboseMode,weightsModeOn,cutoff,domainScore,phosphScore,motifScore);
 		}

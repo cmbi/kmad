@@ -51,7 +51,7 @@ std::vector< std::vector<int> > findVal::nMaxValues(std::vector<int> vectorA, in
 //function getMaxDoubleValuesIndex - returns index of the maximum value from vector<double> someVector
 int findVal::getMaxDoubleValuesIndex(std::vector<double> someVector){
 	int max = -100000;
-	int maxIndex;
+	int maxIndex = -1;
 	for (int i = 0; i < someVector.size(); i++){
 		if (someVector.at(i) > max){
 			max = someVector.at(i);

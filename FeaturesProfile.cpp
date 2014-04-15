@@ -17,9 +17,9 @@ FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, std::vector<std
 	motifs_probs(m_probs)
 	{
 }
-void FeaturesProfile::createProfile(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity, const std::vector<double>& sequenceIdentityValues, bool weightsModeOn, int codon_length){
+void FeaturesProfile::createProfile(const std::vector< std::vector<std::string> >& alignment, const std::vector<double>& sequenceIdentityValues, bool weightsModeOn, int codon_length){
 	if (weightsModeOn) countOccurences(alignment, sequenceIdentityValues, codon_length);
-	else countOccurences(alignment,sequenceIdentity, codon_length);
+	else countOccurences(alignment, codon_length);
 	vecUtil::transposeVec(prfMatrix);
 }
 //fucntion countOccurences - with weights mode on
@@ -61,7 +61,7 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 	prfMatrix = tmpResult;
 }
 double FeaturesProfile::motifs_prob(std::string m_id){
-	double prob;
+	double prob = 0;
 	for (int i = 0; i < motifs_ids.size(); i++){
 		if (motifs_ids[i] == m_id) {
 			prob = motifs_probs[i];
@@ -70,41 +70,39 @@ double FeaturesProfile::motifs_prob(std::string m_id){
 	}
 	return prob;
 }
-void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string> >& alignment, const std::vector<bool>& sequenceIdentity, int codon_length){
+void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string> >& alignment, int codon_length){
 	std::vector<std::vector<double> > tmpResult;
-	int trueSequences = misc::countTrueValuesInVector(sequenceIdentity);
+	int noOfSequences = alignment.size();
 	char nothing = 'A';
 	for (int i = 0; i < alignment[0].size();i++){
 		std::vector<double> profileColumn(listOfFeatures.size(),0);
 		for (int j = 0; j < alignment.size();j++){
-			if (sequenceIdentity.at(j)){
-				for(int k = 1; k < codon_length; k++){
-					char alChar = alignment[j][i][k];
-					if (alChar != nothing){
-						int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
-						if (featIndex != -1){
-							if (k==3){
-								profileColumn.at(featIndex) += phosphScore;
-							}
-							else if (k==2){
-								profileColumn.at(featIndex) += domainScore;
-								profileColumn.at(1)-= domainScore;
-							}
-							else if (k == 4){
-								std::string motifCode = "";
-								motifCode.push_back(alignment[j][i][k]);
-								motifCode.push_back(alignment[j][i][k+1]);
-							//	int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
-								double prob = motifs_prob(motifCode);
-								profileColumn.at(featIndex) += motifScore * prob;
-							}
+			for(int k = 1; k < codon_length; k++){
+				char alChar = alignment[j][i][k];
+				if (alChar != nothing){
+					int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
+					if (featIndex != -1){
+						if (k==3){
+							profileColumn.at(featIndex) += phosphScore;
+						}
+						else if (k==2){
+							profileColumn.at(featIndex) += domainScore;
+							profileColumn.at(1)-= domainScore;
+						}
+						else if (k == 4){
+							std::string motifCode = "";
+							motifCode.push_back(alignment[j][i][k]);
+							motifCode.push_back(alignment[j][i][k+1]);
+						//	int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
+							double prob = motifs_prob(motifCode);
+							profileColumn.at(featIndex) += motifScore * prob;
 						}
 					}
-					//has to be separate from domains and phosphorylations because it takes up 2 chars
 				}
+				//has to be separate from domains and phosphorylations because it takes up 2 chars
 			}
 		}
-		vecUtil::divideVectorByAScalar(profileColumn,trueSequences);
+		vecUtil::divideVectorByAScalar(profileColumn,noOfSequences);
 		tmpResult.push_back(profileColumn);
 	} 
 	prfMatrix = tmpResult;
@@ -115,10 +113,6 @@ double FeaturesProfile::getScore(int position,std::string codon){
 	for (int i = 1; i < codon.size()-1; i++){				//adds up scores from each feature (=each position from codon)
 		result+=getElement(position,name(codon,i));
 		double tmp = getElement(position, name(codon,i));
-		if (name(codon,i)[0]=='m' && tmp != 0){
-			std::cout << name(codon,i) << std::endl;
-			//std::cout << getElement(position, name(codon,i)) << std::endl;
-		}
 	}
 	return result;
 }
@@ -127,7 +121,7 @@ double FeaturesProfile::getElement(int position, std::string featName){
 	int featuresIndex = findFeaturesIndex(featName);
 	int result;
 	if (featuresIndex == -1) result = 0;
-	else result = prfMatrix.at(featuresIndex).at(position);	
+	else result = prfMatrix[featuresIndex][position];	
 	/*
 	if (featName == "motifA"){
 		std::cout << featName << " " << result << std::endl;

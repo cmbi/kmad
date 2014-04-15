@@ -37,37 +37,35 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen, double extension
 //function calculateScoresProfile - calculates scoring matrix for sequences s1 and s2 using profile prf instead of a substitution matrix ENCODED SEQUENCES
 void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, FeaturesProfile& featPrf,int debug, int codon_length){
 	std::vector<std::string> s1 = misc::pseudoSequence(prf.getMatrix()[0].size()+1); //creating polyA pseudoSequence representing the profile, to know later where are the gaps in the profile
-	//s2 = vecUtil::push_front(s2,"-AAA");
 	s2 = vecUtil::push_front(s2,txtProc::gapCode(codon_length));
-	//std::string gap_code = txtProc::gapCode(codon_length);
 	std::string s1String,s2String;
 	for (int i = 1; i < matrixV.size(); i++){
-		matrixV.at(i).at(0) = -10000000; //infinity
-		matrixH.at(i).at(0) = -10000000;
-		matrixG.at(i).at(0) = 0;	//makes gaps at the beginning of the vertical sequence (s1) free
+		matrixV[i][0] = -10000000; //infinity
+		matrixH[i][0] = -10000000;
+		matrixG[i][0] = 0;	//makes gaps at the beginning of the vertical sequence (s1) free
 		//matrixG[i][0] = gapOpening+(i-1)*gapExtension;
 	}
 	for (int i = 1; i < matrixV[0].size(); i++){
-		matrixV.at(0).at(i) = -10000000;
-		matrixH.at(0).at(i) = 0;	//makes gaps at the end of the horizontal sequence (s2) free
+		matrixV[0][i] = -10000000;
+		matrixH[0][i] = 0;	//makes gaps at the end of the horizontal sequence (s2) free
 		//matrixH[0][i] = gapOpening+(i-1)*gapExtension;
-		matrixG.at(0).at(i) = -10000000;
+		matrixG[0][i] = -10000000;
 	}
 	double score1,score2,score3;
 	for (int i = 1; i < matrixV.size();i++){
 		for (int j = 1; j < matrixV.at(i).size(); j++){
 			///V
-			score1 = matrixV.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j)[0]) + featPrf.getScore(i-1,s2.at(j));
-			score2 = matrixG.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j)[0]) + featPrf.getScore(i-1,s2.at(j));
-			score3 = matrixH.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j)[0]) + featPrf.getScore(i-1,s2.at(j));
+			score1 = matrixV[i-1][j-1] + prf.getElement(i-1,s2[j][0]) + featPrf.getScore(i-1,s2[j]);
+			score2 = matrixG[i-1][j-1] + prf.getElement(i-1,s2[j][0]) + featPrf.getScore(i-1,s2[j]);
+			score3 = matrixH[i-1][j-1] + prf.getElement(i-1,s2[j][0]) + featPrf.getScore(i-1,s2[j]);
 			matrixV[i][j] = findVal::maxValueDoubles(score1,score2,score3);
 			///G
-			score1 = matrixV.at(i-1).at(j) + gapOpening;
-			score2 = matrixG.at(i-1).at(j) + gapExtension;
+			score1 = matrixV[i-1][j] + gapOpening;
+			score2 = matrixG[i-1][j] + gapExtension;
 			matrixG[i][j] = (score1 > score2) ? score1 : score2;
 			///H
-			score1 = matrixV.at(i).at(j-1) + gapOpeningHorizontal;
-			score2 = matrixH.at(i).at(j-1) + gapExtensionHorizontal;
+			score1 = matrixV[i][j-1] + gapOpeningHorizontal;
+			score2 = matrixH[i][j-1] + gapExtensionHorizontal;
 			matrixH[i][j] = (score1 > score2) ? score1 : score2;
 		}
 	}

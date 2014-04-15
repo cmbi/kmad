@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <ctime>
 //constructor for ENCODED SEQUENCES
 Sequences::Sequences(std::vector< std::vector< std::vector<std::string> > > s){
 	sequencesEncoded = s;
@@ -24,24 +25,26 @@ std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, Fe
 	identities.push_back(1); // identity of the 1st one to itself
 	sequenceIdentity.push_back(true);					//to build the first profile based only on the first seqeunce
 	outputFeaturesProfile.expandListOfFeatures(sequencesEncoded.at(0).at(1), codon_length);
-	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,sequenceIdentity,identities,weightsModeOn,codon_length); 	//create features profile based on the 1st seq
+	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,identities,weightsModeOn,codon_length); 	//create features profile based on the 1st seq
 
 	std::vector<std::string> alNoLower; //pairwise alignment without lowercase characters
 	std::vector<std::string> alWithLower; //pairwise alignment with lowercase characters where chars were removed
 	for (int i = 1; i < seqNr; i++){
+		time_t start = clock(); 
 		alignPairwise(alNoLower,alWithLower,sequencesEncoded.at(i).at(1),outputProfile,outputFeaturesProfile,penalty,extensionPenalty,i,verbose,codon_length);
-		alignmentWithoutLowercase.push_back(alNoLower);
-		alignmentWithLowercase.push_back(alWithLower);
+		time_t end = clock(); 
+		//std::cout << "Time clock() = " << (end - start)/(double)CLOCKS_PER_SEC << std::endl;
 		double identity = calcIdentity(alNoLower);
 		identities.push_back(identity);
 		if (identity > 0.95){
-			sequenceIdentity.push_back(true);
+			alignmentWithoutLowercase.push_back(alNoLower);
+			alignmentWithLowercase.push_back(alWithLower);
 		}
 		else sequenceIdentity.push_back(false);	
 		if (verbose!="0") outputProfile.printProfile();
 	}
-	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,sequenceIdentity,identities,weightsModeOn,codon_length); 	//create features profile based on the 1st seq
-	outputProfile.buildPseudoProfile(alignmentWithoutLowercase, sequenceIdentity,identities,weightsModeOn);
+	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,identities,weightsModeOn,codon_length); 	//create features profile based on the 1st seq
+	outputProfile.buildPseudoProfile(alignmentWithoutLowercase,identities,weightsModeOn);
 	return vecUtil::flatten(alignmentWithLowercase);		
 }
 //perform next round of MSA (good for all rounds except for the first one - you need a profile)
@@ -54,17 +57,16 @@ std::vector<std::string> Sequences::performMSAnextRound(Profile& outputProfile,F
 	std::vector<std::string> alWithLower;
 	std::vector<bool> sequenceIdentity; 				//'true' stored for every sequence which identity with the 1st one is higher than identityCutoff, only based on these profile will be built
 	sequenceIdentity.push_back(true);				//to build the first profile based only on the first seqeunce
+	int iter=0;
 	for (int i = 1; i < seqNr; i++){
-		alignPairwise(alNoLower,alWithLower,sequencesEncoded.at(i).at(1),outputProfile,outputFeaturesProfile,penalty,extensionPenalty,i,verbose, codon_length);
-		alignmentWithoutLowercase.push_back(alNoLower);
-		alignmentWithLowercase.push_back(alWithLower);
 		if (identities.at(i) > identityCutoff){
-			sequenceIdentity.push_back(true);
+			alignPairwise(alNoLower,alWithLower,sequencesEncoded.at(i).at(1),outputProfile,outputFeaturesProfile,penalty,extensionPenalty,i,verbose, codon_length);
+			alignmentWithoutLowercase.push_back(alNoLower);
+			alignmentWithLowercase.push_back(alWithLower);
 		}
-		else sequenceIdentity.push_back(false);	
 	}
-	outputFeaturesProfile.createProfile(alignmentWithoutLowercase, sequenceIdentity,identities, weightsModeOn, codon_length);//create features profile based on the 1st seq
-	outputProfile.buildPseudoProfile(alignmentWithoutLowercase, sequenceIdentity, identities, weightsModeOn);
+	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,identities, weightsModeOn, codon_length);//create features profile based on the 1st seq
+	outputProfile.buildPseudoProfile(alignmentWithoutLowercase,identities, weightsModeOn);
 	if (verbose!="0") outputProfile.printProfile();
 	return vecUtil::flatten(alignmentWithLowercase);		
 }
@@ -123,8 +125,19 @@ void Sequences::removeGaps(std::vector<std::string> &alignmentWithLowercase, std
 void Sequences::alignPairwise(std::vector<std::string> &alNoLower,std::vector<std::string> &alWithLower,std::vector<std::string> seq2, Profile& prf, FeaturesProfile& featPrf, double penalty, double extensionPenalty,int deb, std::string verbose, int codon_length){
 	int profileLength = prf.getMatrix().at(0).size();
 	std::vector< std::vector<std::string> > alignment;
+	time_t p1 = clock();
 	ScoringMatrix scores(profileLength,seq2.size(),penalty,extensionPenalty);
+	time_t p2 = clock();
 	scores.calculateScores(seq2, prf, featPrf,deb, codon_length);
+	time_t p3 = clock();
 	scores.nwAlignment(&alignment,seq2,prf,featPrf,verbose, codon_length);
+	time_t p4 = clock();
 	removeGaps(alWithLower,alNoLower,alignment); 
+	time_t p5 = clock();
+	/*
+	std::cout << "constructor = " << (p2 - p1)/(double)CLOCKS_PER_SEC << std::endl;
+	std::cout << "calcScores = " << (p3 - p2)/(double)CLOCKS_PER_SEC << std::endl;
+	std::cout << "nwALignment = " << (p4 - p3)/(double)CLOCKS_PER_SEC << std::endl;
+	std::cout << "removeGaps = " << (p5 - p4)/(double)CLOCKS_PER_SEC << std::endl;
+	*/
 }
