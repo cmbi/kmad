@@ -36,7 +36,7 @@ std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, Fe
 		//std::cout << "Time clock() = " << (end - start)/(double)CLOCKS_PER_SEC << std::endl;
 		double identity = calcIdentity(alNoLower);
 		identities.push_back(identity);
-		if (identity > 0.95){
+		if (identity > 0.9){
 			alignmentWithoutLowercase.push_back(alNoLower);
 			alignmentWithLowercase.push_back(alWithLower);
 		}

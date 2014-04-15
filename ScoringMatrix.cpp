@@ -52,12 +52,15 @@ void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, F
 		matrixG[0][i] = -10000000;
 	}
 	double score1,score2,score3;
+	time_t start = clock();
 	for (int i = 1; i < matrixV.size();i++){
 		for (int j = 1; j < matrixV.at(i).size(); j++){
 			///V
-			score1 = matrixV[i-1][j-1] + prf.getElement(i-1,s2[j][0]) + featPrf.getScore(i-1,s2[j]);
-			score2 = matrixG[i-1][j-1] + prf.getElement(i-1,s2[j][0]) + featPrf.getScore(i-1,s2[j]);
-			score3 = matrixH[i-1][j-1] + prf.getElement(i-1,s2[j][0]) + featPrf.getScore(i-1,s2[j]);
+			double prfScore = prf.getElement(i-1, s2[j][0]);
+			double featPrfScore = featPrf.getScore(i-1,s2[j]);
+			score1 = matrixV[i-1][j-1] + prfScore + featPrfScore;
+			score2 = matrixG[i-1][j-1] + prfScore + featPrfScore;
+			score3 = matrixH[i-1][j-1] + prfScore + featPrfScore;
 			matrixV[i][j] = findVal::maxValueDoubles(score1,score2,score3);
 			///G
 			score1 = matrixV[i-1][j] + gapOpening;
@@ -69,6 +72,17 @@ void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, F
 			matrixH[i][j] = (score1 > score2) ? score1 : score2;
 		}
 	}
+	time_t end =clock();
+	std::cout << (end - start)/(double)CLOCKS_PER_SEC << std::endl;
+	start = clock();
+	for (int i = 1; i < matrixV.size();i++){
+		for (int j = 1; j < matrixV.at(i).size(); j++){
+			double prfScore = prf.getElement(i-1, s2[j][0]);
+			double featPrfScore = featPrf.getScore(i-1,s2[j]);
+		}
+	}
+	end = clock();
+	std::cout << (end - start)/(double)CLOCKS_PER_SEC << std::endl;
 }
 //function findBestScore - returns alignment score with positions in the scoring matrix: [score, i, j] (must be either in the last row or in the last column of the scoring matrix)
 std::vector<int> ScoringMatrix::findBestScore(){
@@ -145,11 +159,13 @@ void ScoringMatrix::nwAlignment(std::vector<std::vector<std::string> > *result,s
 		if (i > 0 && j > 0 && currentMatrix == "V"){	//match/mismatch
 			newChar1 = s1.at(i);
 			newChar2 = s2.at(j);
-			if (matrixV.at(i).at(j) != matrixV.at(i-1).at(j-1) + prf.getElement(i-1,s2.at(j)[0]) + featPrf.getScore(i-1,s2.at(j))){
-				if( i > 0 && j > 0 && matrixV.at(i).at(j) == matrixG.at(i-1).at(j-1)+prf.getElement(i-1,s2.at(j)[0]) + featPrf.getScore(i-1,s2.at(j))){
+			double prfScore = prf.getElement(i-1,s2.at(j)[0]);
+			double featPrfScore = featPrf.getScore(i-1, s2.at(j));
+			if (matrixV[i][j] != matrixV[i-1][j-1] + prfScore + featPrfScore){
+				if( i > 0 && j > 0 && matrixV[i][j] == matrixG[i-1][j-1]+prfScore + featPrfScore){
 					currentMatrix = "G";	
 				}
-				else if(i > 0 && j > 0 && matrixV.at(i).at(j) == matrixH.at(i-1).at(j-1)+prf.getElement(i-1,s2.at(j)[0]) + featPrf.getScore(i-1,s2.at(j))){
+				else if(i > 0 && j > 0 && matrixV[i][j] == matrixH[i-1][j-1]+prfScore + featPrfScore){
 					currentMatrix = "H";
 				}
 			}
@@ -159,14 +175,14 @@ void ScoringMatrix::nwAlignment(std::vector<std::vector<std::string> > *result,s
 		else if (i > 0 && currentMatrix == "G"){	//gap in seq2
 			newChar1 = s1.at(i);
 			newChar2 = gap_code;
-			if (matrixG.at(i).at(j) == matrixV.at(i-1).at(j) + gapOpening)
+			if (matrixG[i][j] == matrixV[i-1][j] + gapOpening)
 				currentMatrix = "V";
 			i--;
 		}
 		else if (j > 0 && currentMatrix == "H"){	//gap in profile
 			newChar1 = gap_code;
 			newChar2 = s2.at(j);
-			if (matrixH.at(i).at(j) == matrixV.at(i).at(j-1) + gapOpeningHorizontal){
+			if (matrixH[i][j] == matrixV[i][j-1] + gapOpeningHorizontal){
 				currentMatrix = "V";
 			}
 			j--;

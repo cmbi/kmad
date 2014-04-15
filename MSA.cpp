@@ -44,11 +44,9 @@ int main(int argc, char *argv[]){
 		//first round of the alignment - all vs 1st
 		std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,codonLength,identities));
 		std::vector<std::vector<std::vector<std::string> > > encSeq = rawSequences.getEncodedSequences();
-		Profile prof = prf;
-		FeaturesProfile fprof = fprf;
 		std::vector<std::string> multipleAlignment2ndRound;
 		double gapPenDecreasing;
-		for (int i = 10; i >= 0; i--){
+		for (int i = 8; i >= 0; i--){
 			double cutoff = double(i)/10;
 			//gapPenDecreasing = -3.-4.*i/10;
 			multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,cutoff,codonLength,identities);
@@ -56,7 +54,6 @@ int main(int argc, char *argv[]){
 		}
 		//txtProc::writeAlignmentWithoutCodeToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
 		//gapPenDecreasing = -2;
-		txtProc::writeVector(prof.getMatrix(),"dist2");
 		multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,0,codonLength, identities);
 		//multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPenDecreasing,gapExt,verboseMode,weightsModeOn,0,codonLength, identities);
 		txtProc::writeAlignmentToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA

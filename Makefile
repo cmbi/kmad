@@ -1,9 +1,9 @@
 OBJECTS = MSA.o Sequences.o ScoringMatrix.o FeaturesProfile.o Profile.o substitutionMatrix.o misc.o txtProc.o vecUtil.o findVal.o
 CLANG = clang++ -std=c++11 -stdlib=libc++
-CPPFLAGS = -Os  -c  
+CPPFLAGS = -O3 -c  
 
 MSA: $(OBJECTS)
-	$(CLANG) -Os -o $@ $(OBJECTS) /Users/joanna/Documents/MASTER_THESIS/software/boost/stage/lib/libboost_program_options.a 
+	$(CLANG) -O3 -o $@ $(OBJECTS) /Users/joanna/Documents/MASTER_THESIS/software/boost/stage/lib/libboost_program_options.a 
 MSA.o: MSA.cpp 
 	$(CLANG) $(CPPFLAGS) MSA.cpp 
 Sequences.o: Sequences.h  Sequences.cpp

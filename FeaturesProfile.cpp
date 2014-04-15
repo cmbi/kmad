@@ -110,9 +110,11 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 //function getScore - returns score for the entire codon on nth position
 double FeaturesProfile::getScore(int position,std::string codon){
 	double result = 0;
+	char nothing = 'A';
 	for (int i = 1; i < codon.size()-1; i++){				//adds up scores from each feature (=each position from codon)
-		result+=getElement(position,name(codon,i));
-		double tmp = getElement(position, name(codon,i));
+		if (nothing != codon[i]){	
+			result+=getElement(position,name(codon,i));
+		}
 	}
 	return result;
 }
@@ -122,11 +124,6 @@ double FeaturesProfile::getElement(int position, std::string featName){
 	int result;
 	if (featuresIndex == -1) result = 0;
 	else result = prfMatrix[featuresIndex][position];	
-	/*
-	if (featName == "motifA"){
-		std::cout << featName << " " << result << std::endl;
-	}
-	*/
 	return result;
 }
 double FeaturesProfile::getElement(int position, int featuresIndex){
