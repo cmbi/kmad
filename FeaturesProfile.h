@@ -3,7 +3,7 @@
 #include <vector>
 class FeaturesProfile{
 public:
-	FeaturesProfile(int, int, int, std::vector<std::string>, std::vector<double>);
+	FeaturesProfile(int, int, int, int, std::vector<std::string>, std::vector<double>);
 	//getters
 	double getElement(int, std::string);
 	double getElement(int, int);	
@@ -25,9 +25,7 @@ private:
 	double motifs_prob(std::string);
 	int findFeaturesIndex(std::string);
 	std::string name(std::string,int);
-	int domainScore;
-	int phosphScore;
-	int motifScore;
+	int domainScore, phosphScore, motifScore, lcr_mod;
 	std::vector<std::string> motifs_ids;
 	std::vector<double> motifs_probs;
 };

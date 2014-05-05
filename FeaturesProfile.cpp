@@ -6,12 +6,13 @@
 #include <string>
 #include <vector>
 namespace {
-	std::vector<std::string> listOfFeatures = {"phosphN", "domain0", "motif0"};
+	std::vector<std::string> listOfFeatures = {"phosphN", "domain0", "motif0", "low_complexity_reg"};
 }
-//constructor, creates empty profile, takes domain and phosphorylation scores(dom, phosph) and motifs' ids and probabilities(m_ids, m_probs)
-FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, std::vector<std::string> m_ids, std::vector<double> m_probs)
+//constructor, creates empty profile, takes domain and phosphorylation scores(dom, phosph) and motifs' ids and probabilities(m_ids, m_probs), lcr - low complexity regions gap penlat modifier
+FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr, std::vector<std::string> m_ids, std::vector<double> m_probs)
 :	domainScore(dom),
 	phosphScore(phosph),
+	lcr_mod(lcr),
 	motifScore(motif),
 	motifs_ids(m_ids),
 	motifs_probs(m_probs)
@@ -49,6 +50,9 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 								int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
 								double prob = motifs_prob(motifCode);
 								profileColumn.at(featIndex) += motifScore * prob * sequenceIdentityValues.at(j);
+							}
+							else if (k==1){
+								profileColumn.at(featIndex) += 1;
 							}
 						}
 					}

@@ -67,6 +67,7 @@ std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(st
 		}
 		else{
 			int aAcidInt = findAminoAcidsNo(sequence[i][0]);
+			//std:: cout << aAcidInt << " " << sequence[i][0] << std::endl;
 			result.at(i)=vecUtil::convertIntVectorToDoubleVector(simScores.at(aAcidInt));//adds a column to the result(converted from int to double)
 		}
 	}

@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 /*constructor
 	arguments:
 		s1size - length of the 1st sequence
@@ -72,17 +73,6 @@ void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, F
 			matrixH[i][j] = (score1 > score2) ? score1 : score2;
 		}
 	}
-	time_t end =clock();
-	std::cout << (end - start)/(double)CLOCKS_PER_SEC << std::endl;
-	start = clock();
-	for (int i = 1; i < matrixV.size();i++){
-		for (int j = 1; j < matrixV.at(i).size(); j++){
-			double prfScore = prf.getElement(i-1, s2[j][0]);
-			double featPrfScore = featPrf.getScore(i-1,s2[j]);
-		}
-	}
-	end = clock();
-	std::cout << (end - start)/(double)CLOCKS_PER_SEC << std::endl;
 }
 //function findBestScore - returns alignment score with positions in the scoring matrix: [score, i, j] (must be either in the last row or in the last column of the scoring matrix)
 std::vector<int> ScoringMatrix::findBestScore(){

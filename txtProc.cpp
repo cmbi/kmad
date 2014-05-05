@@ -4,6 +4,12 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <istream>
+#include <algorithm>
+#include <iterator>
+namespace {
+	static const std::vector<char> acceptable_characters = { 'A','R','N','D','C','Q','E','G','H','I','L','K','M','F','P','S','T','W','Y','V','B','X','Z','0','1','2','3','4','5','6','7','8','9'};
+}
 //function convertStringToInt
 int txtProc::convertStringToInt(std::string s){
 	int convertedInt;
@@ -54,6 +60,7 @@ std::vector< std::vector<std::string> > txtProc::processFASTA(std::string filena
 				resultSequences.push_back(newEntry);
 				resultSequences.at(seqNo).push_back(line);
 				resultSequences.at(seqNo).push_back(newSeq);
+
 			}
 			else{
 				resultSequences.at(seqNo).at(1)=resultSequences.at(seqNo).at(1).append(line);	
@@ -70,7 +77,6 @@ std::vector< std::vector<std::string> > txtProc::processFASTA(std::string filena
 //writes sequences + seqNames to vector<vector<string>>; motifs' ids to vector<string> and motifs' probs vector<double>
 std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std::string filename,int codonLength, std::vector<std::string>* ids, std::vector<double>* probs){
 	std::vector< std::vector< std::vector<std::string> > > resultSequences;
-	std::string line;
 	std::string fastaSymbol = ">";
 	std::ifstream fastafile (filename.c_str());
 	std::vector<std::string> newName;
@@ -81,9 +87,13 @@ std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std
 	bool sequences = true;
 	int seqNo = -1;
 	std::string newSeq = "";
+	std::string line;
+	while(!safeGetline(fastafile, line).eof()){
+	/*
 	if (fastafile.is_open()){
 		while(fastafile){
 			getline(fastafile,line);
+	*/
 			std::string firstChar = line.substr(0,1);
 			if (line != std::string("## PROBABILITIES")){
 				if (sequences && firstChar == fastaSymbol){
@@ -98,8 +108,15 @@ std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std
 					for (int i = 0; i < line.size();i++){
 						if (i % codonLength == 0){
 							std::string newResidue = "";
+							//j for goes through all codon postions of this residue
 							for (int j = i;j < i + codonLength; j++){
-								newResidue += line[j];
+									if (acceptableChar(line[j])){
+										newResidue += line[j];
+									}
+									else{
+										std::cout << "I found a weird character (" << line[j] << "), so you probbaly want to go through your files and double check them"  << std::endl;
+										std::exit(0);
+									}
 							}
 							resultSequences.at(seqNo).at(1).push_back(newResidue);
 						}
@@ -120,10 +137,12 @@ std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std
 			}
 		}
 		fastafile.close();
+		/*
 	}
 	else{
 		std::cout << "Where is the file????";
 	}
+	*/
 	return resultSequences;
 }
 //function writeAlignmentToFile
@@ -170,4 +189,38 @@ void txtProc::writeVector(std::vector<std::vector<double>> vec, std::string file
 }
 std::string txtProc::charToString(char mychar){
 	return std::string(1,mychar);
+}
+std::istream& txtProc::safeGetline(std::istream& is, std::string& t)
+{
+	t.clear();
+	std::istream::sentry se(is, true);
+	std::streambuf* sb = is.rdbuf();
+        for(;;) {
+	        int c = sb->sbumpc();
+		switch (c) {
+			case '\n':
+				return is;
+			case '\r':
+				if(sb->sgetc() == '\n')
+				sb->sbumpc();
+				return is;
+			case EOF:
+				// Also handle the case when the last line has no line ending
+				if(t.empty())
+					is.setstate(std::ios::eofbit);
+				return is;
+			default:
+				t += (char)c;
+		}
+	}
+}
+bool txtProc::acceptableChar(char my_char){
+	bool result = false;
+	for (int i = 0; i < acceptable_characters.size(); i++){
+		if (acceptable_characters[i]==my_char){
+			result = true;
+			break;
+		}
+	}
+	return result;
 }

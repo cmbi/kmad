@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 //function contains
 bool vecUtil::contains(std::vector<std::string>& vec, std::string x){
 	if (std::find(vec.begin(),vec.end(),x) != vec.end()) return true;

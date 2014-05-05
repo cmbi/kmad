@@ -9,7 +9,7 @@
 #include <string>
 namespace po = boost::program_options;
 int main(int argc, char *argv[]){
-	int codonLength, phosphScore,domainScore, motifScore;
+	int codonLength, phosphScore,domainScore, motifScore, lcr_mod;
 	double identityCutOff, gapExt, gapPen;
 	bool weightsModeOn;
 	std::string filename,verboseMode,outputPrefix;
@@ -21,8 +21,9 @@ int main(int argc, char *argv[]){
 		("gap_penalty,g", po::value<double>(&gapPen), "gap opening penalty")
 		("gap_extension,e",po::value<double>(&gapExt)->default_value(-1.),"gap extension penalty")
 		("codon_length,c", po::value<int>(&codonLength)->implicit_value(4)->default_value(1),"codon length")
-		("phosph,p", po::value<int>(&phosphScore)->default_value(15),"score for aligning phosphoryated residues")
-		("domain,d", po::value<int>(&domainScore)->default_value(3),"score for aligning domains")
+		("phosph,p", po::value<int>(&phosphScore)->default_value(0),"score for aligning phosphoryated residues")
+		("domain,d", po::value<int>(&domainScore)->default_value(0),"score for aligning domains")
+		("lcr, l", po::value<int>(&lcr_mod)->default_value(1), "gap penalty modifier inside a low complexity region")
 		("motif,m", po::value<int>(&motifScore),"probability multiplier for motifs")
 		("weights,w", po::value<bool>(&weightsModeOn)->implicit_value(true)->default_value(false),"all sequences contribute to the profile with weights(=similarity)")
 		("identity", po::value<double>(&identityCutOff)->default_value(0.8, "0.8"),"identity cut off for sequences included in profile")
@@ -40,7 +41,7 @@ int main(int argc, char *argv[]){
 		std::vector<double> motifs_probs, identities;
 		Sequences rawSequences(txtProc::processFASTA(filename,codonLength, &motifs_ids, &motifs_probs));
 		Profile prf;
-		FeaturesProfile fprf(domainScore,phosphScore,motifScore,motifs_ids,motifs_probs);
+		FeaturesProfile fprf(domainScore,phosphScore,motifScore,lcr_mod,motifs_ids,motifs_probs);
 		//first round of the alignment - all vs 1st
 		std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,codonLength,identities));
 		std::vector<std::vector<std::vector<std::string> > > encSeq = rawSequences.getEncodedSequences();

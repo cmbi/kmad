@@ -20,6 +20,7 @@ std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, Fe
 	std::vector< std::vector<std::string> > alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector< std::vector<std::string> > alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
 	alignmentWithoutLowercase.push_back(sequencesEncoded.at(0).at(1));
+
 	alignmentWithLowercase.push_back(sequencesEncoded.at(0).at(1));
 	std::vector<bool> sequenceIdentity; 					//'true' stored for every sequence which identity with the 1st one is higher than 80%, only based on these profile will be built
 	identities.push_back(1); // identity of the 1st one to itself
