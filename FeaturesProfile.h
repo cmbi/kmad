@@ -8,6 +8,7 @@ public:
 	double getElement(int, std::string);
 	double getElement(int, int);	
 	double getScore(int,std::string);
+	double getGapMod(int, std::string);
 	std::vector<std::vector<double> > getMatrix();
 	std::vector<std::string> getMotifsIDs();
 	std::vector<double> getMotifsProbs();

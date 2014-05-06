@@ -124,6 +124,10 @@ double FeaturesProfile::getScore(int position,std::string codon){
 	}
 	return result;
 }
+double FeaturesProfile::getGapMod(int position, std::string codon){
+	double result = 2;
+	return result;
+}
 //returns score for 1 feature on nth position
 double FeaturesProfile::getElement(int position, std::string featName){
 	int featuresIndex = findFeaturesIndex(featName);

@@ -44,12 +44,12 @@ void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, F
 		matrixV[i][0] = -10000000; //infinity
 		matrixH[i][0] = -10000000;
 		matrixG[i][0] = 0;	//makes gaps at the beginning of the vertical sequence (s1) free
-		//matrixG[i][0] = gapOpening+(i-1)*gapExtension;
+		//matrixG[i][0] = gapOpening+(i-1)*gapExtension; // uncomment to penalize gaps at the beginnig of s1 seq
 	}
 	for (int i = 1; i < matrixV[0].size(); i++){
 		matrixV[0][i] = -10000000;
 		matrixH[0][i] = 0;	//makes gaps at the end of the horizontal sequence (s2) free
-		//matrixH[0][i] = gapOpening+(i-1)*gapExtension;
+		//matrixH[0][i] = gapOpening+(i-1)*gapExtension; //uncomment to penalize gaps at the beginning of s2 seq
 		matrixG[0][i] = -10000000;
 	}
 	double score1,score2,score3;
@@ -59,17 +59,18 @@ void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, F
 			///V
 			double prfScore = prf.getElement(i-1, s2[j][0]);
 			double featPrfScore = featPrf.getScore(i-1,s2[j]);
+			double gapMod = featPrf.getGapMod(i-1,s2[j]);// gap modifier, based on the features profile
 			score1 = matrixV[i-1][j-1] + prfScore + featPrfScore;
 			score2 = matrixG[i-1][j-1] + prfScore + featPrfScore;
 			score3 = matrixH[i-1][j-1] + prfScore + featPrfScore;
 			matrixV[i][j] = findVal::maxValueDoubles(score1,score2,score3);
 			///G
-			score1 = matrixV[i-1][j] + gapOpening;
-			score2 = matrixG[i-1][j] + gapExtension;
+			score1 = matrixV[i-1][j] + gapOpening * gapMod;
+			score2 = matrixG[i-1][j] + gapExtension * gapMod;
 			matrixG[i][j] = (score1 > score2) ? score1 : score2;
 			///H
-			score1 = matrixV[i][j-1] + gapOpeningHorizontal;
-			score2 = matrixH[i][j-1] + gapExtensionHorizontal;
+			score1 = matrixV[i][j-1] + gapOpeningHorizontal * gapMod;
+			score2 = matrixH[i][j-1] + gapExtensionHorizontal * gapMod;
 			matrixH[i][j] = (score1 > score2) ? score1 : score2;
 		}
 	}
@@ -146,6 +147,7 @@ void ScoringMatrix::nwAlignment(std::vector<std::vector<std::string> > *result,s
 	}
 	//trace back the matrix
 	while (i > 0 || j > 0){
+		double gapMod = featPrf.getGapMod(i-1,s2.at(j));
 		if (i > 0 && j > 0 && currentMatrix == "V"){	//match/mismatch
 			newChar1 = s1.at(i);
 			newChar2 = s2.at(j);
@@ -165,14 +167,14 @@ void ScoringMatrix::nwAlignment(std::vector<std::vector<std::string> > *result,s
 		else if (i > 0 && currentMatrix == "G"){	//gap in seq2
 			newChar1 = s1.at(i);
 			newChar2 = gap_code;
-			if (matrixG[i][j] == matrixV[i-1][j] + gapOpening)
+			if (matrixG[i][j] == matrixV[i-1][j] + gapOpening * gapMod)
 				currentMatrix = "V";
 			i--;
 		}
 		else if (j > 0 && currentMatrix == "H"){	//gap in profile
 			newChar1 = gap_code;
 			newChar2 = s2.at(j);
-			if (matrixH[i][j] == matrixV[i][j-1] + gapOpeningHorizontal){
+			if (matrixH[i][j] == matrixV[i][j-1] + gapOpeningHorizontal * gapMod){
 				currentMatrix = "V";
 			}
 			j--;
