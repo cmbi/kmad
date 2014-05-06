@@ -125,7 +125,15 @@ double FeaturesProfile::getScore(int position,std::string codon){
 	return result;
 }
 double FeaturesProfile::getGapMod(int position, std::string codon){
-	double result = 2;
+	double result;
+	if (codon[1]=='L'){ // if it's a low complexity region in the sequence
+		result = 0.5*lcr_mod;
+	}
+	else{
+		result  = 0.5;
+	}
+	double lcr_profile = getElement(position,"low_complexity_reg");//lcr frequency at this position 
+	result += (1 - (1 - lcr_mod)*lcr_profile)*0.5; // score from profile ranges from 0.5*lcr_modifier to 0.5, depending on the frequency in the profile 
 	return result;
 }
 //returns score for 1 feature on nth position

@@ -9,8 +9,8 @@
 #include <string>
 namespace po = boost::program_options;
 int main(int argc, char *argv[]){
-	int codonLength, phosphScore,domainScore, motifScore, lcr_mod;
-	double identityCutOff, gapExt, gapPen;
+	int codonLength, phosphScore,domainScore, motifScore;
+	double identityCutOff, gapExt, gapPen, lcr_mod;
 	bool weightsModeOn;
 	std::string filename,verboseMode,outputPrefix;
 	po::options_description desc("Allowed options");
@@ -23,7 +23,7 @@ int main(int argc, char *argv[]){
 		("codon_length,c", po::value<int>(&codonLength)->implicit_value(4)->default_value(1),"codon length")
 		("phosph,p", po::value<int>(&phosphScore)->default_value(0),"score for aligning phosphoryated residues")
 		("domain,d", po::value<int>(&domainScore)->default_value(0),"score for aligning domains")
-		("lcr, l", po::value<int>(&lcr_mod)->default_value(1), "gap penalty modifier inside a low complexity region")
+		("lcr,l", po::value<double>(&lcr_mod)->default_value(1), "gap penalty modifier inside a low complexity region")
 		("motif,m", po::value<int>(&motifScore),"probability multiplier for motifs")
 		("weights,w", po::value<bool>(&weightsModeOn)->implicit_value(true)->default_value(false),"all sequences contribute to the profile with weights(=similarity)")
 		("identity", po::value<double>(&identityCutOff)->default_value(0.8, "0.8"),"identity cut off for sequences included in profile")
