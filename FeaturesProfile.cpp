@@ -97,9 +97,11 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 							std::string motifCode = "";
 							motifCode.push_back(alignment[j][i][k]);
 							motifCode.push_back(alignment[j][i][k+1]);
-						//	int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
 							double prob = motifs_prob(motifCode);
 							profileColumn.at(featIndex) += motifScore * prob;
+						}
+						else if (k==1){
+							profileColumn.at(featIndex) += 1;
 						}
 					}
 				}
@@ -115,7 +117,7 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 double FeaturesProfile::getScore(int position,std::string codon){
 	double result = 0;
 	char nothing = 'A';
-	for (int i = 1; i < codon.size()-1; i++){				//adds up scores from each feature (=each position from codon)
+	for (int i = 2; i < codon.size()-1; i++){				//adds up scores from each feature (=each position from codon, except for the first(0) one - amino acid and the second one - lcr, which influences only the gap penalty)
 		if (nothing != codon[i]){	
 			result+=getElement(position,name(codon,i));
 		}
@@ -162,6 +164,9 @@ std::string FeaturesProfile::name(std::string codon, int featureType){
 		if (codon.at(featureType+1) != 'A'){
 			name.push_back(codon.at(featureType+1));
 		}
+	}
+	else if (featureType == 1 && codon[featureType] == 'L'){
+			name = "low_complexity_reg";
 	}
 	return name;
 }
