@@ -1,3 +1,4 @@
 
 1) SLiMs debugging
-2) low complexity regions - gap penalty increasing towards the middle of the region
+2) low complexity regions - gap penalty increasing towards the middle of the region, but... how to include them in the profile? 
+should I calc. average of points depending on residue's position in the lcr...will make a big mess what to do
