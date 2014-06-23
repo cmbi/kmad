@@ -43,7 +43,9 @@ int main(int argc, char *argv[]){
 		Profile prf;
 		FeaturesProfile fprf(domainScore,phosphScore,motifScore,lcr_mod,motifs_ids,motifs_probs);
 		//first round of the alignment - all vs 1st
+		std::cout << "msa_first ...";
 		std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(prf,fprf,gapPen,gapExt,verboseMode,weightsModeOn,codonLength,identities));
+		std::cout << "finished" << std::endl;
 		std::vector<std::vector<std::vector<std::string> > > encSeq = rawSequences.getEncodedSequences();
 		std::vector<std::string> multipleAlignment2ndRound;
 		double gapPenDecreasing;

@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <iterator>
 namespace {
-	static const std::vector<char> acceptable_characters = { 'A','R','N','D','C','Q','E','G','H','I','L','K','M','F','P','S','T','W','Y','V','B','X','Z','0','1','2','3','4','5','6','7','8','9'};
+	static const std::vector<char> acceptable_characters = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'};
 }
 //function convertStringToInt
 int txtProc::convertStringToInt(std::string s){
@@ -58,12 +58,12 @@ std::vector< std::vector<std::string> > txtProc::processFASTA(std::string filena
 			if (firstChar == fastaSymbol){
 				seqNo++;
 				resultSequences.push_back(newEntry);
-				resultSequences.at(seqNo).push_back(line);
-				resultSequences.at(seqNo).push_back(newSeq);
+				resultSequences[seqNo].push_back(line);
+				resultSequences[seqNo].push_back(newSeq);
 
 			}
 			else{
-				resultSequences.at(seqNo).at(1)=resultSequences.at(seqNo).at(1).append(line);	
+				resultSequences[seqNo][1] = resultSequences[seqNo][1].append(line);	
 			}
 		}
 		fastafile.close();
@@ -100,9 +100,9 @@ std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std
 					seqNo++;
 					resultSequences.push_back(newEntry);
 					newName.push_back(line);
-					resultSequences.at(seqNo).push_back(newName);
+					resultSequences[seqNo].push_back(newName);
 					newName.clear();
-					resultSequences.at(seqNo).push_back(newSequence);
+					resultSequences[seqNo].push_back(newSequence);
 				}
 				else if (sequences){
 					for (int i = 0; i < line.size();i++){

@@ -24,6 +24,7 @@ private:
 	void countOccurences(const std::vector< std::vector<std::string> >&, int);
 	void countOccurences(const std::vector< std::vector<std::string> >&,const std::vector<double>&, int);
 	double motifs_prob(std::string);
+	double score_domains(int,std::string);
 	int findFeaturesIndex(std::string);
 	std::string name(std::string,int);
 	int domainScore, phosphScore, motifScore, lcr_mod;
