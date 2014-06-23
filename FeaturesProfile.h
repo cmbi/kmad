@@ -18,13 +18,14 @@ public:
 	void setMatrix(std::vector<std::vector<double> >);
 	void printProfile();
 	void createProfile(const std::vector< std::vector<std::string> >&, const std::vector<double>&, bool, int);
-	void expandListOfFeatures(const std::vector<std::string>&, int);
+	void expandListOfFeatures(const std::vector< std::vector< std::vector<std::string> > >&, int);
 private:
 	std::vector< std::vector<double> > prfMatrix;
 	void countOccurences(const std::vector< std::vector<std::string> >&, int);
 	void countOccurences(const std::vector< std::vector<std::string> >&,const std::vector<double>&, int);
 	double motifs_prob(std::string);
-	double score_domains(int,std::string);
+	double score_domains(int, std::string);
+	double score_PTMs(int, std::string);
 	int findFeaturesIndex(std::string);
 	std::string name(std::string,int);
 	int domainScore, phosphScore, motifScore, lcr_mod;

@@ -25,12 +25,10 @@ std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, Fe
 	std::vector<bool> sequenceIdentity; 					//'true' stored for every sequence which identity with the 1st one is higher than 80%, only based on these profile will be built
 	identities.push_back(1); // identity of the 1st one to itself
 	sequenceIdentity.push_back(true);					//to build the first profile based only on the first seqeunce
-	std::cout << "hejhej" << std::endl;
-	outputFeaturesProfile.expandListOfFeatures(sequencesEncoded[0][1], codon_length);
+	outputFeaturesProfile.expandListOfFeatures(sequencesEncoded, codon_length);
 	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,identities,weightsModeOn,codon_length); 	//create features profile based on the 1st seq
 	std::vector<std::string> alNoLower; //pairwise alignment without lowercase characters
 	std::vector<std::string> alWithLower; //pairwise alignment with lowercase characters where chars were removed
-	std::cout << "hej" << std::endl;
 	for (int i = 1; i < seqNr; i++){
 		time_t start = clock(); 
 		alignPairwise(alNoLower,alWithLower,sequencesEncoded[i][1],outputProfile,outputFeaturesProfile,penalty,extensionPenalty,i,verbose,codon_length);

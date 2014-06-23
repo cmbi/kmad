@@ -34,7 +34,7 @@ bool misc::checkParameters(int codonLength,int phosph,int domain,int motif,doubl
 	}
 	else if (phosph < 0 || domain < 0 || motif < 0){
 		alright = false;
-		std::cout << "you're penalizining alignment of domains and/or phosphorylations - that's not the way to go";
+		std::cout << "you're penalizing alignment of domains and/or phosphorylations - that's not the way to go";
 	}
 
 	return alright;

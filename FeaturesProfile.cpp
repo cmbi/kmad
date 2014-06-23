@@ -6,7 +6,8 @@
 #include <string>
 #include <vector>
 namespace {
-	std::vector<std::string> listOfFeatures = {"phosph0","phosph1","phosph2","phosph3","acet0", "acet1","acet2","acet3","Nglyc0","Nglyc1","Nglyc2","Nglyc3","amid0","amid1","amid2","amid3","hydroxy0","hydroxy1","hydroxy2","hydroxy3","methyl0","methyl1","methyl2","methyl3","Oglyc0","Oglyc1","Oglyc2","Oglyc3","domain0", "motif0", "low_complexity_reg"};
+	// 0 - highest level of annotation, 3 - lowest, P - predicted
+	std::vector<std::string> listOfFeatures = {"phosph0","phosph1","phosph2","phosph3","phosphP","acet0", "acet1","acet2","acet3","Nglyc0","Nglyc1","Nglyc2","Nglyc3","amid0","amid1","amid2","amid3","hydroxy0","hydroxy1","hydroxy2","hydroxy3","methyl0","methyl1","methyl2","methyl3","Oglyc0","Oglyc1","Oglyc2","Oglyc3","domain0", "motif0", "low_complexity_reg"};
 }
 //constructor, creates empty profile, takes domain and phosphorylation scores(dom, phosph) and motifs' ids and probabilities(m_ids, m_probs), lcr - low complexity regions gap penlat modifier
 FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr, std::vector<std::string> m_ids, std::vector<double> m_probs)
@@ -79,17 +80,19 @@ void FeaturesProfile::countOccurences(const std::vector< std::vector<std::string
 		for (int j = 0; j < alignment.size();j++){
 			for(int k = 1; k < codon_length; k++){
 				char alChar = alignment.at(j).at(i)[k];
-				std::cout << alChar << " " << k << std::endl;
 				if (alChar != nothing && k != 3 && k != 6){ // 3rd and 6th positions are for 2nd motif/domain character
 					int featIndex = findFeaturesIndex(name(alignment.at(j).at(i),k));
-					if (featIndex == -1 ) { std::cout << "that character ("<< alChar<<") shouldn't be on position "<< k<< std::endl;}
-					if (k==3){
+					if (featIndex == -1 ) { 
+						std::cout << "that character ("<< alChar<<") shouldn't be on position "<< k<< std::endl;
+						std::exit(0);
+					}
+					if (k==4){
 						profileColumn.at(featIndex) += phosphScore;
 					}
 					else if (k==2){
 						profileColumn.at(featIndex) += domainScore;
 					}
-					else if (k == 4){
+					else if (k == 5){
 						feature_code = "";
 						feature_code.push_back(alignment[j][i][k]);
 						feature_code.push_back(alignment[j][i][k+1]);
@@ -113,14 +116,20 @@ double FeaturesProfile::getScore(int position,std::string codon){
 	char nothing = 'A';
 	for (int i = 2; i < codon.size()-1; i++){	//adds up scores from each feature (=each position from codon, except for the first(0) one - amino acid and the second one - lcr, which influences only the gap penalty)
 		if (nothing != codon[i] && i != 2 && i != 3 && i != 6 ){	//positions 3 and 6 a second character of motif/domain code, domains scored separately (because of subtraction for 'other' domains)
-			result+=getElement(position,name(codon,i));
 			if (i == 2){
 				result += score_domains(position,name(codon,i));
+			}
+			else if (i==3){
+				result += score_PTMs(position, name(codon,i));
+			}
+			else{
+				result+=getElement(position,name(codon,i));
 			}
 		}
 	}
 	return result;
 }
+// return gap modifier, based on the low complexity regions on nth position. TO BE IMPLEMENTED
 double FeaturesProfile::getGapMod(int position, std::string codon){
 	double result = 1;  // for now it doesn't change anything
 	/*
@@ -135,7 +144,7 @@ double FeaturesProfile::getGapMod(int position, std::string codon){
 	*/
 	return result;
 }
-//returns score for 1 feature on nth position
+//returns score for a feature on nth position (by feature's name)
 double FeaturesProfile::getElement(int position, std::string featName){
 	int featuresIndex = findFeaturesIndex(featName);
 	int result;
@@ -143,6 +152,7 @@ double FeaturesProfile::getElement(int position, std::string featName){
 	else result = prfMatrix[featuresIndex][position];	
 	return result;
 }
+//returns score for a feature on nth position (by feature's index)
 double FeaturesProfile::getElement(int position, int featuresIndex){
 	return prfMatrix.at(featuresIndex).at(position);
 }
@@ -218,6 +228,8 @@ std::string FeaturesProfile::name(std::string codon, int featureType){
 				break;
 			case 'c': name = "Oglyc3";
 				break;
+			case 'd': name = "phosphP";	//predicted phosphorylation
+				break;
 		}
 		
 	}
@@ -237,20 +249,22 @@ std::string FeaturesProfile::name(std::string codon, int featureType){
 	return name;
 }
 //function expandListOfFeatures - expand it by domains and motifs found in the alignment
-void FeaturesProfile::expandListOfFeatures(const std::vector< std::string >& sequence, int codon_length){
+void FeaturesProfile::expandListOfFeatures(const std::vector< std::vector< std::vector< std::string > > >& sequences, int codon_length){
 	std::string featureToAdd="";
 	std::string nothing = "AA";
 	std::string feature_code;
 	if (codon_length >= 3){
-		for (int j = 0; j < sequence.size(); j++){
-			feature_code = "";
-			feature_code.push_back(sequence.at(j).at(2));
-			feature_code.push_back(sequence.at(j).at(3));
-			if (feature_code != nothing){  										//means there is a domain on jth residue
-				featureToAdd = "domain";
-				featureToAdd += feature_code;
-				if (!vecUtil::contains(listOfFeatures,featureToAdd)){	//check whether this domain is already in the list of features
-					listOfFeatures.push_back(featureToAdd);
+		for(int i = 0; i < sequences.size();i++){	
+			for (int j = 0; j < sequences[i][1].size(); j++){
+				feature_code = "";
+				feature_code.push_back(sequences[i][1].at(j).at(2));
+				feature_code.push_back(sequences[i][1].at(j).at(3));
+				if (feature_code != nothing){  					//means there is a domain on jth residue
+					featureToAdd = "domain";
+					featureToAdd += feature_code;
+					if (!vecUtil::contains(listOfFeatures,featureToAdd)){	//check whether this domain is already in the list of features
+						listOfFeatures.push_back(featureToAdd);
+					}
 				}
 			}
 		}
@@ -262,26 +276,61 @@ void FeaturesProfile::expandListOfFeatures(const std::vector< std::string >& seq
 		listOfFeatures.push_back(featureToAdd);
 	}
 }
+//get score for domain "dom_name" on certain position
 double FeaturesProfile::score_domains(int position, std::string dom_name){
 	double result  = 0;
 	std::string domain = "domain";
 	for (int i = 0; i < listOfFeatures.size(); i++){
 		std::string i_name = listOfFeatures[i];	
-		i_name.pop_back();
-		i_name.pop_back();
+		i_name.pop_back();  // popping back last two characters to get "domain" if it's a domain instead of 'domainXX'
+		i_name.pop_back();	
 		if (i_name == domain){
-			if (listOfFeatures[i] == dom_name){
+			if (listOfFeatures[i] == dom_name){	// add score for "dom_name"
 				result += prfMatrix[i][position];
 			}
 			else{
-				result -= prfMatrix[i][position];
+				result -= prfMatrix[i][position];	// subtract score for every other domain
 			}
 		}
 	}
 	return result;
 }
+//get score for domain "dom_name" on certain position
+double FeaturesProfile::score_PTMs(int position, std::string ptm_name){
+	double result  = 0;
+	std::string ptm_type = ptm_name;
+	ptm_type.pop_back();	//pop back last character to get just the ptm type
+	char ptm_level = ptm_name.back();	// level of annotation - last character of feature's name
+	double ptm_score;
+	// first set ptm_score based on annotation level of the query ptm
+	if (ptm_level == '0'){ ptm_score = 1.0;}
+	else if (ptm_level == '1'){ ptm_score = 0.9;}
+	else if (ptm_level == '2'){ ptm_score = 0.8;}
+	else if (ptm_level == '3'){ ptm_score = 0.7;}
+	else if (ptm_level == 'P'){ ptm_score = 0.3;}
+	else {
+		std::cout << "something's wrong with annotation level on position "<< position << std::endl;
+		std::exit(0);
+	}
+	for (int i = 0; i < listOfFeatures.size(); i++){
+		std::string i_name = listOfFeatures[i];	
+		std::string i_type = i_name;
+		i_type.pop_back();  // popping back last character, to get just the ptm type 
+		if (i_type == ptm_type){
+			char i_level = i_name.back();
+			if (i_level == '0'){ result += prfMatrix[i][position];}
+			else if (i_level == '1'){ result += prfMatrix[i][position] * 0.9;}
+			else if (i_level == '2'){ result += prfMatrix[i][position] * 0.8;}
+			else if (i_level == '3'){ result += prfMatrix[i][position] * 0.7;}
+			else if (i_level == 'P'){ result += prfMatrix[i][position] * 0.3;}
+		}
+	}
+	result = result * ptm_score;
+	return result;
+}
 void FeaturesProfile::printProfile(){
 	for (int i = 0; i < prfMatrix.size(); i++){
+		std::cout << listOfFeatures[i] << " ";
 		for (int j = 0; j < prfMatrix.at(0).size();j++){
 			std::cout << prfMatrix.at(i).at(j) << " ";
 		}
