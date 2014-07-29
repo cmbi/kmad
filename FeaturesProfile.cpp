@@ -115,16 +115,12 @@ double FeaturesProfile::getScore(int position,std::string codon){
 	double result = 0;
 	char nothing = 'A';
 	for (int i = 2; i < codon.size()-1; i++){	//adds up scores from each feature (=each position from codon, except for the first(0) one - amino acid and the second one - lcr, which influences only the gap penalty)
-		if (nothing != codon[i] && i != 2 && i != 3 && i != 6 ){	//positions 3 and 6 a second character of motif/domain code, domains scored separately (because of subtraction for 'other' domains)
-			if (i == 2){
-				result += score_domains(position,name(codon,i));
-			}
-			else if (i==3){
-				result += score_PTMs(position, name(codon,i));
-			}
-			else{
-				result+=getElement(position,name(codon,i));
-			}
+		if (nothing != codon[i]){
+			//positions 3 and 6 a second character of motif/domain code, domains scored separately (because of subtraction for 'other' domains)
+			if (i == 4){ result += score_PTMs(position, name(codon,i));}
+			else if (i == 2){ result += score_domains(position,name(codon,i));}
+			else if (i != 3 && i != 6){ result += getElement(position,name(codon,i));} //positions 3 and 6 a second character of motif/domain code, domains scored separately (because of subtraction for 'other' domains)
+
 		}
 	}
 	return result;
@@ -312,10 +308,11 @@ double FeaturesProfile::score_PTMs(int position, std::string ptm_name){
 		std::cout << "something's wrong with annotation level on position "<< position << std::endl;
 		std::exit(0);
 	}
+	// now go through list of features to find in which rows in profile are the features that we're gonna score for
 	for (int i = 0; i < listOfFeatures.size(); i++){
 		std::string i_name = listOfFeatures[i];	
 		std::string i_type = i_name;
-		i_type.pop_back();  // popping back last character, to get just the ptm type 
+		i_type.pop_back();  			// popping back last character, to get just the ptm type 
 		if (i_type == ptm_type){
 			char i_level = i_name.back();
 			if (i_level == '0'){ result += prfMatrix[i][position];}
@@ -325,6 +322,7 @@ double FeaturesProfile::score_PTMs(int position, std::string ptm_name){
 			else if (i_level == 'P'){ result += prfMatrix[i][position] * 0.3;}
 		}
 	}
+	
 	result = result * ptm_score;
 	return result;
 }

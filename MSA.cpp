@@ -24,11 +24,10 @@ int main(int argc, char *argv[]){
 		("phosph,p", po::value<int>(&phosphScore)->default_value(0),"score for aligning phosphoryated residues")
 		("domain,d", po::value<int>(&domainScore)->default_value(0),"score for aligning domains")
 		("lcr,l", po::value<double>(&lcr_mod)->default_value(1), "gap penalty modifier inside a low complexity region")
-		("motif,m", po::value<int>(&motifScore),"probability multiplier for motifs")
+		("motif,m", po::value<int>(&motifScore)->default_value(0),"probability multiplier for motifs")
 		("weights,w", po::value<bool>(&weightsModeOn)->implicit_value(true)->default_value(false),"all sequences contribute to the profile with weights(=similarity)")
 		("identity", po::value<double>(&identityCutOff)->default_value(0.8, "0.8"),"identity cut off for sequences included in profile")
 		("verbose,v",po::value<std::string>(&verboseMode)->implicit_value("1")->default_value("0"),"verbose mode");
-
 	po::variables_map vm;
 	po::store(po::parse_command_line(argc, argv, desc), vm);
 	po::notify(vm);
