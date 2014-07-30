@@ -52,20 +52,27 @@ void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, F
 		//matrixH[0][i] = gapOpening+(i-1)*gapExtension; //uncomment to penalize gaps at the beginning of s2 seq
 		matrixG[0][i] = -10000000;
 	}
-	double score1,score2,score3;
-	time_t getting1 = 0;
-	time_t getting2 = 0;
+	time_t t1 = 0;
+	time_t t2 = 0;
+	time_t t3 = 0;
 	time_t start;
+	double score1,score2,score3;
 	for (int i = 1; i < matrixV.size();i++){
 		for (int j = 1; j < matrixV.at(i).size(); j++){
 			///V
+			start = clock();
 			double prfScore = prf.getElement(i-1, s2[j][0]);
+			t1 = t1+clock() - start;
+			start = clock();
 			double featPrfScore = featPrf.getScore(i-1,s2[j]);
+			t2 = t2+clock() - start;
 			//double gapMod = featPrf.getGapMod(i-1,s2[j]);// gap modifier, based on the features profile
 			score1 = matrixV[i-1][j-1] + prfScore + featPrfScore;
 			score2 = matrixG[i-1][j-1] + prfScore + featPrfScore;
 			score3 = matrixH[i-1][j-1] + prfScore + featPrfScore;
+			start = clock();
 			matrixV[i][j] = findVal::maxValueDoubles(score1,score2,score3);
+			t3 = t3+clock() - start;
 			///G
 			//score1 = matrixV[i-1][j] + gapOpening * gapMod;
 			//score2 = matrixG[i-1][j] + gapExtension * gapMod;
@@ -80,7 +87,7 @@ void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, F
 			matrixH[i][j] = (score1 > score2) ? score1 : score2;
 		}
 	}
-	featPrf.printTimes();
+	std::cout<< "t1: " << double(t1)/CLOCKS_PER_SEC << " t2: " << double(t2)/CLOCKS_PER_SEC << " t3: " << double(t3)/CLOCKS_PER_SEC << std::endl;
 }
 //function findBestScore - returns alignment score with positions in the scoring matrix: [score, i, j] (must be either in the last row or in the last column of the scoring matrix)
 std::vector<int> ScoringMatrix::findBestScore(){

@@ -9,9 +9,7 @@ namespace {
 	// 0 - highest level of annotation, 3 - lowest, P - predicted
 	std::vector<std::string> listOfFeatures = {"phosph0","phosph1","phosph2","phosph3","phosphP","acet0", "acet1","acet2","acet3","Nglyc0","Nglyc1","Nglyc2","Nglyc3","amid0","amid1","amid2","amid3","hydroxy0","hydroxy1","hydroxy2","hydroxy3","methyl0","methyl1","methyl2","methyl3","Oglyc0","Oglyc1","Oglyc2","Oglyc3","domain0", "motif0", "low_complexity_reg"};
 	std::vector<int> domain_indexes = {29};
-	time_t scoring1 = 0;
-	time_t scoring2 = 0;
-	time_t scoring3 = 0;
+	std::vector<int> motif_indexes = {30};
 }
 //constructor, creates empty profile, takes domain and phosphorylation scores(dom, phosph) and motifs' ids and probabilities(m_ids, m_probs), lcr - low complexity regions gap penlat modifier
 FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr, std::vector<std::string> m_ids, std::vector<double> m_probs)
@@ -129,13 +127,12 @@ double FeaturesProfile::getScore(int position,std::string codon){
 		}
 	}
 	*/
+	time_t start;
 	if (nothing != codon[4]){
 		result += score_PTMs(position, name(codon,4));
 	}
 	if (nothing != codon[2]){
-		time_t start = clock();
 		result += score_domains(position,name(codon,2));
-		scoring2 = scoring2 + clock() - start;
 	}
 	if (nothing != codon[5]){
 		result += getElement(position,name(codon,5)); //positions 3 and 6 a second character of motif/domain code, domains scored separately (because of subtraction for 'other' domains)
@@ -288,6 +285,7 @@ void FeaturesProfile::expandListOfFeatures(const std::vector< std::vector< std::
 		featureToAdd = "motif";	
 		featureToAdd += motifCode;
 		listOfFeatures.push_back(featureToAdd);
+		motif_indexes.push_back(listOfFeatures.size()-1);
 	}
 }
 //get score for domain "dom_name" on certain position
@@ -366,10 +364,4 @@ double FeaturesProfile::getPhosphScore(){
 }
 void FeaturesProfile::setMatrix(std::vector<std::vector<double> > newMatrix){
 	prfMatrix = newMatrix;
-}
-void FeaturesProfile::printTimes(){
-	std::cout << "ptms: " << double( scoring1 ) /CLOCKS_PER_SEC << " domains: " << double(scoring2)/CLOCKS_PER_SEC << " motifs: " << double(scoring3)/CLOCKS_PER_SEC << std::endl;
-	scoring1 = 0;
-	scoring2 = 0;
-	scoring3 = 0;
 }
