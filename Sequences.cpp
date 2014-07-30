@@ -30,7 +30,6 @@ std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, Fe
 	std::vector<std::string> alNoLower; //pairwise alignment without lowercase characters
 	std::vector<std::string> alWithLower; //pairwise alignment with lowercase characters where chars were removed
 	for (int i = 1; i < seqNr; i++){
-		std::cout << "align" << std::endl;
 		alignPairwise(alNoLower,alWithLower,sequencesEncoded[i][1],outputProfile,outputFeaturesProfile,penalty,extensionPenalty,i,verbose,codon_length);
 		double identity = calcIdentity(alNoLower);
 		identities.push_back(identity);

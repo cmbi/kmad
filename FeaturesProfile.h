@@ -19,8 +19,10 @@ public:
 	void printProfile();
 	void createProfile(const std::vector< std::vector<std::string> >&, const std::vector<double>&, bool, int);
 	void expandListOfFeatures(const std::vector< std::vector< std::vector<std::string> > >&, int);
+	void printTimes();
 private:
-	std::vector< std::vector<double> > prfMatrix;
+	std::vector< std::vector<double> > prfMatrix;	
+	
 	void countOccurences(const std::vector< std::vector<std::string> >&, int);
 	void countOccurences(const std::vector< std::vector<std::string> >&,const std::vector<double>&, int);
 	double motifs_prob(std::string);

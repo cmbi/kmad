@@ -53,27 +53,34 @@ void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, F
 		matrixG[0][i] = -10000000;
 	}
 	double score1,score2,score3;
-	time_t start = clock();
+	time_t getting1 = 0;
+	time_t getting2 = 0;
+	time_t start;
 	for (int i = 1; i < matrixV.size();i++){
 		for (int j = 1; j < matrixV.at(i).size(); j++){
 			///V
 			double prfScore = prf.getElement(i-1, s2[j][0]);
 			double featPrfScore = featPrf.getScore(i-1,s2[j]);
-			double gapMod = featPrf.getGapMod(i-1,s2[j]);// gap modifier, based on the features profile
+			//double gapMod = featPrf.getGapMod(i-1,s2[j]);// gap modifier, based on the features profile
 			score1 = matrixV[i-1][j-1] + prfScore + featPrfScore;
 			score2 = matrixG[i-1][j-1] + prfScore + featPrfScore;
 			score3 = matrixH[i-1][j-1] + prfScore + featPrfScore;
 			matrixV[i][j] = findVal::maxValueDoubles(score1,score2,score3);
 			///G
-			score1 = matrixV[i-1][j] + gapOpening * gapMod;
-			score2 = matrixG[i-1][j] + gapExtension * gapMod;
+			//score1 = matrixV[i-1][j] + gapOpening * gapMod;
+			//score2 = matrixG[i-1][j] + gapExtension * gapMod;
+			score1 = matrixV[i-1][j] + gapOpening;
+			score2 = matrixG[i-1][j] + gapExtension;
 			matrixG[i][j] = (score1 > score2) ? score1 : score2;
 			///H
-			score1 = matrixV[i][j-1] + gapOpeningHorizontal * gapMod;
-			score2 = matrixH[i][j-1] + gapExtensionHorizontal * gapMod;
+			//score1 = matrixV[i][j-1] + gapOpeningHorizontal * gapMod;
+			//score2 = matrixH[i][j-1] + gapExtensionHorizontal * gapMod;
+			score1 = matrixV[i][j-1] + gapOpeningHorizontal;
+			score2 = matrixH[i][j-1] + gapExtensionHorizontal;
 			matrixH[i][j] = (score1 > score2) ? score1 : score2;
 		}
 	}
+	featPrf.printTimes();
 }
 //function findBestScore - returns alignment score with positions in the scoring matrix: [score, i, j] (must be either in the last row or in the last column of the scoring matrix)
 std::vector<int> ScoringMatrix::findBestScore(){
