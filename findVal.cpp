@@ -23,7 +23,7 @@ std::vector< std::vector<int> > findVal::nMaxValues(std::vector<int> vectorA, in
 		n = vectorA.size();
 	}
 	while (i < n){
-		newEntry.push_back(vectorA.at(i));
+		newEntry.push_back(vectorA[i]);
 		newEntry.push_back(i);
 		result.push_back(newEntry);
 		newEntry.clear();
@@ -31,17 +31,17 @@ std::vector< std::vector<int> > findVal::nMaxValues(std::vector<int> vectorA, in
 	}
 	for (int i = n; i < vectorA.size(); i++){
 		for (int j = 0; j < n; j++){
-			if (vectorA.at(i) > result.at(j).at(0) ){
+			if (vectorA[i] > result[j][0] ){
 				int min = 100000;
 				int minIndex = -1;
 				for (int k = 0; k < n; k++){
-					if (min > result.at(k).at(0)){
-						min = result.at(k).at(0);
+					if (min > result[k][0]){
+						min = result[k][0];
 						minIndex = k;	
 					}	
 				}
-				result.at(minIndex).at(0) = vectorA.at(i);
-				result.at(minIndex).at(1) = i;
+				result[minIndex][0] = vectorA[i];
+				result[minIndex][1] = i;
 				break;
 			}
 		}
@@ -53,8 +53,8 @@ int findVal::getMaxDoubleValuesIndex(std::vector<double> someVector){
 	int max = -100000;
 	int maxIndex = -1;
 	for (int i = 0; i < someVector.size(); i++){
-		if (someVector.at(i) > max){
-			max = someVector.at(i);
+		if (someVector[i] > max){
+			max = someVector[i];
 			maxIndex = i;
 		}
 	}

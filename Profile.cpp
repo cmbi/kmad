@@ -33,9 +33,9 @@ void Profile::buildPseudoProfile(std::vector< std::vector<std::string> >& alignm
 	for (int i = 0; i < prfMatrix[0].size(); i++){
 		std::vector< std::vector<double> > columnsToAdd;
 		for(int j = 0; j < prfMatrix.size(); j++){
-			if (prfMatrix.at(j).at(i) != 0){
+			if (prfMatrix[j][i] != 0){
 				std::vector<double> columnForJ = vecUtil::convertIntVectorToDoubleVector(substitutionMatrix::getColumn(j));
-				vecUtil::multiplyVectorByAScalar(columnForJ, prfMatrix.at(j).at(i));
+				vecUtil::multiplyVectorByAScalar(columnForJ, prfMatrix[j][i]);
 				columnsToAdd.push_back(columnForJ);
 			}
 		}
@@ -52,24 +52,24 @@ void Profile::countOccurences(std::vector< std::vector<double> >& result,std::ve
 		std::vector<double> profileColumn(20,0);
 		int nonGaps = 0;
 		for (int j = 0; j < alignment.size(); j++){
-			char seqChar(alignment.at(j).at(i)[0]);
+			char seqChar(alignment[j][i][0]);
 			if (seqChar != '-'){
 				if (seqChar == 'B'){ 		//either D or N, so I'll add half a point to both
-					profileColumn.at(2)+=0.5;
-					profileColumn.at(3)+=0.5;
+					profileColumn[2]+=0.5;
+					profileColumn[3]+=0.5;
 				}
 				else if (seqChar == 'Z'){ 	//either D or N, so I'll add half a point to both
-					profileColumn.at(6)+=0.5;
-					profileColumn.at(7)+=0.5;
+					profileColumn[6]+=0.5;
+					profileColumn[7]+=0.5;
 				}
 				else if (seqChar == 'X'){
 					for (int k = 0; k < profileColumn.size();k++){
-						profileColumn.at(k)+=0.05;
+						profileColumn[k]+=0.05;
 					}
 				}
 				else{	
 					int aAcidInt = substitutionMatrix::findAminoAcidsNo(seqChar);
-					profileColumn.at(aAcidInt)++;				
+					profileColumn[aAcidInt]++;				
 				}
 				nonGaps++;
 			}
@@ -87,24 +87,24 @@ void Profile::countOccurences(std::vector< std::vector<double> >& result,std::ve
 	for (int i = 0; i < alignment[0].size(); i++){
 		std::vector<double> profileColumn(20,0);
 		for (int j = 0; j < alignment.size(); j++){
-			char seqChar(alignment.at(j).at(i)[0]);
+			char seqChar(alignment[j][i][0]);
 			if (seqChar != '-'){
 				if (seqChar == 'B'){ 		//either D or N, so I'll add half a point to both
-					profileColumn.at(2)+=0.5*sequenceIdentityValues.at(j);
-					profileColumn.at(3)+=0.5*sequenceIdentityValues.at(j);
+					profileColumn[2]+=0.5*sequenceIdentityValues[j];
+					profileColumn[3]+=0.5*sequenceIdentityValues[j];
 				}
 				else if (seqChar == 'Z'){ 	//either D or N, so I'll add half a point to both
-					profileColumn.at(6)+=0.5*sequenceIdentityValues.at(j);
-					profileColumn.at(7)+=0.5;
+					profileColumn[6]+=0.5*sequenceIdentityValues[j];
+					profileColumn[7]+=0.5;
 				}
 				else if (seqChar == 'X'){
 					for (int k = 0; k < profileColumn.size();k++){
-						profileColumn.at(k)+=0.05*sequenceIdentityValues.at(j);
+						profileColumn[k]+=0.05*sequenceIdentityValues[j];
 					}
 				}
 				else{	
 					int aAcidInt = substitutionMatrix::findAminoAcidsNo(seqChar);
-					profileColumn.at(aAcidInt)+=sequenceIdentityValues.at(j);				
+					profileColumn[aAcidInt]+=sequenceIdentityValues[j];				
 				}
 			}
 		}
@@ -117,7 +117,7 @@ void Profile::countOccurences(std::vector< std::vector<double> >& result,std::ve
 double Profile::countNonGaps(int column){
 	double sum = 0;
 	for (int i =0; i < 20; i++){
-		sum += double(prfMatrix.at(i).at(column));
+		sum += double(prfMatrix[i][column]);
 	}
 	return sum;
 }
@@ -144,13 +144,13 @@ double Profile::getElement(int position, char aAcid){
 }
 //function getElement - returns score for nth amino acid on mth position
 double Profile::getElement(int aAcidInt, int position){
-	return prfMatrix.at(aAcidInt).at(position);
+	return prfMatrix[aAcidInt][position];
 }
 //function printProfile(int,int) - prints only columns from boundStart to boundEnd
 void Profile::printProfile(int boundStart, int boundEnd){
 	for (int i = boundStart; i < boundEnd; i++){
 		for (int j = 0; j < prfMatrix.size();j++){
-			std::cout << prfMatrix.at(j).at(i) << " ";
+			std::cout << prfMatrix[j][i] << " ";
 		}
 		std::cout << "\n";
 	}
@@ -158,8 +158,8 @@ void Profile::printProfile(int boundStart, int boundEnd){
 //function printProfile - prints full profile
 void Profile::printProfile(){
 	for (int i = 0; i < prfMatrix.size(); i++){
-		for (int j = 0; j < prfMatrix.at(0).size();j++){
-			std::cout << prfMatrix.at(i).at(j) << " ";
+		for (int j = 0; j < prfMatrix[0].size();j++){
+			std::cout << prfMatrix[i][j] << " ";
 		}
 		std::cout << "\n";
 	}

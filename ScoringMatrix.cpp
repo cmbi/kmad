@@ -22,11 +22,12 @@
 		pen - gap opening penalty
 */
 //constructor
-ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen, double extensionPenalty)
+ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen, double endPenalty, double extensionPenalty)
 :	iLength(s1size),
 	jLength(s2size),	
-	gapOpening(double(pen)),
-	gapExtension(double(extensionPenalty)),
+	gapOpening(pen),
+	gapExtension(extensionPenalty),
+	endGapPenalty(endPenalty),
 	gapOpeningHorizontal(gapOpening),
 	gapExtensionHorizontal(gapExtension)
 {
@@ -43,36 +44,28 @@ void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, F
 	for (int i = 1; i < matrixV.size(); i++){
 		matrixV[i][0] = -10000000; //infinity
 		matrixH[i][0] = -10000000;
-		matrixG[i][0] = 0;	//makes gaps at the beginning of the vertical sequence (s1) free
+		//matrixG[i][0] = 0;	//makes gaps at the beginning of the vertical sequence (s1) free
+		matrixG[i][0] = i*endGapPenalty;	//makes gaps at the beginning of the vertical sequence (s1) free
 		//matrixG[i][0] = gapOpening+(i-1)*gapExtension; // uncomment to penalize gaps at the beginnig of s1 seq
 	}
 	for (int i = 1; i < matrixV[0].size(); i++){
 		matrixV[0][i] = -10000000;
-		matrixH[0][i] = 0;	//makes gaps at the end of the horizontal sequence (s2) free
+		//matrixH[0][i] = 0;	//makes gaps at the beginning of the horizontal sequence (s2) free
+		matrixH[0][i] = i*endGapPenalty;	//makes gaps at the beginning of the horizontal sequence (s2) free
 		//matrixH[0][i] = gapOpening+(i-1)*gapExtension; //uncomment to penalize gaps at the beginning of s2 seq
 		matrixG[0][i] = -10000000;
 	}
-	time_t t1 = 0;
-	time_t t2 = 0;
-	time_t t3 = 0;
-	time_t start;
 	double score1,score2,score3;
 	for (int i = 1; i < matrixV.size();i++){
-		for (int j = 1; j < matrixV.at(i).size(); j++){
+		for (int j = 1; j < matrixV[i].size(); j++){
 			///V
-			start = clock();
 			double prfScore = prf.getElement(i-1, s2[j][0]);
-			t1 = t1+clock() - start;
-			start = clock();
 			double featPrfScore = featPrf.getScore(i-1,s2[j]);
-			t2 = t2+clock() - start;
 			//double gapMod = featPrf.getGapMod(i-1,s2[j]);// gap modifier, based on the features profile
 			score1 = matrixV[i-1][j-1] + prfScore + featPrfScore;
 			score2 = matrixG[i-1][j-1] + prfScore + featPrfScore;
 			score3 = matrixH[i-1][j-1] + prfScore + featPrfScore;
-			start = clock();
 			matrixV[i][j] = findVal::maxValueDoubles(score1,score2,score3);
-			t3 = t3+clock() - start;
 			///G
 			//score1 = matrixV[i-1][j] + gapOpening * gapMod;
 			//score2 = matrixG[i-1][j] + gapExtension * gapMod;
@@ -87,28 +80,36 @@ void ScoringMatrix::calculateScores(std::vector<std::string> s2, Profile& prf, F
 			matrixH[i][j] = (score1 > score2) ? score1 : score2;
 		}
 	}
-	std::cout<< "t1: " << double(t1)/CLOCKS_PER_SEC << " t2: " << double(t2)/CLOCKS_PER_SEC << " t3: " << double(t3)/CLOCKS_PER_SEC << std::endl;
 }
-//function findBestScore - returns alignment score with positions in the scoring matrix: [score, i, j] (must be either in the last row or in the last column of the scoring matrix)
+//function findBestScore - returns positions of the end of the best scoring alignment[score, i, j] (must be either in the last row or in the last column of the scoring matrix)
 std::vector<int> ScoringMatrix::findBestScore(){
 	int maxI = matrixV.size()-1;
 	int maxJ = matrixV[0].size()-1;
-	int n = maxI;
-	int m = maxJ;
+	int n = maxI;  //last row of matrixV
+	int m = maxJ; // last column of matrixV
 	double maxIval = matrixV[maxI][maxJ];
 	double maxJval = matrixV[maxI][maxJ];
+	double real_val;
 	double max = matrixV[maxI][maxJ];
 	for (int i = 0; i < n ; i++){		//finds max score in the last row
-		if (matrixV[i][m] > max){
-			maxIval = matrixV[i][m];
-			max = matrixV[i][m];
+		real_val = matrixV[i][m]+endGapPenalty*(matrixV.size()-i);
+		//if (matrixV[i][m] > max){
+		if (real_val > max){
+			//maxIval = matrixV[i][m];
+			maxIval = real_val;
+			//max = matrixV[i][m];
+			max = real_val;
 			maxI = i;
 		} 
 	}
 	for (int i = 0; i < m; i++){		//finds max score in the last column	
-		if (matrixV[n][i]>max){
-			maxJval = matrixV[n][i];
-			max = matrixV[n][i];
+		real_val = matrixV[n][i]+endGapPenalty*(matrixV[0].size()-i);
+		//if (matrixV[n][i]>max){
+		if (real_val > max){
+			//maxJval = matrixV[n][i];
+			maxJval = real_val;
+			//max = matrixV[n][i];
+			max = real_val;
 			maxJ = i;
 		}
 	}
@@ -143,7 +144,7 @@ void ScoringMatrix::nwAlignment(std::vector<std::vector<std::string> > *result,s
 	std::string currentMatrix = "V";
 	int iteratorM = 10;
 	//if bestScore isn't in the lower right corner, then add gaps to newS1 or newS2
-	if (findBestScore().at(0) != matrixV.size()-1 || findBestScore().at(1) != matrixV.at(0).size()-1){
+	if (findBestScore()[0] != matrixV.size()-1 || findBestScore()[1] != matrixV[0].size()-1){
 		i = findBestScore()[0];
 		j = findBestScore()[1];
 		for (int k = s1.size()-1; k > i; k--){
@@ -161,12 +162,12 @@ void ScoringMatrix::nwAlignment(std::vector<std::vector<std::string> > *result,s
 	}
 	//trace back the matrix
 	while (i > 0 || j > 0){
-		double gapMod = featPrf.getGapMod(i-1,s2.at(j));
+		double gapMod = featPrf.getGapMod(i-1,s2[j]);
 		if (i > 0 && j > 0 && currentMatrix == "V"){	//match/mismatch
 			newChar1 = s1[i];
 			newChar2 = s2[j];
-			double prfScore = prf.getElement(i-1,s2.at(j)[0]);
-			double featPrfScore = featPrf.getScore(i-1, s2.at(j));
+			double prfScore = prf.getElement(i-1,s2[j][0]);
+			double featPrfScore = featPrf.getScore(i-1, s2[j]);
 			if (matrixV[i][j] != matrixV[i-1][j-1] + prfScore + featPrfScore){
 				if( i > 0 && j > 0 && matrixV[i][j] == matrixG[i-1][j-1]+prfScore + featPrfScore){
 					currentMatrix = "G";	

@@ -118,7 +118,7 @@ std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std
 										std::exit(0);
 									}
 							}
-							resultSequences.at(seqNo).at(1).push_back(newResidue);
+							resultSequences[seqNo][1].push_back(newResidue);
 						}
 					}
 				}
@@ -127,8 +127,8 @@ std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std
 					std::istringstream iss(line);
 					std::vector<std::string> motif{std::istream_iterator<std::string>{iss},std::istream_iterator<std::string>{}};
 					if (motif.size() == 2){
-						ids->push_back(motif.at(0));
-						probs->push_back(convertStringToDouble(motif.at(1)));
+						ids->push_back(motif[0]);
+						probs->push_back(convertStringToDouble(motif[1]));
 					}
 				}
 			}
@@ -151,7 +151,7 @@ void txtProc::writeAlignmentToFile(std::vector<std::string> sequences,std::vecto
 	sstr << filename << "_al";
 	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
 	for (int i = 0; i < sequences.size() ;i++){
-		outputFile << sequencesWithNames.at(i).at(0)<< "\n" << sequences.at(i) << "\n";
+		outputFile << sequencesWithNames[i][0]<< "\n" << sequences[i] << "\n";
 	}
 }
 //function writeAlignmentToFile ENCODED SEQUENCES
@@ -160,7 +160,7 @@ void txtProc::writeAlignmentToFile(std::vector<std::string> sequences,std::vecto
 	sstr << filename << "_al";
 	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
 	for (int i = 0; i < sequences.size() ;i++){
-		outputFile << sequencesWithNames.at(i).at(0).at(0)<< "\n" << sequences.at(i) << "\n";
+		outputFile << sequencesWithNames[i][0][0]<< "\n" << sequences[i] << "\n";
 	}
 }
 void txtProc::writeAlignmentWithoutCodeToFile(std::vector<std::string> sequences,std::vector< std::vector<std::vector<std::string> > > sequencesWithNames, std::string filename){
@@ -168,10 +168,10 @@ void txtProc::writeAlignmentWithoutCodeToFile(std::vector<std::string> sequences
 	sstr << filename << "_al";
 	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
 	for (int i = 0; i < sequences.size() ;i++){
-		outputFile << sequencesWithNames.at(i).at(0).at(0)<< "\n";
+		outputFile << sequencesWithNames[i][0][0]<< "\n";
 		std::string sequence="";
-		for (int j = 0; j < sequences.at(i).size(); j+=4){
-			sequence += sequences.at(i).at(j);
+		for (int j = 0; j < sequences[i].size(); j+=4){
+			sequence += sequences[i][j];
 		}
 		outputFile << sequence << std::endl;
 	}

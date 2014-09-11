@@ -12,9 +12,9 @@ bool vecUtil::contains(std::vector<std::string>& vec, std::string x){
 void vecUtil::transposeVec(std::vector< std::vector<int> >& vec){
 	std::vector< std::vector<int> > newVec;
 	std::vector<int> newRow;
-	for (int i = 0; i < vec.at(0).size(); i++){
+	for (int i = 0; i < vec[0].size(); i++){
 		for (int j = 0; j < vec.size(); j++){
-			newRow.push_back(vec.at(j).at(i));	
+			newRow.push_back(vec[j][i]);	
 		}
 		newVec.push_back(newRow);
 		newRow.clear();
@@ -26,9 +26,9 @@ void vecUtil::transposeVec(std::vector< std::vector<int> >& vec){
 void vecUtil::transposeVec(std::vector< std::vector<double> >& vec){
 	std::vector< std::vector<double> > newVec;
 	std::vector<double> newRow;
-	for (int i = 0; i < vec.at(0).size(); i++){
+	for (int i = 0; i < vec[0].size(); i++){
 		for (int j = 0; j < vec.size(); j++){
-			newRow.push_back(vec.at(j).at(i));	
+			newRow.push_back(vec[j][i]);	
 		}
 		newVec.push_back(newRow);
 		newRow.clear();
@@ -55,7 +55,7 @@ std::vector<double> vecUtil::addUp(std::vector< std::vector<double> > vec){
 	for (int i = 0; i < vec[0].size(); i++){
 		double sum = 0;
 		for (int j = 0; j < vec.size(); j++){
-			sum += vec.at(j).at(i);
+			sum += vec[j][i];
 		}
 		newVec.push_back(sum);
 	}
@@ -65,7 +65,7 @@ std::vector<double> vecUtil::addUp(std::vector< std::vector<double> > vec){
 std::vector<double> vecUtil::convertIntVectorToDoubleVector(std::vector<int> vec){
 	std::vector<double> result;
 	for (int i = 0; i < vec.size();i++){
-		result.push_back(double(vec.at(i)));
+		result.push_back(double(vec[i]));
 	}
 	return result;
 }

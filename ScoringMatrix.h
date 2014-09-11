@@ -5,7 +5,7 @@ class Profile;
 class FeaturesProfile;
 class ScoringMatrix{
 public:
-	ScoringMatrix(int,int,double,double); //constructor
+	ScoringMatrix(int,int,double,double,double); //constructor
 	void calculateScores(std::vector<std::string>,Profile&,FeaturesProfile&,int, int);
 	void nwAlignment(std::vector<std::vector<std::string> >*,std::vector<std::string>,Profile&,FeaturesProfile&,std::string,int);
 	std::vector< std::vector<double> > getVec(); //getter
@@ -14,6 +14,7 @@ private:
 	int jLength;
 	double gapOpening;
 	double gapExtension;
+	double endGapPenalty;
 	double gapOpeningHorizontal;
 	double gapExtensionHorizontal;
 	std::vector< std::vector<double> > matrixV,matrixG,matrixH;

@@ -15,8 +15,8 @@ Sequences::Sequences(std::vector< std::vector< std::vector<std::string> > > s){
 	firstSequenceSize = s[0][1].size();
 }
 //function performMSA for ENCODED SEQUENCES
-std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, FeaturesProfile& outputFeaturesProfile, double penalty, double extensionPenalty, std::string verbose, bool weightsModeOn, int codon_length, std::vector<double>& identities){
-	outputProfile = Profile(substitutionMatrix::convertToProfileFormat(sequencesEncoded.at(0).at(1))); 
+std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, FeaturesProfile& outputFeaturesProfile, double penalty, double endPenalty, double extensionPenalty, std::string verbose, bool weightsModeOn, int codon_length, std::vector<double>& identities){
+	outputProfile = Profile(substitutionMatrix::convertToProfileFormat(sequencesEncoded[0][1])); 
 	std::vector< std::vector<std::string> > alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector< std::vector<std::string> > alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
 	alignmentWithoutLowercase.push_back(sequencesEncoded[0][1]);
@@ -30,7 +30,7 @@ std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, Fe
 	std::vector<std::string> alNoLower; //pairwise alignment without lowercase characters
 	std::vector<std::string> alWithLower; //pairwise alignment with lowercase characters where chars were removed
 	for (int i = 1; i < seqNr; i++){
-		alignPairwise(alNoLower,alWithLower,sequencesEncoded[i][1],outputProfile,outputFeaturesProfile,penalty,extensionPenalty,i,verbose,codon_length);
+		alignPairwise(alNoLower,alWithLower,sequencesEncoded[i][1],outputProfile,outputFeaturesProfile,penalty,endPenalty,extensionPenalty,i,verbose,codon_length);
 		double identity = calcIdentity(alNoLower);
 		identities.push_back(identity);
 		if (identity > 0.9){
@@ -45,7 +45,7 @@ std::vector<std::string> Sequences::performMSAencoded(Profile& outputProfile, Fe
 	return vecUtil::flatten(alignmentWithLowercase);		
 }
 //perform next round of MSA (good for all rounds except for the first one - you need a profile)
-std::vector<std::string> Sequences::performMSAnextRound(Profile& outputProfile,FeaturesProfile& outputFeaturesProfile, double penalty, double extensionPenalty,std::string verbose, bool weightsModeOn, double identityCutoff,int codon_length, std::vector<double> identities){
+std::vector<std::string> Sequences::performMSAnextRound(Profile& outputProfile,FeaturesProfile& outputFeaturesProfile, double penalty, double endPenalty, double extensionPenalty,std::string verbose, bool weightsModeOn, double identityCutoff,int codon_length, std::vector<double> identities){
 	std::vector< std::vector<std::string> > alignmentWithoutLowercase;	//working alignment - without lowercase around cut out residues - would make latter aligning more complicated
 	std::vector< std::vector<std::string> > alignmentWithLowercase;		//lowercase before and after cut out residues -- final result 
 	alignmentWithoutLowercase.push_back(sequencesEncoded[0][1]);
@@ -56,8 +56,8 @@ std::vector<std::string> Sequences::performMSAnextRound(Profile& outputProfile,F
 	sequenceIdentity.push_back(true);				//to build the first profile based only on the first seqeunce
 	int iter=0;
 	for (int i = 1; i < seqNr; i++){
-		if (identities.at(i) > identityCutoff){
-			alignPairwise(alNoLower,alWithLower,sequencesEncoded[i][1],outputProfile,outputFeaturesProfile,penalty,extensionPenalty,i,verbose, codon_length);
+		if (identities[i] > identityCutoff){
+			alignPairwise(alNoLower,alWithLower,sequencesEncoded[i][1],outputProfile,outputFeaturesProfile,penalty,endPenalty,extensionPenalty,i,verbose, codon_length);
 			alignmentWithoutLowercase.push_back(alNoLower);
 			alignmentWithLowercase.push_back(alWithLower);
 		}
@@ -71,7 +71,7 @@ std::vector<std::string> Sequences::performMSAnextRound(Profile& outputProfile,F
 double Sequences::calcIdentity(const std::vector<std::string>& alignedSequence){
 	double identicalResidues=0;
 	for (int i = 0; i < alignedSequence.size(); i++){
-		if (alignedSequence[i][0]==sequencesEncoded.at(0)[1][i][0]){
+		if (alignedSequence[i][0]==sequencesEncoded[0][1][i][0]){
 			identicalResidues++;
 		}
 	}
@@ -119,10 +119,10 @@ void Sequences::removeGaps(std::vector<std::string> &alignmentWithLowercase, std
 	alignmentWithoutLowercase = newS2;
 }
 //function alignPairwise for ENCODED SEQUENCES
-void Sequences::alignPairwise(std::vector<std::string> &alNoLower,std::vector<std::string> &alWithLower,std::vector<std::string> seq2, Profile& prf, FeaturesProfile& featPrf, double penalty, double extensionPenalty,int deb, std::string verbose, int codon_length){
+void Sequences::alignPairwise(std::vector<std::string> &alNoLower,std::vector<std::string> &alWithLower,std::vector<std::string> seq2, Profile& prf, FeaturesProfile& featPrf, double penalty, double endPenalty, double extensionPenalty,int deb, std::string verbose, int codon_length){
 	int profileLength = prf.getMatrix()[0].size();
 	std::vector< std::vector<std::string> > alignment;
-	ScoringMatrix scores(profileLength,seq2.size(),penalty,extensionPenalty);
+	ScoringMatrix scores(profileLength,seq2.size(),penalty,endPenalty,extensionPenalty);
 	scores.calculateScores(seq2, prf, featPrf,deb, codon_length);
 	scores.nwAlignment(&alignment,seq2,prf,featPrf,verbose, codon_length);
 	removeGaps(alWithLower,alNoLower,alignment); 

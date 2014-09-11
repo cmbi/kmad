@@ -2,7 +2,7 @@ OBJECTS = MSA.o Sequences.o ScoringMatrix.o FeaturesProfile.o Profile.o substitu
 CLANG = clang++ -std=c++11 -stdlib=libc++
 CPPFLAGS = -O3 -c  
 
-MSA: $(OBJECTS)
+KMAN: $(OBJECTS)
 	$(CLANG) -O3 -o $@ $(OBJECTS) /Users/joanna/Documents/MASTER_THESIS/software/boost/stage/lib/libboost_program_options.a 
 MSA.o: MSA.cpp 
 	$(CLANG) $(CPPFLAGS) MSA.cpp 
@@ -25,6 +25,6 @@ vecUtil.o: vecUtil.h vecUtil.cpp
 findVal.o: findVal.h findVal.cpp
 	$(CLANG) $(CPPFLAGS) findVal.cpp
 clean: 
-	rm -f *.o MSA *.h.gch
+	rm -f *.o KMAN *.h.gch
 install:
-	cp MSA /usr/local/bin
+	cp KMAN /usr/local/bin
