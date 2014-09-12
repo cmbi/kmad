@@ -11,7 +11,7 @@ public:
 	std::vector< std::vector< std::vector<std::string> > > getEncodedSequences();
 	//main functionality
 	std::vector<std::string> performMSAencoded(Profile&,FeaturesProfile&,double,double,double,std::string, bool,int, std::vector<double>&);
-	std::vector<std::string> performMSAnextRound(Profile&,FeaturesProfile&,double,double,double,std::string, bool, double,int, std::vector<double>);
+	void performMSAnextRound(std::vector<std::string>*,Profile&,FeaturesProfile&,double,double,double,std::string, bool, double,int, std::vector<double>, int&);
 
 private:
 	//functions
@@ -21,6 +21,7 @@ private:
 	std::vector< std::vector< std::vector<std::string> > > sequencesEncoded;	
 	double calcIdentity(const std::vector<std::string>&);
 	double countIdenticalResidues(std::vector<std::string>&);
+	int countAlignments(double, std::vector<double>);
 	//variables 
 	int seqNr;
 	int firstSequenceSize;

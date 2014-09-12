@@ -46,19 +46,20 @@ int main(int argc, char *argv[]){
 		//first round of the alignment - all vs 1st
 		std::vector<std::string> multipleAlignment(rawSequences.performMSAencoded(prf,fprf,gapPen,endPenalty,gapExt,verboseMode,weightsModeOn,codonLength,identities));
 		std::vector<std::vector<std::vector<std::string> > > encSeq = rawSequences.getEncodedSequences();
-		std::vector<std::string> multipleAlignment2ndRound;
+		std::vector<std::string> alignment2ndRound;
+		int prev_alignments = 0;
 		double gapPenDecreasing;
 		for (int i = 8; i >= 0; i--){
 			double cutoff = double(i)/10;
-			//gapPenDecreasing = -3.-4.*i/10;
-			multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPen,endPenalty,gapExt,verboseMode,weightsModeOn,cutoff,codonLength,identities);
-			//multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPenDecreasing,gapExt,verboseMode,weightsModeOn,cutoff,domainScore,phosphScore,motifScore);
+			//gapPen = -3.-4.*i/10; //decreasing gap penalties
+			rawSequences.performMSAnextRound(&alignment2ndRound,prf,fprf,gapPen,endPenalty,gapExt,verboseMode,weightsModeOn,cutoff,codonLength,identities, prev_alignments);
+			//prev_alignments - number of alignments performed in the previous round - to omit this round if the number of aligned sequences is the same as in the previous round
 		}
-		//txtProc::writeAlignmentWithoutCodeToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
-		//gapPenDecreasing = -2;
-		multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPen,endPenalty,gapExt,verboseMode,weightsModeOn,0,codonLength, identities);
-		//multipleAlignment2ndRound=rawSequences.performMSAnextRound(prf,fprf,gapPenDecreasing,gapExt,verboseMode,weightsModeOn,0,codonLength, identities);
-		txtProc::writeAlignmentToFile(multipleAlignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
+		//gapPen = -2; //decreasing gap penalties
+		prev_alignments = 0;  // to align (again) all sequences to the profile
+		rawSequences.performMSAnextRound(&alignment2ndRound,prf,fprf,gapPen,endPenalty,gapExt,verboseMode,weightsModeOn,0,codonLength, identities, prev_alignments);
+		txtProc::writeAlignmentToFile(alignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
+		//txtProc::writeAlignmentWithoutCodeToFile(alignment2ndRound,encSeq,outputPrefix);						//write multiple alignment to a fileA
 	}
 	else{
 		std::cout << "input file and/or gap penalty not specified, try --help for more information" << std::endl;
