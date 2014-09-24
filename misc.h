@@ -1,8 +1,10 @@
 #include <iostream>
 #include <vector>
+class Residue;
 namespace misc{
-	int countTrueValuesInVector(const std::vector<bool>&);
-	std::vector<std::string> pseudoSequence(int);
+//	std::vector<std::string> pseudoSequence(int,int);
+	Residue gapRes(int);
+	std::vector<Residue> pseudoResidueSequence(int,int);
 	void printEncodedSeq(const std::vector<std::string>&);
 	bool checkParameters(int, int, int, int, double, double,bool,double);
 };

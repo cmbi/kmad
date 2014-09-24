@@ -1,5 +1,6 @@
 //SubtitutionMatrix class implementation
 #include "substitutionMatrix.h"
+#include "Residue.h"
 #include "misc.h"
 #include "vecUtil.h"
 #include <iostream>
@@ -32,42 +33,29 @@ int substitutionMatrix::getElement(char char1,char char2){
 	}
 	return simScores[index1][index2];
 }
-/*
 //convert to profile format - creates a matrix 20 x sequence length, where nth column is a column from sbstMatrix for the amino acid on position n in the sequence
-std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(std::string sequence){
-	std::vector< std::vector<double> > result(sequence.size());
-	for (int i = 0; i < result.size(); i++){
-		int aAcidInt = findAminoAcidsNo(sequence[i]);
-		result.at(i)=vecUtil::convertIntVectorToDoubleVector(simScores.at(aAcidInt));//adds a column to the result(converted from int to double)
-	}
-	vecUtil::transposeVec(result);
-	return result;
-}
-*/
-//convert to profile format - creates a matrix 20 x sequence length, where nth column is a column from sbstMatrix for the amino acid on position n in the sequence ENCODED SEQUENCES
-std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(std::vector<std::string> sequence){
+std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(std::vector<Residue> sequence){
 	std::vector< std::vector<double> > result(sequence.size());
 	std::vector<std::vector<int> > newSbstRow;
 	for (int i = 0; i < result.size(); i++){
-		if (sequence[i][0] == 'B'){
+		if (sequence[i].getAA() == 'B'){
 			newSbstRow.clear();
 			newSbstRow.push_back(simScores[2]);
 			newSbstRow.push_back(simScores[3]);
 			result[i] = vecUtil::average(newSbstRow);
 		}
-		else if (sequence[i][0] == 'Z'){
+		else if (sequence[i].getAA() == 'Z'){
 			newSbstRow.clear();
 			newSbstRow.push_back(simScores[6]);
 			newSbstRow.push_back(simScores[7]);
 			result[i] = vecUtil::average(newSbstRow);
 
 		}
-		else if (sequence[i][0] == 'X'){
+		else if (sequence[i].getAA() == 'X'){
 			result[i] = vecUtil::average(simScores);
 		}
 		else{
-			int aAcidInt = findAminoAcidsNo(sequence[i][0]);
-			//std:: cout << aAcidInt << " " << sequence[i][0] << std::endl;
+			int aAcidInt = findAminoAcidsNo(sequence[i].getAA());
 			result[i] = vecUtil::convertIntVectorToDoubleVector(simScores[aAcidInt]);//adds a column to the result(converted from int to double)
 		}
 	}

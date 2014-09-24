@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+class Residue;
 class Profile;
 class FeaturesProfile;
 class Sequences{
@@ -7,20 +8,20 @@ public:
 	//constructor
 	Sequences(std::vector< std::vector< std::vector<std::string> > >);
 	//getters
-	std::vector< std::vector<std::string> > getSequences();
 	std::vector< std::vector< std::vector<std::string> > > getEncodedSequences();
 	//main functionality
-	std::vector<std::string> performMSAencoded(Profile&,FeaturesProfile&,double,double,double,std::string, bool,int, std::vector<double>&);
-	void performMSAnextRound(std::vector<std::string>*,Profile&,FeaturesProfile&,double,double,double,std::string, bool, double,int, std::vector<double>, int&);
-
+	std::vector<std::string> performMSAfirstround(Profile&,FeaturesProfile&,double,double,double,std::string, bool,int, std::vector<double>&);
+	void performMSAnextRounds(std::vector<std::string>*,Profile&,FeaturesProfile&,double,double,double,std::string, bool, double,int, std::vector<double>, int&);
+	void printSequence(int) const;
+	void add_features(std::vector<std::tuple<std::string,std::string,int,int,int,double,double,double,double,std::string,std::string > >);
 private:
 	//functions
-	void removeGaps(std::vector<std::string> &,std::vector<std::string> &,std::vector<std::vector<std::string> >&);
-	void alignPairwise(std::vector<std::string> &,std::vector<std::string> &, std::vector<std::string>, Profile&, FeaturesProfile&,double,double,double, int,std::string,int);
-	std::vector< std::vector<std::string> > sequences;	
+	void removeGaps(std::vector<Residue> &,std::vector<Residue> &,std::vector<std::vector<Residue> >&);
+	void alignPairwise(std::vector<Residue> &,std::vector<Residue> &, std::vector<Residue>, Profile&, FeaturesProfile&,double,double,double, int,std::string,int, int);
 	std::vector< std::vector< std::vector<std::string> > > sequencesEncoded;	
-	double calcIdentity(const std::vector<std::string>&);
-	double countIdenticalResidues(std::vector<std::string>&);
+	std::vector< std::vector<Residue > > sequences_aa;
+	std::vector< std::vector<std::string> > sequence_names;
+	double calcIdentity(const std::vector<Residue>&);
 	int countAlignments(double, std::vector<double>);
 	//variables 
 	int seqNr;

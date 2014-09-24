@@ -1,13 +1,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
+class Residue;
 class Profile{
 public:
 	Profile(std::vector< std::vector<double> >); //constructor
 	Profile();
-	void buildPseudoProfile(std::vector< std::vector< std::string > >&, const std::vector<double>&, bool);
-	//getters//
-	std::string getConsensusSequence();
+	void buildPseudoProfile(std::vector< std::vector< Residue > >&, const std::vector<double>&, bool);
+	//getters/setters
 	std::vector< std::vector<double> > getMatrix() const;
 	void setMatrix(std::vector<std::vector<double> >);
 	double getElement(int, char);
@@ -16,9 +16,7 @@ public:
 	void printProfile();
 private:
 	//functions
-	void createProfile(std::vector< std::vector<std::string> >&, const std::vector<double>&, bool);
-	void countOccurences(std::vector< std::vector<double> >&,std::vector< std::vector<std::string> >&);
-	void countOccurences(std::vector< std::vector<double> >&,std::vector< std::vector<std::string> >&,const std::vector<double>&);
+	void createProfile(std::vector< std::vector<Residue> >&,const std::vector<double>&,bool);
 	double countNonGaps(int);
 	int getMaxDoubleValue(std::vector<double>);
 	//variables

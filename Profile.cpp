@@ -1,5 +1,6 @@
 //Profile class implementation
 #include "Profile.h"
+#include "Residue.h"
 #include "substitutionMatrix.h"
 #include "vecUtil.h"
 #include "misc.h"
@@ -17,17 +18,8 @@ Profile::Profile(){
 std::vector< std::vector<double> > Profile::getMatrix() const{
 	return prfMatrix;
 }
-//calculate the alignment profile ENCODED SEQUENCES
-void Profile::createProfile(std::vector< std::vector<std::string> >& alignment, const std::vector<double>& sequenceIdentityValues, bool weightsModeOn){
-	if (weightsModeOn){
-		countOccurences(prfMatrix,alignment,sequenceIdentityValues);
-		std::cout << "weights on: " << weightsModeOn << std::endl;
-	}
-	else countOccurences(prfMatrix,alignment);
-	vecUtil::transposeVec(prfMatrix);
-}
-//builds a pseudo-profile from the profile itself and the substitution matrix with appropriate weights for ENCODED SEQUENCES
-void Profile::buildPseudoProfile(std::vector< std::vector<std::string> >& alignment,const std::vector<double>& sequenceIdentityValues, bool weightsModeOn){
+//builds a pseudo-profile from the profile itself and the substitution matrix with appropriate weights
+void Profile::buildPseudoProfile(std::vector< std::vector<Residue> >& alignment,const std::vector<double>& sequenceIdentityValues, bool weightsModeOn){
 	createProfile(alignment,sequenceIdentityValues,weightsModeOn);
 	std::vector< std::vector<double> > newProfile;
 	for (int i = 0; i < prfMatrix[0].size(); i++){
@@ -44,74 +36,61 @@ void Profile::buildPseudoProfile(std::vector< std::vector<std::string> >& alignm
 	vecUtil::transposeVec(newProfile);
 	prfMatrix = newProfile;
 }
-//function countOccurences returns matrix with occurences of each amino acid on each position normalized by the number of sequences ENCODED SEQUENCES
-void Profile::countOccurences(std::vector< std::vector<double> >& result,std::vector< std::vector<std::string> >& alignment){
+void Profile::createProfile(std::vector< std::vector<Residue> >& alignment, const std::vector<double>& sequenceIdentityValues,bool weightsModeOn){
 	std::vector< std::vector<double> > tmpResult;
-	//int noOfSequences = alignment.size();
+	double identitiesSum;
+	int noOfSequences;
+	if (weightsModeOn){
+		identitiesSum = vecUtil::sum(sequenceIdentityValues);
+	}
+	else{
+		noOfSequences = alignment.size();
+	}
 	for (int i = 0; i < alignment[0].size(); i++){
 		std::vector<double> profileColumn(20,0);
 		int nonGaps = 0;
 		for (int j = 0; j < alignment.size(); j++){
-			char seqChar(alignment[j][i][0]);
+			
+			double weight;
+			if (weightsModeOn){
+				weight = sequenceIdentityValues[j];
+			}
+			else{
+				weight = 1;
+			}
+			char seqChar(alignment[j][i].getAA());
 			if (seqChar != '-'){
 				if (seqChar == 'B'){ 		//either D or N, so I'll add half a point to both
-					profileColumn[2]+=0.5;
-					profileColumn[3]+=0.5;
+					profileColumn[2]+=0.5*weight;
+					profileColumn[3]+=0.5*weight;
 				}
 				else if (seqChar == 'Z'){ 	//either D or N, so I'll add half a point to both
-					profileColumn[6]+=0.5;
-					profileColumn[7]+=0.5;
+					profileColumn[6]+=0.5*weight;
+					profileColumn[7]+=0.5*weight;
 				}
 				else if (seqChar == 'X'){
 					for (int k = 0; k < profileColumn.size();k++){
-						profileColumn[k]+=0.05;
+						profileColumn[k]+=0.05*weight;
 					}
 				}
 				else{	
 					int aAcidInt = substitutionMatrix::findAminoAcidsNo(seqChar);
-					profileColumn[aAcidInt]++;				
+					profileColumn[aAcidInt]+=weight;				
 				}
 				nonGaps++;
 			}
 		}
-		//vecUtil::divideVectorByAScalar(profileColumn,noOfSequences);
-		vecUtil::divideVectorByAScalar(profileColumn,nonGaps);
-		tmpResult.push_back(profileColumn);
-	}
-	result = tmpResult;
-}
-//function countOccurences returns matrix with occurences of each amino acid on each position normalized by the number of sequences ENCODED SEQUENCES with WEIGHTS
-void Profile::countOccurences(std::vector< std::vector<double> >& result,std::vector< std::vector<std::string> >& alignment, const std::vector<double>& sequenceIdentityValues){
-	std::vector< std::vector<double> > tmpResult;
-	double identitiesSum = vecUtil::sum(sequenceIdentityValues);
-	for (int i = 0; i < alignment[0].size(); i++){
-		std::vector<double> profileColumn(20,0);
-		for (int j = 0; j < alignment.size(); j++){
-			char seqChar(alignment[j][i][0]);
-			if (seqChar != '-'){
-				if (seqChar == 'B'){ 		//either D or N, so I'll add half a point to both
-					profileColumn[2]+=0.5*sequenceIdentityValues[j];
-					profileColumn[3]+=0.5*sequenceIdentityValues[j];
-				}
-				else if (seqChar == 'Z'){ 	//either D or N, so I'll add half a point to both
-					profileColumn[6]+=0.5*sequenceIdentityValues[j];
-					profileColumn[7]+=0.5;
-				}
-				else if (seqChar == 'X'){
-					for (int k = 0; k < profileColumn.size();k++){
-						profileColumn[k]+=0.05*sequenceIdentityValues[j];
-					}
-				}
-				else{	
-					int aAcidInt = substitutionMatrix::findAminoAcidsNo(seqChar);
-					profileColumn[aAcidInt]+=sequenceIdentityValues[j];				
-				}
-			}
+		if (weightsModeOn){
+			vecUtil::divideVectorByAScalar(profileColumn,identitiesSum);
+		}	
+		else{
+			vecUtil::divideVectorByAScalar(profileColumn,noOfSequences);
+			//vecUtil::divideVectorByAScalar(profileColumn,nonGaps);
 		}
-		vecUtil::divideVectorByAScalar(profileColumn,identitiesSum);
 		tmpResult.push_back(profileColumn);
 	}
-	result = tmpResult;
+	prfMatrix = tmpResult;
+	vecUtil::transposeVec(prfMatrix);
 }
 //function countNonGaps - counts how many characters in alignment nth ('column' integer) column are not gaps 
 double Profile::countNonGaps(int column){
@@ -123,20 +102,20 @@ double Profile::countNonGaps(int column){
 }
 //function getElement - returns score for 'aAcid' amino acid on 'position' position
 double Profile::getElement(int position, char aAcid){
-	int result;
-	if (aAcid=='B'){
+	double result;
+	if (aAcid=='B'){ //take half the score for asparagine and half the score for aspartate
 		result = 0.5*prfMatrix[2][position]+ 0.5*prfMatrix[3][position];
 	}
-	else if (aAcid=='Z'){
+	else if (aAcid=='Z'){ // take half the score for glutamine and half the score for glutamate
 		result = 0.5*prfMatrix[6][position]+ 0.5*prfMatrix[7][position];
 	}
-	else if (aAcid=='X'){
+	else if (aAcid=='X'){ // take average score from scores for all residues
 		result = 0;
 		for (int i = 0; i < prfMatrix.size(); i++){
 			result += 0.05*prfMatrix[i][position];
 		}
 	}
-	else {	
+	else { // it's not any of the {B,Z,X} -> single amino acid
 		int aAcidint = substitutionMatrix::findAminoAcidsNo(aAcid);
 		result = prfMatrix[aAcidint][position];
 	}
@@ -148,9 +127,10 @@ double Profile::getElement(int aAcidInt, int position){
 }
 //function printProfile(int,int) - prints only columns from boundStart to boundEnd
 void Profile::printProfile(int boundStart, int boundEnd){
+	std::cout << "##PROFILE POSITION "<< boundStart << "-" << boundEnd-1 << "##" << std::endl;
 	for (int i = boundStart; i < boundEnd; i++){
 		for (int j = 0; j < prfMatrix.size();j++){
-			std::cout << prfMatrix[j][i] << " ";
+			std::cout << j << ": " << prfMatrix[j][i] << " ";
 		}
 		std::cout << "\n";
 	}

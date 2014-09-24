@@ -1,16 +1,19 @@
 #include "txtProc.h"
+#include "vecUtil.h"
+#include "Sequences.h"
+#include "FeaturesProfile.h"
 #include <iostream>
 #include <vector>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <istream>
+#include <tuple>
 #include <algorithm>
 #include <iterator>
 namespace {
 	static const std::vector<char> acceptable_characters = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'};
 }
-//function convertStringToInt
 int txtProc::convertStringToInt(std::string s){
 	int convertedInt;
 	std::istringstream iss(s);
@@ -21,6 +24,8 @@ double txtProc::convertStringToDouble(std::string s){
 	double convertedDouble = atof(s.c_str());;
 	return convertedDouble;
 }
+/*
+//alternative version of split
 std::vector<std::string> &txtProc::split(const std::string &s, char delim, std::vector<std::string> &elems) {
     std::stringstream ss(s);
     std::string item;
@@ -29,52 +34,20 @@ std::vector<std::string> &txtProc::split(const std::string &s, char delim, std::
     }
     return elems;
 }
-std::string txtProc::gapCode(int length){
-	std::string gap = "-";
-	for (int i = 1; i < length; i++){
-		gap.push_back('A');
-	}
-	return gap;
-}
+*/
+//splits a string by the delimiter, returns a vector of strings
 std::vector<std::string> txtProc::split(const std::string &s, char delim) {
     std::vector<std::string> elems;
-    split(s, delim, elems);
+    //split(s, delim, elems);
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
     return elems;
 }
-/* function processFASTA
-reads 'filename' file, returns an array of sequences and their names - [[sequenceName,sequence],...] */
-std::vector< std::vector<std::string> > txtProc::processFASTA(std::string filename){
-	std::vector< std::vector<std::string> > resultSequences;
-	std::string line;
-	std::string fastaSymbol = ">";
-	std::vector<std::string> newEntry;
-	std::ifstream fastafile (filename.c_str());
-	int seqNo = -1;
-	std::string newSeq = "";
-	if (fastafile.is_open()){
-		while(fastafile){
-			getline(fastafile,line);
-			std::string firstChar = line.substr(0,1);
-			if (firstChar == fastaSymbol){
-				seqNo++;
-				resultSequences.push_back(newEntry);
-				resultSequences[seqNo].push_back(line);
-				resultSequences[seqNo].push_back(newSeq);
-
-			}
-			else{
-				resultSequences[seqNo][1] = resultSequences[seqNo][1].append(line);	
-			}
-		}
-		fastafile.close();
-	}
-	else{
-		std::cout << "Where is the file????";
-	}
-	return resultSequences;
-}
 //function processFASTA - reads fasta file with encoded sequence
-//writes sequences + seqNames to vector<vector<string>>; motifs' ids to vector<string> and motifs' probs vector<double>
+//writes sequences + seqNames to vector<vector<string>>; motifs' ids to vector<string> ids and motifs' probabilities to vector<double> probs
 std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std::string filename,int codonLength, std::vector<std::string>* ids, std::vector<double>* probs){
 	std::vector< std::vector< std::vector<std::string> > > resultSequences;
 	std::string fastaSymbol = ">";
@@ -82,18 +55,11 @@ std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std
 	std::vector<std::string> newName;
 	std::vector<std::string> newSequence;
 	std::vector< std::vector<std::string> > newEntry;
-	//std::vector<std::string> ids;
-	//std::vector<double> probs;
 	bool sequences = true;
 	int seqNo = -1;
 	std::string newSeq = "";
 	std::string line;
 	while(!safeGetline(fastafile, line).eof()){
-	/*
-	if (fastafile.is_open()){
-		while(fastafile){
-			getline(fastafile,line);
-	*/
 			std::string firstChar = line.substr(0,1);
 			if (line != std::string("## PROBABILITIES")){
 				if (sequences && firstChar == fastaSymbol){
@@ -136,25 +102,10 @@ std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std
 				sequences = false;
 			}
 		}
-		fastafile.close();
-		/*
-	}
-	else{
-		std::cout << "Where is the file????";
-	}
-	*/
+	fastafile.close();
 	return resultSequences;
 }
 //function writeAlignmentToFile
-void txtProc::writeAlignmentToFile(std::vector<std::string> sequences,std::vector< std::vector<std::string> > sequencesWithNames, std::string filename){
-	std::stringstream sstr;
-	sstr << filename << "_al";
-	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
-	for (int i = 0; i < sequences.size() ;i++){
-		outputFile << sequencesWithNames[i][0]<< "\n" << sequences[i] << "\n";
-	}
-}
-//function writeAlignmentToFile ENCODED SEQUENCES
 void txtProc::writeAlignmentToFile(std::vector<std::string> sequences,std::vector< std::vector< std::vector<std::string> > > sequencesWithNames, std::string filename){
 	std::stringstream sstr;
 	sstr << filename << "_al";
@@ -163,6 +114,7 @@ void txtProc::writeAlignmentToFile(std::vector<std::string> sequences,std::vecto
 		outputFile << sequencesWithNames[i][0][0]<< "\n" << sequences[i] << "\n";
 	}
 }
+//write alignment to file as a nonencoded fasta
 void txtProc::writeAlignmentWithoutCodeToFile(std::vector<std::string> sequences,std::vector< std::vector<std::vector<std::string> > > sequencesWithNames, std::string filename){
 	std::stringstream sstr;
 	sstr << filename << "_al";
@@ -190,6 +142,11 @@ void txtProc::writeVector(std::vector<std::vector<double>> vec, std::string file
 std::string txtProc::charToString(char mychar){
 	return std::string(1,mychar);
 }
+std::string txtProc::charToString(char mychar1, char mychar2){
+	std::string newstring = std::string(1,mychar1);
+	newstring.push_back(mychar2);
+	return newstring;
+}
 std::istream& txtProc::safeGetline(std::istream& is, std::string& t)
 {
 	t.clear();
@@ -214,6 +171,7 @@ std::istream& txtProc::safeGetline(std::istream& is, std::string& t)
 		}
 	}
 }
+//check if the character is supported
 bool txtProc::acceptableChar(char my_char){
 	bool result = false;
 	for (int i = 0; i < acceptable_characters.size(); i++){
@@ -223,4 +181,47 @@ bool txtProc::acceptableChar(char my_char){
 		}
 	}
 	return result;
+}
+void txtProc::process_conf_file(std::string filename, FeaturesProfile& feat_profile, Sequences& sequences_aa){
+	std::ifstream conf_file(filename.c_str());
+	std::string line;
+	std::vector<std::tuple<std::string, std::string, int, int, int, double, double, double, double, std::string, std::string> > feature_rules;
+	while(!safeGetline(conf_file, line).eof()){
+		if (line[0] != '#'){
+			line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
+			std::vector<std::string> tmp_vector = split(line,';');
+			feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], std::stoi(tmp_vector[2]), std::stoi(tmp_vector[3]), std::stoi(tmp_vector[4]),std::stod(tmp_vector[5]),std::stod(tmp_vector[6]),std::stod(tmp_vector[7]),std::stod(tmp_vector[8]),tmp_vector[9],tmp_vector[10]));
+		}
+	}
+	feat_profile.add_USR_features(feature_rules);
+	sequences_aa.add_features(feature_rules);
+	feat_profile.setRules(feature_rules);
+}
+// converts the string form the conf file to vector of positions of features to be scored
+std::vector<int> txtProc::unfold(std::string conf_string, std::vector<std::string> listOfFeatures){
+	std::vector<std::string> tmp_vector = split(conf_string,',');
+	std::vector<int> out_vector;
+	for (int i = 0; i < tmp_vector.size(); i++){
+		if (split(tmp_vector[i],'_').size() > 1){						// this is a single feature entry, e.g. 'PF_A'
+			out_vector.push_back(vecUtil::findIndex(std::string("USR_")+tmp_vector[i], listOfFeatures));
+		}
+		else if (split(tmp_vector[i],'[').size() == 1){						// this is an entry with only the tag specified (without any exceptions)
+			for (int j = 0; j < listOfFeatures.size(); j++){
+				std::vector<std::string> singlefeat = split(listOfFeatures[j],'_');
+				if (singlefeat.size() > 1 && singlefeat[1] == tmp_vector[i]){out_vector.push_back(j);}
+			}
+		}
+		else{//TAG with exceptions
+			std::vector<std::string> tagfeat = split(tmp_vector[i],'[');
+			std::string tag = tagfeat[0];
+			std::vector<std::string> exceptions = split(split(tagfeat[1],']')[0],'.');
+			for (int j = 0; j < listOfFeatures.size(); j++){
+				std::vector<std::string> singlefeat = split(listOfFeatures[j],'_');
+				if (singlefeat.size() > 1 && singlefeat[1] == tag && !vecUtil::contains(exceptions, singlefeat[2])){
+					out_vector.push_back(j);
+				}
+			}
+		}
+	}
+	return out_vector;
 }

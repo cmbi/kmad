@@ -1,14 +1,14 @@
 #include "vecUtil.h"
+#include "Residue.h"
 #include <iostream>
 #include <vector>
 #include <string>
 #include <algorithm>
-//function contains
+//checks if the vector of strings vec contains the string x
 bool vecUtil::contains(std::vector<std::string>& vec, std::string x){
 	if (std::find(vec.begin(),vec.end(),x) != vec.end()) return true;
 	else return false;
 }
-//function transposeVec
 void vecUtil::transposeVec(std::vector< std::vector<int> >& vec){
 	std::vector< std::vector<int> > newVec;
 	std::vector<int> newRow;
@@ -20,9 +20,7 @@ void vecUtil::transposeVec(std::vector< std::vector<int> >& vec){
 		newRow.clear();
 	}
 	vec = newVec;
-	//return newVec;
 }
-//function transposeVec  - transposes vector< vector<double> > and returns vector< vector<double> >
 void vecUtil::transposeVec(std::vector< std::vector<double> >& vec){
 	std::vector< std::vector<double> > newVec;
 	std::vector<double> newRow;
@@ -70,18 +68,43 @@ std::vector<double> vecUtil::convertIntVectorToDoubleVector(std::vector<int> vec
 	return result;
 }
 //function printDoubleVector
-void vecUtil::printDoubleVector(const std::vector<double>& vec){
+void vecUtil::printVector(const std::vector<int>& vec){
 	for (int i = 0; i < vec.size(); i++){
-		std::cout << vec[i];
+		std::cout << vec[i] << " ";
 	}
 	std::cout << "\n";
 }
+void vecUtil::printVector(const std::vector<double>& vec){
+	for (int i = 0; i < vec.size(); i++){
+		std::cout << vec[i] << " ";
+	}
+	std::cout << "\n";
+}
+void vecUtil::printVector(const std::vector<std::string>& vec){
+	for (int i = 0; i < vec.size(); i++){
+		std::cout << vec[i] << " ";
+	}
+	std::cout << "\n";
+}
+//takes a set of encoded sequences (=vector of vectors of strings) and returns a vector of nonencoded sequences
 std::vector<std::string> vecUtil::flattenWithoutFeatures(const std::vector<std::vector<std::string> >& vec){
 	std::vector<std::string> result;
 	for (int i = 0; i < vec.size();i++){
 		std::string newSeq = "";
 		for(int j = 0; j < vec[i].size(); j++){
 			newSeq+=vec[i][j][0];
+		}
+		result.push_back(newSeq);
+	}
+	return result;
+}
+//flatten a vector of residue vectors to a vector of strings
+std::vector<std::string> vecUtil::flatten(const std::vector<std::vector<Residue> > & vec){
+	std::vector<std::string> result;
+	for (int i = 0; i < vec.size();i++){
+		std::string newSeq = "";
+		for(int j = 0; j < vec[i].size(); j++){
+			newSeq+=vec[i][j].getCodon();
 		}
 		result.push_back(newSeq);
 	}
@@ -98,12 +121,14 @@ std::vector<std::string> vecUtil::flatten(const std::vector<std::vector<std::str
 	}
 	return result;
 }
-std::vector<std::string> vecUtil::push_front(std::vector<std::string> vec, std::string newElement){
+//add an element to the beginning of the vector
+std::vector<Residue> vecUtil::push_front(std::vector<Residue> vec, Residue newElement){
 	reverse(vec.begin(),vec.end());
 	vec.push_back(newElement);
 	reverse(vec.begin(),vec.end());
 	return vec;
 }
+//calc the sum of elements in the vector
 double vecUtil::sum(const std::vector<double>& vec){
 	double sum = 0;
 	for (int i = 0; i < vec.size(); i++){
@@ -111,6 +136,7 @@ double vecUtil::sum(const std::vector<double>& vec){
 	}
 	return sum;
 }
+//calc the average of the elements in the vector
 std::vector<double> vecUtil::average(std::vector< std::vector<double> > vec){
 	std::vector<double> result;
 	for (int i = 0; i < vec[0].size(); i++){
@@ -134,55 +160,29 @@ std::vector<double> vecUtil::average(std::vector< std::vector<int> > vec){
 	}
 	return result;
 }
-//claculate average for vector of vectors of doubles
-double vecUtil::singleAverage(std::vector<std::vector<double> > vec){
-	double sum = 0;
-	for (int i = 0; i < vec.size();i++){
-		for (int j = 0; j < vec[0].size();j++){
-			sum += vec[i][j];
+int vecUtil::countTrueValuesInVector(const std::vector<bool>& vec){
+	int result = 0;
+	for (int i = 0; i < vec.size(); i++){
+		if (vec[i]){
+			result++;	
 		}
 	}
-	sum = sum / (vec.size()*vec[0].size());
-	return sum;
+	return result;
 }
-double vecUtil::max(std::vector<std::vector<double> > vec){
-	double max = -1000;
-	for (int i = 0; i < vec.size();i++){
-		for (int j = 0; j < vec[0].size();j++){
-			if (max < vec[i][j]){
-				max = vec[i][j];
-			}
-		}
+void vecUtil::printSequence(std::vector<Residue> vec){
+	for (int i = 0; i < vec.size(); i++){
+		std::cout << vec[i].getAA();
 	}
-	return max;
+	std::cout << std::endl;
 }
-double vecUtil::min(std::vector<std::vector<double> > vec){
-	double min = 1000000;
-	for (int i = 0; i < vec.size();i++){
-		for (int j = 0; j < vec[0].size();j++){
-			if (min > vec[i][j]){
-				min = vec[i][j];
-			}
+//returns index of the first occurence of val in vec
+int vecUtil::findIndex(std::string val, std::vector<std::string> vec){
+	int res = -1;
+	for (int i = 0; i < vec.size(); i++){
+		if (vec[i] == val){
+			res = i;
+			break;
 		}
 	}
-	return min;
-}
-double vecUtil::median(std::vector<std::vector<double> > vec){
-	std::vector<double> sorted;
-	for (int i = 0; i < vec.size();i++){
-		for(int j = 0; j < vec[0].size();j++){
-			sorted.push_back(vec[i][j]);
-		}
-	}	
-	double tmp;
-	for (int i = 0; i < sorted.size();i++){
-		for(int j = i; j < sorted.size();j++){
-			if (sorted[j]> sorted[j+1]){
-				tmp = sorted[j];
-				sorted[j] = sorted[j+1];
-				sorted[j+1] = tmp;
-			}	
-		}
-	}
-	return sorted[int(sorted.size()/2)];
+	return res;
 }

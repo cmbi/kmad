@@ -1,4 +1,4 @@
-OBJECTS = MSA.o Sequences.o ScoringMatrix.o FeaturesProfile.o Profile.o substitutionMatrix.o misc.o txtProc.o vecUtil.o findVal.o
+OBJECTS = MSA.o Residue.o Sequences.o ScoringMatrix.o FeaturesProfile.o Profile.o substitutionMatrix.o misc.o txtProc.o vecUtil.o findVal.o
 CLANG = clang++ -std=c++11 -stdlib=libc++
 CPPFLAGS = -O3 -c  
 
@@ -14,14 +14,16 @@ FeaturesProfile.o: FeaturesProfile.h FeaturesProfile.cpp
 	$(CLANG) $(CPPFLAGS) FeaturesProfile.cpp
 Profile.o: Profile.h Profile.cpp
 	$(CLANG) $(CPPFLAGS) Profile.cpp 
+Residue.o: Residue.h Residue.cpp
+	$(CLANG) $(CPPFLAGS) Residue.cpp
 substitutionMatrix.o: substitutionMatrix.h substitutionMatrix.cpp
 	$(CLANG) $(CPPFLAGS) substitutionMatrix.cpp
 misc.o: misc.h misc.cpp
 	$(CLANG) $(CPPFLAGS) misc.cpp
-txtProc.o: txtProc.h txtProc.cpp
-	$(CLANG) $(CPPFLAGS) txtProc.cpp
 vecUtil.o: vecUtil.h vecUtil.cpp
 	$(CLANG) $(CPPFLAGS) vecUtil.cpp
+txtProc.o: txtProc.h txtProc.cpp
+	$(CLANG) $(CPPFLAGS) txtProc.cpp
 findVal.o: findVal.h findVal.cpp
 	$(CLANG) $(CPPFLAGS) findVal.cpp
 clean: 
