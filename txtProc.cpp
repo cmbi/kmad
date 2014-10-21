@@ -185,12 +185,17 @@ bool txtProc::acceptableChar(char my_char){
 void txtProc::process_conf_file(std::string filename, FeaturesProfile& feat_profile, Sequences& sequences_aa){
 	std::ifstream conf_file(filename.c_str());
 	std::string line;
-	std::vector<std::tuple<std::string, std::string, int, int, int, double, double, double, double, std::string, std::string> > feature_rules;
+	std::vector<std::tuple<std::string, std::string, int, int, int, double, double, double, double, std::string, std::string> > usr_feature_rules;
+	std::vector<std::tuple<std::string, std::string, int, int, int> > feature_rules;
+    bool features = true;
 	while(!safeGetline(conf_file, line).eof()){
-		if (line[0] != '#'){
+       // if (line[0] != '#' && features){
+
+       // }
+		else if (line[0] != '#'){
 			line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
 			std::vector<std::string> tmp_vector = split(line,';');
-			feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], std::stoi(tmp_vector[2]), std::stoi(tmp_vector[3]), std::stoi(tmp_vector[4]),std::stod(tmp_vector[5]),std::stod(tmp_vector[6]),std::stod(tmp_vector[7]),std::stod(tmp_vector[8]),tmp_vector[9],tmp_vector[10]));
+			usr_feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], std::stoi(tmp_vector[2]), std::stoi(tmp_vector[3]), std::stoi(tmp_vector[4]),std::stod(tmp_vector[5]),std::stod(tmp_vector[6]),std::stod(tmp_vector[7]),std::stod(tmp_vector[8]),tmp_vector[9],tmp_vector[10]));
 		}
 	}
 	feat_profile.add_USR_features(feature_rules);

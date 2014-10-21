@@ -1,8 +1,13 @@
+## FEATURES
+#TAG;	F_NAME;	SEQ;	POS_START;	POS_END
+PHOSPH; 0;      1;      0;          0;
+PHOSPH; 1;      1;      5;          5;
+## USER DEFINED
 #TAG;	F_NAME;	SEQ;	POS_START;	POS_END;	INCR_SCORE_1;	INCR_SCORE_2;	REDUCE_SCORE_1;	REDUCE_SCORE_2;	INCREASE_SCORE_FEAT;	REDUCE_SCORE_FEAT;
-PF;	A;	1;	1;		1;		3;		2;		1;		2;		PF[A.B],LF[B];		LF;
-PF;	C;	2;	1;		1;		3;		2;		2;		1;		LF_B,PF_A;		LF;
-LF;	B;	1;	1;		3;		3;		1;		2;		3;		LF;			PF;
-LF;	D;	1;	1;		3;		3;		1;		2;		3;		LF;			PF;
+PF;	    A;	    1;	    1;		    1;		    3;		        2;		        1;		        2;		        PF[A.B],LF[B];	    	LF;
+PF;	    C;	    2;	    1;		    1;		    3;		        2;		        2;		        1;		        LF_B,PF_A;	        	LF;
+LF;	    B;	    1;	    1;		    3;		    3;		        1;		        2;		        3;		        LF;			            PF;
+LF;	    D;	    1;	    1;		    3;		    3;		        1;		        2;		        3;		        LF;			            PF;
 #TAG:			defines a class of features
 #F_NAME:		feature's name - name within the same class have to be unique
 #SEQ			sequence number (beginning with 0)
