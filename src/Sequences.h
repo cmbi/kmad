@@ -1,3 +1,6 @@
+#ifndef SEQUENCES_H
+#define SEQUENCES_H
+
 #include <iostream>
 #include <vector>
 class Residue;
@@ -28,3 +31,5 @@ private:
 	int firstSequenceSize;
 	
 };
+
+#endif /* SEQUENCES_H */

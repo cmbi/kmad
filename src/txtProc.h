@@ -1,3 +1,6 @@
+#ifndef TXTPROC_H
+#define TXTPROC_H
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -19,3 +22,5 @@ namespace txtProc{
 	void process_conf_file(std::string, FeaturesProfile&, Sequences&);
 	std::vector<int> unfold(std::string, std::vector<std::string>);
 }
+
+#endif /* TXTPROC_H */

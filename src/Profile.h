@@ -1,3 +1,6 @@
+#ifndef PROFILE_H
+#define PROFILE_H
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -22,3 +25,5 @@ private:
 	//variables
 	std::vector< std::vector<double> > prfMatrix;
 };
+
+#endif /* PROFILE_H */

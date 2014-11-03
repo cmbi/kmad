@@ -1,3 +1,6 @@
+#ifndef VECUTIL_H
+#define VECUTIL_H 
+
 #include<iostream>
 #include<vector>
 #include<string>
@@ -24,3 +27,5 @@ namespace vecUtil{
 	int countTrueValuesInVector(const std::vector<bool>&);
 	void printSequence(std::vector<Residue>);
 }
+
+#endif /* VECUTIL_H */

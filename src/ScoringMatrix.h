@@ -1,3 +1,6 @@
+#ifndef SCORINGMATRIX_H
+#define SCORINGMATRIX_H
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -22,3 +25,4 @@ private:
 	std::vector<int> findBestScore();
 };
 
+#endif /* SCORINGMATRIX_H */

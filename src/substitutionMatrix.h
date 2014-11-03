@@ -1,3 +1,6 @@
+#ifndef SBSTMATRIX_H
+#define SBSTMATRIX_H
+
 #include <iostream>
 #include <vector>
 class Residue;
@@ -11,3 +14,5 @@ namespace substitutionMatrix{
 	std::vector<int> getColumn(int);
 	int findAminoAcidsNo(char);
 };
+
+#endif /* SBSTMARTIX_H */

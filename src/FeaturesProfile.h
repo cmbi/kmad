@@ -1,3 +1,6 @@
+#ifndef FEATURESPROFILE_H
+#define FEATURESPROFILE_H
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -33,3 +36,5 @@ private:
 	std::vector<std::string> motifs_ids;
 	std::vector<double> motifs_probs;
 };
+
+#endif /* FEATURESPROFILE_H */

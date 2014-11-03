@@ -1,3 +1,6 @@
+#ifndef RESIDUE_H
+#define RESIDUE_H
+
 #include <iostream>
 #include <vector>
 class Residue{
@@ -19,3 +22,5 @@ class Residue{
 		std::vector<std::string> getFeatures() const;
 		std::vector<std::string> getFeatures();
 };
+
+#endif /* RESIDUE_H */
