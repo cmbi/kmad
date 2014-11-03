@@ -19,5 +19,6 @@
 *.exe
 *.out
 *.app
+KMAN
 
 .DS_Store
