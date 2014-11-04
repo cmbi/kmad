@@ -284,7 +284,7 @@ void FeaturesProfile::score_USR_features(int sequence_no, int position, std::str
 		if (std::get<0>(rules[i]) == feat_name && sequence_no == std::get<1>(rules[i])){
 			double add_tmp = std::get<2>(rules[i]);
 			double multiply_tmp = std::get<3>(rules[i]);
-			std::vector<int> incr_features = std::get<6>(rules[i]);
+			std::vector<int> incr_features = std::get<6>(rules[i]);  //positions of increasing features
 			for (unsigned int j = 0; j < incr_features.size(); j++){ //go through features that increase the score
 				double prf_score = prfMatrix[incr_features[j]][position];
 				if (prf_score != 0){
@@ -343,7 +343,14 @@ void FeaturesProfile::setRules(std::vector<std::tuple<std::string,std::string,in
 		std::vector<int> red_feat = txtProc::unfold(std::get<10>(new_rules[i]), listOfFeatures);
 		//new_tuple <tag+name, incr_rule_1, incr_rule_2, red_rule_1, red_rule_2, incr_features_positions, red_features_positions>
 		//incr_features_positions and red_features_positions are positions(indexes in the profile, not positions in sequence) of features that will be scored in the listOfFeatures vector
-		std::tuple<std::string,int,double,double,double,double,std::vector<int>,std::vector<int>> new_tuple = std::make_tuple(std::string("USR_")+std::get<0>(new_rules[i])+std::string("_")+std::get<1>(new_rules[i]),std::get<2>(new_rules[i]), std::get<5>(new_rules[i]),std::get<6>(new_rules[i]),std::get<7>(new_rules[i]), std::get<8>(new_rules[i]),incr_feat, red_feat);
+		std::tuple<std::string,int,double,double,double,double,std::vector<int>,std::vector<int>> new_tuple = std::make_tuple(std::string("USR_")+std::get<0>(new_rules[i])+std::string("_")+std::get<1>(new_rules[i]),
+                                                                                                                          std::get<2>(new_rules[i]), 
+                                                                                                                          std::get<5>(new_rules[i]),
+                                                                                                                          std::get<6>(new_rules[i]),
+                                                                                                                          std::get<7>(new_rules[i]), 
+                                                                                                                          std::get<8>(new_rules[i]),
+                                                                                                                          incr_feat, 
+                                                                                                                          red_feat);
 		rules.push_back(new_tuple);
 	}
 }

@@ -80,10 +80,7 @@ am_kman_OBJECTS = src/kman.$(OBJEXT) src/FeaturesProfile.$(OBJEXT) \
 	src/txtProc.$(OBJEXT) src/vecUtil.$(OBJEXT) src/misc.$(OBJEXT) \
 	src/substitutionMatrix.$(OBJEXT) src/findVal.$(OBJEXT)
 kman_OBJECTS = $(am_kman_OBJECTS)
-am__DEPENDENCIES_1 =
-am__DEPENDENCIES_2 = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	/usr/local/lib/libboost_program_options.a
-kman_DEPENDENCIES = $(am__DEPENDENCIES_2)
+kman_DEPENDENCIES = $(shared_LDADD)
 am__objects_1 = src/kman.$(OBJEXT) src/FeaturesProfile.$(OBJEXT) \
 	src/Profile.$(OBJEXT) src/Residue.$(OBJEXT) \
 	src/ScoringMatrix.$(OBJEXT) src/Sequences.$(OBJEXT) \
@@ -91,7 +88,7 @@ am__objects_1 = src/kman.$(OBJEXT) src/FeaturesProfile.$(OBJEXT) \
 	src/substitutionMatrix.$(OBJEXT) src/findVal.$(OBJEXT)
 am_test_kman_OBJECTS = $(am__objects_1)
 test_kman_OBJECTS = $(am_test_kman_OBJECTS)
-test_kman_DEPENDENCIES = $(am__DEPENDENCIES_2)
+test_kman_DEPENDENCIES = $(shared_LDADD)
 DEFAULT_INCLUDES = -I.
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__depfiles_maybe = depfiles
@@ -139,7 +136,7 @@ CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
 CPP = gcc -E
-CPPCHECK = 
+CPPCHECK = cppcheck
 CPPFLAGS = 
 CXX = g++
 CXXDEPMODE = depmode=gcc3
@@ -228,10 +225,7 @@ target_alias =
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
-shared_LDADD = $(BOOST_PROGRAM_OPTIONS_LIB) \
-								$(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
-								/usr/local/lib/libboost_program_options.a
-
+shared_LDADD = /usr/local/lib/libboost_program_options.a
 kman_SOURCES = src/kman.cpp \
 								src/FeaturesProfile.cpp \
 								src/Profile.cpp \
@@ -252,7 +246,6 @@ AM_CPPFLAGS = -std=c++11 \
 							-Wall \
 							-Werror \
 							-Wno-reorder \
-							$(BOOST_CPPFLAGS) \
 							-Isrc/
 
 all: config.h
@@ -771,9 +764,9 @@ uninstall-am: uninstall-binPROGRAMS
 	uninstall-am uninstall-binPROGRAMS
 
 
-#cppcheck:
-#		$(CPPCHECK) --quiet --enable=style src test
-#check:	cppcheck
+cppcheck:
+		$(CPPCHECK) --quiet --enable=style src test
+check:	cppcheck
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

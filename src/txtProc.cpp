@@ -187,21 +187,23 @@ void txtProc::process_conf_file(std::string filename, FeaturesProfile& feat_prof
 	std::string line;
 	std::vector<std::tuple<std::string, std::string, int, int, int, double, double, double, double, std::string, std::string> > usr_feature_rules;
 	std::vector<std::tuple<std::string, std::string, int, int, int> > feature_rules;
-    bool features = true;
-    std::string tag_usr = "## USER DEFINED";
+  bool features = true;
+  std::string tag_usr = "## USER DEFINED";
 	while(!safeGetline(conf_file, line).eof()){
-       if ( (signed)line.find(tag_usr) > -1){
+       if ( features && line.find(tag_usr) >= 0){
             features = false;
        }
        else if (line[0] != '#' && features){
-			line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
-			std::vector<std::string> tmp_vector = split(line,';');
-			feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], std::stoi(tmp_vector[2]), std::stoi(tmp_vector[3]), std::stoi(tmp_vector[4])));
+			  line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
+			  line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
+			  std::vector<std::string> tmp_vector = split(line,';');
+			  feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], std::stoi(tmp_vector[2]), std::stoi(tmp_vector[3]), std::stoi(tmp_vector[4])));
        }
-		else if (line[0] != '#'){
-			line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
-			std::vector<std::string> tmp_vector = split(line,';');
-			usr_feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], std::stoi(tmp_vector[2]), std::stoi(tmp_vector[3]), std::stoi(tmp_vector[4]),std::stod(tmp_vector[5]),std::stod(tmp_vector[6]),std::stod(tmp_vector[7]),std::stod(tmp_vector[8]),tmp_vector[9],tmp_vector[10]));
+		   else if (line[0] != '#'){
+		  	line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
+			  line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
+		  	std::vector<std::string> tmp_vector = split(line,';');
+		  	usr_feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], std::stoi(tmp_vector[2]), std::stoi(tmp_vector[3]), std::stoi(tmp_vector[4]),std::stod(tmp_vector[5]),std::stod(tmp_vector[6]),std::stod(tmp_vector[7]),std::stod(tmp_vector[8]),tmp_vector[9],tmp_vector[10]));
 		}
 	}
 	feat_profile.add_USR_features(usr_feature_rules);
@@ -234,5 +236,6 @@ std::vector<int> txtProc::unfold(std::string conf_string, std::vector<std::strin
 			}
 		}
 	}
+  vecUtil::printVector(out_vector);
 	return out_vector;
 }

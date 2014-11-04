@@ -17,9 +17,9 @@ int main(int argc, char *argv[]){
 	std::string filename,verboseMode,outputPrefix,conf_file;
 	po::options_description desc("Allowed options");
 	desc.add_options()
-	    	("help,h", "produce help message")
-	    	("input,i", po::value<std::string>(&filename), "input file name")
-	    	("output,o", po::value<std::string>(&outputPrefix), "output file prefix")
+		("help,h", "produce help message")
+		("input,i", po::value<std::string>(&filename), "input file name")
+		("output,o", po::value<std::string>(&outputPrefix), "output file prefix")
 		("gap_penalty,g", po::value<double>(&gapPen), "gap opening penalty")
 		("gap_extension,e",po::value<double>(&gapExt)->default_value(-1.),"gap extension penalty")
 		("codon_length,c", po::value<int>(&codonLength)->implicit_value(7)->default_value(1),"codon length")
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
 		("motif,m", po::value<int>(&motifScore)->default_value(0),"probability multiplier for motifs")
 		("end,n", po::value<double>(&endPenalty)->default_value(-0.1),"penalty for gaps at the end (and beginning)")
 		("weights,w", po::value<bool>(&weightsModeOn)->implicit_value(true)->default_value(false),"all sequences contribute to the profile with weights(=similarity)")
-	    	("conf", po::value<std::string>(&conf_file), "configure file")
+		("conf", po::value<std::string>(&conf_file), "configure file")
 		("verbose,v",po::value<std::string>(&verboseMode)->implicit_value("1")->default_value("0"),"verbose mode");
 	po::variables_map vm;
 	po::store(po::parse_command_line(argc, argv, desc), vm);

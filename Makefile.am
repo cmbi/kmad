@@ -1,8 +1,6 @@
 bin_PROGRAMS	=	kman test_kman
 
-shared_LDADD	=	$(BOOST_PROGRAM_OPTIONS_LIB) \
-								$(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
-								/usr/local/lib/libboost_program_options.a
+shared_LDADD	=	/usr/local/lib/libboost_program_options.a
 
 
 kman_SOURCES	=	src/kman.cpp \
@@ -28,7 +26,6 @@ AM_CPPFLAGS	=	-std=c++11 \
 							-Wall \
 							-Werror \
 							-Wno-reorder \
-							$(BOOST_CPPFLAGS) \
 							-Isrc/
 
 if HAVE_CPPCHECK
