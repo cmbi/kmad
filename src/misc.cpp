@@ -1,4 +1,3 @@
-//UsefulStuff class implementation
 #include "misc.h"
 #include "Residue.h"
 #include <iostream>
@@ -30,7 +29,7 @@ std::vector<Residue> misc::pseudoResidueSequence(int seqLength, int codon_length
 	return result;
 }
 void misc::printEncodedSeq(const std::vector<std::string>& sequence){
-	for (int i = 0; i < sequence.size();i++) std::cout << sequence[i][0];	
+	for (unsigned int i = 0; i < sequence.size();i++) std::cout << sequence[i][0];	
 	std::cout << "\n";
 }
 //look for mistakes in the given command line arguments

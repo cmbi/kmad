@@ -14,10 +14,10 @@
 Sequences::Sequences(std::vector< std::vector< std::vector<std::string> > > s){
 	sequencesEncoded = s;
 	std::vector<std::string> additional_features;
-	for (int i = 0; i < sequencesEncoded.size(); i++){
+	for (unsigned int i = 0; i < sequencesEncoded.size(); i++){
 		sequence_names.push_back(sequencesEncoded[i][0]);
 		std::vector<Residue> new_seq;
-		for (int j = 0; j < sequencesEncoded[i][1].size(); j++){
+		for (unsigned int j = 0; j < sequencesEncoded[i][1].size(); j++){
 			Residue newRes(sequencesEncoded[i][1][j], additional_features);
 			new_seq.push_back(newRes);
 		}
@@ -65,7 +65,6 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment, Pr
 		alignmentWithLowercase.push_back(sequences_aa[0]);
 		std::vector<Residue> alNoLower; // tmp pairwise alignment (and so is alWithLower)
 		std::vector<Residue> alWithLower;
-		int iter=0;
 		for (int i = 1; i < seqNr; i++){
 			if (identities[i] > identityCutoff){
 				alignPairwise(alNoLower,alWithLower,sequences_aa[i],outputProfile,outputFeaturesProfile,penalty,endPenalty,extensionPenalty,i,verbose, codon_length, i); // NW alignment of the ith seq against the profile
@@ -83,7 +82,7 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment, Pr
 //function calcIdentity, calculates identity with the query sequence (takes aligned sequence with the gaps cut out)
 double Sequences::calcIdentity(const std::vector<Residue>& alignedSequence){
 	double identicalResidues=0;
-	for (int i = 0; i < alignedSequence.size(); i++){
+	for (unsigned int i = 0; i < alignedSequence.size(); i++){
 		if (alignedSequence[i].getAA() == sequences_aa[0][i].getAA()){
 			identicalResidues++;
 		}
@@ -102,7 +101,7 @@ void Sequences::removeGaps(std::vector<Residue> &alignmentWithLowercase, std::ve
 	std::vector<Residue> newS2lower;
 	char gap = '-';
 	bool lowerFlag = false;
-	for (int i = 0; i < alignment[0].size(); i++){
+	for (unsigned int i = 0; i < alignment[0].size(); i++){
 		char s1char = s1[i].getAA();
 		if (s1char == gap){
 			if (newS2lower.size() > 0){
@@ -140,7 +139,7 @@ void Sequences::alignPairwise(std::vector<Residue> &alNoLower,std::vector<Residu
 //count alignments that will be performed in this round
 int Sequences::countAlignments(double identity_cutoff, std::vector<double> identities){
 	int count = 0;
-	for (int i = 0; i < identities.size(); i++){
+	for (unsigned int i = 0; i < identities.size(); i++){
 		if (identities[i] > identity_cutoff){
 			count++;
 		}
@@ -148,14 +147,14 @@ int Sequences::countAlignments(double identity_cutoff, std::vector<double> ident
 	return count;
 }
 void Sequences::printSequence(int seq_index) const{
-	for (int i = 0; i < sequences_aa[seq_index].size(); i++){
+	for (unsigned int i = 0; i < sequences_aa[seq_index].size(); i++){
 		std::cout << sequences_aa[seq_index][i].getAA();
 	}
 	std::cout << std::endl;
 }
 //adds features from the tuple 'feature_rules'(usr defined) to relevant residues (also specified in 'feature_rules')
-void Sequences::add_features(std::vector<std::tuple<std::string,std::string,int, int, int, double, double, double, double, std::string, std::string> > feature_rules){
-	for (int i = 0; i < feature_rules.size(); i++){
+void Sequences::add_usr_features(std::vector<std::tuple<std::string,std::string,int, int, int, double, double, double, double, std::string, std::string> > feature_rules){
+	for (unsigned int i = 0; i < feature_rules.size(); i++){
 		std::string feat_name = std::string("USR_")+std::get<0>(feature_rules[i])+std::string("_")+std::get<1>(feature_rules[i]);
 		int sequence_no = std::get<2>(feature_rules[i]);
 		int start = std::get<3>(feature_rules[i]);

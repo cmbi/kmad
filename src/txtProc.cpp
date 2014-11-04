@@ -71,11 +71,11 @@ std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std
 					resultSequences[seqNo].push_back(newSequence);
 				}
 				else if (sequences){
-					for (int i = 0; i < line.size();i++){
+					for (unsigned int i = 0; i < line.size();i++){
 						if (i % codonLength == 0){
 							std::string newResidue = "";
 							//j for goes through all codon postions of this residue
-							for (int j = i;j < i + codonLength; j++){
+							for (unsigned int j = i;j < i + codonLength; j++){
 									if (acceptableChar(line[j])){
 										newResidue += line[j];
 									}
@@ -110,7 +110,7 @@ void txtProc::writeAlignmentToFile(std::vector<std::string> sequences,std::vecto
 	std::stringstream sstr;
 	sstr << filename << "_al";
 	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
-	for (int i = 0; i < sequences.size() ;i++){
+	for (unsigned int i = 0; i < sequences.size() ;i++){
 		outputFile << sequencesWithNames[i][0][0]<< "\n" << sequences[i] << "\n";
 	}
 }
@@ -119,10 +119,10 @@ void txtProc::writeAlignmentWithoutCodeToFile(std::vector<std::string> sequences
 	std::stringstream sstr;
 	sstr << filename << "_al";
 	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
-	for (int i = 0; i < sequences.size() ;i++){
+	for (unsigned int i = 0; i < sequences.size() ;i++){
 		outputFile << sequencesWithNames[i][0][0]<< "\n";
 		std::string sequence="";
-		for (int j = 0; j < sequences[i].size(); j+=4){
+		for (unsigned int j = 0; j < sequences[i].size(); j+=4){
 			sequence += sequences[i][j];
 		}
 		outputFile << sequence << std::endl;
@@ -133,8 +133,8 @@ void txtProc::writeVector(std::vector<std::vector<double>> vec, std::string file
 	std::stringstream sstr;
 	sstr << filename;
 	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
-	for (int i = 0; i < vec.size() ;i++){
-		for (int j = 0; j < vec[0].size(); j++){
+	for (unsigned int i = 0; i < vec.size() ;i++){
+		for (unsigned int j = 0; j < vec[0].size(); j++){
 			outputFile << vec[i][j] << std::endl;
 		}
 	}
@@ -174,7 +174,7 @@ std::istream& txtProc::safeGetline(std::istream& is, std::string& t)
 //check if the character is supported
 bool txtProc::acceptableChar(char my_char){
 	bool result = false;
-	for (int i = 0; i < acceptable_characters.size(); i++){
+	for (unsigned int i = 0; i < acceptable_characters.size(); i++){
 		if (acceptable_characters[i]==my_char){
 			result = true;
 			break;
@@ -188,30 +188,36 @@ void txtProc::process_conf_file(std::string filename, FeaturesProfile& feat_prof
 	std::vector<std::tuple<std::string, std::string, int, int, int, double, double, double, double, std::string, std::string> > usr_feature_rules;
 	std::vector<std::tuple<std::string, std::string, int, int, int> > feature_rules;
     bool features = true;
+    std::string tag_usr = "## USER DEFINED";
 	while(!safeGetline(conf_file, line).eof()){
-       // if (line[0] != '#' && features){
-
-       // }
+       if ( (signed)line.find(tag_usr) > -1){
+            features = false;
+       }
+       else if (line[0] != '#' && features){
+			line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
+			std::vector<std::string> tmp_vector = split(line,';');
+			feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], std::stoi(tmp_vector[2]), std::stoi(tmp_vector[3]), std::stoi(tmp_vector[4])));
+       }
 		else if (line[0] != '#'){
 			line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
 			std::vector<std::string> tmp_vector = split(line,';');
 			usr_feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], std::stoi(tmp_vector[2]), std::stoi(tmp_vector[3]), std::stoi(tmp_vector[4]),std::stod(tmp_vector[5]),std::stod(tmp_vector[6]),std::stod(tmp_vector[7]),std::stod(tmp_vector[8]),tmp_vector[9],tmp_vector[10]));
 		}
 	}
-	feat_profile.add_USR_features(feature_rules);
-	sequences_aa.add_features(feature_rules);
-	feat_profile.setRules(feature_rules);
+	feat_profile.add_USR_features(usr_feature_rules);
+	sequences_aa.add_usr_features(usr_feature_rules);
+	feat_profile.setRules(usr_feature_rules);
 }
 // converts the string form the conf file to vector of positions of features to be scored
 std::vector<int> txtProc::unfold(std::string conf_string, std::vector<std::string> listOfFeatures){
 	std::vector<std::string> tmp_vector = split(conf_string,',');
 	std::vector<int> out_vector;
-	for (int i = 0; i < tmp_vector.size(); i++){
+	for (unsigned int i = 0; i < tmp_vector.size(); i++){
 		if (split(tmp_vector[i],'_').size() > 1){						// this is a single feature entry, e.g. 'PF_A'
 			out_vector.push_back(vecUtil::findIndex(std::string("USR_")+tmp_vector[i], listOfFeatures));
 		}
 		else if (split(tmp_vector[i],'[').size() == 1){						// this is an entry with only the tag specified (without any exceptions)
-			for (int j = 0; j < listOfFeatures.size(); j++){
+			for (unsigned int j = 0; j < listOfFeatures.size(); j++){
 				std::vector<std::string> singlefeat = split(listOfFeatures[j],'_');
 				if (singlefeat.size() > 1 && singlefeat[1] == tmp_vector[i]){out_vector.push_back(j);}
 			}
@@ -220,7 +226,7 @@ std::vector<int> txtProc::unfold(std::string conf_string, std::vector<std::strin
 			std::vector<std::string> tagfeat = split(tmp_vector[i],'[');
 			std::string tag = tagfeat[0];
 			std::vector<std::string> exceptions = split(split(tagfeat[1],']')[0],'.');
-			for (int j = 0; j < listOfFeatures.size(); j++){
+			for (unsigned int j = 0; j < listOfFeatures.size(); j++){
 				std::vector<std::string> singlefeat = split(listOfFeatures[j],'_');
 				if (singlefeat.size() > 1 && singlefeat[1] == tag && !vecUtil::contains(exceptions, singlefeat[2])){
 					out_vector.push_back(j);

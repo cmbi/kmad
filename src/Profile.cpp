@@ -22,9 +22,9 @@ std::vector< std::vector<double> > Profile::getMatrix() const{
 void Profile::buildPseudoProfile(std::vector< std::vector<Residue> >& alignment,const std::vector<double>& sequenceIdentityValues, bool weightsModeOn){
 	createProfile(alignment,sequenceIdentityValues,weightsModeOn);
 	std::vector< std::vector<double> > newProfile;
-	for (int i = 0; i < prfMatrix[0].size(); i++){
+	for (unsigned int i = 0; i < prfMatrix[0].size(); i++){
 		std::vector< std::vector<double> > columnsToAdd;
-		for(int j = 0; j < prfMatrix.size(); j++){
+		for(unsigned int j = 0; j < prfMatrix.size(); j++){
 			if (prfMatrix[j][i] != 0){
 				std::vector<double> columnForJ = vecUtil::convertIntVectorToDoubleVector(substitutionMatrix::getColumn(j));
 				vecUtil::multiplyVectorByAScalar(columnForJ, prfMatrix[j][i]);
@@ -46,10 +46,10 @@ void Profile::createProfile(std::vector< std::vector<Residue> >& alignment, cons
 	else{
 		noOfSequences = alignment.size();
 	}
-	for (int i = 0; i < alignment[0].size(); i++){
+	for (unsigned int i = 0; i < alignment[0].size(); i++){
 		std::vector<double> profileColumn(20,0);
 		int nonGaps = 0;
-		for (int j = 0; j < alignment.size(); j++){
+		for (unsigned int j = 0; j < alignment.size(); j++){
 			
 			double weight;
 			if (weightsModeOn){
@@ -69,7 +69,7 @@ void Profile::createProfile(std::vector< std::vector<Residue> >& alignment, cons
 					profileColumn[7]+=0.5*weight;
 				}
 				else if (seqChar == 'X'){
-					for (int k = 0; k < profileColumn.size();k++){
+					for (unsigned int k = 0; k < profileColumn.size();k++){
 						profileColumn[k]+=0.05*weight;
 					}
 				}
@@ -95,7 +95,7 @@ void Profile::createProfile(std::vector< std::vector<Residue> >& alignment, cons
 //function countNonGaps - counts how many characters in alignment nth ('column' integer) column are not gaps 
 double Profile::countNonGaps(int column){
 	double sum = 0;
-	for (int i =0; i < 20; i++){
+	for (unsigned int i =0; i < 20; i++){
 		sum += double(prfMatrix[i][column]);
 	}
 	return sum;
@@ -111,7 +111,7 @@ double Profile::getElement(int position, char aAcid){
 	}
 	else if (aAcid=='X'){ // take average score from scores for all residues
 		result = 0;
-		for (int i = 0; i < prfMatrix.size(); i++){
+		for (unsigned int i = 0; i < prfMatrix.size(); i++){
 			result += 0.05*prfMatrix[i][position];
 		}
 	}
@@ -129,7 +129,7 @@ double Profile::getElement(int aAcidInt, int position){
 void Profile::printProfile(int boundStart, int boundEnd){
 	std::cout << "##PROFILE POSITION "<< boundStart << "-" << boundEnd-1 << "##" << std::endl;
 	for (int i = boundStart; i < boundEnd; i++){
-		for (int j = 0; j < prfMatrix.size();j++){
+		for (unsigned int j = 0; j < prfMatrix.size();j++){
 			std::cout << j << ": " << prfMatrix[j][i] << " ";
 		}
 		std::cout << "\n";
@@ -137,8 +137,8 @@ void Profile::printProfile(int boundStart, int boundEnd){
 }
 //function printProfile - prints full profile
 void Profile::printProfile(){
-	for (int i = 0; i < prfMatrix.size(); i++){
-		for (int j = 0; j < prfMatrix[0].size();j++){
+	for (unsigned int i = 0; i < prfMatrix.size(); i++){
+		for (unsigned int j = 0; j < prfMatrix[0].size();j++){
 			std::cout << prfMatrix[i][j] << " ";
 		}
 		std::cout << "\n";

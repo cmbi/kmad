@@ -13,6 +13,6 @@ namespace substitutionMatrix{
 	int getElement(int,int);
 	std::vector<int> getColumn(int);
 	int findAminoAcidsNo(char);
-};
+}
 
 #endif /* SBSTMARTIX_H */

@@ -40,14 +40,14 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen, double endPenalt
 //function calculateScoresProfile - calculates scoring matrix for sequences s1 and s2 using profile prf instead of a substitution matrix ENCODED SEQUENCES
 void ScoringMatrix::calculateScores(std::vector<Residue> s2, Profile& prf, FeaturesProfile& featPrf,int debug, int codon_length, int sequence_no){
 	s2 = vecUtil::push_front(s2,misc::gapRes(codon_length));
-	for (int i = 1; i < matrixV.size(); i++){
+	for (unsigned int i = 1; i < matrixV.size(); i++){
 		matrixV[i][0] = -10000000; //infinity
 		matrixH[i][0] = -10000000;
 		//matrixG[i][0] = 0;	//makes gaps at the beginning of the vertical sequence (s1) free
 		matrixG[i][0] = i*endGapPenalty;	//makes gaps at the beginning of the vertical sequence (s1) free
 		//matrixG[i][0] = gapOpening+(i-1)*gapExtension; // uncomment to penalize gaps at the beginnig of s1 seq with the same penalty function as the gaps inside
 	}
-	for (int i = 1; i < matrixV[0].size(); i++){
+	for (unsigned int i = 1; i < matrixV[0].size(); i++){
 		matrixV[0][i] = -10000000;
 		//matrixH[0][i] = 0;	//makes gaps at the beginning of the horizontal sequence (s2) free
 		matrixH[0][i] = i*endGapPenalty;	//makes gaps at the beginning of the horizontal sequence (s2) free
@@ -55,8 +55,8 @@ void ScoringMatrix::calculateScores(std::vector<Residue> s2, Profile& prf, Featu
 		matrixG[0][i] = -10000000;
 	}
 	double score1,score2,score3;
-	for (int i = 1; i < matrixV.size();i++){
-		for (int j = 1; j < matrixV[i].size(); j++){
+	for (unsigned int i = 1; i < matrixV.size();i++){
+		for (unsigned int j = 1; j < matrixV[i].size(); j++){
 			///V
 			double prfScore = prf.getElement(i-1, s2[j].getAA());
 			double add_score;
@@ -133,7 +133,7 @@ void ScoringMatrix::nwAlignment(std::vector<std::vector<Residue> > *result,std::
 	int j = s2.size()-1;
 	std::string currentMatrix = "V";
 	//if bestScore isn't in the lower right corner, then add gaps to newS1 or newS2
-	if (findBestScore()[0] != matrixV.size()-1 || findBestScore()[1] != matrixV[0].size()-1){
+	if (findBestScore()[0] != (signed)matrixV.size()-1 || findBestScore()[1] != (signed)matrixV[0].size()-1){
 		i = findBestScore()[0];
 		j = findBestScore()[1];
 		for (int k = s1.size()-1; k > i; k--){
