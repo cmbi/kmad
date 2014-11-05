@@ -115,9 +115,11 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment,
 		for (int i = 1; i < seqNr; i++){
 			if (identities[i] > identityCutoff){
         // NW alignment of the ith seq against the profile
+
 				alignPairwise(alNoLower, alWithLower, sequences_aa[i], outputProfile,
                       outputFeaturesProfile,penalty,endPenalty,extensionPenalty,
                       i, verbose, codon_length, i); 
+
 				alignmentWithoutLowercase.push_back(alNoLower);
 				alignmentWithLowercase.push_back(alWithLower);
 			}

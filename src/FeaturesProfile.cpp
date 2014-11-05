@@ -14,7 +14,9 @@ namespace {
 	std::vector<int> motif_indexes = {30};
 }
 //constructor, creates empty profile, takes domain and phosphorylation scores(dom, phosph) and motifs' ids and probabilities(m_ids, m_probs), lcr - low complexity regions gap penlat modifier
-FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr, std::vector<std::string> m_ids, std::vector<double> m_probs)
+FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr, 
+                                 std::vector<std::string> m_ids, 
+                                 std::vector<double> m_probs)
 :	domainScore(dom),
 	phosphScore(phosph),
 	lcr_mod(lcr),
@@ -23,8 +25,12 @@ FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr, std::v
 	motifs_probs(m_probs)
 	{
 }
-// creates a features profile - counts occurences of each feature on each position an normalize it by the number of non gaps (easily changeable to number of sequences);(with or without weights)
-void FeaturesProfile::createProfile(const std::vector< std::vector<Residue> >& alignment, const std::vector<double>& sequenceIdentityValues, bool weightsModeOn, int codon_length){
+// creates a features profile - counts occurences of each feature on each 
+// position an normalize it by the number of non gaps (easily changeable to 
+// number of sequences);(with or without weights)
+void FeaturesProfile::createProfile(const std::vector< std::vector<Residue> >& alignment, 
+                                    const std::vector<double>& sequenceIdentityValues, 
+                                    bool weightsModeOn, int codon_length){
 	std::vector<std::vector<double> > tmpResult;
 	std::string nothing = "AA";
 	double weight;
@@ -88,7 +94,9 @@ double FeaturesProfile::motifs_prob(std::string m_id){
 	return prob;
 }
 //function getScore - returns score for the entire codon on nth position
-void FeaturesProfile::getScore(int position,std::vector<std::string> features, double& add_score, double& multiply_score, int sequence_no){
+void FeaturesProfile::getScore(int position, std::vector<std::string>& features, 
+                               double& add_score, double& multiply_score, 
+                               int sequence_no){
 	std::string nothing = "AA";
 	add_score = 0;
 	multiply_score = 1;

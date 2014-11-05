@@ -9,7 +9,7 @@ class FeaturesProfile{
 public:
 	FeaturesProfile(int, int, int, int, std::vector<std::string>, std::vector<double>);
 	//getters
-	void getScore(int,std::vector<std::string>,double&, double&, int);
+	void getScore(int, std::vector<std::string>&, double&, double&, int);
 	//double getScore(int,std::string);
 	double getGapMod(int, std::vector<std::string>);
 	std::vector<std::vector<double> > getMatrix();
@@ -30,8 +30,6 @@ public:
                                                 std::string> >&);
 	void printFeatures();
 private:
-	std::vector<std::tuple<std::string,int,double,double,double,double,std::vector<int>,std::vector<int> > > rules;
-	std::vector< std::vector<double> > prfMatrix;	
 	double motifs_prob(std::string);
 	void score_motifs(int, std::string, double&, double&);
 	void score_domains(int, std::string, double&, double&);
@@ -43,6 +41,8 @@ private:
 	int domainScore, phosphScore, motifScore, lcr_mod;
 	std::vector<std::string> motifs_ids;
 	std::vector<double> motifs_probs;
+	std::vector<std::tuple<std::string,int,double,double,double,double,std::vector<int>,std::vector<int> > > rules;
+	std::vector< std::vector<double> > prfMatrix;	
 };
 
 #endif /* FEATURESPROFILE_H */

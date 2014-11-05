@@ -10,7 +10,7 @@ class Residue{
 		char aa;
 		std::vector<std::string> codon_to_features(std::string);
 	public:
-		Residue(std::string,std::vector<std::string>);
+		Residue(std::string, std::vector<std::string>);
 		Residue();
 		char getAA() const;
 		char getAA();

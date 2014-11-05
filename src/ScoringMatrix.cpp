@@ -23,7 +23,8 @@
 		pen - gap opening penalty
 */
 //constructor
-ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen, double endPenalty, double extensionPenalty)
+ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen, 
+                             double endPenalty, double extensionPenalty)
 :	iLength(s1size),
 	jLength(s2size),	
 	gapOpening(pen),
@@ -38,7 +39,9 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen, double endPenalt
 	matrixH.assign(iLength+1, row);
 }
 //function calculateScoresProfile - calculates scoring matrix for sequences s1 and s2 using profile prf instead of a substitution matrix ENCODED SEQUENCES
-void ScoringMatrix::calculateScores(std::vector<Residue> s2, Profile& prf, FeaturesProfile& featPrf,int debug, int codon_length, int sequence_no){
+void ScoringMatrix::calculateScores(std::vector<Residue> s2, Profile& prf, 
+                                    FeaturesProfile& featPrf, int debug, 
+                                    int codon_length, int sequence_no){
 	s2 = vecUtil::push_front(s2,misc::gapRes(codon_length));
 	for (unsigned int i = 1; i < matrixV.size(); i++){
 		matrixV[i][0] = -10000000; //infinity
@@ -61,7 +64,8 @@ void ScoringMatrix::calculateScores(std::vector<Residue> s2, Profile& prf, Featu
 			double prfScore = prf.getElement(i-1, s2[j].getAA());
 			double add_score;
 			double multiply_score;
-			featPrf.getScore(i-1,s2[j].getFeatures(), add_score, multiply_score, sequence_no);
+      std::vector<std::string> features = s2[j].getFeatures();
+			featPrf.getScore(i-1, features, add_score, multiply_score, sequence_no);
 			double final_score = prfScore*multiply_score + add_score;
 			score1 = matrixV[i-1][j-1];
 			score2 = matrixG[i-1][j-1];
@@ -120,7 +124,10 @@ std::vector< std::vector<double> > ScoringMatrix::getVec(){
 	return matrixV;
 }
 //function nwAlignment - performs a sequence vs profile(/pseudoprofile) needleman wunsch alignment 
-void ScoringMatrix::nwAlignment(std::vector<std::vector<Residue> > *result,std::vector<Residue> s2, Profile& prf, FeaturesProfile& featPrf,std::string verbose, int codon_length, int sequence_no){
+void ScoringMatrix::nwAlignment(std::vector<std::vector<Residue> > *result,
+                                std::vector<Residue> s2, Profile& prf, 
+                                FeaturesProfile& featPrf, std::string verbose, 
+                                int codon_length, int sequence_no){
 	std::vector<Residue> s1 = misc::pseudoResidueSequence(prf.getMatrix()[0].size()+1,codon_length); //creating polyA pseudoSequence representing the profile, to know later where are the gaps in the profile
 	Residue gap_code = misc::gapRes(codon_length);
 	s2 = vecUtil::push_front(s2,gap_code);
@@ -158,7 +165,8 @@ void ScoringMatrix::nwAlignment(std::vector<std::vector<Residue> > *result,std::
 			double prfScore = prf.getElement(i-1,s2[j].getAA());
 			double add_score;
 			double multiply_score;
-			featPrf.getScore(i-1, s2[j].getFeatures(), add_score, multiply_score, sequence_no); //get scores for features
+      std::vector<std::string> features = s2[j].getFeatures();
+			featPrf.getScore(i-1, features, add_score, multiply_score, sequence_no);
 			double final_score = prfScore*multiply_score + add_score;
 			if (matrixV[i][j] != matrixV[i-1][j-1] + final_score){
 				if( i > 0 && j > 0 && matrixV[i][j] == matrixG[i-1][j-1]+final_score){
