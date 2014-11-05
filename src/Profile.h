@@ -9,7 +9,9 @@ class Profile{
 public:
 	Profile(std::vector< std::vector<double> >); //constructor
 	Profile();
-	void buildPseudoProfile(std::vector< std::vector< Residue > >&, const std::vector<double>&, bool);
+	void buildPseudoProfile(std::vector< std::vector< Residue > >&, 
+                          const std::vector<double>&, bool);
+
 	//getters/setters
 	std::vector< std::vector<double> > getMatrix() const;
 	void setMatrix(std::vector<std::vector<double> >);
@@ -19,9 +21,10 @@ public:
 	void printProfile();
 private:
 	//functions
-	void createProfile(std::vector< std::vector<Residue> >&,const std::vector<double>&,bool);
+	void createProfile(std::vector< std::vector<Residue> >&,
+                     const std::vector<double>&, bool);
+
 	double countNonGaps(int);
-	int getMaxDoubleValue(std::vector<double>);
 	//variables
 	std::vector< std::vector<double> > prfMatrix;
 };
