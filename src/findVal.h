@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 namespace findVal{
-	double maxValueDoubles(double,double,double); 		
+	double maxValueDoubles(double, double, double); 		
 	std::vector< std::vector<int> > nMaxValues(std::vector<int>&, int);
 	int getMaxDoubleValuesIndex(std::vector<double>&);
 }
