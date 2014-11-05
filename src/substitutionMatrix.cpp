@@ -53,7 +53,7 @@ int substitutionMatrix::getElement(char char1,char char2){
 	return simScores[index1][index2];
 }
 //convert to profile format - creates a matrix 20 x sequence length, where nth column is a column from sbstMatrix for the amino acid on position n in the sequence
-std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(std::vector<Residue> sequence){
+std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(std::vector<Residue>& sequence){
 	std::vector< std::vector<double> > result(sequence.size());
 	std::vector<std::vector<int> > newSbstRow;
 	for (unsigned int i = 0; i < result.size(); i++){
