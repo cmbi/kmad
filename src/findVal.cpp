@@ -15,7 +15,7 @@ double findVal::maxValueDoubles(double double1,double double2,double double3){
 }
 /* function maxValuesFromVector
 finds n max values from vector<int>  vectorA */
-std::vector< std::vector<int> > findVal::nMaxValues(std::vector<int> vectorA, int n){
+std::vector< std::vector<int> > findVal::nMaxValues(std::vector<int>& vectorA, int n){
 	int i = 0;
 	std::vector< std::vector<int> > result;
 	std::vector<int> newEntry;
@@ -49,7 +49,7 @@ std::vector< std::vector<int> > findVal::nMaxValues(std::vector<int> vectorA, in
 	return result;
 }
 //function getMaxDoubleValuesIndex - returns index of the maximum value from vector<double> someVector
-int findVal::getMaxDoubleValuesIndex(std::vector<double> someVector){
+int findVal::getMaxDoubleValuesIndex(std::vector<double>& someVector){
 	int max = -100000;
 	int maxIndex = -1;
 	for (unsigned int i = 0; i < someVector.size(); i++){
