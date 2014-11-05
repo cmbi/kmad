@@ -48,7 +48,10 @@ std::vector<std::string> txtProc::split(const std::string &s, char delim) {
 }
 //function processFASTA - reads fasta file with encoded sequence
 //writes sequences + seqNames to vector<vector<string>>; motifs' ids to vector<string> ids and motifs' probabilities to vector<double> probs
-std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std::string filename,int codonLength, std::vector<std::string>* ids, std::vector<double>* probs){
+std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std::string filename,
+                                                                             int codonLength, 
+                                                                             std::vector<std::string>* ids, 
+                                                                             std::vector<double>* probs){
 	std::vector< std::vector< std::vector<std::string> > > resultSequences;
 	std::string fastaSymbol = ">";
 	std::ifstream fastafile (filename.c_str());
@@ -108,8 +111,8 @@ std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std
 
 
 //function writeAlignmentToFile
-void txtProc::writeAlignmentToFile(std::vector<std::string> sequences,
-                                   std::vector< std::vector< std::string > > sequence_names, 
+void txtProc::writeAlignmentToFile(std::vector<std::string>& sequences,
+                                   std::vector< std::vector< std::string > >& sequence_names, 
                                    std::string filename){
 	std::stringstream sstr;
 	sstr << filename << "_al";
@@ -121,7 +124,9 @@ void txtProc::writeAlignmentToFile(std::vector<std::string> sequences,
 
 
 //write alignment to file as a nonencoded fasta
-void txtProc::writeAlignmentWithoutCodeToFile(std::vector<std::string> sequences,std::vector< std::vector<std::vector<std::string> > > sequencesWithNames, std::string filename){
+void txtProc::writeAlignmentWithoutCodeToFile(std::vector<std::string>& sequences,
+                                              std::vector< std::vector<std::vector<std::string> > >& sequencesWithNames, 
+                                              std::string filename){
 	std::stringstream sstr;
 	sstr << filename << "_al";
 	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
@@ -137,7 +142,7 @@ void txtProc::writeAlignmentWithoutCodeToFile(std::vector<std::string> sequences
 
 
 //write to file (2d vector as a 1d vector)
-void txtProc::writeVector(std::vector<std::vector<double>> vec, std::string filename){
+void txtProc::writeVector(std::vector<std::vector<double>>& vec, std::string filename){
 	std::stringstream sstr;
 	sstr << filename;
 	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
@@ -219,7 +224,7 @@ void txtProc::process_conf_file(std::string filename, FeaturesProfile& feat_prof
 	feat_profile.setRules(usr_feature_rules);
 }
 // converts the string form the conf file to vector of positions of features to be scored
-std::vector<int> txtProc::unfold(std::string conf_string, std::vector<std::string> listOfFeatures){
+std::vector<int> txtProc::unfold(std::string conf_string, std::vector<std::string>& listOfFeatures){
 	std::vector<std::string> tmp_vector = split(conf_string,',');
 	std::vector<int> out_vector;
 	for (unsigned int i = 0; i < tmp_vector.size(); i++){
