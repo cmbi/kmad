@@ -246,9 +246,12 @@ void Sequences::add_usr_features(std::vector<std::tuple<std::string,std::string,
 		int sequence_no = std::get<2>(feature_rules[i]);
 		int start = std::get<3>(feature_rules[i]);
 		int end = std::get<4>(feature_rules[i])+1;
-		for (int j = start; j < end; j++){
-			sequences_aa[sequence_no][j].add_feature(feat_name);
-		}
+    signed int seq_length = sequences_aa[sequence_no].size();
+    if (sequence_no < (signed)sequences_aa.size()){
+		  for (int j = start; j < end && j < seq_length; j++){
+		  	sequences_aa[sequence_no][j].add_feature(feat_name);
+		  }
+    }
 	}
 }
 

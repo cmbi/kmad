@@ -336,13 +336,15 @@ double FeaturesProfile::modifier(std::string featName){
 	}
 	return modifier;
 }
+
+
 // sets rules for aligning features, unfolds last two elements in each tuple to vectors (vectors of features(strings))
-void FeaturesProfile::setRules(std::vector<std::tuple<std::string,std::string,int,int,int,double,double,double,double,std::string,std::string> > new_rules){
+void FeaturesProfile::setRules(std::vector<std::tuple<std::string,std::string,int,int,int,double,double,double,double,std::string,std::string> >& new_rules){
 	for (unsigned int i = 0; i < new_rules.size(); i++){
 		std::vector<int> incr_feat = txtProc::unfold(std::get<9>(new_rules[i]), listOfFeatures);
 		std::vector<int> red_feat = txtProc::unfold(std::get<10>(new_rules[i]), listOfFeatures);
-		//new_tuple <tag+name, incr_rule_1, incr_rule_2, red_rule_1, red_rule_2, incr_features_positions, red_features_positions>
-		//incr_features_positions and red_features_positions are positions(indexes in the profile, not positions in sequence) of features that will be scored in the listOfFeatures vector
+		// new_tuple <tag+name, incr_rule_1, incr_rule_2, red_rule_1, red_rule_2, incr_features_positions, red_features_positions>
+		// incr_features_positions and red_features_positions are positions(indexes in the profile, not positions in sequence) of features that will be scored in the listOfFeatures vector
 		std::tuple<std::string,int,double,double,double,double,std::vector<int>,std::vector<int>> new_tuple = std::make_tuple(std::string("USR_")+std::get<0>(new_rules[i])+std::string("_")+std::get<1>(new_rules[i]),
                                                                                                                           std::get<2>(new_rules[i]), 
                                                                                                                           std::get<5>(new_rules[i]),
@@ -354,8 +356,16 @@ void FeaturesProfile::setRules(std::vector<std::tuple<std::string,std::string,in
 		rules.push_back(new_tuple);
 	}
 }
+
+
 //adds user defined features fo listOfFeatures, called from txtProc::process_conf_file(....)
-void FeaturesProfile::add_USR_features(std::vector<std::tuple<std::string,std::string,int,int,int,double,double,double,double,std::string,std::string> > new_rules){
+void FeaturesProfile::add_USR_features(std::vector<std::tuple<std::string, 
+                                                              std::string,
+                                                              int, int, int,
+                                                              double, double,
+                                                              double, double,
+                                                              std::string,
+                                                              std::string> >& new_rules){
 	for (unsigned int i = 0; i < new_rules.size(); i++){
 		std::string feature_i = std::string("USR_")+ std::get<0>(new_rules[i]) + std::string("_") + std::get<1>(new_rules[i]);
 		if (!vecUtil::contains(listOfFeatures,feature_i)){
@@ -363,6 +373,8 @@ void FeaturesProfile::add_USR_features(std::vector<std::tuple<std::string,std::s
 		}
 	}
 }
+
+
 void FeaturesProfile::printFeatures(){
 	for (unsigned int i = 0; i < listOfFeatures.size(); i++){
 		std::cout << listOfFeatures[i] << " ";

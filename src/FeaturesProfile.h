@@ -16,10 +16,18 @@ public:
 	//setters
 	void setMatrix(std::vector<std::vector<double> >);
 	void printProfile();
-	void createProfile(const std::vector< std::vector<Residue> >&, const std::vector<double>&, bool, int);
+	void createProfile(const std::vector< std::vector<Residue> >&, 
+                     const std::vector<double>&, bool, int);
+
 	void expandListOfFeatures(const std::vector< std::vector< Residue> > &);
-	void setRules(std::vector< std::tuple<std::string,std::string,int,int,int,double,double,double,double,std::string,std::string> >);
-	void add_USR_features(std::vector< std::tuple<std::string,std::string,int,int,int,double,double,double,double,std::string,std::string> >);
+	void setRules(std::vector< std::tuple<std::string, std::string, int, int, 
+                                        int, double, double, double, double, 
+                                        std::string, std::string> >&);
+
+	void add_USR_features(std::vector< std::tuple<std::string, std::string, int,
+                                                int, int, double, double, 
+                                                double, double, std::string,
+                                                std::string> >&);
 	void printFeatures();
 private:
 	std::vector<std::tuple<std::string,int,double,double,double,double,std::vector<int>,std::vector<int> > > rules;
