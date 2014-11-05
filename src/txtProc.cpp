@@ -105,15 +105,21 @@ std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std
 	fastafile.close();
 	return resultSequences;
 }
+
+
 //function writeAlignmentToFile
-void txtProc::writeAlignmentToFile(std::vector<std::string> sequences,std::vector< std::vector< std::vector<std::string> > > sequencesWithNames, std::string filename){
+void txtProc::writeAlignmentToFile(std::vector<std::string> sequences,
+                                   std::vector< std::vector< std::string > > sequence_names, 
+                                   std::string filename){
 	std::stringstream sstr;
 	sstr << filename << "_al";
 	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
 	for (unsigned int i = 0; i < sequences.size() ;i++){
-		outputFile << sequencesWithNames[i][0][0]<< "\n" << sequences[i] << "\n";
+		outputFile << sequence_names[i][0]<< "\n" << sequences[i] << "\n";
 	}
 }
+
+
 //write alignment to file as a nonencoded fasta
 void txtProc::writeAlignmentWithoutCodeToFile(std::vector<std::string> sequences,std::vector< std::vector<std::vector<std::string> > > sequencesWithNames, std::string filename){
 	std::stringstream sstr;
@@ -128,6 +134,8 @@ void txtProc::writeAlignmentWithoutCodeToFile(std::vector<std::string> sequences
 		outputFile << sequence << std::endl;
 	}
 }
+
+
 //write to file (2d vector as a 1d vector)
 void txtProc::writeVector(std::vector<std::vector<double>> vec, std::string filename){
 	std::stringstream sstr;
@@ -190,7 +198,7 @@ void txtProc::process_conf_file(std::string filename, FeaturesProfile& feat_prof
   bool features = true;
   std::string tag_usr = "## USER DEFINED";
 	while(!safeGetline(conf_file, line).eof()){
-       if ( features && line.find(tag_usr) >= 0){
+       if (features && line.find(tag_usr) >= 0){
             features = false;
        }
        else if (line[0] != '#' && features){
@@ -236,6 +244,5 @@ std::vector<int> txtProc::unfold(std::string conf_string, std::vector<std::strin
 			}
 		}
 	}
-  vecUtil::printVector(out_vector);
 	return out_vector;
 }

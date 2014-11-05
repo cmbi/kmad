@@ -10,15 +10,15 @@
 #include <string>
 #include <vector>
 #include <ctime>
-//constructor for ENCODED SEQUENCES
-Sequences::Sequences(std::vector< std::vector< std::vector<std::string> > > s){
-	sequencesEncoded = s;
+
+
+Sequences::Sequences(std::vector<std::vector<std::vector<std::string> > >& s){
 	std::vector<std::string> additional_features;
-	for (unsigned int i = 0; i < sequencesEncoded.size(); i++){
-		sequence_names.push_back(sequencesEncoded[i][0]);
+	for (unsigned int i = 0; i < s.size(); i++){
+		sequence_names.push_back(s[i][0]);
 		std::vector<Residue> new_seq;
-		for (unsigned int j = 0; j < sequencesEncoded[i][1].size(); j++){
-			Residue newRes(sequencesEncoded[i][1][j], additional_features);
+		for (unsigned int j = 0; j < s[i][1].size(); j++){
+			Residue newRes(s[i][1][j], additional_features);
 			new_seq.push_back(newRes);
 		}
 		sequences_aa.push_back(new_seq);
@@ -26,6 +26,8 @@ Sequences::Sequences(std::vector< std::vector< std::vector<std::string> > > s){
 	seqNr = s.size(); 
 	firstSequenceSize = s[0][1].size();
 }
+
+
 //function performMSAfirstround - performs the first round of alignments, 
 //all vs query seq (first calculates profile based only on the query seq, then 
 //aligns all sequences and calculates identity of each sequence to the query seq.)
@@ -130,6 +132,8 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment,
 		prev_alignments = next_alignments; //number of performed alignments
 	}
 }
+
+
 //function calcIdentity, calculates identity with the query sequence (takes 
 //aligned sequence with the gaps cut out)
 double Sequences::calcIdentity(const std::vector<Residue>& alignedSequence){
@@ -141,9 +145,8 @@ double Sequences::calcIdentity(const std::vector<Residue>& alignedSequence){
 	}
 	return identicalResidues/double(firstSequenceSize);
 }
-std::vector< std::vector<std::vector<std::string> > > Sequences::getEncodedSequences(){
-	return sequencesEncoded;
-}
+
+
 //function removeGaps - takes pairwise alignment vector<string>, removes 
 //characters from the 2nd sequence that match gaps from 1st seq and returns 
 //vector<string> of 2 elements, where the 1st one is 2nd sequence with cut out 
@@ -247,4 +250,8 @@ void Sequences::add_usr_features(std::vector<std::tuple<std::string,std::string,
 			sequences_aa[sequence_no][j].add_feature(feat_name);
 		}
 	}
+}
+
+std::vector< std::vector< std::string>> Sequences::get_names(){
+  return sequence_names;
 }
