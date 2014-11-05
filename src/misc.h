@@ -9,6 +9,7 @@ namespace misc{
 	std::vector<Residue> pseudoResidueSequence(int, int);
 	void printEncodedSeq(const std::vector<std::string>&);
 	bool checkParameters(int, int, int, int, double, double, bool, double);
+  bool file_exists(const std::string*);
 }
 
 #endif /* MISC_H */

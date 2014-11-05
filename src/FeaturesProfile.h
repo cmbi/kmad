@@ -38,7 +38,7 @@ private:
 	double modifier(std::string);
 	int findFeaturesIndex(std::string);
 	std::string name(std::string,int);
-	int domainScore, phosphScore, motifScore, lcr_mod;
+	int domainScore, phosphScore, motifScore;
 	std::vector<std::string> motifs_ids;
 	std::vector<double> motifs_probs;
 	std::vector<std::tuple<std::string,int,double,double,double,double,std::vector<int>,std::vector<int> > > rules;

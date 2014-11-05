@@ -1,3 +1,4 @@
+#include "misc.h"
 #include "txtProc.h"
 #include "vecUtil.h"
 #include "Sequences.h"
@@ -11,6 +12,7 @@
 #include <tuple>
 #include <algorithm>
 #include <iterator>
+#include <stdexcept>
 namespace {
 	static const std::vector<char> acceptable_characters = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'};
 }
@@ -48,64 +50,69 @@ std::vector<std::string> txtProc::split(const std::string &s, char delim) {
 }
 //function processFASTA - reads fasta file with encoded sequence
 //writes sequences + seqNames to vector<vector<string>>; motifs' ids to vector<string> ids and motifs' probabilities to vector<double> probs
-std::vector< std::vector< std::vector<std::string> > > txtProc::processFASTA(std::string filename,
-                                                                             int codonLength, 
-                                                                             std::vector<std::string>* ids, 
-                                                                             std::vector<double>* probs){
+std::vector< std::vector< std::vector<std::string> > > txtProc::read_fasta(std::string filename,
+                                                                           int codonLength, 
+                                                                           std::vector<std::string>* ids, 
+                                                                           std::vector<double>* probs){
 	std::vector< std::vector< std::vector<std::string> > > resultSequences;
-	std::string fastaSymbol = ">";
-	std::ifstream fastafile (filename.c_str());
-	std::vector<std::string> newName;
-	std::vector<std::string> newSequence;
-	std::vector< std::vector<std::string> > newEntry;
-	bool sequences = true;
-	int seqNo = -1;
-	std::string newSeq = "";
-	std::string line;
-	while(!safeGetline(fastafile, line).eof()){
-			std::string firstChar = line.substr(0,1);
-			if (line != std::string("## PROBABILITIES")){
-				if (sequences && firstChar == fastaSymbol){
-					seqNo++;
-					resultSequences.push_back(newEntry);
-					newName.push_back(line);
-					resultSequences[seqNo].push_back(newName);
-					newName.clear();
-					resultSequences[seqNo].push_back(newSequence);
-				}
-				else if (sequences){
-					for (unsigned int i = 0; i < line.size();i++){
-						if (i % codonLength == 0){
-							std::string newResidue = "";
-							//j for goes through all codon postions of this residue
-							for (unsigned int j = i;j < i + codonLength; j++){
-									if (acceptableChar(line[j])){
-										newResidue += line[j];
-									}
-									else{
-										std::cout << "I found a weird character (" << line[j] << "), so you probbaly want to go through your files and double check them"  << std::endl;
-										std::exit(0);
-									}
-							}
-							resultSequences[seqNo][1].push_back(newResidue);
-						}
-					}
-				}
-				//else means we're already in the motifs probs section
-				else{
-					std::istringstream iss(line);
-					std::vector<std::string> motif{std::istream_iterator<std::string>{iss},std::istream_iterator<std::string>{}};
-					if (motif.size() == 2){
-						ids->push_back(motif[0]);
-						probs->push_back(convertStringToDouble(motif[1]));
-					}
-				}
-			}
-			else{
-				sequences = false;
-			}
-		}
-	fastafile.close();
+  if (!misc::file_exists(&filename)){
+    throw std::runtime_error("Input file doesn't exist");
+  }
+  else{
+	  std::string fastaSymbol = ">";
+	  std::ifstream fastafile (filename.c_str());
+	  std::vector<std::string> newName;
+	  std::vector<std::string> newSequence;
+	  std::vector< std::vector<std::string> > newEntry;
+	  bool sequences = true;
+	  int seqNo = -1;
+	  std::string newSeq = "";
+	  std::string line;
+	  while(!safeGetline(fastafile, line).eof()){
+	  		std::string firstChar = line.substr(0,1);
+	  		if (line != std::string("## PROBABILITIES")){
+	  			if (sequences && firstChar == fastaSymbol){
+	  				seqNo++;
+	  				resultSequences.push_back(newEntry);
+	  				newName.push_back(line);
+	  				resultSequences[seqNo].push_back(newName);
+	  				newName.clear();
+	  				resultSequences[seqNo].push_back(newSequence);
+	  			}
+	  			else if (sequences){
+	  				for (unsigned int i = 0; i < line.size();i++){
+	  					if (i % codonLength == 0){
+	  						std::string newResidue = "";
+	  						//j for goes through all codon postions of this residue
+	  						for (unsigned int j = i;j < i + codonLength; j++){
+	  								if (acceptableChar(line[j])){
+	  									newResidue += line[j];
+	  								}
+	  								else{
+	  									std::cout << "I found a weird character (" << line[j] << "), so you probbaly want to go through your files and double check them"  << std::endl;
+	  									std::exit(0);
+	  								}
+	  						}
+	  						resultSequences[seqNo][1].push_back(newResidue);
+	  					}
+	  				}
+	  			}
+	  			//else means we're already in the motifs probs section
+	  			else{
+	  				std::istringstream iss(line);
+	  				std::vector<std::string> motif{std::istream_iterator<std::string>{iss},std::istream_iterator<std::string>{}};
+	  				if (motif.size() == 2){
+	  					ids->push_back(motif[0]);
+	  					probs->push_back(convertStringToDouble(motif[1]));
+	  				}
+	  			}
+	  		}
+	  		else{
+	  			sequences = false;
+	  		}
+	  	}
+	  fastafile.close();
+  }
 	return resultSequences;
 }
 
@@ -152,14 +159,20 @@ void txtProc::writeVector(std::vector<std::vector<double>>& vec, std::string fil
 		}
 	}
 }
+
+
 std::string txtProc::charToString(char mychar){
 	return std::string(1,mychar);
 }
+
+
 std::string txtProc::charToString(char mychar1, char mychar2){
 	std::string newstring = std::string(1,mychar1);
 	newstring.push_back(mychar2);
 	return newstring;
 }
+
+
 std::istream& txtProc::safeGetline(std::istream& is, std::string& t)
 {
 	t.clear();
@@ -203,8 +216,11 @@ void txtProc::process_conf_file(std::string filename, FeaturesProfile& feat_prof
   bool features = true;
   std::string tag_usr = "## USER DEFINED";
 	while(!safeGetline(conf_file, line).eof()){
-       if (features && line.find(tag_usr) >= 0){
+       if (features){
+          std::size_t found = line.find(tag_usr);
+          if (found != std::string::npos){
             features = false;
+          }
        }
        else if (line[0] != '#' && features){
 			  line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());

@@ -19,7 +19,6 @@ FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr,
                                  std::vector<double> m_probs)
 :	domainScore(dom),
 	phosphScore(phosph),
-	lcr_mod(lcr),
 	motifScore(motif),
 	motifs_ids(m_ids),
 	motifs_probs(m_probs)

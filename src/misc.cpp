@@ -50,3 +50,10 @@ bool misc::checkParameters(int codonLength,int phosph,int domain,int motif,doubl
 
 	return alright;
 }
+
+
+bool misc::file_exists(const std::string* name){
+  const char *cstr = name->c_str();
+  std::ifstream infile(cstr);
+  return infile.good();
+}

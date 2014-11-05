@@ -1,8 +1,7 @@
 bin_PROGRAMS	=	kman test_kman
 
 shared_LDADD	=	$(BOOST_PROGRAM_OPTIONS_LIB) \
-								$(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
-								/usr/local/lib/libboost_program_options.a
+								$(BOOST_UNIT_TEST_FRAMEWORK_LIB) 
 
 
 kman_SOURCES	=	src/kman.cpp \

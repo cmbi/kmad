@@ -243,7 +243,6 @@ test_kman_SOURCES = $(kman_SOURCES)
 test_kman_LDADD = $(shared_LDADD)
 AM_CPPFLAGS = -std=c++11 \
 							-pedantic \
-							-O3 \
 							-Wall \
 							-Werror \
 							-Wno-reorder \

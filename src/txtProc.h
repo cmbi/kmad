@@ -14,10 +14,10 @@ namespace txtProc{
 	std::istream& safeGetline(std::istream&, std::string&);
 	std::vector<std::string> split(const std::string&, char);
 	bool acceptableChar(char);
-	std::vector< std::vector< std::vector<std::string> > >processFASTA(std::string,
-                                                                     int, 
-                                                                     std::vector<std::string>*, 
-                                                                     std::vector<double>*);
+	std::vector< std::vector< std::vector<std::string> > > read_fasta(std::string,
+                                                                    int, 
+                                                                    std::vector<std::string>*, 
+                                                                    std::vector<double>*);
 	void writeAlignmentToFile(std::vector<std::string>&, 
                             std::vector< std::vector<std::string> >&,
                             std::string);

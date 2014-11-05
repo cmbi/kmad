@@ -4,11 +4,15 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+
+
 //checks if the vector of strings vec contains the string x
 bool vecUtil::contains(std::vector<std::string>& vec, std::string x){
 	if (std::find(vec.begin(),vec.end(),x) != vec.end()) return true;
 	else return false;
 }
+
+
 void vecUtil::transposeVec(std::vector< std::vector<int> >& vec){
 	std::vector< std::vector<int> > newVec;
 	std::vector<int> newRow;
@@ -21,6 +25,8 @@ void vecUtil::transposeVec(std::vector< std::vector<int> >& vec){
 	}
 	vec = newVec;
 }
+
+
 void vecUtil::transposeVec(std::vector< std::vector<double> >& vec){
 	std::vector< std::vector<double> > newVec;
 	std::vector<double> newRow;
@@ -33,6 +39,8 @@ void vecUtil::transposeVec(std::vector< std::vector<double> >& vec){
 	}
 	vec = newVec;
 }
+
+
 void vecUtil::divideVectorByAScalar(std::vector<double>& vec, double scalar){
 	std::vector<double> result;
 	for (unsigned int i = 0; i < vec.size(); i++){
@@ -40,6 +48,8 @@ void vecUtil::divideVectorByAScalar(std::vector<double>& vec, double scalar){
 	}
 	vec = result;
 }
+
+
 void vecUtil::multiplyVectorByAScalar(std::vector<double>& vec, double scalar){
 	std::vector<double> result;
 	for (unsigned int i = 0; i < vec.size(); i++){
@@ -47,6 +57,8 @@ void vecUtil::multiplyVectorByAScalar(std::vector<double>& vec, double scalar){
 	}
 	vec = result;
 }
+
+
 //function addUp - takes 2D matrix, adds up elements from each column, returns a 1D vector
 std::vector<double> vecUtil::addUp(std::vector< std::vector<double> >& vec){
 	std::vector<double> newVec;
@@ -59,6 +71,8 @@ std::vector<double> vecUtil::addUp(std::vector< std::vector<double> >& vec){
 	}
 	return newVec;
 }
+
+
 //convertIntVectorToDoubleVector
 std::vector<double> vecUtil::convertIntVectorToDoubleVector(std::vector<int>& vec){
 	std::vector<double> result;
@@ -67,6 +81,8 @@ std::vector<double> vecUtil::convertIntVectorToDoubleVector(std::vector<int>& ve
 	}
 	return result;
 }
+
+
 //function printDoubleVector
 void vecUtil::printVector(const std::vector<int>& vec){
 	for (unsigned int i = 0; i < vec.size(); i++){
@@ -74,18 +90,24 @@ void vecUtil::printVector(const std::vector<int>& vec){
 	}
 	std::cout << "\n";
 }
+
+
 void vecUtil::printVector(const std::vector<double>& vec){
 	for (unsigned int i = 0; i < vec.size(); i++){
 		std::cout << vec[i] << " ";
 	}
 	std::cout << "\n";
 }
+
+
 void vecUtil::printVector(const std::vector<std::string>& vec){
 	for (unsigned int i = 0; i < vec.size(); i++){
 		std::cout << vec[i] << " ";
 	}
 	std::cout << "\n";
 }
+
+
 //takes a set of encoded sequences (=vector of vectors of strings) and returns a vector of nonencoded sequences
 std::vector<std::string> vecUtil::flattenWithoutFeatures(const std::vector<std::vector<std::string> >& vec){
 	std::vector<std::string> result;
@@ -98,6 +120,8 @@ std::vector<std::string> vecUtil::flattenWithoutFeatures(const std::vector<std::
 	}
 	return result;
 }
+
+
 //flatten a vector of residue vectors to a vector of strings
 std::vector<std::string> vecUtil::flatten(const std::vector<std::vector<Residue> > & vec){
 	std::vector<std::string> result;
@@ -110,6 +134,8 @@ std::vector<std::string> vecUtil::flatten(const std::vector<std::vector<Residue>
 	}
 	return result;
 }
+
+
 std::vector<std::string> vecUtil::flatten(const std::vector<std::vector<std::string> >& vec){
 	std::vector<std::string> result;
 	for (unsigned int i = 0; i < vec.size();i++){
@@ -121,6 +147,8 @@ std::vector<std::string> vecUtil::flatten(const std::vector<std::vector<std::str
 	}
 	return result;
 }
+
+
 //add an element to the beginning of the vector
 std::vector<Residue> vecUtil::push_front(std::vector<Residue>& vec, Residue newElement){
 	reverse(vec.begin(),vec.end());
@@ -128,6 +156,8 @@ std::vector<Residue> vecUtil::push_front(std::vector<Residue>& vec, Residue newE
 	reverse(vec.begin(),vec.end());
 	return vec;
 }
+
+
 //calc the sum of elements in the vector
 double vecUtil::sum(const std::vector<double>& vec){
 	double sum = 0;
@@ -136,6 +166,8 @@ double vecUtil::sum(const std::vector<double>& vec){
 	}
 	return sum;
 }
+
+
 //calc the average of the elements in the vector
 std::vector<double> vecUtil::average(std::vector< std::vector<double> >& vec){
 	std::vector<double> result;
@@ -148,18 +180,8 @@ std::vector<double> vecUtil::average(std::vector< std::vector<double> >& vec){
 	}
 	return result;
 }
-//calculate average for every column in vector 
-std::vector<double> vecUtil::average(std::vector< std::vector<int> >& vec){
-	std::vector<double> result;
-	for (unsigned int i = 0; i < vec[0].size(); i++){
-		double sum = 0;
-		for(unsigned int j = 0; j < vec.size();j++){
-			sum += vec[j][i];
-		}
-		result.push_back(sum/vec.size());
-	}
-	return result;
-}
+
+
 //calculate average for every column in vector 
 std::vector<double> vecUtil::average(const std::vector< std::vector<int> >& vec){
 	std::vector<double> result;
@@ -172,6 +194,8 @@ std::vector<double> vecUtil::average(const std::vector< std::vector<int> >& vec)
 	}
 	return result;
 }
+
+
 int vecUtil::countTrueValuesInVector(const std::vector<bool>& vec){
 	int result = 0;
 	for (unsigned int i = 0; i < vec.size(); i++){
@@ -181,12 +205,16 @@ int vecUtil::countTrueValuesInVector(const std::vector<bool>& vec){
 	}
 	return result;
 }
+
+
 void vecUtil::printSequence(std::vector<Residue>& vec){
 	for (unsigned int i = 0; i < vec.size(); i++){
 		std::cout << vec[i].getAA();
 	}
 	std::cout << std::endl;
 }
+
+
 //returns index of the first occurence of val in vec
 int vecUtil::findIndex(std::string val, std::vector<std::string>& vec){
 	int res = -1;
