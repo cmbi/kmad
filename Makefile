@@ -80,15 +80,17 @@ am_kman_OBJECTS = src/kman.$(OBJEXT) src/FeaturesProfile.$(OBJEXT) \
 	src/txtProc.$(OBJEXT) src/vecUtil.$(OBJEXT) src/misc.$(OBJEXT) \
 	src/substitutionMatrix.$(OBJEXT) src/findVal.$(OBJEXT)
 kman_OBJECTS = $(am_kman_OBJECTS)
-kman_DEPENDENCIES = $(shared_LDADD)
-am__objects_1 = src/kman.$(OBJEXT) src/FeaturesProfile.$(OBJEXT) \
-	src/Profile.$(OBJEXT) src/Residue.$(OBJEXT) \
-	src/ScoringMatrix.$(OBJEXT) src/Sequences.$(OBJEXT) \
-	src/txtProc.$(OBJEXT) src/vecUtil.$(OBJEXT) src/misc.$(OBJEXT) \
+am__DEPENDENCIES_1 =
+am__DEPENDENCIES_2 = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+kman_DEPENDENCIES = $(am__DEPENDENCIES_2)
+am_test_kman_OBJECTS = tests/test_vecutil.$(OBJEXT) \
+	src/FeaturesProfile.$(OBJEXT) src/Profile.$(OBJEXT) \
+	src/Residue.$(OBJEXT) src/ScoringMatrix.$(OBJEXT) \
+	src/Sequences.$(OBJEXT) src/txtProc.$(OBJEXT) \
+	src/vecUtil.$(OBJEXT) src/misc.$(OBJEXT) \
 	src/substitutionMatrix.$(OBJEXT) src/findVal.$(OBJEXT)
-am_test_kman_OBJECTS = $(am__objects_1)
 test_kman_OBJECTS = $(am_test_kman_OBJECTS)
-test_kman_DEPENDENCIES = $(shared_LDADD)
+test_kman_DEPENDENCIES = $(am__DEPENDENCIES_2)
 DEFAULT_INCLUDES = -I.
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__depfiles_maybe = depfiles
@@ -128,10 +130,10 @@ AUTOCONF = ${SHELL} /home/joanna/master/kman/config/missing --run autoconf
 AUTOHEADER = ${SHELL} /home/joanna/master/kman/config/missing --run autoheader
 AUTOMAKE = ${SHELL} /home/joanna/master/kman/config/missing --run automake-1.11
 AWK = gawk
-BOOST_CPPFLAGS = -I/usr/include
-BOOST_LDFLAGS = -L/usr/lib64
-BOOST_PROGRAM_OPTIONS_LIB = -lboost_program_options-mt
-BOOST_UNIT_TEST_FRAMEWORK_LIB = -lboost_unit_test_framework-mt
+BOOST_CPPFLAGS = -I/usr/local/include
+BOOST_LDFLAGS = -L/usr/local/lib
+BOOST_PROGRAM_OPTIONS_LIB = -lboost_program_options
+BOOST_UNIT_TEST_FRAMEWORK_LIB = -lboost_unit_test_framework
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
@@ -225,7 +227,9 @@ target_alias =
 top_build_prefix = 
 top_builddir = .
 top_srcdir = .
-shared_LDADD = /usr/local/lib/libboost_program_options.a
+shared_LDADD = $(BOOST_PROGRAM_OPTIONS_LIB) \
+								$(BOOST_UNIT_TEST_FRAMEWORK_LIB) 
+
 kman_SOURCES = src/kman.cpp \
 								src/FeaturesProfile.cpp \
 								src/Profile.cpp \
@@ -239,13 +243,25 @@ kman_SOURCES = src/kman.cpp \
 								src/findVal.cpp
 
 kman_LDADD = $(shared_LDADD)
-test_kman_SOURCES = $(kman_SOURCES)
+test_kman_SOURCES = tests/test_vecutil.cpp \
+										src/FeaturesProfile.cpp \
+										src/Profile.cpp \
+										src/Residue.cpp \
+										src/ScoringMatrix.cpp \
+										src/Sequences.cpp \
+										src/txtProc.cpp \
+										src/vecUtil.cpp \
+										src/misc.cpp \
+										src/substitutionMatrix.cpp \
+										src/findVal.cpp
+
 test_kman_LDADD = $(shared_LDADD)
 AM_CPPFLAGS = -std=c++11 \
 							-pedantic \
 							-Wall \
 							-Werror \
 							-Wno-reorder \
+							$(BOOST_CPPFLAGS) \
 							-Isrc/
 
 all: config.h
@@ -371,6 +387,14 @@ src/findVal.$(OBJEXT): src/$(am__dirstamp) \
 kman$(EXEEXT): $(kman_OBJECTS) $(kman_DEPENDENCIES) $(EXTRA_kman_DEPENDENCIES) 
 	@rm -f kman$(EXEEXT)
 	$(CXXLINK) $(kman_OBJECTS) $(kman_LDADD) $(LIBS)
+tests/$(am__dirstamp):
+	@$(MKDIR_P) tests
+	@: > tests/$(am__dirstamp)
+tests/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) tests/$(DEPDIR)
+	@: > tests/$(DEPDIR)/$(am__dirstamp)
+tests/test_vecutil.$(OBJEXT): tests/$(am__dirstamp) \
+	tests/$(DEPDIR)/$(am__dirstamp)
 test_kman$(EXEEXT): $(test_kman_OBJECTS) $(test_kman_DEPENDENCIES) $(EXTRA_test_kman_DEPENDENCIES) 
 	@rm -f test_kman$(EXEEXT)
 	$(CXXLINK) $(test_kman_OBJECTS) $(test_kman_LDADD) $(LIBS)
@@ -388,6 +412,7 @@ mostlyclean-compile:
 	-rm -f src/substitutionMatrix.$(OBJEXT)
 	-rm -f src/txtProc.$(OBJEXT)
 	-rm -f src/vecUtil.$(OBJEXT)
+	-rm -f tests/test_vecutil.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -403,6 +428,7 @@ include src/$(DEPDIR)/misc.Po
 include src/$(DEPDIR)/substitutionMatrix.Po
 include src/$(DEPDIR)/txtProc.Po
 include src/$(DEPDIR)/vecUtil.Po
+include tests/$(DEPDIR)/test_vecutil.Po
 
 .cpp.o:
 	depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -669,6 +695,8 @@ distclean-generic:
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f src/$(DEPDIR)/$(am__dirstamp)
 	-rm -f src/$(am__dirstamp)
+	-rm -f tests/$(DEPDIR)/$(am__dirstamp)
+	-rm -f tests/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -679,7 +707,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf src/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) tests/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-tags
@@ -727,7 +755,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf src/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) tests/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
