@@ -53,3 +53,4 @@ AC_CHECK_FUNCS([dup2 floor pow socket sqrt strchr strerror])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
+

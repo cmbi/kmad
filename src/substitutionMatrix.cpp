@@ -100,8 +100,8 @@ void substitutionMatrix::printSbstMatrix(){
 char substitutionMatrix::getLetter(int lNr){
 	return alphabet[lNr];
 }
-std::vector<int> substitutionMatrix::getColumn(int columnNo){
-	return simScores[columnNo];
+void substitutionMatrix::getColumn(unsigned int& columnNo, std::vector<int>& column_int){
+	column_int = simScores[columnNo];
 }
 //function findAminoAcidsNo - finds index of the given char aa amino acid
 int substitutionMatrix::findAminoAcidsNo(char aa){

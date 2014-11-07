@@ -11,7 +11,7 @@ namespace substitutionMatrix{
 	char getLetter(int);
 	int getElement(char, char);
 	int getElement(int, int);
-	std::vector<int> getColumn(int);
+	void getColumn(unsigned int&, std::vector<int>&);
 	int findAminoAcidsNo(char);
 }
 

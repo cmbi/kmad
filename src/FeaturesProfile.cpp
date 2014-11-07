@@ -12,6 +12,8 @@ namespace {
 	std::vector<std::string> listOfFeatures = {"ptm_phosph0","ptm_phosph1","ptm_phosph2","ptm_phosph3","ptm_phosphP","ptm_acet0", "ptm_acet1","ptm_acet2","ptm_acet3","ptm_Nglyc0","ptm_Nglyc1","ptm_Nglyc2","ptm_Nglyc3","ptm_amid0","ptm_amid1","ptm_amid2","ptm_amid3","ptm_hydroxy0","ptm_hydroxy1","ptm_hydroxy2","ptm_hydroxy3","ptm_methyl0","ptm_methyl1","ptm_methyl2","ptm_methyl3","ptm_Oglyc0","ptm_Oglyc1","ptm_Oglyc2","ptm_Oglyc3","domain_0", "motif_0", "lcr"};
 	std::vector<int> domain_indexes = {29};
 	std::vector<int> motif_indexes = {30};
+  std::string nothing = "AA";
+	std::string domain = "domain";
 }
 //constructor, creates empty profile, takes domain and phosphorylation scores(dom, phosph) and motifs' ids and probabilities(m_ids, m_probs), lcr - low complexity regions gap penlat modifier
 FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr, 
@@ -81,7 +83,7 @@ void FeaturesProfile::createProfile(const std::vector< std::vector<Residue> >& a
 	vecUtil::transposeVec(prfMatrix);
 }
 //get motif's probability (by its id)
-double FeaturesProfile::motifs_prob(std::string m_id){
+double FeaturesProfile::motifs_prob(std::string& m_id){
 	double prob = 0;
 	std::string id_code = txtProc::split(m_id, '_')[1];
 	for (unsigned int i = 0; i < motifs_ids.size(); i++){
@@ -93,10 +95,9 @@ double FeaturesProfile::motifs_prob(std::string m_id){
 	return prob;
 }
 //function getScore - returns score for the entire codon on nth position
-void FeaturesProfile::getScore(int position, std::vector<std::string>& features, 
+void FeaturesProfile::getScore(unsigned int position, std::vector<std::string>& features, 
                                double& add_score, double& multiply_score, 
-                               int sequence_no){
-	std::string nothing = "AA";
+                               int& sequence_no){
 	add_score = 0;
 	multiply_score = 1;
 	if (features[0] != nothing) score_PTMs(position,features[0], add_score, multiply_score);
@@ -112,7 +113,7 @@ double FeaturesProfile::getGapMod(int position, std::vector<std::string> feature
 	return result;
 }
 //returns score for a feature on nth position (by feature's name)
-void FeaturesProfile::score_motifs(int position, std::string featName, double& add_score, double& multiply_score){
+void FeaturesProfile::score_motifs(unsigned int& position, std::string& featName, double& add_score, double& multiply_score){
 	int featuresIndex = findFeaturesIndex(featName);
 	double result;
 	if (featuresIndex == -1) result = 0;
@@ -120,9 +121,8 @@ void FeaturesProfile::score_motifs(int position, std::string featName, double& a
 	add_score += result;
 }
 //function findFeaturesIndex - takes features' name, e.g. "phosphN"
-int FeaturesProfile::findFeaturesIndex(std::string featName){
+int FeaturesProfile::findFeaturesIndex(std::string& featName){
 	int featuresIndex = -1;
-	std::string nothing = "AA";
 	if (featName != nothing){
 		for (unsigned int i = 0; i < listOfFeatures.size();i++){
 			if (featName == listOfFeatures[i]){
@@ -134,7 +134,7 @@ int FeaturesProfile::findFeaturesIndex(std::string featName){
 	return featuresIndex;
 }
 //function name - converts codon to name, e.g. AAAN to phosphN
-std::string FeaturesProfile::name(std::string codon, int featureType){
+std::string FeaturesProfile::name(std::string& codon, int& featureType){
 	std::string name;
 	if (featureType == 4){
 		switch(codon[featureType]){
@@ -216,7 +216,6 @@ std::string FeaturesProfile::name(std::string codon, int featureType){
 }
 //function expandListOfFeatures - expand it by domains and motifs found in the alignment
 void FeaturesProfile::expandListOfFeatures(const std::vector< std::vector<Residue> >& sequences){
-	std::string nothing = "AA";  // code for no feature
 	for(unsigned int i = 0; i < sequences.size();i++){	
 		for (unsigned int j = 0; j < sequences[i].size(); j++){
 			std::vector<std::string> features = sequences[i][j].getFeatures();
@@ -236,9 +235,8 @@ void FeaturesProfile::expandListOfFeatures(const std::vector< std::vector<Residu
 	}
 }
 //get score for domain "dom_name" on certain position
-void FeaturesProfile::score_domains(int position, std::string dom_name, double& add_score, double& multiply_score){
+void FeaturesProfile::score_domains(unsigned int& position, std::string& dom_name, double& add_score, double& multiply_score){
 	double result  = 0;
-	std::string domain = "domain";
 	for (unsigned int i = 0; i < domain_indexes.size(); i++){
 		int dom_index = domain_indexes[i];
 		if (listOfFeatures[dom_index] == dom_name){
@@ -250,12 +248,16 @@ void FeaturesProfile::score_domains(int position, std::string dom_name, double& 
 	}
 	add_score += result;
 }
+
+
 // get a score for a certain ptm encoded aligned to the 'position' position
-void FeaturesProfile::score_PTMs(int position, std::string ptm_name, double& add_score, double& multiply_score){
+void FeaturesProfile::score_PTMs(unsigned int& position, std::string& ptm_name, double& add_score, double& multiply_score){
 	double result  = 0;
 	std::string ptm_type = ptm_name;
-	ptm_type.pop_back();	//pop back last character to get just the ptm type
-	char ptm_level = ptm_name.back();	// level of annotation - last character of feature's name
+  //pop back last character to get just the ptm type
+	ptm_type.pop_back();	
+  // level of annotation - last character of feature's name
+	char ptm_level = ptm_name.back();	
 	double ptm_score;
 	// first set ptm_score based on annotation level of the query ptm
 	if (ptm_level == '0'){ ptm_score = 1.0;}
@@ -267,11 +269,14 @@ void FeaturesProfile::score_PTMs(int position, std::string ptm_name, double& add
 		std::cout << "something's wrong with annotation level on position "<< position << " ptmname: " << ptm_name<< std::endl;
 		std::exit(0);
 	}
-	// now go through list of features to find in which rows in profile are the features that we're gonna score for
+	// now go through list of features to find in which rows in profile 
+  // are the features that we're gonna score for
 	for (unsigned int i = 0; i < listOfFeatures.size(); i++){
 		std::string i_name = listOfFeatures[i];	
 		std::string i_type = i_name;
-		i_type.pop_back();  			// popping back last character, to get just the ptm type (without its level of annotation)
+    // popping back last character, to get just the ptm type 
+    // (without its level of annotation)
+		i_type.pop_back();  			
 		if (i_type == ptm_type){
 			char i_level = i_name.back();
 			if (i_level == '0'){ result += prfMatrix[i][position];}
@@ -281,18 +286,25 @@ void FeaturesProfile::score_PTMs(int position, std::string ptm_name, double& add
 			else if (i_level == 'P') result += prfMatrix[i][position] * 0.3;
 		}
 	}
-	
 	result = result * ptm_score;
 	add_score += result;
 }
-void FeaturesProfile::score_USR_features(int sequence_no, int position, std::string feat_name, double& add_score, double& multiply_score){
+
+
+void FeaturesProfile::score_USR_features(int& sequence_no, 
+                                         unsigned int& position, 
+                                         std::string& feat_name, 
+                                         double& add_score, 
+                                         double& multiply_score){
 	//first find tuple(s) with rules for this feature
 	for (unsigned int i = 0; i < rules.size(); i++){
 		if (std::get<0>(rules[i]) == feat_name && sequence_no == std::get<1>(rules[i])){
 			double add_tmp = std::get<2>(rules[i]);
 			double multiply_tmp = std::get<3>(rules[i]);
-			std::vector<int> incr_features = std::get<6>(rules[i]);  //positions of increasing features
-			for (unsigned int j = 0; j < incr_features.size(); j++){ //go through features that increase the score
+      //positions of increasing features
+			std::vector<int> incr_features = std::get<6>(rules[i]);  
+      //go through features that increase the score
+			for (unsigned int j = 0; j < incr_features.size(); j++){ 
 				double prf_score = prfMatrix[incr_features[j]][position];
 				if (prf_score != 0){
 					add_score += add_tmp*prf_score;
@@ -303,7 +315,8 @@ void FeaturesProfile::score_USR_features(int sequence_no, int position, std::str
 			add_tmp = std::get<4>(rules[i]);
 			multiply_tmp = std::get<5>(rules[i]);
 			std::vector<int> decr_features = std::get<7>(rules[i]);
-			for (unsigned int j = 0; j < decr_features.size(); j++){ //go through features that increase the score
+      //go through features that increase the score
+			for (unsigned int j = 0; j < decr_features.size(); j++){ 
 				double prf_score = prfMatrix[decr_features[j]][position];
 				if (prf_score != 0){
 					add_score -= add_tmp*prf_score;
@@ -329,7 +342,7 @@ void FeaturesProfile::setMatrix(std::vector<std::vector<double> > newMatrix){
 	prfMatrix = newMatrix;
 }
 //returns score modifier for a given feature
-double FeaturesProfile::modifier(std::string featName){
+double FeaturesProfile::modifier(std::string& featName){
 	std::string feat_code = txtProc::split(featName,'_')[0];
 	double modifier = 1;
 	if (feat_code == "ptm"){
@@ -374,7 +387,8 @@ void FeaturesProfile::add_USR_features(std::vector<std::tuple<std::string,
                                                               std::string,
                                                               std::string> >& new_rules){
 	for (unsigned int i = 0; i < new_rules.size(); i++){
-		std::string feature_i = std::string("USR_")+ std::get<0>(new_rules[i]) + std::string("_") + std::get<1>(new_rules[i]);
+		std::string feature_i = std::string("USR_") + std::get<0>(new_rules[i]) \
+                            + std::string("_") + std::get<1>(new_rules[i]);
 		if (!vecUtil::contains(listOfFeatures,feature_i)){
 			listOfFeatures.push_back(feature_i);
 		}

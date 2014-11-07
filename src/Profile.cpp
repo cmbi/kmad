@@ -26,7 +26,8 @@ void Profile::buildPseudoProfile(std::vector< std::vector<Residue> >& alignment,
 		std::vector< std::vector<double> > columnsToAdd;
 		for(unsigned int j = 0; j < prfMatrix.size(); j++){
 			if (prfMatrix[j][i] != 0){
-        std::vector<int> column_int = substitutionMatrix::getColumn(j);
+        std::vector<int> column_int; 
+        substitutionMatrix::getColumn(j, column_int);
 				std::vector<double> columnForJ = vecUtil::convertIntVectorToDoubleVector(column_int);
 				vecUtil::multiplyVectorByAScalar(columnForJ, prfMatrix[j][i]);
 				columnsToAdd.push_back(columnForJ);

@@ -17,7 +17,7 @@ public:
 	void setMatrix(std::vector<std::vector<double> >);
 	double getElement(int, char);
 	double getElement(int, int);
-	void printProfile(int,int);
+	void printProfile(int, int);
 	void printProfile();
 private:
 	//functions

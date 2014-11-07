@@ -13,30 +13,27 @@
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>
+
+
 namespace {
 	static const std::vector<char> acceptable_characters = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'};
 }
-int txtProc::convertStringToInt(std::string s){
+
+
+int txtProc::convertStringToInt(std::string& s){
 	int convertedInt;
 	std::istringstream iss(s);
 	iss >> convertedInt;
 	return convertedInt;
 }
-double txtProc::convertStringToDouble(std::string s){
+
+
+double txtProc::convertStringToDouble(std::string& s){
 	double convertedDouble = atof(s.c_str());;
 	return convertedDouble;
 }
-/*
-//alternative version of split
-std::vector<std::string> &txtProc::split(const std::string &s, char delim, std::vector<std::string> &elems) {
-    std::stringstream ss(s);
-    std::string item;
-    while (std::getline(ss, item, delim)) {
-        elems.push_back(item);
-    }
-    return elems;
-}
-*/
+
+
 //splits a string by the delimiter, returns a vector of strings
 std::vector<std::string> txtProc::split(const std::string &s, char delim) {
     std::vector<std::string> elems;
@@ -48,6 +45,8 @@ std::vector<std::string> txtProc::split(const std::string &s, char delim) {
     }
     return elems;
 }
+
+
 //function processFASTA - reads fasta file with encoded sequence
 //writes sequences + seqNames to vector<vector<string>>; motifs' ids to vector<string> ids and motifs' probabilities to vector<double> probs
 std::vector< std::vector< std::vector<std::string> > > txtProc::read_fasta(std::string filename,
@@ -197,6 +196,8 @@ std::istream& txtProc::safeGetline(std::istream& is, std::string& t)
 		}
 	}
 }
+
+
 //check if the character is supported
 bool txtProc::acceptableChar(char my_char){
 	bool result = false;
@@ -208,6 +209,8 @@ bool txtProc::acceptableChar(char my_char){
 	}
 	return result;
 }
+
+
 void txtProc::process_conf_file(std::string filename, FeaturesProfile& feat_profile, Sequences& sequences_aa){
 	std::ifstream conf_file(filename.c_str());
 	std::string line;
@@ -239,13 +242,16 @@ void txtProc::process_conf_file(std::string filename, FeaturesProfile& feat_prof
 	sequences_aa.add_usr_features(usr_feature_rules);
 	feat_profile.setRules(usr_feature_rules);
 }
+
+
 // converts the string form the conf file to vector of positions of features to be scored
 std::vector<int> txtProc::unfold(std::string conf_string, std::vector<std::string>& listOfFeatures){
 	std::vector<std::string> tmp_vector = split(conf_string,',');
 	std::vector<int> out_vector;
 	for (unsigned int i = 0; i < tmp_vector.size(); i++){
 		if (split(tmp_vector[i],'_').size() > 1){						// this is a single feature entry, e.g. 'PF_A'
-			out_vector.push_back(vecUtil::findIndex(std::string("USR_")+tmp_vector[i], listOfFeatures));
+      std::string feat_name = std::string("USR_")+tmp_vector[i];
+			out_vector.push_back(vecUtil::findIndex(feat_name, listOfFeatures));
 		}
 		else if (split(tmp_vector[i],'[').size() == 1){						// this is an entry with only the tag specified (without any exceptions)
 			for (unsigned int j = 0; j < listOfFeatures.size(); j++){

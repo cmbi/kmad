@@ -2,6 +2,7 @@
 #include "Residue.h"
 #include <iostream>
 #include <fstream>
+#include <istream>
 #include <sstream>
 #include <vector>
 //creates a polyA sequence of length seqLength, where each resdue is coded by a codon of length codon_length
@@ -20,6 +21,8 @@ Residue misc::gapRes(int codon_length){
 	Residue res(single_codon, additional_features);
 	return res;
 }
+
+
 //creates a polyA sequence of length seqLength, where each resdue is coded by a codon of length codon_length
 std::vector<Residue> misc::pseudoResidueSequence(int seqLength, int codon_length){
 	std::string single_codon(codon_length, 'A');
@@ -28,10 +31,14 @@ std::vector<Residue> misc::pseudoResidueSequence(int seqLength, int codon_length
 	std::vector<Residue> result(seqLength, single_res);
 	return result;
 }
+
+
 void misc::printEncodedSeq(const std::vector<std::string>& sequence){
 	for (unsigned int i = 0; i < sequence.size();i++) std::cout << sequence[i][0];	
 	std::cout << "\n";
 }
+
+
 //look for mistakes in the given command line arguments
 bool misc::checkParameters(int codonLength,int phosph,int domain,int motif,double gep,double gop,bool weightsOn, double endPenalty){
 	bool alright = true;

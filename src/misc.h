@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include <fstream>
+
 class Residue;
 namespace misc{
 	Residue gapRes(int);

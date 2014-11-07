@@ -7,8 +7,8 @@
 class FeaturesProfile;
 class Sequences;
 namespace txtProc{
-	int convertStringToInt(std::string);
-	double convertStringToDouble(std::string);
+	int convertStringToInt(std::string&);
+	double convertStringToDouble(std::string&);
 	std::string charToString(char);
 	std::string charToString(char,char);
 	std::istream& safeGetline(std::istream&, std::string&);

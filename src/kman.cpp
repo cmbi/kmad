@@ -55,7 +55,6 @@ int main(int argc, char *argv[]){
         std::cout << "Exception: " << e.what() << "\n";
         return -1;
       }
-      std::cout << "dind't catch it, sorry!" << std::endl;
   		Sequences rawSequences(fasta);
   		Profile prf;
   		FeaturesProfile fprf(domainScore,phosphScore,motifScore,lcr_mod,motifs_ids,motifs_probs);

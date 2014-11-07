@@ -9,7 +9,7 @@ class FeaturesProfile{
 public:
 	FeaturesProfile(int, int, int, int, std::vector<std::string>, std::vector<double>);
 	//getters
-	void getScore(int, std::vector<std::string>&, double&, double&, int);
+	void getScore(unsigned int, std::vector<std::string>&, double&, double&, int&);
 	//double getScore(int,std::string);
 	double getGapMod(int, std::vector<std::string>);
 	std::vector<std::vector<double> > getMatrix();
@@ -30,14 +30,15 @@ public:
                                                 std::string> >&);
 	void printFeatures();
 private:
-	double motifs_prob(std::string);
-	void score_motifs(int, std::string, double&, double&);
-	void score_domains(int, std::string, double&, double&);
-	void score_PTMs(int, std::string, double&, double&);
-	void score_USR_features(int, int, std::string, double&, double&);
-	double modifier(std::string);
-	int findFeaturesIndex(std::string);
-	std::string name(std::string,int);
+	double motifs_prob(std::string&);
+	void score_motifs(unsigned int&, std::string&, double&, double&);
+	void score_domains(unsigned int&, std::string&, double&, double&);
+	void score_PTMs(unsigned int&, std::string&, double&, double&);
+	void score_USR_features(int&, unsigned int&, std::string&, 
+                          double&, double&);
+	double modifier(std::string&);
+	int findFeaturesIndex(std::string&);
+	std::string name(std::string&,int&);
 	int domainScore, phosphScore, motifScore;
 	std::vector<std::string> motifs_ids;
 	std::vector<double> motifs_probs;

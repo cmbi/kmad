@@ -7,7 +7,7 @@
 
 
 //checks if the vector of strings vec contains the string x
-bool vecUtil::contains(std::vector<std::string>& vec, std::string x){
+bool vecUtil::contains(std::vector<std::string>& vec, std::string& x){
 	if (std::find(vec.begin(),vec.end(),x) != vec.end()) return true;
 	else return false;
 }
@@ -41,7 +41,7 @@ void vecUtil::transposeVec(std::vector< std::vector<double> >& vec){
 }
 
 
-void vecUtil::divideVectorByAScalar(std::vector<double>& vec, double scalar){
+void vecUtil::divideVectorByAScalar(std::vector<double>& vec, int scalar){
 	std::vector<double> result;
 	for (unsigned int i = 0; i < vec.size(); i++){
 		result.push_back(vec[i]/scalar);	
@@ -50,7 +50,25 @@ void vecUtil::divideVectorByAScalar(std::vector<double>& vec, double scalar){
 }
 
 
-void vecUtil::multiplyVectorByAScalar(std::vector<double>& vec, double scalar){
+void vecUtil::divideVectorByAScalar(std::vector<double>& vec, double& scalar){
+	std::vector<double> result;
+	for (unsigned int i = 0; i < vec.size(); i++){
+		result.push_back(vec[i]/scalar);	
+	}
+	vec = result;
+}
+
+
+void vecUtil::multiplyVectorByAScalar(std::vector<double>& vec, int scalar){
+	std::vector<double> result;
+	for (unsigned int i = 0; i < vec.size(); i++){
+		result.push_back(vec[i]*scalar);
+	}
+	vec = result;
+}
+
+
+void vecUtil::multiplyVectorByAScalar(std::vector<double>& vec, double& scalar){
 	std::vector<double> result;
 	for (unsigned int i = 0; i < vec.size(); i++){
 		result.push_back(vec[i]*scalar);
@@ -216,7 +234,7 @@ void vecUtil::printSequence(std::vector<Residue>& vec){
 
 
 //returns index of the first occurence of val in vec
-int vecUtil::findIndex(std::string val, std::vector<std::string>& vec){
+int vecUtil::findIndex(std::string& val, std::vector<std::string>& vec){
 	int res = -1;
 	for (unsigned int i = 0; i < vec.size(); i++){
 		if (vec[i] == val){
