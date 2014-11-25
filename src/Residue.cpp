@@ -137,3 +137,13 @@ std::vector<std::string> Residue::getFeatures() {
 void Residue::add_feature(std::string new_feat){
 	features.push_back(new_feat);
 }
+
+
+std::vector<int> Residue::getFeatIndexes(){
+  return feature_indexes;
+}
+
+
+void Residue::setFeatIndexes(std::vector<int> vec){
+  feature_indexes = vec;
+}

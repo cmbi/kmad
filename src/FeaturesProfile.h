@@ -10,6 +10,7 @@ public:
 	FeaturesProfile(int, int, int, int, std::vector<std::string>, std::vector<double>);
 	//getters
 	void getScore(unsigned int, std::vector<std::string>&, double&);
+	void getScore(unsigned int, std::vector<int>&, double&);
 	//double getScore(int,std::string);
 	double getGapMod(int, std::vector<std::string>);
 	std::vector<std::vector<double> > getMatrix();
@@ -33,6 +34,7 @@ public:
                                                 double, double, std::string,
                                                 std::string> >&);
 	void printFeatures();
+	int findFeaturesIndex(std::string&);
 private:
 	double motifs_prob(std::string&);
 	double score_motifs(unsigned int&, std::string&);
@@ -40,7 +42,6 @@ private:
 	double score_PTMs(unsigned int&, std::string&);
 	double score_USR_features(unsigned int&, std::string&); 
 	double modifier(std::string&);
-	int findFeaturesIndex(std::string&);
 	std::string name(std::string&,int&);
 	int domainScore, phosphScore, motifScore;
 	std::vector<std::string> motifs_ids;

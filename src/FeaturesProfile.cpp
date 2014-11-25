@@ -132,15 +132,12 @@ void FeaturesProfile::getScore(unsigned int position, std::vector<std::string>& 
        add_score += prfMatrix[feat_index][position];
      }
   }
-  /*
-	add_score = 0;
-	if (features[0] != nothing) score_PTMs(position,features[0], add_score);
-	if (features[1] != nothing) score_domains(position,features[1], add_score);
-	if (features[2] != nothing) score_motifs(position,features[2], add_score); 
-	for (unsigned int i = 3; i < features.size(); i++){
-		score_USR_features(sequence_no, position, features[i], add_score);	
-	}
-  */
+}
+void FeaturesProfile::getScore(unsigned int position, std::vector<int>& features, 
+                               double& add_score){
+  for (unsigned int i = 0; i < features.size(); i++){
+       add_score += prfMatrix[features[i]][position];
+  }
 }
 // return gap modifier, based on the low complexity regions on nth position. TO BE IMPLEMENTED
 double FeaturesProfile::getGapMod(int position, std::vector<std::string> features){

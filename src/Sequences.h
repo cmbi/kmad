@@ -36,6 +36,7 @@ private:
                      double, double, double, int, std::string, int, int);
 	double calcIdentity(const std::vector<Residue>&);
 	int countAlignments(double, std::vector<double>&);
+  void add_feature_indexes(FeaturesProfile&);
 	//variables 
 	int seqNr;
 	int firstSequenceSize;

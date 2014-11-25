@@ -58,6 +58,7 @@ std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile,
   //create features profile based on the 1st seq
 	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,
                                       identities, weightsModeOn, codon_length); 	
+  add_feature_indexes(outputFeaturesProfile);
   //pairwise alignment without lowercase characters
 	std::vector<Residue> alNoLower; 
   //pairwise alignment with lowercase characters where chars were removed
@@ -259,4 +260,20 @@ void Sequences::add_usr_features(std::vector<std::tuple<std::string,std::string,
 
 std::vector< std::vector< std::string>> Sequences::get_names(){
   return sequence_names;
+}
+
+void Sequences::add_feature_indexes(FeaturesProfile& fprf){
+  std::string nothing = "AA";
+  for (unsigned int i = 0; i < sequences_aa.size(); i++){
+    for (unsigned int j = 0; j < sequences_aa[i].size(); j ++){
+        std::vector<std::string> features = sequences_aa[i][j].getFeatures();
+        std::vector<int> indexes;
+        for (unsigned int k = 0; k < features.size(); k++){
+          if (features[k] != nothing){
+            indexes.push_back(fprf.findFeaturesIndex(features[k]));
+          }
+        }
+        sequences_aa[i][j].setFeatIndexes(indexes);
+    }
+  }
 }
