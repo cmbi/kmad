@@ -63,6 +63,7 @@ int main(int argc, char *argv[]){
   		}
   		//first round of the alignment - all vs 1st
   		std::vector<std::string> multipleAlignment(rawSequences.performMSAfirstround(prf,fprf,gapPen,endPenalty,gapExt,verboseMode,weightsModeOn,codonLength,identities));
+      fprf.printProfile();
       std::vector< std::vector< std::string>> seq_names = rawSequences.get_names();
   		std::vector<std::string> alignment2ndRound;
   		int prev_alignments = 0;

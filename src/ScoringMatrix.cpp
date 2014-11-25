@@ -62,11 +62,10 @@ void ScoringMatrix::calculateScores(std::vector<Residue> s2, Profile& prf,
 		for (unsigned int j = 1; j < matrixV[i].size(); j++){
 			///V
 			double prfScore = prf.getElement(i-1, s2[j].getAA());
-			double add_score;
-			double multiply_score;
+			double add_score = 0;
       std::vector<std::string> features = s2[j].getFeatures();
-			featPrf.getScore(i-1, features, add_score, multiply_score, sequence_no);
-			double final_score = prfScore*multiply_score + add_score;
+			featPrf.getScore(i-1, features, add_score);
+			double final_score = prfScore + add_score;
 			score1 = matrixV[i-1][j-1];
 			score2 = matrixG[i-1][j-1];
 			score3 = matrixH[i-1][j-1];
@@ -163,11 +162,10 @@ void ScoringMatrix::nwAlignment(std::vector<std::vector<Residue> > *result,
 			newChar1 = s1[i];
 			newChar2 = s2[j];
 			double prfScore = prf.getElement(i-1,s2[j].getAA());
-			double add_score;
-			double multiply_score;
+			double add_score = 0;
       std::vector<std::string> features = s2[j].getFeatures();
-			featPrf.getScore(i-1, features, add_score, multiply_score, sequence_no);
-			double final_score = prfScore*multiply_score + add_score;
+			featPrf.getScore(i-1, features, add_score);
+			double final_score = prfScore + add_score;
 			if (matrixV[i][j] != matrixV[i-1][j-1] + final_score){
 				if( i > 0 && j > 0 && matrixV[i][j] == matrixG[i-1][j-1]+final_score){
 					currentMatrix = "G";	
