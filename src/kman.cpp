@@ -11,10 +11,7 @@
 #include <string>
 #include <stdexcept>
 namespace po = boost::program_options;
-std::vector<std::string> run_msa(std::vector<
-                                      std::vector<
-                                      std::vector<
-                                      std::string> > >& fasta, 
+std::vector<std::string> run_msa(Sequences sequences,
                                  std::string conf_filename,
                                  double gapPen,
                                  double gapExt,
@@ -30,42 +27,41 @@ std::vector<std::string> run_msa(std::vector<
                                  std::vector<double> motifs_probs,
                                  std::vector<std::vector<std::string>>& seq_names){
 
-  		Sequences rawSequences(fasta);
   		Profile prf;
   		FeaturesProfile fprf(domainScore, phosphScore, motifScore, lcr_mod, 
                            motifs_ids, motifs_probs);
   		if (!conf_filename.empty()){
-  			txtProc::process_conf_file(conf_filename, fprf, rawSequences);
+  			txtProc::process_conf_file(conf_filename, fprf, sequences);
   		}
       std::vector<double> identities;
   		//first round of the alignment - all vs 1st
-  		std::vector<std::string> multipleAlignment(rawSequences.performMSAfirstround(prf, fprf, 
-                                                                                   gapPen, 
-                                                                                   endPenalty, 
-                                                                                   gapExt, 
-                                                                                   verboseMode, 
-                                                                                   weightsModeOn, 
-                                                                                   codonLength, 
-                                                                                   identities));
-      seq_names = rawSequences.get_names();
+  		std::vector<std::string> multipleAlignment(sequences.performMSAfirstround(prf, fprf, 
+                                                                                gapPen, 
+                                                                                endPenalty, 
+                                                                                gapExt, 
+                                                                                verboseMode, 
+                                                                                weightsModeOn, 
+                                                                                codonLength, 
+                                                                                identities));
+      seq_names = sequences.get_names();
   		std::vector<std::string> alignment;
   		int prev_alignments = 0;
   		for (int i = 8; i >= 0; i--){
   			double cutoff = double(i)/10;
-  			rawSequences.performMSAnextRounds(&alignment, prf, fprf, gapPen, 
-                                          endPenalty, gapExt, verboseMode, 
-                                          weightsModeOn, cutoff, codonLength, 
-                                          identities, prev_alignments);
+  			sequences.performMSAnextRounds(&alignment, prf, fprf, gapPen, 
+                                       endPenalty, gapExt, verboseMode, 
+                                       weightsModeOn, cutoff, codonLength, 
+                                       identities, prev_alignments);
   			//prev_alignments - number of alignments performed in the previous round - 
         //to omit this round if the number of aligned sequences is the same as
         //in the previous round
   		}
   		prev_alignments = 0;  // to align (again) all sequences to the profile
-  		rawSequences.performMSAnextRounds(&alignment, prf, fprf, 
-                                        gapPen, endPenalty, gapExt, 
-                                        verboseMode, weightsModeOn, 0, 
-                                        codonLength, identities, 
-                                        prev_alignments);
+  		sequences.performMSAnextRounds(&alignment, prf, fprf, 
+                                     gapPen, endPenalty, gapExt, 
+                                     verboseMode, weightsModeOn, 0, 
+                                     codonLength, identities, 
+                                     prev_alignments);
       return alignment;
 }
 int main(int argc, char *argv[]){
@@ -100,9 +96,10 @@ int main(int argc, char *argv[]){
   		time_t start = clock();
   		std::vector<std::string> motifs_ids;
   		std::vector<double> motifs_probs, identities;
-      std::vector< std::vector < std::vector<std::string> > > fasta;
+      Sequences sequences;
+      //std::vector<std::vector<std::vector<std::string> > > sequences; 
       try{
-          fasta = txtProc::read_fasta(filename, 
+          sequences = txtProc::read_fasta(filename, 
                                       codonLength, 
                                       &motifs_ids, 
                                       &motifs_probs);
@@ -113,7 +110,7 @@ int main(int argc, char *argv[]){
         return -1;
       }
       std::vector<std::vector<std::string>> seq_names;
-      std::vector<std::string> alignment = run_msa(fasta, conf_file, gapPen, 
+      std::vector<std::string> alignment = run_msa(sequences, conf_file, gapPen, 
                                                    gapExt, endPenalty, lcr_mod, 
                                                    domainScore, motifScore, 
                                                    phosphScore, codonLength, 

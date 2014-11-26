@@ -15,8 +15,8 @@
 
 BOOST_AUTO_TEST_SUITE(test_kman_suite)
 
-BOOST_AUTO_TEST_CASE(test_main){
-
+BOOST_AUTO_TEST_CASE(test_run_msa){
+  
 }
 
 BOOST_AUTO_TEST_SUITE_END()

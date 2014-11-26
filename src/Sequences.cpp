@@ -28,6 +28,10 @@ Sequences::Sequences(std::vector<std::vector<std::vector<std::string> > >& s){
 }
 
 
+Sequences::Sequences(){
+}
+
+
 //function performMSAfirstround - performs the first round of alignments, 
 //all vs query seq (first calculates profile based only on the query seq, then 
 //aligns all sequences and calculates identity of each sequence to the query seq.)

@@ -9,6 +9,7 @@ class Sequences{
 public:
 	//constructor
 	Sequences(std::vector< std::vector< std::vector< std::string> > >& );
+  Sequences();
 	//getters
   std::vector< std::vector< std::string> > get_names();
 	//main functionality

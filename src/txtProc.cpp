@@ -1,6 +1,7 @@
 #include "misc.h"
 #include "txtProc.h"
 #include "vecUtil.h"
+#include "Residue.h"
 #include "Sequences.h"
 #include "FeaturesProfile.h"
 #include <iostream>
@@ -49,10 +50,11 @@ std::vector<std::string> txtProc::split(const std::string &s, char delim) {
 
 //function processFASTA - reads fasta file with encoded sequence
 //writes sequences + seqNames to vector<vector<string>>; motifs' ids to vector<string> ids and motifs' probabilities to vector<double> probs
-std::vector< std::vector< std::vector<std::string> > > txtProc::read_fasta(std::string filename,
-                                                                           int codonLength, 
-                                                                           std::vector<std::string>* ids, 
-                                                                           std::vector<double>* probs){
+//std::vector<std::vector<std::vector<std::string> > > txtProc::read_fasta(std::string filename,
+Sequences txtProc::read_fasta(std::string filename,
+                              int codonLength, 
+                              std::vector<std::string>* ids, 
+                              std::vector<double>* probs){
 	std::vector< std::vector< std::vector<std::string> > > resultSequences;
   if (!misc::file_exists(&filename)){
     throw std::runtime_error("Input file doesn't exist");
@@ -112,7 +114,9 @@ std::vector< std::vector< std::vector<std::string> > > txtProc::read_fasta(std::
 	  	}
 	  fastafile.close();
   }
-	return resultSequences;
+  Sequences sequences(resultSequences);
+  return sequences;
+	//return resultSequences;
 }
 
 
