@@ -18,10 +18,10 @@ public:
 	void setMatrix(std::vector<std::vector<double> >);
 	void printProfile();
 	void printOcc();
-	void createProfile(const std::vector< std::vector<Residue> >&, 
+	void createProfile(const std::vector<std::vector<Residue>>&, 
                      const std::vector<double>&, bool, int);
   void processProfile();
-	void countOccurences(const std::vector< std::vector<Residue> >&, 
+	void countOccurences(const std::vector<std::vector<Residue>>&, 
                      const std::vector<double>&, bool, int);
 
 	void expandListOfFeatures(const std::vector< std::vector< Residue> > &);

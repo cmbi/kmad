@@ -19,7 +19,9 @@ std::vector< std::vector<double> > Profile::getMatrix() const{
 	return prfMatrix;
 }
 //builds a pseudo-profile from the profile itself and the substitution matrix with appropriate weights
-void Profile::buildPseudoProfile(std::vector< std::vector<Residue> >& alignment,const std::vector<double>& sequenceIdentityValues, bool weightsModeOn){
+void Profile::buildPseudoProfile(std::vector<sequence>& alignment,
+                                 const std::vector<double>& sequenceIdentityValues, 
+                                 bool weightsModeOn){
 	createProfile(alignment,sequenceIdentityValues,weightsModeOn);
 	std::vector< std::vector<double> > newProfile;
 	for (unsigned int i = 0; i < prfMatrix[0].size(); i++){
@@ -33,12 +35,16 @@ void Profile::buildPseudoProfile(std::vector< std::vector<Residue> >& alignment,
 				columnsToAdd.push_back(columnForJ);
 			}
 		}
-		newProfile.push_back(vecUtil::addUp(columnsToAdd));	//add up columns from substitution matrix for amino acids seen on ith position(times occurence/totalNrOfSeq))
+    //add up columns from substitution matrix for amino acids seen on ith 
+    //position(times occurence/totalNrOfSeq))
+		newProfile.push_back(vecUtil::addUp(columnsToAdd));	
 	}
 	vecUtil::transposeVec(newProfile);
 	prfMatrix = newProfile;
 }
-void Profile::createProfile(std::vector< std::vector<Residue> >& alignment, const std::vector<double>& sequenceIdentityValues,bool weightsModeOn){
+void Profile::createProfile(std::vector<sequence>& alignment, 
+                            const std::vector<double>& sequenceIdentityValues,
+                            bool weightsModeOn){
 	std::vector< std::vector<double> > tmpResult;
 	double identitiesSum;
 	int noOfSequences;

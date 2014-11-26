@@ -24,17 +24,17 @@ Residue misc::gapRes(int codon_length){
 
 
 //creates a polyA sequence of length seqLength, where each resdue is coded by a codon of length codon_length
-std::vector<Residue> misc::pseudoResidueSequence(int seqLength, int codon_length){
+sequence misc::pseudoResidueSequence(int seqLength, int codon_length){
 	std::string single_codon(codon_length, 'A');
 	std::vector<std::string> additional_features;	
 	Residue single_res(single_codon,additional_features);
-	std::vector<Residue> result(seqLength, single_res);
+	sequence result(seqLength, single_res);
 	return result;
 }
 
 
-void misc::printEncodedSeq(const std::vector<std::string>& sequence){
-	for (unsigned int i = 0; i < sequence.size();i++) std::cout << sequence[i][0];	
+void misc::printEncodedSeq(const std::vector<std::string>& seq){
+	for (unsigned int i = 0; i < seq.size();i++) std::cout << seq[i][0];	
 	std::cout << "\n";
 }
 

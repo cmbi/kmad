@@ -21,7 +21,7 @@ public:
 	void printProfile();
 private:
 	//functions
-	void createProfile(std::vector< std::vector<Residue> >&,
+	void createProfile(std::vector<std::vector<Residue>>&,
                      const std::vector<double>&, bool);
 
 	double countNonGaps(int);

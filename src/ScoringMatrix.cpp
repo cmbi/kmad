@@ -39,7 +39,7 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen,
 	matrixH.assign(iLength+1, row);
 }
 //function calculateScoresProfile - calculates scoring matrix for sequences s1 and s2 using profile prf instead of a substitution matrix ENCODED SEQUENCES
-void ScoringMatrix::calculateScores(std::vector<Residue> s2, Profile& prf, 
+void ScoringMatrix::calculateScores(sequence s2, Profile& prf, 
                                     FeaturesProfile& featPrf, int debug, 
                                     int codon_length, int sequence_no){
 	s2 = vecUtil::push_front(s2,misc::gapRes(codon_length));
@@ -124,16 +124,18 @@ std::vector< std::vector<double> > ScoringMatrix::getVec(){
 	return matrixV;
 }
 //function nwAlignment - performs a sequence vs profile(/pseudoprofile) needleman wunsch alignment 
-void ScoringMatrix::nwAlignment(std::vector<std::vector<Residue> > *result,
-                                std::vector<Residue> s2, Profile& prf, 
+void ScoringMatrix::nwAlignment(std::vector<sequence> *result,
+                                sequence s2, Profile& prf, 
                                 FeaturesProfile& featPrf, std::string verbose, 
                                 int codon_length, int sequence_no){
-	std::vector<Residue> s1 = misc::pseudoResidueSequence(prf.getMatrix()[0].size()+1,codon_length); //creating polyA pseudoSequence representing the profile, to know later where are the gaps in the profile
+  //creating polyA pseudoSequence representing the profile, to know later where are the gaps in the profile
+	sequence s1 = misc::pseudoResidueSequence(prf.getMatrix()[0].size()+1, 
+                                            codon_length); 
 	Residue gap_code = misc::gapRes(codon_length);
 	s2 = vecUtil::push_front(s2,gap_code);
-	std::vector<Residue> newS1;
-	std::vector<Residue> newS2;
-	std::vector<std::vector<Residue> > ali; //alignment
+	sequence newS1;
+	sequence newS2;
+	std::vector<sequence> ali; //alignment
 	Residue newChar1;
 	Residue newChar2;	
 	int i = s1.size()-1;

@@ -50,7 +50,7 @@ std::vector<std::string> txtProc::split(const std::string &s, char delim) {
 
 //function processFASTA - reads fasta file with encoded sequence
 //writes sequences + seqNames to vector<vector<string>>; motifs' ids to vector<string> ids and motifs' probabilities to vector<double> probs
-//std::vector<std::vector<std::vector<std::string> > > txtProc::read_fasta(std::string filename,
+//std::vector< std::vector< std::vector<std::string> > > txtProc::read_fasta(std::string filename,
 Sequences txtProc::read_fasta(std::string filename,
                               int codonLength, 
                               std::vector<std::string>* ids, 
@@ -115,8 +115,7 @@ Sequences txtProc::read_fasta(std::string filename,
 	  fastafile.close();
   }
   Sequences sequences(resultSequences);
-  return sequences;
-	//return resultSequences;
+	return sequences;
 }
 
 
@@ -142,11 +141,11 @@ void txtProc::writeAlignmentWithoutCodeToFile(std::vector<std::string>& sequence
 	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
 	for (unsigned int i = 0; i < sequences.size() ;i++){
 		outputFile << sequencesWithNames[i][0][0]<< "\n";
-		std::string sequence="";
+		std::string seq="";
 		for (unsigned int j = 0; j < sequences[i].size(); j+=4){
-			sequence += sequences[i][j];
+			seq += sequences[i][j];
 		}
-		outputFile << sequence << std::endl;
+		outputFile << seq << std::endl;
 	}
 }
 

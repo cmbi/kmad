@@ -11,12 +11,11 @@
 #include <vector>
 #include <ctime>
 
-
 Sequences::Sequences(std::vector<std::vector<std::vector<std::string> > >& s){
 	std::vector<std::string> additional_features;
 	for (unsigned int i = 0; i < s.size(); i++){
 		sequence_names.push_back(s[i][0]);
-		std::vector<Residue> new_seq;
+		sequence new_seq;
 		for (unsigned int j = 0; j < s[i][1].size(); j++){
 			Residue newRes(s[i][1][j], additional_features);
 			new_seq.push_back(newRes);
@@ -46,9 +45,9 @@ std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile,
                                                          std::vector<double>& identities){
 	outputProfile = Profile(substitutionMatrix::convertToProfileFormat(sequences_aa[0])); 
   //working alignment - without lowercase around cut out residues
-	std::vector< std::vector<Residue> > alignmentWithoutLowercase;	
+	std::vector<sequence> alignmentWithoutLowercase;	
   //lowercase before and after cut out residues -- final result 
-	std::vector< std::vector<Residue> > alignmentWithLowercase;		
+	std::vector<sequence> alignmentWithLowercase;		
 	alignmentWithoutLowercase.push_back(sequences_aa[0]);
 	alignmentWithLowercase.push_back(sequences_aa[0]);
   //'true' stored for every sequence which identity with the 1st one is higher 
@@ -64,9 +63,9 @@ std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile,
                                       identities, weightsModeOn, codon_length); 	
   add_feature_indexes(outputFeaturesProfile);
   //pairwise alignment without lowercase characters
-	std::vector<Residue> alNoLower; 
+	sequence alNoLower; 
   //pairwise alignment with lowercase characters where chars were removed
-	std::vector<Residue> alWithLower; 
+	sequence alWithLower; 
 	for (int i = 1; i < seqNr; i++){
 		alignPairwise(alNoLower, alWithLower, sequences_aa[i], outputProfile, 
                   outputFeaturesProfile, penalty, endPenalty, extensionPenalty, 
@@ -109,14 +108,14 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment,
 	if (next_alignments > prev_alignments){
     //working alignment - without lowercase around cut out residues
     //would make latter aligning more complicated
-		std::vector< std::vector<Residue> > alignmentWithoutLowercase;	
+		std::vector<sequence> alignmentWithoutLowercase;	
     //lowercase before and after cut out residues -- final result 
-		std::vector< std::vector<Residue> > alignmentWithLowercase;		
+		std::vector<sequence> alignmentWithLowercase;		
 		alignmentWithoutLowercase.push_back(sequences_aa[0]);
 		alignmentWithLowercase.push_back(sequences_aa[0]);
     // tmp pairwise alignment (and so is alWithLower)
-		std::vector<Residue> alNoLower; 
-		std::vector<Residue> alWithLower;
+		sequence alNoLower; 
+		sequence alWithLower;
 		for (int i = 1; i < seqNr; i++){
 			if (identities[i] > identityCutoff){
         // NW alignment of the ith seq against the profile
@@ -143,7 +142,7 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment,
 
 //function calcIdentity, calculates identity with the query sequence (takes 
 //aligned sequence with the gaps cut out)
-double Sequences::calcIdentity(const std::vector<Residue>& alignedSequence){
+double Sequences::calcIdentity(const sequence& alignedSequence){
 	double identicalResidues=0;
 	for (unsigned int i = 0; i < alignedSequence.size(); i++){
 		if (alignedSequence[i].getAA() == sequences_aa[0][i].getAA()){
@@ -159,14 +158,14 @@ double Sequences::calcIdentity(const std::vector<Residue>& alignedSequence){
 //vector<string> of 2 elements, where the 1st one is 2nd sequence with cut out 
 //chars and 2nd one is 2nd sequence with cut out chars and lowercase chars 
 //before and after that
-void Sequences::removeGaps(std::vector<Residue> &alignmentWithLowercase, 
-                           std::vector<Residue> &alignmentWithoutLowercase, 
-                           std::vector< std::vector<Residue> >& alignment){
-	std::vector<std::vector<Residue> >result;
-	std::vector<Residue> s1 = alignment[0];
-	std::vector<Residue> s2 = alignment[1];
-	std::vector<Residue> newS2;
-	std::vector<Residue> newS2lower;
+void Sequences::removeGaps(sequence& alignmentWithLowercase, 
+                           sequence& alignmentWithoutLowercase, 
+                           std::vector<sequence>& alignment){
+	std::vector<sequence>result;
+	sequence s1 = alignment[0];
+	sequence s2 = alignment[1];
+	sequence newS2;
+	sequence newS2lower;
 	char gap = '-';
 	bool lowerFlag = false;
 	for (unsigned int i = 0; i < alignment[0].size(); i++){
@@ -203,9 +202,9 @@ void Sequences::removeGaps(std::vector<Residue> &alignmentWithLowercase,
 }
 //function alignPairwise -> takes a sequence and profiles, returns a ready 
 //alignment of the two, with gaps cut out
-void Sequences::alignPairwise(std::vector<Residue> &alNoLower, 
-                              std::vector<Residue> &alWithLower, 
-                              std::vector<Residue>& seq2, 
+void Sequences::alignPairwise(sequence& alNoLower, 
+                              sequence& alWithLower, 
+                              sequence& seq2, 
                               Profile& prf, 
                               FeaturesProfile& featPrf, 
                               double penalty, double endPenalty, 
@@ -213,7 +212,7 @@ void Sequences::alignPairwise(std::vector<Residue> &alNoLower,
                               std::string verbose, int codon_length, 
                               int sequence_no){
 	int profileLength = prf.getMatrix()[0].size();
-	std::vector< std::vector<Residue> > alignment;
+	std::vector<sequence> alignment;
 	ScoringMatrix scores(profileLength, seq2.size(), penalty, 
                        endPenalty, extensionPenalty);
 	scores.calculateScores(seq2, prf, featPrf, deb, 

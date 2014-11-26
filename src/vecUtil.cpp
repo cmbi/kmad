@@ -141,7 +141,7 @@ std::vector<std::string> vecUtil::flattenWithoutFeatures(const std::vector<std::
 
 
 //flatten a vector of residue vectors to a vector of strings
-std::vector<std::string> vecUtil::flatten(const std::vector<std::vector<Residue> > & vec){
+std::vector<std::string> vecUtil::flatten(const std::vector<sequence> & vec){
 	std::vector<std::string> result;
 	for(unsigned int i = 0; i < vec.size();i++){
 		std::string newSeq = "";
@@ -168,11 +168,11 @@ std::vector<std::string> vecUtil::flatten(const std::vector<std::vector<std::str
 
 
 //add an element to the beginning of the vector
-std::vector<Residue> vecUtil::push_front(std::vector<Residue>& vec, Residue newElement){
-	reverse(vec.begin(),vec.end());
-	vec.push_back(newElement);
-	reverse(vec.begin(),vec.end());
-	return vec;
+std::vector<Residue> vecUtil::push_front(sequence& seq, Residue newElement){
+	reverse(seq.begin(),seq.end());
+	seq.push_back(newElement);
+	reverse(seq.begin(),seq.end());
+	return seq;
 }
 
 
@@ -225,9 +225,9 @@ int vecUtil::countTrueValuesInVector(const std::vector<bool>& vec){
 }
 
 
-void vecUtil::printSequence(std::vector<Residue>& vec){
-	for (unsigned int i = 0; i < vec.size(); i++){
-		std::cout << vec[i].getAA();
+void vecUtil::printSequence(sequence& seq){
+	for (unsigned int i = 0; i < seq.size(); i++){
+		std::cout << seq[i].getAA();
 	}
 	std::cout << std::endl;
 }

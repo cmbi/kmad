@@ -30,10 +30,11 @@ public:
                                                std::string > >&);
 private:
 	//functions
-	void removeGaps(std::vector<Residue> &,std::vector<Residue> &,
-                  std::vector<std::vector<Residue> >&);
-	void alignPairwise(std::vector<Residue> &,std::vector<Residue> &, 
-                     std::vector<Residue> &, Profile&, FeaturesProfile&,
+	void removeGaps(std::vector<Residue>&, std::vector<Residue>&, 
+                  std::vector<std::vector<Residue>>&);
+	void alignPairwise(std::vector<Residue>&, std::vector<Residue>&, 
+                     std::vector<Residue>&,
+                     Profile&, FeaturesProfile&,
                      double, double, double, int, std::string, int, int);
 	double calcIdentity(const std::vector<Residue>&);
 	int countAlignments(double, std::vector<double>&);
@@ -41,7 +42,7 @@ private:
 	//variables 
 	int seqNr;
 	int firstSequenceSize;
-	std::vector< std::vector<Residue > > sequences_aa;
+	std::vector<std::vector<Residue>> sequences_aa;
 	std::vector< std::vector<std::string> > sequence_names;
 };
 #endif /* SEQUENCES_H */
