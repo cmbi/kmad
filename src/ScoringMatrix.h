@@ -11,9 +11,9 @@ class ScoringMatrix{
 public:
 	ScoringMatrix(int, int, double, double, double); //constructor
 	void calculateScores(std::vector<Residue>, Profile&, FeaturesProfile&, 
-                       int, int, int);
+                       int, int);
 	void nwAlignment(std::vector<std::vector<Residue>>*, std::vector<Residue>, 
-                   Profile&, FeaturesProfile&, std::string, int, int);
+                   Profile&, FeaturesProfile&, std::string, int);
 	std::vector< std::vector<double> > getVec(); //getter
 private:
 	int iLength;

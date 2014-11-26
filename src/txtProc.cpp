@@ -121,13 +121,13 @@ Sequences txtProc::read_fasta(std::string filename,
 
 //function writeAlignmentToFile
 void txtProc::writeAlignmentToFile(std::vector<std::string>& sequences,
-                                   std::vector< std::vector< std::string > >& sequence_names, 
+                                   std::vector<std::string>& sequence_names, 
                                    std::string filename){
 	std::stringstream sstr;
 	sstr << filename << "_al";
 	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
 	for (unsigned int i = 0; i < sequences.size() ;i++){
-		outputFile << sequence_names[i][0]<< "\n" << sequences[i] << "\n";
+		outputFile << sequence_names[i] << "\n" << sequences[i] << "\n";
 	}
 }
 

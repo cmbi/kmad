@@ -11,7 +11,7 @@ public:
 	Sequences(std::vector< std::vector< std::vector< std::string> > >& );
   Sequences();
 	//getters
-  std::vector< std::vector< std::string> > get_names();
+  std::vector<std::string> get_names();
 	//main functionality
 	std::vector<std::string> performMSAfirstround(Profile&, FeaturesProfile&, 
                                                 double, double, double, 
@@ -35,7 +35,7 @@ private:
 	void alignPairwise(std::vector<Residue>&, std::vector<Residue>&, 
                      std::vector<Residue>&,
                      Profile&, FeaturesProfile&,
-                     double, double, double, int, std::string, int, int);
+                     double, double, double, int, std::string, int);
 	double calcIdentity(const std::vector<Residue>&);
 	int countAlignments(double, std::vector<double>&);
   void add_feature_indexes(FeaturesProfile&);
@@ -43,6 +43,6 @@ private:
 	int seqNr;
 	int firstSequenceSize;
 	std::vector<std::vector<Residue>> sequences_aa;
-	std::vector< std::vector<std::string> > sequence_names;
+	std::vector<std::string> m_sequence_names;
 };
 #endif /* SEQUENCES_H */

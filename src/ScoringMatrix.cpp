@@ -41,7 +41,7 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen,
 //function calculateScoresProfile - calculates scoring matrix for sequences s1 and s2 using profile prf instead of a substitution matrix ENCODED SEQUENCES
 void ScoringMatrix::calculateScores(sequence s2, Profile& prf, 
                                     FeaturesProfile& featPrf, int debug, 
-                                    int codon_length, int sequence_no){
+                                    int codon_length){
 	s2 = vecUtil::push_front(s2,misc::gapRes(codon_length));
 	for (unsigned int i = 1; i < matrixV.size(); i++){
 		matrixV[i][0] = -10000000; //infinity
@@ -127,7 +127,7 @@ std::vector< std::vector<double> > ScoringMatrix::getVec(){
 void ScoringMatrix::nwAlignment(sequenceList *result,
                                 sequence s2, Profile& prf, 
                                 FeaturesProfile& featPrf, std::string verbose, 
-                                int codon_length, int sequence_no){
+                                int codon_length){
   //creating polyA pseudoSequence representing the profile, to know later where are the gaps in the profile
 	sequence s1 = misc::pseudoResidueSequence(prf.getMatrix()[0].size()+1, 
                                             codon_length); 

@@ -24,8 +24,7 @@ std::vector<std::string> run_msa(Sequences sequences,
                                  bool weightsModeOn, 
                                  std::string verboseMode,
                                  std::vector<std::string> motifs_ids,
-                                 std::vector<double> motifs_probs,
-                                 std::vector<std::vector<std::string>>& seq_names){
+                                 std::vector<double> motifs_probs){
 
   		Profile prf;
   		FeaturesProfile fprf(domainScore, phosphScore, motifScore, lcr_mod, 
@@ -43,7 +42,6 @@ std::vector<std::string> run_msa(Sequences sequences,
                                                                                 weightsModeOn, 
                                                                                 codonLength, 
                                                                                 identities));
-      seq_names = sequences.get_names();
   		std::vector<std::string> alignment;
   		int prev_alignments = 0;
   		for (int i = 8; i >= 0; i--){
@@ -109,14 +107,13 @@ int main(int argc, char *argv[]){
         std::cout << "Exception: " << e.what() << "\n";
         return -1;
       }
-      std::vector<std::vector<std::string>> seq_names;
+      std::vector<std::string> seq_names = sequences.get_names();
       std::vector<std::string> alignment = run_msa(sequences, conf_file, gapPen, 
                                                    gapExt, endPenalty, lcr_mod, 
                                                    domainScore, motifScore, 
                                                    phosphScore, codonLength, 
                                                    weightsModeOn, verboseMode, 
-                                                   motifs_ids, motifs_probs, 
-                                                   seq_names);
+                                                   motifs_ids, motifs_probs);
   		txtProc::writeAlignmentToFile(alignment, seq_names, outputPrefix);						
   		time_t end = clock();
   		std::cout << "time: " << double(end - start)/CLOCKS_PER_SEC << std::endl;

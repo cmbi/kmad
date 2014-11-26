@@ -21,7 +21,7 @@ namespace txtProc{
   //std::vector<std::vector<std::vector<std::string> > > read_fasta(std::string, int, std::vector<std::string>*,
   //                     std::vector<double>*);
 	void writeAlignmentToFile(std::vector<std::string>&, 
-                            std::vector< std::vector<std::string> >&,
+                            std::vector<std::string>&,
                             std::string);
 	void writeAlignmentWithoutCodeToFile(std::vector<std::string>&, 
                                        std::vector< std::vector< std::vector<std::string> > >&, 

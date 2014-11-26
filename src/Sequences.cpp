@@ -14,7 +14,8 @@
 Sequences::Sequences(std::vector<std::vector<std::vector<std::string> > >& s){
 	std::vector<std::string> additional_features;
 	for (unsigned int i = 0; i < s.size(); i++){
-		sequence_names.push_back(s[i][0]);
+		//sequence_names.push_back(s[i][0]);
+		m_sequence_names.push_back(s[i][0][0]);
 		sequence new_seq;
 		for (unsigned int j = 0; j < s[i][1].size(); j++){
 			Residue newRes(s[i][1][j], additional_features);
@@ -66,10 +67,14 @@ std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile,
 	sequence alNoLower; 
   //pairwise alignment with lowercase characters where chars were removed
 	sequence alWithLower; 
-	for (int i = 1; i < seqNr; i++){
-		alignPairwise(alNoLower, alWithLower, sequences_aa[i], outputProfile, 
+	//for (int i = 1; i < seqNr; i++){
+  for (auto &seqI: sequences_aa){
+		//alignPairwise(alNoLower, alWithLower, sequences_aa[i], outputProfile, 
+    //              outputFeaturesProfile, penalty, endPenalty, extensionPenalty, 
+    //              i, verbose, codon_length);
+		alignPairwise(alNoLower, alWithLower, seqI, outputProfile, 
                   outputFeaturesProfile, penalty, endPenalty, extensionPenalty, 
-                  i, verbose, codon_length, i);
+                  0, verbose, codon_length);
 		double identity = calcIdentity(alNoLower);
 		identities.push_back(identity);
 		if (identity > 0.9){
@@ -121,7 +126,7 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment,
 
 				alignPairwise(alNoLower, alWithLower, sequences_aa[i], outputProfile,
                       outputFeaturesProfile,penalty,endPenalty,extensionPenalty,
-                      i, verbose, codon_length, i); 
+                      i, verbose, codon_length); 
 
 				alignmentWithoutLowercase.push_back(alNoLower);
 				alignmentWithLowercase.push_back(alWithLower);
@@ -208,16 +213,15 @@ void Sequences::alignPairwise(sequence& alNoLower,
                               FeaturesProfile& featPrf, 
                               double penalty, double endPenalty, 
                               double extensionPenalty, int deb, 
-                              std::string verbose, int codon_length, 
-                              int sequence_no){
+                              std::string verbose, int codon_length){
 	int profileLength = prf.getMatrix()[0].size();
 	sequenceList alignment;
 	ScoringMatrix scores(profileLength, seq2.size(), penalty, 
                        endPenalty, extensionPenalty);
 	scores.calculateScores(seq2, prf, featPrf, deb, 
-                         codon_length, sequence_no);
+                         codon_length);
 	scores.nwAlignment(&alignment, seq2, prf, featPrf, 
-                     verbose, codon_length, sequence_no);
+                     verbose, codon_length);
 
 	removeGaps(alWithLower,alNoLower,alignment); 
 }
@@ -260,8 +264,8 @@ void Sequences::add_usr_features(std::vector<std::tuple<std::string,std::string,
 	}
 }
 
-std::vector< std::vector< std::string>> Sequences::get_names(){
-  return sequence_names;
+std::vector< std::string> Sequences::get_names(){
+  return m_sequence_names;
 }
 
 void Sequences::add_feature_indexes(FeaturesProfile& fprf){
