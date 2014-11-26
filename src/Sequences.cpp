@@ -45,9 +45,9 @@ std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile,
                                                          std::vector<double>& identities){
 	outputProfile = Profile(substitutionMatrix::convertToProfileFormat(sequences_aa[0])); 
   //working alignment - without lowercase around cut out residues
-	std::vector<sequence> alignmentWithoutLowercase;	
+	sequenceList alignmentWithoutLowercase;	
   //lowercase before and after cut out residues -- final result 
-	std::vector<sequence> alignmentWithLowercase;		
+	sequenceList alignmentWithLowercase;		
 	alignmentWithoutLowercase.push_back(sequences_aa[0]);
 	alignmentWithLowercase.push_back(sequences_aa[0]);
   //'true' stored for every sequence which identity with the 1st one is higher 
@@ -104,13 +104,12 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment,
                                      std::vector<double>& identities, 
                                      int& prev_alignments){
 	int next_alignments = countAlignments(identityCutoff, identities);
-
 	if (next_alignments > prev_alignments){
     //working alignment - without lowercase around cut out residues
     //would make latter aligning more complicated
-		std::vector<sequence> alignmentWithoutLowercase;	
+		sequenceList alignmentWithoutLowercase;	
     //lowercase before and after cut out residues -- final result 
-		std::vector<sequence> alignmentWithLowercase;		
+		sequenceList alignmentWithLowercase;		
 		alignmentWithoutLowercase.push_back(sequences_aa[0]);
 		alignmentWithLowercase.push_back(sequences_aa[0]);
     // tmp pairwise alignment (and so is alWithLower)
@@ -160,8 +159,8 @@ double Sequences::calcIdentity(const sequence& alignedSequence){
 //before and after that
 void Sequences::removeGaps(sequence& alignmentWithLowercase, 
                            sequence& alignmentWithoutLowercase, 
-                           std::vector<sequence>& alignment){
-	std::vector<sequence>result;
+                           sequenceList& alignment){
+	sequenceList result;
 	sequence s1 = alignment[0];
 	sequence s2 = alignment[1];
 	sequence newS2;
@@ -212,7 +211,7 @@ void Sequences::alignPairwise(sequence& alNoLower,
                               std::string verbose, int codon_length, 
                               int sequence_no){
 	int profileLength = prf.getMatrix()[0].size();
-	std::vector<sequence> alignment;
+	sequenceList alignment;
 	ScoringMatrix scores(profileLength, seq2.size(), penalty, 
                        endPenalty, extensionPenalty);
 	scores.calculateScores(seq2, prf, featPrf, deb, 

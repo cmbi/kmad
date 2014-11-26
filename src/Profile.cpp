@@ -19,7 +19,7 @@ std::vector< std::vector<double> > Profile::getMatrix() const{
 	return prfMatrix;
 }
 //builds a pseudo-profile from the profile itself and the substitution matrix with appropriate weights
-void Profile::buildPseudoProfile(std::vector<sequence>& alignment,
+void Profile::buildPseudoProfile(sequenceList& alignment,
                                  const std::vector<double>& sequenceIdentityValues, 
                                  bool weightsModeOn){
 	createProfile(alignment,sequenceIdentityValues,weightsModeOn);
@@ -42,7 +42,7 @@ void Profile::buildPseudoProfile(std::vector<sequence>& alignment,
 	vecUtil::transposeVec(newProfile);
 	prfMatrix = newProfile;
 }
-void Profile::createProfile(std::vector<sequence>& alignment, 
+void Profile::createProfile(sequenceList& alignment, 
                             const std::vector<double>& sequenceIdentityValues,
                             bool weightsModeOn){
 	std::vector< std::vector<double> > tmpResult;

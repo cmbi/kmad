@@ -27,4 +27,5 @@ class Residue{
 };
 
 typedef std::vector<Residue> sequence;
+typedef std::vector<sequence> sequenceList;
 #endif /* RESIDUE_H */

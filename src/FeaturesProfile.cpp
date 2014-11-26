@@ -29,7 +29,7 @@ FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr,
 // creates a features profile - counts occurences of each feature on each 
 // position an normalize it by the number of non gaps (easily changeable to 
 // number of sequences);(with or without weights)
-void FeaturesProfile::createProfile(const std::vector<sequence>& alignment, 
+void FeaturesProfile::createProfile(const sequenceList& alignment, 
                                     const std::vector<double>& sequenceIdentityValues, 
                                     bool weightsModeOn, int codon_length){
   countOccurences(alignment, sequenceIdentityValues, 
@@ -58,7 +58,7 @@ void FeaturesProfile::processProfile(){
     prfMatrix.push_back(feature_row);
   }
 }
-void FeaturesProfile::countOccurences(const std::vector<sequence>& alignment, 
+void FeaturesProfile::countOccurences(const sequenceList& alignment, 
                                     const std::vector<double>& sequenceIdentityValues, 
                                     bool weightsModeOn, int codon_length){
 	std::vector<std::vector<double> > tmpResult;
@@ -245,7 +245,7 @@ std::string FeaturesProfile::name(std::string& codon, int& featureType){
 	return name;
 }
 //function expandListOfFeatures - expand it by domains and motifs found in the alignment
-void FeaturesProfile::expandListOfFeatures(const std::vector<sequence>& sequences){
+void FeaturesProfile::expandListOfFeatures(const sequenceList& sequences){
 	for(unsigned int i = 0; i < sequences.size();i++){	
 		for (unsigned int j = 0; j < sequences[i].size(); j++){
 			std::vector<std::string> features = sequences[i][j].getFeatures();

@@ -124,7 +124,7 @@ std::vector< std::vector<double> > ScoringMatrix::getVec(){
 	return matrixV;
 }
 //function nwAlignment - performs a sequence vs profile(/pseudoprofile) needleman wunsch alignment 
-void ScoringMatrix::nwAlignment(std::vector<sequence> *result,
+void ScoringMatrix::nwAlignment(sequenceList *result,
                                 sequence s2, Profile& prf, 
                                 FeaturesProfile& featPrf, std::string verbose, 
                                 int codon_length, int sequence_no){
@@ -135,7 +135,7 @@ void ScoringMatrix::nwAlignment(std::vector<sequence> *result,
 	s2 = vecUtil::push_front(s2,gap_code);
 	sequence newS1;
 	sequence newS2;
-	std::vector<sequence> ali; //alignment
+	sequenceList ali; //alignment
 	Residue newChar1;
 	Residue newChar2;	
 	int i = s1.size()-1;

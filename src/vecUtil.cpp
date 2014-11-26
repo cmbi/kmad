@@ -141,7 +141,7 @@ std::vector<std::string> vecUtil::flattenWithoutFeatures(const std::vector<std::
 
 
 //flatten a vector of residue vectors to a vector of strings
-std::vector<std::string> vecUtil::flatten(const std::vector<sequence> & vec){
+std::vector<std::string> vecUtil::flatten(const sequenceList& vec){
 	std::vector<std::string> result;
 	for(unsigned int i = 0; i < vec.size();i++){
 		std::string newSeq = "";
