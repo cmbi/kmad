@@ -21,14 +21,6 @@ namespace {
 }
 
 
-int txtProc::convertStringToInt(std::string& s){
-	int convertedInt;
-	std::istringstream iss(s);
-	iss >> convertedInt;
-	return convertedInt;
-}
-
-
 double txtProc::convertStringToDouble(std::string& s){
 	double convertedDouble = atof(s.c_str());;
 	return convertedDouble;
@@ -66,7 +58,6 @@ Sequences txtProc::read_fasta(std::string filename,
 	  std::vector< std::vector<std::string> > newEntry;
 	  bool sequences = true;
 	  int seqNo = -1;
-	  std::string newSeq = "";
 	  std::string line;
 	  while(!safeGetline(fastafile, line).eof()){
 	  		std::string firstChar = line.substr(0,1);
@@ -100,7 +91,8 @@ Sequences txtProc::read_fasta(std::string filename,
 	  			//else means we're already in the motifs probs section
 	  			else{
 	  				std::istringstream iss(line);
-	  				std::vector<std::string> motif{std::istream_iterator<std::string>{iss},std::istream_iterator<std::string>{}};
+	  				std::vector<std::string> motif((std::istream_iterator<std::string>(iss)),
+                                            std::istream_iterator<std::string>());
 	  				if (motif.size() == 2){
 	  					ids->push_back(motif[0]);
 	  					probs->push_back(convertStringToDouble(motif[1]));
@@ -149,19 +141,6 @@ void txtProc::writeAlignmentWithoutCodeToFile(std::vector<std::string>& sequence
 }
 
 
-//write to file (2d vector as a 1d vector)
-void txtProc::writeVector(std::vector<std::vector<double>>& vec, std::string filename){
-	std::stringstream sstr;
-	sstr << filename;
-	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
-  for (auto &row: vec){
-    for (auto &item: row){
-			outputFile << item << std::endl;
-		}
-	}
-}
-
-
 std::string txtProc::charToString(char mychar){
 	return std::string(1,mychar);
 }
@@ -177,7 +156,6 @@ std::string txtProc::charToString(char mychar1, char mychar2){
 std::istream& txtProc::safeGetline(std::istream& is, std::string& t)
 {
 	t.clear();
-	std::istream::sentry se(is, true);
 	std::streambuf* sb = is.rdbuf();
         for(;;) {
 	        int c = sb->sbumpc();

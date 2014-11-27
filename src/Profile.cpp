@@ -1,23 +1,32 @@
 //Profile class implementation
 #include "Profile.h"
 #include "Residue.h"
+#include "misc.h"
 #include "substitutionMatrix.h"
 #include "vecUtil.h"
-#include "misc.h"
-#include <string>
-#include <iostream>
-#include <vector>
-#include <sstream>
+
 #include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+
+
 Profile::Profile(std::vector< std::vector<double> > mat)
 :	m_prfMatrix(mat){
 }
+
+
 Profile::Profile(){
 }
+
+
 //function getMatrix - returns profile matrix (double)
 std::vector< std::vector<double> > Profile::getMatrix() const{
 	return m_prfMatrix;
 }
+
+
 //builds a pseudo-profile from the profile itself and the substitution matrix with appropriate weights
 void Profile::buildPseudoProfile(sequenceList& alignment,
                                  const std::vector<double>& sequenceIdentityValues, 
@@ -42,6 +51,8 @@ void Profile::buildPseudoProfile(sequenceList& alignment,
 	vecUtil::transposeVec(newProfile);
 	m_prfMatrix = newProfile;
 }
+
+
 void Profile::createProfile(sequenceList& alignment, 
                             const std::vector<double>& sequenceIdentityValues,
                             bool weightsModeOn){
@@ -100,6 +111,8 @@ void Profile::createProfile(sequenceList& alignment,
 	m_prfMatrix = tmpResult;
 	vecUtil::transposeVec(m_prfMatrix);
 }
+
+
 //function getElement - returns score for 'aAcid' amino acid on 'position' position
 double Profile::getElement(int position, char aAcid){
 	double result;
@@ -121,29 +134,9 @@ double Profile::getElement(int position, char aAcid){
 	}
 	return result;
 }
+
+
 //function getElement - returns score for nth amino acid on mth position
 double Profile::getElement(int aAcidInt, int position){
 	return m_prfMatrix[aAcidInt][position];
-}
-//function printProfile(int,int) - prints only columns from boundStart to boundEnd
-void Profile::printProfile(int boundStart, int boundEnd){
-	std::cout << "##PROFILE POSITION "<< boundStart << "-" << boundEnd-1 << "##" << std::endl;
-	for (int i = boundStart; i < boundEnd; i++){
-		for (unsigned int j = 0; j < m_prfMatrix.size();j++){
-			std::cout << j << ": " << m_prfMatrix[j][i] << " ";
-		}
-		std::cout << "\n";
-	}
-}
-//function printProfile - prints full profile
-void Profile::printProfile(){
-  for (auto &row: m_prfMatrix){
-    for (auto &item: row){
-			std::cout << item << " ";
-		}
-		std::cout << "\n";
-	}
-}
-void Profile::setMatrix(std::vector<std::vector<double> > newMatrix){
-	m_prfMatrix = newMatrix;
 }

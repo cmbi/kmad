@@ -23,7 +23,6 @@ public:
                             bool, double, 
                             int, std::vector<double>&, 
                             int&);
-	void printSequence(int) const;
 	void add_usr_features(std::vector<std::tuple<std::string, std::string, int, 
                                                int, int, double, double, 
                                                double, double, std::string, 

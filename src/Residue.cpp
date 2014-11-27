@@ -3,8 +3,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-Residue::Residue(std::string codon, std::vector<std::string> additional_features){
-	m_codon = codon;
+Residue::Residue(std::string codon, std::vector<std::string> additional_features)
+: m_codon(codon){
 	m_aa = codon[0];
 	codon_to_features();
   for (auto &feat: additional_features){
@@ -98,32 +98,45 @@ void Residue::codon_to_features(){
 		}
 	}
 }
+
+
 char Residue::getAA() const{
 	return m_aa;
 }
+
+
 char Residue::getAA() {
 	return m_aa;
 }
+
+
 std::string Residue::getCodon() const{
 	return m_codon;
 }
+
+
 std::string Residue::getCodon() {
 	return m_codon;
 }
-void Residue::setAA(char new_aa){
-	m_aa = new_aa;
-}
+
+
 //change amino acid char to lowercase
 void Residue::lowercase(){
 	m_aa = tolower(m_aa);
 	m_codon[0] = tolower(m_codon[0]);
 }
+
+
 std::vector<std::string> Residue::getFeatures() const{
 	return m_features;
 }
+
+
 std::vector<std::string> Residue::getFeatures() {
 	return m_features;
 }
+
+
 void Residue::add_feature(std::string new_feat){
 	m_features.push_back(new_feat);
 }

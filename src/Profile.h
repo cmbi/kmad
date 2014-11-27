@@ -11,14 +11,10 @@ public:
 	Profile();
 	void buildPseudoProfile(std::vector< std::vector< Residue > >&, 
                           const std::vector<double>&, bool);
-
 	//getters/setters
 	std::vector< std::vector<double> > getMatrix() const;
-	void setMatrix(std::vector<std::vector<double> >);
 	double getElement(int, char);
 	double getElement(int, int);
-	void printProfile(int, int);
-	void printProfile();
 private:
 	//functions
 	void createProfile(std::vector<std::vector<Residue>>&,

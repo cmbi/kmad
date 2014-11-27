@@ -155,7 +155,6 @@ double Sequences::calcIdentity(const sequence& alignedSequence){
 void Sequences::removeGaps(sequence& alignmentWithLowercase, 
                            sequence& alignmentWithoutLowercase, 
                            sequenceList& alignment){
-	sequenceList result;
 	sequence s1 = alignment[0];
 	sequence s2 = alignment[1];
 	sequence newS2;
@@ -215,6 +214,8 @@ void Sequences::alignPairwise(sequence& alNoLower,
 
 	removeGaps(alWithLower,alNoLower,alignment); 
 }
+
+
 //count alignments that will be performed in this round
 int Sequences::countAlignments(double identity_cutoff, 
                                std::vector<double>& identities){
@@ -227,13 +228,8 @@ int Sequences::countAlignments(double identity_cutoff,
 	}
 	return count;
 }
-void Sequences::printSequence(int seq_index) const{
-	//for (unsigned int i = 0; i < m_sequences_aa[seq_index].size(); i++){
-  for (auto &residue: m_sequences_aa[seq_index]){
-		std::cout << residue.getAA();
-	}
-	std::cout << std::endl;
-}
+
+
 //adds features from the tuple 'feature_rules'(usr defined) to relevant 
 //residues (also specified in 'feature_rules')
 void Sequences::add_usr_features(std::vector<std::tuple<std::string,std::string, 
@@ -256,6 +252,7 @@ void Sequences::add_usr_features(std::vector<std::tuple<std::string,std::string,
     }
 	}
 }
+
 
 std::vector< std::string> Sequences::get_names(){
   return m_sequence_names;

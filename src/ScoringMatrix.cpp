@@ -11,11 +11,13 @@
 #include "misc.h"
 #include "vecUtil.h"
 #include "txtProc.h"
+
+#include <algorithm>
+#include <cassert>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
-#include <sstream>
-#include <algorithm>
 /*constructor
 	arguments:
 		s1size - length of the 1st sequence
@@ -43,6 +45,10 @@ void ScoringMatrix::calculateScores(sequence s2, Profile& prf,
                                     FeaturesProfile& featPrf, int debug, 
                                     int codon_length){
 	s2 = vecUtil::push_front(s2,misc::gapRes(codon_length));
+
+  assert(m_matrixV.size() == m_matrixG.size());
+  assert(m_matrixV.size() == m_matrixH.size());
+
 	for (unsigned int i = 1; i < m_matrixV.size(); i++){
 		m_matrixV[i][0] = -10000000; //infinity
 		m_matrixH[i][0] = -10000000;
@@ -70,7 +76,10 @@ void ScoringMatrix::calculateScores(sequence s2, Profile& prf,
 			score1 = m_matrixV[i-1][j-1];
 			score2 = m_matrixG[i-1][j-1];
 			score3 = m_matrixH[i-1][j-1];
-			m_matrixV[i][j] = val::maxValueDoubles(score1,score2,score3) + final_score;
+
+      m_matrixV[i][j] = std::max<double>(score1,
+          std::max<double>(score2, score3)) + final_score;
+
 			///G
 			score1 = m_matrixV[i-1][j] + m_gapOpening;
 			score2 = m_matrixG[i-1][j] + m_gapExtension;

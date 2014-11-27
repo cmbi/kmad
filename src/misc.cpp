@@ -34,14 +34,6 @@ sequence misc::pseudoResidueSequence(int seqLength, int codon_length){
 }
 
 
-void misc::printEncodedSeq(const std::vector<std::string>& seq){
-  for (auto &res: seq){
-    std::cout << res[0];	
-  }
-	std::cout << "\n";
-}
-
-
 //look for mistakes in the given command line arguments
 bool misc::checkParameters(int codonLength,int phosph,int domain,int motif,double gep,double gop,bool weightsOn, double endPenalty){
 	bool alright = true;

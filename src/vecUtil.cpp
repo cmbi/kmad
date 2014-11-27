@@ -101,31 +101,6 @@ std::vector<double> vecUtil::convertIntVectorToDoubleVector(std::vector<int>& ve
 }
 
 
-//function printDoubleVector
-void vecUtil::printVector(const std::vector<int>& vec){
-  for (auto &item: vec){
-		std::cout << item << " ";
-	}
-	std::cout << "\n";
-}
-
-
-void vecUtil::printVector(const std::vector<double>& vec){
-  for (auto &item: vec){
-		std::cout << item << " ";
-	}
-	std::cout << "\n";
-}
-
-
-void vecUtil::printVector(const std::vector<std::string>& vec){
-  for (auto &item: vec){
-		std::cout << item << " ";
-	}
-	std::cout << "\n";
-}
-
-
 //takes a set of encoded sequences (=vector of vectors of strings) and returns a vector of nonencoded sequences
 std::vector<std::string> vecUtil::flattenWithoutFeatures(const std::vector<std::vector<std::string> >& vec){
 	std::vector<std::string> result;
@@ -211,25 +186,6 @@ std::vector<double> vecUtil::average(const std::vector< std::vector<int> >& vec)
 		result.push_back(sum/vec.size());
 	}
 	return result;
-}
-
-
-int vecUtil::countTrueValuesInVector(const std::vector<bool>& vec){
-	int result = 0;
-  for (const auto &item: vec){
-		if (item){
-			result++;	
-		}
-	}
-	return result;
-}
-
-
-void vecUtil::printSequence(sequence& seq){
-  for (auto &res: seq){
-		std::cout << res.getAA();
-	}
-	std::cout << std::endl;
 }
 
 

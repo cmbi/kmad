@@ -9,7 +9,6 @@
 class FeaturesProfile;
 class Sequences;
 namespace txtProc{
-	int convertStringToInt(std::string&);
 	double convertStringToDouble(std::string&);
 	std::string charToString(char);
 	std::string charToString(char,char);
@@ -26,7 +25,6 @@ namespace txtProc{
 	void writeAlignmentWithoutCodeToFile(std::vector<std::string>&, 
                                        std::vector< std::vector< std::vector<std::string> > >&, 
                                        std::string);
-	void writeVector(std::vector<std::vector<double> >&, std::string);
 	void process_conf_file(std::string, FeaturesProfile&, Sequences&);
 	std::vector<int> unfold(std::string, std::vector<std::string>&);
 }

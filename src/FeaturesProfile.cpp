@@ -89,7 +89,7 @@ void FeaturesProfile::countOccurences(const sequenceList& alignment,
 					if (featName != nothing){
 						int featIndex = findFeaturesIndex(featName);
 						if (featIndex != -1){
-							profileColumn[featIndex]+=modifier(featName) * weight; // seq. idenity * modifier (motif/domain/ptm...); w/o weights: weight == 1 
+							profileColumn[featIndex] += get_modifier(featName) * weight; // seq. idenity * modifier (motif/domain/ptm...); w/o weights: weight == 1 
 						}
 						else{
 							std::cout << "WARNING: unknown feature " << featName << std::endl;
@@ -139,11 +139,6 @@ void FeaturesProfile::getScore(unsigned int position, std::vector<int>& features
        add_score += m_prfMatrix[features[i]][position];
   }
 }
-// return gap modifier, based on the low complexity regions on nth position. TO BE IMPLEMENTED
-double FeaturesProfile::getGapMod(int position, std::vector<std::string> features){
-	double result = 1;  // for now it doesn't change anything
-	return result;
-}
 //returns score for a feature on nth position (by feature's name)
 double FeaturesProfile::score_motifs(unsigned int& position, std::string& featName){
 	int featuresIndex = findFeaturesIndex(featName);
@@ -162,87 +157,6 @@ int FeaturesProfile::findFeaturesIndex(std::string& featName){
 		}
 	}
 	return featuresIndex;
-}
-//function name - converts codon to name, e.g. AAAN to phosphN
-std::string FeaturesProfile::name(std::string& codon, int& featureType){
-	std::string name;
-	if (featureType == 4){
-		switch(codon[featureType]){
-			case 'N': name = "phosph0";
-				break;
-			case 'O': name = "phosph1"; 
-				break;
-			case 'P': name = "phosph2"; 
-				break;
-			case 'Q': name = "phosph3"; 
-				break;
-			case 'B': name = "acet0"; 
-				break;
-			case 'C': name = "acet1"; 
-				break;
-			case 'D': name = "acet2"; 
-				break;
-			case 'E': name = "acet3"; 
-				break;
-			case 'F': name = "Nglyc0"; 
-				break;
-			case 'G': name = "Nglyc1"; 
-				break;
-			case 'H': name = "Nglyc2"; 
-				break;
-			case 'I': name = "Nglyc3"; 
-				break;
-			case 'J': name = "amid0";
-				break;
-			case 'K': name = "amid1";
-				break;
-			case 'L': name = "amid2";
-				break;
-			case 'M': name = "amid3";
-				break;
-			case 'R': name = "hydroxy0";
-				break;
-			case 'S': name = "hydroxy1";
-				break;
-			case 'T': name = "hydroxy2";
-				break;
-			case 'U': name = "hydroxy3";
-				break;
-			case 'V': name = "methyl0";
-				break;
-			case 'W': name = "methyl1";
-				break;
-			case 'X': name = "methyl2";
-				break;
-			case 'Y': name = "methyl3";
-				break;
-			case 'Z': name = "Oglyc0";
-				break;
-			case 'a': name = "Oglyc1";
-				break;
-			case 'b': name = "Oglyc2";
-				break;
-			case 'c': name = "Oglyc3";
-				break;
-			case 'd': name = "phosphP";	//predicted phosphorylation
-				break;
-		}
-		
-	}
-	else if (featureType == 2){
-		name="domain";
-		name.push_back(codon[featureType]);
-		name.push_back(codon[featureType+1]);
-	}
-	else if (featureType == 5){
-		name="motif";
-		name.push_back(codon[featureType]);
-		name.push_back(codon[featureType+1]);
-	}
-	else if (featureType == 1 && codon[featureType] == 'L'){
-			name = "low_complexity_reg";
-	}
-	return name;
 }
 //function expandListOfFeatures - expand it by domains and motifs found in the alignment
 void FeaturesProfile::expandListOfFeatures(const sequenceList& sequences){
@@ -352,41 +266,15 @@ double FeaturesProfile::score_USR_features(unsigned int& position,
 	}
   return result;
 }
-void FeaturesProfile::printProfile(){
-	for (unsigned int i = 0; i < m_prfMatrix.size(); i++){
-    std::cout << listOfFeatures[i] << " ";
-		//for (unsigned int j = 0; j < m_prfMatrix[i].size();j++){
-    for (auto &score: m_prfMatrix[i]){
-			std::cout << score << " ";
-		}
-		std::cout << std::endl;
-	}
-}
-
-
-void FeaturesProfile::printOcc(){
-	for (unsigned int i = 0; i < m_occurences_matrix.size(); i++){
-    std::cout << listOfFeatures[i] << " ";
-    for (auto &score: m_occurences_matrix[i]){
-			std::cout << score << " ";
-		}
-		std::cout << std::endl;
-	}
-}
-
+ 
 
 std::vector<std::vector<double> > FeaturesProfile::getMatrix(){
 	return m_prfMatrix;
 }
 
 
-void FeaturesProfile::setMatrix(std::vector<std::vector<double> > newMatrix){
-	m_prfMatrix = newMatrix;
-}
-
-
 //returns score modifier for a given feature
-double FeaturesProfile::modifier(std::string& featName){
+double FeaturesProfile::get_modifier(std::string& featName){
 	std::string feat_code = txtProc::split(featName,'_')[0];
 	double modifier = 1;
 	if (feat_code == "ptm"){
@@ -438,12 +326,4 @@ void FeaturesProfile::add_USR_features(std::vector<std::tuple<std::string,
 			listOfFeatures.push_back(feature_i);
 		}
 	}
-}
-
-
-void FeaturesProfile::printFeatures(){
-  for (auto &feat: listOfFeatures){
-		std::cout << feat << " ";
-	}
-	std::cout << std::endl;
 }

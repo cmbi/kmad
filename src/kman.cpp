@@ -47,7 +47,7 @@ int main(int argc, char *argv[]){
   	if (vm.count("input") && vm.count("gap_penalty") && misc::checkParameters(codonLength,phosphScore,domainScore,motifScore,gapExt,gapPen,weightsModeOn,endPenalty)){
   		time_t start = clock();
   		std::vector<std::string> motifs_ids;
-  		std::vector<double> motifs_probs, identities;
+  		std::vector<double> motifs_probs;
       Sequences sequences;
       try{
           sequences = txtProc::read_fasta(filename, 

@@ -47,7 +47,7 @@ AM_CPPFLAGS	=	-std=c++11 \
 
 if HAVE_CPPCHECK
 cppcheck:
-		$(CPPCHECK) --quiet --enable=style src test
+		$(CPPCHECK) --quiet --std=c++11 --enable=all src
 check:	cppcheck
 endif
 

@@ -9,6 +9,9 @@ class Profile;
 class FeaturesProfile;
 class ScoringMatrix{
 public:
+  // Constructor
+  //
+  // @param int int1
 	ScoringMatrix(int, int, double, double, double); //constructor
 	void calculateScores(std::vector<Residue>, Profile&, FeaturesProfile&, 
                        int, int);

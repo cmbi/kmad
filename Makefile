@@ -799,7 +799,7 @@ uninstall-am: uninstall-binPROGRAMS
 
 
 cppcheck:
-		$(CPPCHECK) --quiet --enable=style src test
+		$(CPPCHECK) --quiet --std=c++11 --enable=all src
 check:	cppcheck
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

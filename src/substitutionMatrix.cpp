@@ -7,7 +7,9 @@
 #include <vector>
 //constructor
 namespace {
-	static const std::vector<char>alphabet = { 'A','R','N','D','C','Q','E','G','H','I','L','K','M','F','P','S','T','W','Y','V' };
+	static const std::vector<char>alphabet = { 'A','R','N','D','C','Q','E','G',
+                                             'H','I','L','K','M','F','P','S',
+                                             'T','W','Y','V' };
 	//BLOSUM62
 	static const std::vector< std::vector<int> >simScores = {{4, -1, -2, -2, 0, -1, -1, 0, -2, -1, -1, -1, -1, -2, -1, 1, 0, -3, -2, 0},
                                                            {-1, 5, 0, -2, -3, 1, 0, -2, 0, -3, -2, 2, -1, -3, -2, -1, -1, -3, -2, -3},
@@ -38,6 +40,8 @@ namespace {
 	//dummy binary
 	//static const std::vector<std::vector<int> > simScores = {{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}};
 }
+
+
 //function getElement - returns score for substitution of char1 amino acid by char2
 int substitutionMatrix::getElement(char char1,char char2){
 	int index1=0;
@@ -52,6 +56,8 @@ int substitutionMatrix::getElement(char char1,char char2){
 	}
 	return simScores[index1][index2];
 }
+
+
 //convert to profile format - creates a matrix 20 x sequence length, where nth column is a column from sbstMatrix for the amino acid on position n in the sequence
 std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(sequence& seq){
 	std::vector< std::vector<double> > result(seq.size());
@@ -82,27 +88,19 @@ std::vector< std::vector<double> > substitutionMatrix::convertToProfileFormat(se
 	vecUtil::transposeVec(result);
 	return result;
 }
+
+
 //function getElement - retruns score for substitution of ith aa by jth aa
 int substitutionMatrix::getElement(int i,int j){
 	return simScores[i][j];
 }
-//function printSbstMatrix - prints substitution matrix
-void substitutionMatrix::printSbstMatrix(){
-  for (auto &row: simScores){
-    for(auto &item: row){
-			std::cout << item;
-			std::cout << " ";
-		}
-		std::cout << "\n";
-	}
-}
-//function getLetter - returns nth('lNr' integer) aa
-char substitutionMatrix::getLetter(int lNr){
-	return alphabet[lNr];
-}
+
+
 void substitutionMatrix::getColumn(unsigned int& columnNo, std::vector<int>& column_int){
 	column_int = simScores[columnNo];
 }
+
+
 //function findAminoAcidsNo - finds index of the given char aa amino acid
 int substitutionMatrix::findAminoAcidsNo(char aa){
 	int aAcidint = -1;

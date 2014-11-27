@@ -11,13 +11,8 @@ public:
 	//getters
 	void getScore(unsigned int, std::vector<std::string>&, double&);
 	void getScore(unsigned int, std::vector<int>&, double&);
-	//double getScore(int,std::string);
-	double getGapMod(int, std::vector<std::string>);
 	std::vector<std::vector<double> > getMatrix();
 	//setters
-	void setMatrix(std::vector<std::vector<double> >);
-	void printProfile();
-	void printOcc();
 	void createProfile(const std::vector<std::vector<Residue>>&, 
                      const std::vector<double>&, bool, int);
   void processProfile();
@@ -33,7 +28,6 @@ public:
                                                 int, int, double, double, 
                                                 double, double, std::string,
                                                 std::string> >&);
-	void printFeatures();
 	int findFeaturesIndex(std::string&);
 private:
 	double motifs_prob(std::string&);
@@ -41,8 +35,7 @@ private:
 	double score_domains(unsigned int&, std::string&);
 	double score_PTMs(unsigned int&, std::string&);
 	double score_USR_features(unsigned int&, std::string&); 
-	double modifier(std::string&);
-	std::string name(std::string&,int&);
+	double get_modifier(std::string&);
 	int m_domainScore, m_phosphScore, m_motifScore;
 	std::vector<std::string> m_motifs_ids;
 	std::vector<double> m_motifs_probs;
