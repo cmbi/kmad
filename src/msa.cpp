@@ -7,19 +7,19 @@
 #include <iostream>
 #include <vector>
 #include <tuple>
-std::vector<std::string> msa::run_msa(Sequences sequences,
-                                 std::string conf_filename,
-                                 double gapPen,
-                                 double gapExt,
-                                 double endPenalty,
-                                 double lcr_mod,
-                                 int domainScore, 
-                                 int motifScore,
-                                 int phosphScore,
-                                 int codonLength,
-                                 bool weightsModeOn, 
-                                 std::vector<std::string> motifs_ids,
-                                 std::vector<double> motifs_probs){
+string_sequences msa::run_msa(Sequences sequences,
+                              std::string conf_filename,
+                              double gapPen,
+                              double gapExt,
+                              double endPenalty,
+                              double lcr_mod,
+                              int domainScore, 
+                              int motifScore,
+                              int phosphScore,
+                              int codonLength,
+                              bool weightsModeOn, 
+                              ids_list motifs_ids,
+                              probs_list motifs_probs){
 
   		Profile prf;
   		FeaturesProfile fprf(domainScore, phosphScore, motifScore, lcr_mod, 
@@ -36,7 +36,7 @@ std::vector<std::string> msa::run_msa(Sequences sequences,
                                                                                 weightsModeOn, 
                                                                                 codonLength, 
                                                                                 identities));
-  		std::vector<std::string> alignment;
+  		string_sequences alignment;
   		int prev_alignments = 0;
   		for (int i = 8; i >= 0; i--){
   			double cutoff = double(i)/10;

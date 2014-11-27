@@ -1,6 +1,7 @@
 #ifndef VECUTIL_H
 #define VECUTIL_H 
 
+#include "types.h"
 #include<iostream>
 #include<vector>
 #include<string>

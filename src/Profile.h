@@ -1,6 +1,7 @@
 #ifndef PROFILE_H
 #define PROFILE_H
 
+#include "types.h"
 #include <iostream>
 #include <string>
 #include <vector>

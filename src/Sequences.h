@@ -1,5 +1,6 @@
 #ifndef SEQUENCES_H
 #define SEQUENCES_H
+#include "types.h"
 #include <iostream>
 #include <vector>
 class Residue;

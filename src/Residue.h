@@ -27,6 +27,4 @@ class Residue{
     void setFeatIndexes(std::vector<int>);
 };
 
-typedef std::vector<Residue> sequence;
-typedef std::vector<sequence> sequenceList;
 #endif /* RESIDUE_H */

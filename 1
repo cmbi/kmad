@@ -15,6 +15,8 @@
 #include <stdexcept>
 #include <string>
 namespace po = boost::program_options;
+typedef std::vector<std::string> ids_list;
+typedef std::vector<double> probs_list;
 int main(int argc, char *argv[]){
   	int codon_length, phosphScore, domainScore, motifScore = 0;
   	double gapExt, gapPen, endPenalty, lcr_mod = 0;
