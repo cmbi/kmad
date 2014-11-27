@@ -17,7 +17,7 @@
 
 
 namespace {
-	static const std::vector<char> acceptable_characters = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'};
+	static const std::vector<char> accepted_characters = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'};
 }
 
 
@@ -38,7 +38,6 @@ double txtProc::convertStringToDouble(std::string& s){
 //splits a string by the delimiter, returns a vector of strings
 std::vector<std::string> txtProc::split(const std::string &s, char delim) {
     std::vector<std::string> elems;
-    //split(s, delim, elems);
     std::stringstream ss(s);
     std::string item;
     while (std::getline(ss, item, delim)) {
@@ -86,7 +85,7 @@ Sequences txtProc::read_fasta(std::string filename,
 	  						std::string newResidue = "";
 	  						//j for goes through all codon postions of this residue
 	  						for (unsigned int j = i;j < i + codonLength; j++){
-	  								if (acceptableChar(line[j])){
+	  								if (acceptedChar(line[j])){
 	  									newResidue += line[j];
 	  								}
 	  								else{
@@ -155,9 +154,9 @@ void txtProc::writeVector(std::vector<std::vector<double>>& vec, std::string fil
 	std::stringstream sstr;
 	sstr << filename;
 	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
-	for (unsigned int i = 0; i < vec.size() ;i++){
-		for (unsigned int j = 0; j < vec[0].size(); j++){
-			outputFile << vec[i][j] << std::endl;
+  for (auto &row: vec){
+    for (auto &item: row){
+			outputFile << item << std::endl;
 		}
 	}
 }
@@ -202,10 +201,10 @@ std::istream& txtProc::safeGetline(std::istream& is, std::string& t)
 
 
 //check if the character is supported
-bool txtProc::acceptableChar(char my_char){
+bool txtProc::acceptedChar(char my_char){
 	bool result = false;
-	for (unsigned int i = 0; i < acceptable_characters.size(); i++){
-		if (acceptable_characters[i]==my_char){
+  for (auto &acc_char: accepted_characters){
+		if (acc_char == my_char){
 			result = true;
 			break;
 		}
@@ -251,19 +250,22 @@ void txtProc::process_conf_file(std::string filename, FeaturesProfile& feat_prof
 std::vector<int> txtProc::unfold(std::string conf_string, std::vector<std::string>& listOfFeatures){
 	std::vector<std::string> tmp_vector = split(conf_string,',');
 	std::vector<int> out_vector;
-	for (unsigned int i = 0; i < tmp_vector.size(); i++){
-		if (split(tmp_vector[i],'_').size() > 1){						// this is a single feature entry, e.g. 'PF_A'
-      std::string feat_name = std::string("USR_")+tmp_vector[i];
+	//for (unsigned int i = 0; i < tmp_vector.size(); i++){
+  for (auto &item: tmp_vector){
+		if (split(item,'_').size() > 1){						// this is a single feature entry, e.g. 'PF_A'
+      std::string feat_name = std::string("USR_") + item;
 			out_vector.push_back(vecUtil::findIndex(feat_name, listOfFeatures));
 		}
-		else if (split(tmp_vector[i],'[').size() == 1){						// this is an entry with only the tag specified (without any exceptions)
+		else if (split(item,'[').size() == 1){						// this is an entry with only the tag specified (without any exceptions)
 			for (unsigned int j = 0; j < listOfFeatures.size(); j++){
 				std::vector<std::string> singlefeat = split(listOfFeatures[j],'_');
-				if (singlefeat.size() > 1 && singlefeat[1] == tmp_vector[i]){out_vector.push_back(j);}
+				if (singlefeat.size() > 1 && singlefeat[1] == item){
+          out_vector.push_back(j);
+        }
 			}
 		}
 		else{//TAG with exceptions
-			std::vector<std::string> tagfeat = split(tmp_vector[i],'[');
+			std::vector<std::string> tagfeat = split(item,'[');
 			std::string tag = tagfeat[0];
 			std::vector<std::string> exceptions = split(split(tagfeat[1],']')[0],'.');
 			for (unsigned int j = 0; j < listOfFeatures.size(); j++){

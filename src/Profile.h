@@ -24,7 +24,6 @@ private:
 	void createProfile(std::vector<std::vector<Residue>>&,
                      const std::vector<double>&, bool);
 
-	double countNonGaps(int);
 	//variables
 	std::vector< std::vector<double> > m_prfMatrix;
 };

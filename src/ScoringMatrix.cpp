@@ -7,7 +7,7 @@
 #include "Residue.h"
 #include "substitutionMatrix.h"
 #include "Profile.h"
-#include "findVal.h"
+#include "val.h"
 #include "misc.h"
 #include "vecUtil.h"
 #include "txtProc.h"
@@ -70,7 +70,7 @@ void ScoringMatrix::calculateScores(sequence s2, Profile& prf,
 			score1 = m_matrixV[i-1][j-1];
 			score2 = m_matrixG[i-1][j-1];
 			score3 = m_matrixH[i-1][j-1];
-			m_matrixV[i][j] = findVal::maxValueDoubles(score1,score2,score3) + final_score;
+			m_matrixV[i][j] = val::maxValueDoubles(score1,score2,score3) + final_score;
 			///G
 			score1 = m_matrixV[i-1][j] + m_gapOpening;
 			score2 = m_matrixG[i-1][j] + m_gapExtension;

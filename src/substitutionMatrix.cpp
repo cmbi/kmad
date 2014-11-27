@@ -42,7 +42,7 @@ namespace {
 int substitutionMatrix::getElement(char char1,char char2){
 	int index1=0;
 	int index2=0;
-	for (unsigned int i = 0; i<20;i++){
+  for (unsigned int i = 0; i < alphabet.size(); i++){
 		if(alphabet[i] == char1){
 			index1 = i;
 		}
@@ -88,9 +88,9 @@ int substitutionMatrix::getElement(int i,int j){
 }
 //function printSbstMatrix - prints substitution matrix
 void substitutionMatrix::printSbstMatrix(){
-	for (unsigned int i=0; i < simScores.size();i++){
-		for (unsigned int j = 0; j < simScores[i].size();j++){
-			std::cout << simScores[i][j];
+  for (auto &row: simScores){
+    for(auto &item: row){
+			std::cout << item;
 			std::cout << " ";
 		}
 		std::cout << "\n";

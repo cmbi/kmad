@@ -7,8 +7,8 @@ Residue::Residue(std::string codon, std::vector<std::string> additional_features
 	m_codon = codon;
 	m_aa = codon[0];
 	codon_to_features();
-	for (unsigned int i = 0; i < additional_features.size(); i++){
-		m_features.push_back(additional_features[i]);
+  for (auto &feat: additional_features){
+		m_features.push_back(feat);
 	}
 }
 Residue::Residue(){}

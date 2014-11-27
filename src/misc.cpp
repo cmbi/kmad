@@ -1,5 +1,6 @@
 #include "misc.h"
 #include "Residue.h"
+
 #include <iostream>
 #include <fstream>
 #include <istream>
@@ -34,7 +35,9 @@ sequence misc::pseudoResidueSequence(int seqLength, int codon_length){
 
 
 void misc::printEncodedSeq(const std::vector<std::string>& seq){
-	for (unsigned int i = 0; i < seq.size();i++) std::cout << seq[i][0];	
+  for (auto &res: seq){
+    std::cout << res[0];	
+  }
 	std::cout << "\n";
 }
 

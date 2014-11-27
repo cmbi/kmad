@@ -100,14 +100,6 @@ void Profile::createProfile(sequenceList& alignment,
 	m_prfMatrix = tmpResult;
 	vecUtil::transposeVec(m_prfMatrix);
 }
-//function countNonGaps - counts how many characters in alignment nth ('column' integer) column are not gaps 
-double Profile::countNonGaps(int column){
-	double sum = 0;
-	for (unsigned int i =0; i < 20; i++){
-		sum += double(m_prfMatrix[i][column]);
-	}
-	return sum;
-}
 //function getElement - returns score for 'aAcid' amino acid on 'position' position
 double Profile::getElement(int position, char aAcid){
 	double result;
@@ -145,9 +137,9 @@ void Profile::printProfile(int boundStart, int boundEnd){
 }
 //function printProfile - prints full profile
 void Profile::printProfile(){
-	for (unsigned int i = 0; i < m_prfMatrix.size(); i++){
-		for (unsigned int j = 0; j < m_prfMatrix[0].size();j++){
-			std::cout << m_prfMatrix[i][j] << " ";
+  for (auto &row: m_prfMatrix){
+    for (auto &item: row){
+			std::cout << item << " ";
 		}
 		std::cout << "\n";
 	}

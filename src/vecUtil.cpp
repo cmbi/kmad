@@ -43,8 +43,8 @@ void vecUtil::transposeVec(std::vector< std::vector<double> >& vec){
 
 void vecUtil::divideVectorByAScalar(std::vector<double>& vec, int scalar){
 	std::vector<double> result;
-	for (unsigned int i = 0; i < vec.size(); i++){
-		result.push_back(vec[i]/scalar);	
+  for (auto &item: vec){
+		result.push_back(item/scalar);	
 	}
 	vec = result;
 }
@@ -52,8 +52,8 @@ void vecUtil::divideVectorByAScalar(std::vector<double>& vec, int scalar){
 
 void vecUtil::divideVectorByAScalar(std::vector<double>& vec, double& scalar){
 	std::vector<double> result;
-	for (unsigned int i = 0; i < vec.size(); i++){
-		result.push_back(vec[i]/scalar);	
+  for (auto &item: vec){
+		result.push_back(item/scalar);	
 	}
 	vec = result;
 }
@@ -61,8 +61,8 @@ void vecUtil::divideVectorByAScalar(std::vector<double>& vec, double& scalar){
 
 void vecUtil::multiplyVectorByAScalar(std::vector<double>& vec, int scalar){
 	std::vector<double> result;
-	for (unsigned int i = 0; i < vec.size(); i++){
-		result.push_back(vec[i]*scalar);
+  for (auto &item: vec){
+		result.push_back(item*scalar);
 	}
 	vec = result;
 }
@@ -70,8 +70,8 @@ void vecUtil::multiplyVectorByAScalar(std::vector<double>& vec, int scalar){
 
 void vecUtil::multiplyVectorByAScalar(std::vector<double>& vec, double& scalar){
 	std::vector<double> result;
-	for (unsigned int i = 0; i < vec.size(); i++){
-		result.push_back(vec[i]*scalar);
+  for (auto &item: vec){
+		result.push_back(item*scalar);
 	}
 	vec = result;
 }
@@ -94,8 +94,8 @@ std::vector<double> vecUtil::addUp(std::vector< std::vector<double> >& vec){
 //convertIntVectorToDoubleVector
 std::vector<double> vecUtil::convertIntVectorToDoubleVector(std::vector<int>& vec){
 	std::vector<double> result;
-	for (unsigned int i = 0; i < vec.size();i++){
-		result.push_back(double(vec[i]));
+  for (auto &item: vec){
+		result.push_back(double(item));
 	}
 	return result;
 }
@@ -103,24 +103,24 @@ std::vector<double> vecUtil::convertIntVectorToDoubleVector(std::vector<int>& ve
 
 //function printDoubleVector
 void vecUtil::printVector(const std::vector<int>& vec){
-	for (unsigned int i = 0; i < vec.size(); i++){
-		std::cout << vec[i] << " ";
+  for (auto &item: vec){
+		std::cout << item << " ";
 	}
 	std::cout << "\n";
 }
 
 
 void vecUtil::printVector(const std::vector<double>& vec){
-	for (unsigned int i = 0; i < vec.size(); i++){
-		std::cout << vec[i] << " ";
+  for (auto &item: vec){
+		std::cout << item << " ";
 	}
 	std::cout << "\n";
 }
 
 
 void vecUtil::printVector(const std::vector<std::string>& vec){
-	for (unsigned int i = 0; i < vec.size(); i++){
-		std::cout << vec[i] << " ";
+  for (auto &item: vec){
+		std::cout << item << " ";
 	}
 	std::cout << "\n";
 }
@@ -129,10 +129,10 @@ void vecUtil::printVector(const std::vector<std::string>& vec){
 //takes a set of encoded sequences (=vector of vectors of strings) and returns a vector of nonencoded sequences
 std::vector<std::string> vecUtil::flattenWithoutFeatures(const std::vector<std::vector<std::string> >& vec){
 	std::vector<std::string> result;
-	for (unsigned int i = 0; i < vec.size();i++){
+  for (auto &row: vec){
 		std::string newSeq = "";
-		for(unsigned int j = 0; j < vec[i].size(); j++){
-			newSeq+=vec[i][j][0];
+    for (auto &item: row){
+			newSeq += item[0];
 		}
 		result.push_back(newSeq);
 	}
@@ -143,10 +143,10 @@ std::vector<std::string> vecUtil::flattenWithoutFeatures(const std::vector<std::
 //flatten a vector of residue vectors to a vector of strings
 std::vector<std::string> vecUtil::flatten(const sequenceList& vec){
 	std::vector<std::string> result;
-	for(unsigned int i = 0; i < vec.size();i++){
+  for (auto &row: vec){
 		std::string newSeq = "";
-		for(unsigned int j = 0; j < vec[i].size(); j++){
-			newSeq+=vec[i][j].getCodon();
+    for(auto &item: row){
+			newSeq += item.getCodon();
 		}
 		result.push_back(newSeq);
 	}
@@ -156,10 +156,10 @@ std::vector<std::string> vecUtil::flatten(const sequenceList& vec){
 
 std::vector<std::string> vecUtil::flatten(const std::vector<std::vector<std::string> >& vec){
 	std::vector<std::string> result;
-	for (unsigned int i = 0; i < vec.size();i++){
+  for (auto &row: vec){
 		std::string newSeq = "";
-		for(unsigned int j = 0; j < vec[i].size(); j++){
-			newSeq+=vec[i][j];
+    for (auto &item: row){
+			newSeq += item;
 		}
 		result.push_back(newSeq);
 	}
@@ -179,8 +179,8 @@ std::vector<Residue> vecUtil::push_front(sequence& seq, Residue newElement){
 //calc the sum of elements in the vector
 double vecUtil::sum(const std::vector<double>& vec){
 	double sum = 0;
-	for (unsigned int i = 0; i < vec.size(); i++){
-		sum += vec[i];
+  for (auto &item: vec){
+		sum += item;
 	}
 	return sum;
 }
@@ -216,8 +216,8 @@ std::vector<double> vecUtil::average(const std::vector< std::vector<int> >& vec)
 
 int vecUtil::countTrueValuesInVector(const std::vector<bool>& vec){
 	int result = 0;
-	for (unsigned int i = 0; i < vec.size(); i++){
-		if (vec[i]){
+  for (const auto &item: vec){
+		if (item){
 			result++;	
 		}
 	}
@@ -226,8 +226,8 @@ int vecUtil::countTrueValuesInVector(const std::vector<bool>& vec){
 
 
 void vecUtil::printSequence(sequence& seq){
-	for (unsigned int i = 0; i < seq.size(); i++){
-		std::cout << seq[i].getAA();
+  for (auto &res: seq){
+		std::cout << res.getAA();
 	}
 	std::cout << std::endl;
 }

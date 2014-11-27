@@ -1,65 +1,21 @@
-#include "Residue.h"
-#include "Sequences.h"
-#include "FeaturesProfile.h"
-#include "Profile.h"
-#include "txtProc.h"
+#include "val.h"
 #include "vecUtil.h"
 #include "misc.h"
+#include "msa.h"
+#include "txtProc.h"
+
+#include "Residue.h"
+#include "ScoringMatrix.h"
+#include "Profile.h"
+#include "FeaturesProfile.h"
+#include "Sequences.h"
+
 #include <boost/program_options.hpp>
 #include <ctime>
 #include <iostream>
 #include <string>
 #include <stdexcept>
 namespace po = boost::program_options;
-std::vector<std::string> run_msa(Sequences sequences,
-                                 std::string conf_filename,
-                                 double gapPen,
-                                 double gapExt,
-                                 double endPenalty,
-                                 double lcr_mod,
-                                 int domainScore, 
-                                 int motifScore,
-                                 int phosphScore,
-                                 int codonLength,
-                                 bool weightsModeOn, 
-                                 std::vector<std::string> motifs_ids,
-                                 std::vector<double> motifs_probs){
-
-  		Profile prf;
-  		FeaturesProfile fprf(domainScore, phosphScore, motifScore, lcr_mod, 
-                           motifs_ids, motifs_probs);
-  		if (!conf_filename.empty()){
-  			txtProc::process_conf_file(conf_filename, fprf, sequences);
-  		}
-      std::vector<double> identities;
-  		//first round of the alignment - all vs 1st
-  		std::vector<std::string> multipleAlignment(sequences.performMSAfirstround(prf, fprf, 
-                                                                                gapPen, 
-                                                                                endPenalty, 
-                                                                                gapExt, 
-                                                                                weightsModeOn, 
-                                                                                codonLength, 
-                                                                                identities));
-  		std::vector<std::string> alignment;
-  		int prev_alignments = 0;
-  		for (int i = 8; i >= 0; i--){
-  			double cutoff = double(i)/10;
-  			sequences.performMSAnextRounds(&alignment, prf, fprf, gapPen, 
-                                       endPenalty, gapExt,
-                                       weightsModeOn, cutoff, codonLength, 
-                                       identities, prev_alignments);
-  			//prev_alignments - number of alignments performed in the previous round - 
-        //to omit this round if the number of aligned sequences is the same as
-        //in the previous round
-  		}
-  		prev_alignments = 0;  // to align (again) all sequences to the profile
-  		sequences.performMSAnextRounds(&alignment, prf, fprf, 
-                                     gapPen, endPenalty, gapExt, 
-                                     weightsModeOn, 0, 
-                                     codonLength, identities, 
-                                     prev_alignments);
-      return alignment;
-}
 int main(int argc, char *argv[]){
   	int codonLength, phosphScore,domainScore, motifScore;
   	double gapExt, gapPen, endPenalty, lcr_mod;
@@ -93,7 +49,6 @@ int main(int argc, char *argv[]){
   		std::vector<std::string> motifs_ids;
   		std::vector<double> motifs_probs, identities;
       Sequences sequences;
-      //std::vector<std::vector<std::vector<std::string> > > sequences; 
       try{
           sequences = txtProc::read_fasta(filename, 
                                       codonLength, 
@@ -106,12 +61,12 @@ int main(int argc, char *argv[]){
         return -1;
       }
       std::vector<std::string> seq_names = sequences.get_names();
-      std::vector<std::string> alignment = run_msa(sequences, conf_file, gapPen, 
-                                                   gapExt, endPenalty, lcr_mod, 
-                                                   domainScore, motifScore, 
-                                                   phosphScore, codonLength, 
-                                                   weightsModeOn,
-                                                   motifs_ids, motifs_probs);
+      std::vector<std::string> alignment = msa::run_msa(sequences, conf_file, gapPen, 
+                                                        gapExt, endPenalty, lcr_mod, 
+                                                        domainScore, motifScore, 
+                                                        phosphScore, codonLength, 
+                                                        weightsModeOn,
+                                                        motifs_ids, motifs_probs);
   		txtProc::writeAlignmentToFile(alignment, seq_names, outputPrefix);						
   		time_t end = clock();
   		std::cout << "time: " << double(end - start)/CLOCKS_PER_SEC << std::endl;

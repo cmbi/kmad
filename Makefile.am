@@ -15,7 +15,9 @@ kman_SOURCES	=	src/kman.cpp \
 								src/vecUtil.cpp \
 								src/misc.cpp \
 								src/substitutionMatrix.cpp \
-								src/findVal.cpp
+								src/val.cpp \
+								src/msa.cpp
+
 
 kman_LDADD = $(shared_LDADD)
 
@@ -29,7 +31,8 @@ test_kman_SOURCES = tests/test_vecutil.cpp \
 										src/vecUtil.cpp \
 										src/misc.cpp \
 										src/substitutionMatrix.cpp \
-										src/findVal.cpp
+										src/val.cpp \
+										src/msa.cpp
 
 test_kman_LDADD	=	$(shared_LDADD)
 

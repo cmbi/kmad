@@ -325,24 +325,25 @@ double FeaturesProfile::score_USR_features(unsigned int& position,
                                            std::string& feat_name){
 	//first find tuple(s) with rules for this feature
   double result = 0;
-	for (unsigned int i = 0; i < m_rules.size(); i++){
-		if (std::get<0>(m_rules[i]) == feat_name){
-			double add_tmp = std::get<2>(m_rules[i]);
+  for (auto &rule: m_rules){
+		if (std::get<0>(rule) == feat_name){
+			double add_tmp = std::get<2>(rule);
       //positions of increasing features
-			std::vector<int> incr_features = std::get<6>(m_rules[i]);  
+			std::vector<int> incr_features = std::get<6>(rule);  
       //go through features that increase the score
-			for (unsigned int j = 0; j < incr_features.size(); j++){ 
-				double prf_score = m_occurences_matrix[incr_features[j]][position];
+      for (auto &feat: incr_features){
+				double prf_score = m_occurences_matrix[feat][position];
 				if (prf_score != 0){
 					 result += add_tmp*prf_score;
 				}
 			}
 			//the same for decreasing features
-			add_tmp = std::get<4>(m_rules[i]);
-			std::vector<int> decr_features = std::get<7>(m_rules[i]);
+			add_tmp = std::get<4>(rule);
+			std::vector<int> decr_features = std::get<7>(rule);
       //go through features that increase the score
-			for (unsigned int j = 0; j < decr_features.size(); j++){ 
-				double prf_score = m_occurences_matrix[decr_features[j]][position];
+			//for (unsigned int j = 0; j < decr_features.size(); j++){ 
+      for (auto &feat: decr_features){
+				double prf_score = m_occurences_matrix[feat][position];
 				if (prf_score != 0){
 					result -= add_tmp*prf_score;
 				}
@@ -354,8 +355,9 @@ double FeaturesProfile::score_USR_features(unsigned int& position,
 void FeaturesProfile::printProfile(){
 	for (unsigned int i = 0; i < m_prfMatrix.size(); i++){
     std::cout << listOfFeatures[i] << " ";
-		for (unsigned int j = 0; j < m_prfMatrix[i].size();j++){
-			std::cout << m_prfMatrix[i][j] << " ";
+		//for (unsigned int j = 0; j < m_prfMatrix[i].size();j++){
+    for (auto &score: m_prfMatrix[i]){
+			std::cout << score << " ";
 		}
 		std::cout << std::endl;
 	}
@@ -365,8 +367,8 @@ void FeaturesProfile::printProfile(){
 void FeaturesProfile::printOcc(){
 	for (unsigned int i = 0; i < m_occurences_matrix.size(); i++){
     std::cout << listOfFeatures[i] << " ";
-		for (unsigned int j = 0; j < m_occurences_matrix[i].size();j++){
-			std::cout << m_occurences_matrix[i][j] << " ";
+    for (auto &score: m_occurences_matrix[i]){
+			std::cout << score << " ";
 		}
 		std::cout << std::endl;
 	}
@@ -402,17 +404,18 @@ double FeaturesProfile::modifier(std::string& featName){
 
 // sets rules for aligning features, unfolds last two elements in each tuple to vectors (vectors of features(strings))
 void FeaturesProfile::setRules(std::vector<std::tuple<std::string,std::string,int,int,int,double,double,double,double,std::string,std::string> >& new_rules){
-	for (unsigned int i = 0; i < new_rules.size(); i++){
-		std::vector<int> incr_feat = txtProc::unfold(std::get<9>(new_rules[i]), listOfFeatures);
-		std::vector<int> red_feat = txtProc::unfold(std::get<10>(new_rules[i]), listOfFeatures);
+	//for (unsigned int i = 0; i < new_rules.size(); i++){
+  for (auto &rule: new_rules){
+		std::vector<int> incr_feat = txtProc::unfold(std::get<9>(rule), listOfFeatures);
+		std::vector<int> red_feat = txtProc::unfold(std::get<10>(rule), listOfFeatures);
 		// new_tuple <tag+name, incr_rule_1, incr_rule_2, red_rule_1, red_rule_2, incr_features_positions, red_features_positions>
 		// incr_features_positions and red_features_positions are positions(indexes in the profile, not positions in sequence) of features that will be scored in the listOfFeatures vector
-		std::tuple<std::string,int,double,double,double,double,std::vector<int>,std::vector<int>> new_tuple = std::make_tuple(std::string("USR_")+std::get<0>(new_rules[i])+std::string("_")+std::get<1>(new_rules[i]),
-                                                                                                                          std::get<2>(new_rules[i]), 
-                                                                                                                          std::get<5>(new_rules[i]),
-                                                                                                                          std::get<6>(new_rules[i]),
-                                                                                                                          std::get<7>(new_rules[i]), 
-                                                                                                                          std::get<8>(new_rules[i]),
+		std::tuple<std::string,int,double,double,double,double,std::vector<int>,std::vector<int>> new_tuple = std::make_tuple(std::string("USR_")+std::get<0>(rule)+std::string("_")+std::get<1>(rule),
+                                                                                                                          std::get<2>(rule), 
+                                                                                                                          std::get<5>(rule),
+                                                                                                                          std::get<6>(rule),
+                                                                                                                          std::get<7>(rule), 
+                                                                                                                          std::get<8>(rule),
                                                                                                                           incr_feat, 
                                                                                                                           red_feat);
 		m_rules.push_back(new_tuple);
@@ -428,9 +431,9 @@ void FeaturesProfile::add_USR_features(std::vector<std::tuple<std::string,
                                                               double, double,
                                                               std::string,
                                                               std::string> >& new_rules){
-	for (unsigned int i = 0; i < new_rules.size(); i++){
-		std::string feature_i = std::string("USR_") + std::get<0>(new_rules[i]) \
-                            + std::string("_") + std::get<1>(new_rules[i]);
+  for (auto &rule: new_rules){
+		std::string feature_i = std::string("USR_") + std::get<0>(rule) \
+                            + std::string("_") + std::get<1>(rule);
 		if (!vecUtil::contains(listOfFeatures,feature_i)){
 			listOfFeatures.push_back(feature_i);
 		}
@@ -439,8 +442,8 @@ void FeaturesProfile::add_USR_features(std::vector<std::tuple<std::string,
 
 
 void FeaturesProfile::printFeatures(){
-	for (unsigned int i = 0; i < listOfFeatures.size(); i++){
-		std::cout << listOfFeatures[i] << " ";
+  for (auto &feat: listOfFeatures){
+		std::cout << feat << " ";
 	}
 	std::cout << std::endl;
 }

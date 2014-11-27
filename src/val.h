@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-namespace findVal{
+namespace val{
 	double maxValueDoubles(double, double, double); 		
 	std::vector< std::vector<int> > nMaxValues(std::vector<int>&, int);
 	int getMaxDoubleValuesIndex(std::vector<double>&);

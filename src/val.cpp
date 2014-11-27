@@ -1,9 +1,9 @@
-#include "findVal.h"
+#include "val.h"
 #include <iostream>
 #include <vector>
 #include <string>
 //function maxValueOf3 - finds maximum value from 3 doubles
-double findVal::maxValueDoubles(double double1,double double2,double double3){
+double val::maxValueDoubles(double double1,double double2,double double3){
 	double m = double1;
 	if (double2 > double1 && double2 > double3){
 		m = double2;
@@ -15,7 +15,7 @@ double findVal::maxValueDoubles(double double1,double double2,double double3){
 }
 /* function maxValuesFromVector
 finds n max values from vector<int>  vectorA */
-std::vector< std::vector<int> > findVal::nMaxValues(std::vector<int>& vectorA, int n){
+std::vector< std::vector<int> > val::nMaxValues(std::vector<int>& vectorA, int n){
 	int i = 0;
 	std::vector< std::vector<int> > result;
 	std::vector<int> newEntry;
@@ -49,7 +49,7 @@ std::vector< std::vector<int> > findVal::nMaxValues(std::vector<int>& vectorA, i
 	return result;
 }
 //function getMaxDoubleValuesIndex - returns index of the maximum value from vector<double> someVector
-int findVal::getMaxDoubleValuesIndex(std::vector<double>& someVector){
+int val::getMaxDoubleValuesIndex(std::vector<double>& someVector){
 	int max = -100000;
 	int maxIndex = -1;
 	for (unsigned int i = 0; i < someVector.size(); i++){

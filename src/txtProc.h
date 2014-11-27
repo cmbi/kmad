@@ -15,7 +15,7 @@ namespace txtProc{
 	std::string charToString(char,char);
 	std::istream& safeGetline(std::istream&, std::string&);
 	std::vector<std::string> split(const std::string&, char);
-	bool acceptableChar(char);
+	bool acceptedChar(char);
 	Sequences read_fasta(std::string, int, std::vector<std::string>*,
                        std::vector<double>*);
   //std::vector<std::vector<std::vector<std::string> > > read_fasta(std::string, int, std::vector<std::string>*,
