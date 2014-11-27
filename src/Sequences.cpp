@@ -118,7 +118,7 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment,
         // NW alignment of the ith seq against the profile
 				alignPairwise(alNoLower, alWithLower, m_sequences_aa[i], outputProfile,
                       outputFeaturesProfile,penalty,endPenalty,extensionPenalty,
-                      i, codon_length); 
+                      0, codon_length); 
 				alignmentWithoutLowercase.push_back(alNoLower);
 				alignmentWithLowercase.push_back(alWithLower);
 			}
@@ -219,16 +219,18 @@ void Sequences::alignPairwise(sequence& alNoLower,
 int Sequences::countAlignments(double identity_cutoff, 
                                std::vector<double>& identities){
 	int count = 0;
-	for (unsigned int i = 0; i < identities.size(); i++){
-		if (identities[i] > identity_cutoff){
+	//for (unsigned int i = 0; i < identities.size(); i++){
+  for (auto &item: identities){
+		if (item > identity_cutoff){
 			count++;
 		}
 	}
 	return count;
 }
 void Sequences::printSequence(int seq_index) const{
-	for (unsigned int i = 0; i < m_sequences_aa[seq_index].size(); i++){
-		std::cout << m_sequences_aa[seq_index][i].getAA();
+	//for (unsigned int i = 0; i < m_sequences_aa[seq_index].size(); i++){
+  for (auto &residue: m_sequences_aa[seq_index]){
+		std::cout << residue.getAA();
 	}
 	std::cout << std::endl;
 }
@@ -237,14 +239,15 @@ void Sequences::printSequence(int seq_index) const{
 void Sequences::add_usr_features(std::vector<std::tuple<std::string,std::string, 
                                  int, int, int, double, double, double, double, 
                                  std::string, std::string> >& feature_rules){
-	for (unsigned int i = 0; i < feature_rules.size(); i++){
+	//for (unsigned int i = 0; i < feature_rules.size(); i++){
+	for (auto &rule: feature_rules){
 		std::string feat_name = std::string("USR_")
-                            + std::get<0>(feature_rules[i])
+                            + std::get<0>(rule)
                             + std::string("_")
-                            + std::get<1>(feature_rules[i]);
-		int sequence_no = std::get<2>(feature_rules[i]);
-		int start = std::get<3>(feature_rules[i]);
-		int end = std::get<4>(feature_rules[i])+1;
+                            + std::get<1>(rule);
+		int sequence_no = std::get<2>(rule);
+		int start = std::get<3>(rule);
+		int end = std::get<4>(rule)+1;
     signed int seq_length = m_sequences_aa[sequence_no].size();
     if (sequence_no < (signed)m_sequences_aa.size()){
 		  for (int j = start; j < end && j < seq_length; j++){
@@ -260,16 +263,16 @@ std::vector< std::string> Sequences::get_names(){
 
 void Sequences::add_feature_indexes(FeaturesProfile& fprf){
   std::string nothing = "AA";
-  for (unsigned int i = 0; i < m_sequences_aa.size(); i++){
-    for (unsigned int j = 0; j < m_sequences_aa[i].size(); j ++){
-        std::vector<std::string> features = m_sequences_aa[i][j].getFeatures();
+  for (auto &seq: m_sequences_aa){
+    for (auto &res: seq){
+        std::vector<std::string> features = res.getFeatures();
         std::vector<int> indexes;
-        for (unsigned int k = 0; k < features.size(); k++){
-          if (features[k] != nothing){
-            indexes.push_back(fprf.findFeaturesIndex(features[k]));
+        for (auto &feat: features){
+          if (feat != nothing){
+            indexes.push_back(fprf.findFeaturesIndex(feat));
           }
         }
-        m_sequences_aa[i][j].setFeatIndexes(indexes);
+        res.setFeatIndexes(indexes);
     }
   }
 }
