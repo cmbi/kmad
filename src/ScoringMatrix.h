@@ -13,7 +13,7 @@ public:
 	void calculateScores(std::vector<Residue>, Profile&, FeaturesProfile&, 
                        int, int);
 	void nwAlignment(std::vector<std::vector<Residue>>*, std::vector<Residue>, 
-                   Profile&, FeaturesProfile&, std::string, int);
+                   Profile&, FeaturesProfile&, int);
 	std::vector< std::vector<double> > getVec(); //getter
 private:
 	std::vector<int> findBestScore();

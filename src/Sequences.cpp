@@ -40,7 +40,6 @@ std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile,
                                                          double penalty, 
                                                          double endPenalty, 
                                                          double extensionPenalty, 
-                                                         std::string verbose, 
                                                          bool weightsModeOn, 
                                                          int codon_length, 
                                                          std::vector<double>& identities){
@@ -70,7 +69,7 @@ std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile,
   for (auto &seqI: m_sequences_aa){
 		alignPairwise(alNoLower, alWithLower, seqI, outputProfile, 
                   outputFeaturesProfile, penalty, endPenalty, extensionPenalty, 
-                  0, verbose, codon_length);
+                  0, codon_length);
 		double identity = calcIdentity(alNoLower);
 		identities.push_back(identity);
 		if (identity > 0.9){
@@ -78,7 +77,6 @@ std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile,
 			alignmentWithLowercase.push_back(alWithLower);
 		}
 		else sequenceIdentity.push_back(false);	
-		if (verbose!="0") outputProfile.printProfile();
 	}
   //create features profile based on the 1st seq
 	outputFeaturesProfile.createProfile(alignmentWithoutLowercase, 
@@ -98,7 +96,6 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment,
                                      double penalty, 
                                      double endPenalty, 
                                      double extensionPenalty,
-                                     std::string verbose, 
                                      bool weightsModeOn, 
                                      double identityCutoff,
                                      int codon_length, 
@@ -121,7 +118,7 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment,
         // NW alignment of the ith seq against the profile
 				alignPairwise(alNoLower, alWithLower, m_sequences_aa[i], outputProfile,
                       outputFeaturesProfile,penalty,endPenalty,extensionPenalty,
-                      i, verbose, codon_length); 
+                      i, codon_length); 
 				alignmentWithoutLowercase.push_back(alNoLower);
 				alignmentWithLowercase.push_back(alWithLower);
 			}
@@ -131,7 +128,6 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment,
                                         weightsModeOn, codon_length);
 		outputProfile.buildPseudoProfile(alignmentWithoutLowercase,identities,
                                      weightsModeOn);
-		if (verbose!="0") outputProfile.printProfile();
 		*prevAlignment = vecUtil::flatten(alignmentWithLowercase);
 		prev_alignments = next_alignments; //number of performed alignments
 	}
@@ -207,7 +203,7 @@ void Sequences::alignPairwise(sequence& alNoLower,
                               FeaturesProfile& featPrf, 
                               double penalty, double endPenalty, 
                               double extensionPenalty, int deb, 
-                              std::string verbose, int codon_length){
+                              int codon_length){
 	int profileLength = prf.getMatrix()[0].size();
 	sequenceList alignment;
 	ScoringMatrix scores(profileLength, seq2.size(), penalty, 
@@ -215,7 +211,7 @@ void Sequences::alignPairwise(sequence& alNoLower,
 	scores.calculateScores(seq2, prf, featPrf, deb, 
                          codon_length);
 	scores.nwAlignment(&alignment, seq2, prf, featPrf, 
-                     verbose, codon_length);
+                     codon_length);
 
 	removeGaps(alWithLower,alNoLower,alignment); 
 }

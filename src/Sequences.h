@@ -15,12 +15,12 @@ public:
 	//main functionality
 	std::vector<std::string> performMSAfirstround(Profile&, FeaturesProfile&, 
                                                 double, double, double, 
-                                                std::string, bool, int, 
+                                                bool, int, 
                                                 std::vector<double>&);
 	void performMSAnextRounds(std::vector<std::string>*,
                             Profile&, FeaturesProfile&, 
                             double, double, double, 
-                            std::string, bool, double, 
+                            bool, double, 
                             int, std::vector<double>&, 
                             int&);
 	void printSequence(int) const;
@@ -35,7 +35,7 @@ private:
 	void alignPairwise(std::vector<Residue>&, std::vector<Residue>&, 
                      std::vector<Residue>&,
                      Profile&, FeaturesProfile&,
-                     double, double, double, int, std::string, int);
+                     double, double, double, int, int);
 	double calcIdentity(const std::vector<Residue>&);
 	int countAlignments(double, std::vector<double>&);
   void add_feature_indexes(FeaturesProfile&);

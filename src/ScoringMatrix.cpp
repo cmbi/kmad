@@ -126,7 +126,7 @@ std::vector< std::vector<double> > ScoringMatrix::getVec(){
 //function nwAlignment - performs a sequence vs profile(/pseudoprofile) needleman wunsch alignment 
 void ScoringMatrix::nwAlignment(sequenceList *result,
                                 sequence s2, Profile& prf, 
-                                FeaturesProfile& featPrf, std::string verbose, 
+                                FeaturesProfile& featPrf,
                                 int codon_length){
   //creating polyA pseudoSequence representing the profile, to know later where are the gaps in the profile
 	sequence s1 = misc::pseudoResidueSequence(prf.getMatrix()[0].size()+1, 

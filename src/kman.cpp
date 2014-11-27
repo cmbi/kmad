@@ -22,7 +22,6 @@ std::vector<std::string> run_msa(Sequences sequences,
                                  int phosphScore,
                                  int codonLength,
                                  bool weightsModeOn, 
-                                 std::string verboseMode,
                                  std::vector<std::string> motifs_ids,
                                  std::vector<double> motifs_probs){
 
@@ -38,7 +37,6 @@ std::vector<std::string> run_msa(Sequences sequences,
                                                                                 gapPen, 
                                                                                 endPenalty, 
                                                                                 gapExt, 
-                                                                                verboseMode, 
                                                                                 weightsModeOn, 
                                                                                 codonLength, 
                                                                                 identities));
@@ -47,7 +45,7 @@ std::vector<std::string> run_msa(Sequences sequences,
   		for (int i = 8; i >= 0; i--){
   			double cutoff = double(i)/10;
   			sequences.performMSAnextRounds(&alignment, prf, fprf, gapPen, 
-                                       endPenalty, gapExt, verboseMode, 
+                                       endPenalty, gapExt,
                                        weightsModeOn, cutoff, codonLength, 
                                        identities, prev_alignments);
   			//prev_alignments - number of alignments performed in the previous round - 
@@ -57,7 +55,7 @@ std::vector<std::string> run_msa(Sequences sequences,
   		prev_alignments = 0;  // to align (again) all sequences to the profile
   		sequences.performMSAnextRounds(&alignment, prf, fprf, 
                                      gapPen, endPenalty, gapExt, 
-                                     verboseMode, weightsModeOn, 0, 
+                                     weightsModeOn, 0, 
                                      codonLength, identities, 
                                      prev_alignments);
       return alignment;
@@ -112,7 +110,7 @@ int main(int argc, char *argv[]){
                                                    gapExt, endPenalty, lcr_mod, 
                                                    domainScore, motifScore, 
                                                    phosphScore, codonLength, 
-                                                   weightsModeOn, verboseMode, 
+                                                   weightsModeOn,
                                                    motifs_ids, motifs_probs);
   		txtProc::writeAlignmentToFile(alignment, seq_names, outputPrefix);						
   		time_t end = clock();
