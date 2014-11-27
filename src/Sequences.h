@@ -40,9 +40,9 @@ private:
 	int countAlignments(double, std::vector<double>&);
   void add_feature_indexes(FeaturesProfile&);
 	//variables 
-	int seqNr;
-	int firstSequenceSize;
-	std::vector<std::vector<Residue>> sequences_aa;
+	int m_seqNr;
+	int m_firstSequenceSize;
+	std::vector<std::vector<Residue>> m_sequences_aa;
 	std::vector<std::string> m_sequence_names;
 };
 #endif /* SEQUENCES_H */

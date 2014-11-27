@@ -21,10 +21,10 @@ Sequences::Sequences(std::vector<std::vector<std::vector<std::string> > >& s){
 			Residue newRes(s[i][1][j], additional_features);
 			new_seq.push_back(newRes);
 		}
-		sequences_aa.push_back(new_seq);
+		m_sequences_aa.push_back(new_seq);
 	}
-	seqNr = s.size(); 
-	firstSequenceSize = s[0][1].size();
+	m_seqNr = s.size(); 
+	m_firstSequenceSize = s[0][1].size();
 }
 
 
@@ -44,13 +44,13 @@ std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile,
                                                          bool weightsModeOn, 
                                                          int codon_length, 
                                                          std::vector<double>& identities){
-	outputProfile = Profile(substitutionMatrix::convertToProfileFormat(sequences_aa[0])); 
+	outputProfile = Profile(substitutionMatrix::convertToProfileFormat(m_sequences_aa[0])); 
   //working alignment - without lowercase around cut out residues
 	sequenceList alignmentWithoutLowercase;	
   //lowercase before and after cut out residues -- final result 
 	sequenceList alignmentWithLowercase;		
-	alignmentWithoutLowercase.push_back(sequences_aa[0]);
-	alignmentWithLowercase.push_back(sequences_aa[0]);
+	alignmentWithoutLowercase.push_back(m_sequences_aa[0]);
+	alignmentWithLowercase.push_back(m_sequences_aa[0]);
   //'true' stored for every sequence which identity with the 1st one is higher 
   //than 80%, only based on these profile will be built
 	std::vector<bool> sequenceIdentity; 					
@@ -58,7 +58,7 @@ std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile,
 	identities.push_back(1); 
   //to build the first profile based only on the first seqeunce
 	sequenceIdentity.push_back(true);					
-	outputFeaturesProfile.expandListOfFeatures(sequences_aa);
+	outputFeaturesProfile.expandListOfFeatures(m_sequences_aa);
   //create features profile based on the 1st seq
 	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,
                                       identities, weightsModeOn, codon_length); 	
@@ -67,11 +67,7 @@ std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile,
 	sequence alNoLower; 
   //pairwise alignment with lowercase characters where chars were removed
 	sequence alWithLower; 
-	//for (int i = 1; i < seqNr; i++){
-  for (auto &seqI: sequences_aa){
-		//alignPairwise(alNoLower, alWithLower, sequences_aa[i], outputProfile, 
-    //              outputFeaturesProfile, penalty, endPenalty, extensionPenalty, 
-    //              i, verbose, codon_length);
+  for (auto &seqI: m_sequences_aa){
 		alignPairwise(alNoLower, alWithLower, seqI, outputProfile, 
                   outputFeaturesProfile, penalty, endPenalty, extensionPenalty, 
                   0, verbose, codon_length);
@@ -115,19 +111,17 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment,
 		sequenceList alignmentWithoutLowercase;	
     //lowercase before and after cut out residues -- final result 
 		sequenceList alignmentWithLowercase;		
-		alignmentWithoutLowercase.push_back(sequences_aa[0]);
-		alignmentWithLowercase.push_back(sequences_aa[0]);
+		alignmentWithoutLowercase.push_back(m_sequences_aa[0]);
+		alignmentWithLowercase.push_back(m_sequences_aa[0]);
     // tmp pairwise alignment (and so is alWithLower)
 		sequence alNoLower; 
 		sequence alWithLower;
-		for (int i = 1; i < seqNr; i++){
+		for (int i = 1; i < m_seqNr; i++){
 			if (identities[i] > identityCutoff){
         // NW alignment of the ith seq against the profile
-
-				alignPairwise(alNoLower, alWithLower, sequences_aa[i], outputProfile,
+				alignPairwise(alNoLower, alWithLower, m_sequences_aa[i], outputProfile,
                       outputFeaturesProfile,penalty,endPenalty,extensionPenalty,
                       i, verbose, codon_length); 
-
 				alignmentWithoutLowercase.push_back(alNoLower);
 				alignmentWithLowercase.push_back(alWithLower);
 			}
@@ -149,11 +143,11 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment,
 double Sequences::calcIdentity(const sequence& alignedSequence){
 	double identicalResidues=0;
 	for (unsigned int i = 0; i < alignedSequence.size(); i++){
-		if (alignedSequence[i].getAA() == sequences_aa[0][i].getAA()){
+		if (alignedSequence[i].getAA() == m_sequences_aa[0][i].getAA()){
 			identicalResidues++;
 		}
 	}
-	return identicalResidues/double(firstSequenceSize);
+	return identicalResidues/double(m_firstSequenceSize);
 }
 
 
@@ -237,8 +231,8 @@ int Sequences::countAlignments(double identity_cutoff,
 	return count;
 }
 void Sequences::printSequence(int seq_index) const{
-	for (unsigned int i = 0; i < sequences_aa[seq_index].size(); i++){
-		std::cout << sequences_aa[seq_index][i].getAA();
+	for (unsigned int i = 0; i < m_sequences_aa[seq_index].size(); i++){
+		std::cout << m_sequences_aa[seq_index][i].getAA();
 	}
 	std::cout << std::endl;
 }
@@ -255,10 +249,10 @@ void Sequences::add_usr_features(std::vector<std::tuple<std::string,std::string,
 		int sequence_no = std::get<2>(feature_rules[i]);
 		int start = std::get<3>(feature_rules[i]);
 		int end = std::get<4>(feature_rules[i])+1;
-    signed int seq_length = sequences_aa[sequence_no].size();
-    if (sequence_no < (signed)sequences_aa.size()){
+    signed int seq_length = m_sequences_aa[sequence_no].size();
+    if (sequence_no < (signed)m_sequences_aa.size()){
 		  for (int j = start; j < end && j < seq_length; j++){
-		  	sequences_aa[sequence_no][j].add_feature(feat_name);
+		  	m_sequences_aa[sequence_no][j].add_feature(feat_name);
 		  }
     }
 	}
@@ -270,16 +264,16 @@ std::vector< std::string> Sequences::get_names(){
 
 void Sequences::add_feature_indexes(FeaturesProfile& fprf){
   std::string nothing = "AA";
-  for (unsigned int i = 0; i < sequences_aa.size(); i++){
-    for (unsigned int j = 0; j < sequences_aa[i].size(); j ++){
-        std::vector<std::string> features = sequences_aa[i][j].getFeatures();
+  for (unsigned int i = 0; i < m_sequences_aa.size(); i++){
+    for (unsigned int j = 0; j < m_sequences_aa[i].size(); j ++){
+        std::vector<std::string> features = m_sequences_aa[i][j].getFeatures();
         std::vector<int> indexes;
         for (unsigned int k = 0; k < features.size(); k++){
           if (features[k] != nothing){
             indexes.push_back(fprf.findFeaturesIndex(features[k]));
           }
         }
-        sequences_aa[i][j].setFeatIndexes(indexes);
+        m_sequences_aa[i][j].setFeatIndexes(indexes);
     }
   }
 }

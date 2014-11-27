@@ -16,15 +16,15 @@ public:
                    Profile&, FeaturesProfile&, std::string, int);
 	std::vector< std::vector<double> > getVec(); //getter
 private:
-	int iLength;
-	int jLength;
-	double gapOpening;
-	double gapExtension;
-	double endGapPenalty;
-	double gapOpeningHorizontal;
-	double gapExtensionHorizontal;
-	std::vector< std::vector<double> > matrixV,matrixG,matrixH;
 	std::vector<int> findBestScore();
+	int m_iLength;
+	int m_jLength;
+	double m_gapOpening;
+	double m_gapExtension;
+	double m_endGapPenalty;
+	double m_gapOpeningHorizontal;
+	double m_gapExtensionHorizontal;
+	std::vector< std::vector<double> > m_matrixV,m_matrixG,m_matrixH;
 };
 
 #endif /* SCORINGMATRIX_H */

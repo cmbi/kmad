@@ -19,11 +19,11 @@ namespace {
 FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr, 
                                  std::vector<std::string> m_ids, 
                                  std::vector<double> m_probs)
-:	domainScore(dom),
-	phosphScore(phosph),
-	motifScore(motif),
-	motifs_ids(m_ids),
-	motifs_probs(m_probs)
+:	m_domainScore(dom),
+	m_phosphScore(phosph),
+	m_motifScore(motif),
+	m_motifs_ids(m_ids),
+	m_motifs_probs(m_probs)
 	{
 }
 // creates a features profile - counts occurences of each feature on each 
@@ -37,11 +37,11 @@ void FeaturesProfile::createProfile(const sequenceList& alignment,
   processProfile();
 }
 void FeaturesProfile::processProfile(){
-  prfMatrix.clear();
-  for (unsigned int i = 0; i < occurences_matrix.size(); i++){
+  m_prfMatrix.clear();
+  for (unsigned int i = 0; i < m_occurences_matrix.size(); i++){
     std::string feat_name = listOfFeatures[i];
-    std::vector<double> feature_row(occurences_matrix[i].size());
-    for (unsigned int j = 0; j < occurences_matrix[i].size(); j++){
+    std::vector<double> feature_row(m_occurences_matrix[i].size());
+    for (unsigned int j = 0; j < m_occurences_matrix[i].size(); j++){
       if (feat_name.substr(0,3) == "ptm"){
         feature_row[j] = score_PTMs(j, feat_name);
       }
@@ -55,7 +55,7 @@ void FeaturesProfile::processProfile(){
         feature_row[j] = score_USR_features(j, feat_name);
       }
     }
-    prfMatrix.push_back(feature_row);
+    m_prfMatrix.push_back(feature_row);
   }
 }
 void FeaturesProfile::countOccurences(const sequenceList& alignment, 
@@ -108,16 +108,16 @@ void FeaturesProfile::countOccurences(const sequenceList& alignment,
 		}
 		tmpResult.push_back(profileColumn);
 	} 
-	occurences_matrix = tmpResult;
-	vecUtil::transposeVec(occurences_matrix);
+	m_occurences_matrix = tmpResult;
+	vecUtil::transposeVec(m_occurences_matrix);
 }
 //get motif's probability (by its id)
 double FeaturesProfile::motifs_prob(std::string& m_id){
 	double prob = 0;
 	std::string id_code = txtProc::split(m_id, '_')[1];
-	for (unsigned int i = 0; i < motifs_ids.size(); i++){
-		if (motifs_ids[i] == id_code) {
-			prob = motifs_probs[i];
+	for (unsigned int i = 0; i < m_motifs_ids.size(); i++){
+		if (m_motifs_ids[i] == id_code) {
+			prob = m_motifs_probs[i];
 			break;
 		} 
 	}
@@ -129,14 +129,14 @@ void FeaturesProfile::getScore(unsigned int position, std::vector<std::string>& 
   for (unsigned int i = 0; i < features.size(); i++){
      if (features[i] != nothing){
        int feat_index = findFeaturesIndex(features[i]);
-       add_score += prfMatrix[feat_index][position];
+       add_score += m_prfMatrix[feat_index][position];
      }
   }
 }
 void FeaturesProfile::getScore(unsigned int position, std::vector<int>& features, 
                                double& add_score){
   for (unsigned int i = 0; i < features.size(); i++){
-       add_score += prfMatrix[features[i]][position];
+       add_score += m_prfMatrix[features[i]][position];
   }
 }
 // return gap modifier, based on the low complexity regions on nth position. TO BE IMPLEMENTED
@@ -149,7 +149,7 @@ double FeaturesProfile::score_motifs(unsigned int& position, std::string& featNa
 	int featuresIndex = findFeaturesIndex(featName);
 	double result;
 	if (featuresIndex == -1) result = 0;
-	else result = occurences_matrix[featuresIndex][position];	
+	else result = m_occurences_matrix[featuresIndex][position];	
   return result;
 }
 //function findFeaturesIndex - takes features' name, e.g. "phosphN"
@@ -270,10 +270,10 @@ double FeaturesProfile::score_domains(unsigned int& position, std::string& dom_n
 	for (unsigned int i = 0; i < domain_indexes.size(); i++){
 		int dom_index = domain_indexes[i];
 		if (listOfFeatures[dom_index] == dom_name){
-			result += occurences_matrix[dom_index][position];
+			result += m_occurences_matrix[dom_index][position];
 		}
 		else{
-			result -= occurences_matrix[dom_index][position];	// subtract score for every other domain
+			result -= m_occurences_matrix[dom_index][position];	// subtract score for every other domain
 		}
 	}
   return result;
@@ -309,11 +309,11 @@ double FeaturesProfile::score_PTMs(unsigned int& position, std::string& ptm_name
 		i_type.pop_back();  			
 		if (i_type == ptm_type){
 			char i_level = i_name.back();
-			if (i_level == '0'){ result += occurences_matrix[i][position];}
-			else if (i_level == '1') result += occurences_matrix[i][position] * 0.9;
-			else if (i_level == '2') result += occurences_matrix[i][position] * 0.8;
-			else if (i_level == '3') result += occurences_matrix[i][position] * 0.7;
-			else if (i_level == 'P') result += occurences_matrix[i][position] * 0.3;
+			if (i_level == '0'){ result += m_occurences_matrix[i][position];}
+			else if (i_level == '1') result += m_occurences_matrix[i][position] * 0.9;
+			else if (i_level == '2') result += m_occurences_matrix[i][position] * 0.8;
+			else if (i_level == '3') result += m_occurences_matrix[i][position] * 0.7;
+			else if (i_level == 'P') result += m_occurences_matrix[i][position] * 0.3;
 		}
 	}
 	result = result * ptm_score;
@@ -325,24 +325,24 @@ double FeaturesProfile::score_USR_features(unsigned int& position,
                                            std::string& feat_name){
 	//first find tuple(s) with rules for this feature
   double result = 0;
-	for (unsigned int i = 0; i < rules.size(); i++){
-		if (std::get<0>(rules[i]) == feat_name){
-			double add_tmp = std::get<2>(rules[i]);
+	for (unsigned int i = 0; i < m_rules.size(); i++){
+		if (std::get<0>(m_rules[i]) == feat_name){
+			double add_tmp = std::get<2>(m_rules[i]);
       //positions of increasing features
-			std::vector<int> incr_features = std::get<6>(rules[i]);  
+			std::vector<int> incr_features = std::get<6>(m_rules[i]);  
       //go through features that increase the score
 			for (unsigned int j = 0; j < incr_features.size(); j++){ 
-				double prf_score = occurences_matrix[incr_features[j]][position];
+				double prf_score = m_occurences_matrix[incr_features[j]][position];
 				if (prf_score != 0){
 					 result += add_tmp*prf_score;
 				}
 			}
 			//the same for decreasing features
-			add_tmp = std::get<4>(rules[i]);
-			std::vector<int> decr_features = std::get<7>(rules[i]);
+			add_tmp = std::get<4>(m_rules[i]);
+			std::vector<int> decr_features = std::get<7>(m_rules[i]);
       //go through features that increase the score
 			for (unsigned int j = 0; j < decr_features.size(); j++){ 
-				double prf_score = occurences_matrix[decr_features[j]][position];
+				double prf_score = m_occurences_matrix[decr_features[j]][position];
 				if (prf_score != 0){
 					result -= add_tmp*prf_score;
 				}
@@ -352,10 +352,10 @@ double FeaturesProfile::score_USR_features(unsigned int& position,
   return result;
 }
 void FeaturesProfile::printProfile(){
-	for (unsigned int i = 0; i < prfMatrix.size(); i++){
+	for (unsigned int i = 0; i < m_prfMatrix.size(); i++){
     std::cout << listOfFeatures[i] << " ";
-		for (unsigned int j = 0; j < prfMatrix[i].size();j++){
-			std::cout << prfMatrix[i][j] << " ";
+		for (unsigned int j = 0; j < m_prfMatrix[i].size();j++){
+			std::cout << m_prfMatrix[i][j] << " ";
 		}
 		std::cout << std::endl;
 	}
@@ -363,10 +363,10 @@ void FeaturesProfile::printProfile(){
 
 
 void FeaturesProfile::printOcc(){
-	for (unsigned int i = 0; i < occurences_matrix.size(); i++){
+	for (unsigned int i = 0; i < m_occurences_matrix.size(); i++){
     std::cout << listOfFeatures[i] << " ";
-		for (unsigned int j = 0; j < occurences_matrix[i].size();j++){
-			std::cout << occurences_matrix[i][j] << " ";
+		for (unsigned int j = 0; j < m_occurences_matrix[i].size();j++){
+			std::cout << m_occurences_matrix[i][j] << " ";
 		}
 		std::cout << std::endl;
 	}
@@ -374,12 +374,12 @@ void FeaturesProfile::printOcc(){
 
 
 std::vector<std::vector<double> > FeaturesProfile::getMatrix(){
-	return prfMatrix;
+	return m_prfMatrix;
 }
 
 
 void FeaturesProfile::setMatrix(std::vector<std::vector<double> > newMatrix){
-	prfMatrix = newMatrix;
+	m_prfMatrix = newMatrix;
 }
 
 
@@ -388,13 +388,13 @@ double FeaturesProfile::modifier(std::string& featName){
 	std::string feat_code = txtProc::split(featName,'_')[0];
 	double modifier = 1;
 	if (feat_code == "ptm"){
-		modifier = phosphScore;
+		modifier = m_phosphScore;
 	}
 	else if (feat_code == "domain"){
-		modifier = domainScore;
+		modifier = m_domainScore;
 	}
 	else if (feat_code == "motif"){
-		modifier = motifScore*motifs_prob(featName);
+		modifier = m_motifScore*motifs_prob(featName);
 	}
 	return modifier;
 }
@@ -415,7 +415,7 @@ void FeaturesProfile::setRules(std::vector<std::tuple<std::string,std::string,in
                                                                                                                           std::get<8>(new_rules[i]),
                                                                                                                           incr_feat, 
                                                                                                                           red_feat);
-		rules.push_back(new_tuple);
+		m_rules.push_back(new_tuple);
 	}
 }
 

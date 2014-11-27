@@ -26,7 +26,7 @@ private:
 
 	double countNonGaps(int);
 	//variables
-	std::vector< std::vector<double> > prfMatrix;
+	std::vector< std::vector<double> > m_prfMatrix;
 };
 
 #endif /* PROFILE_H */

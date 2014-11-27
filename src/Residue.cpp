@@ -4,20 +4,20 @@
 #include <string>
 #include <vector>
 Residue::Residue(std::string codon, std::vector<std::string> additional_features){
-	this->codon = codon;
-	aa = codon[0];
-	features = codon_to_features(codon);
+	m_codon = codon;
+	m_aa = codon[0];
+	codon_to_features();
 	for (unsigned int i = 0; i < additional_features.size(); i++){
-		features.push_back(additional_features[i]);
+		m_features.push_back(additional_features[i]);
 	}
 }
 Residue::Residue(){}
 // adds features (in this order: ptm, domains, motifs)
-std::vector<std::string> Residue::codon_to_features(std::string){
+void Residue::codon_to_features(){
 	std::string nothing = "AA";
 	std::string feat;
-	if (codon.size() >= 5){
-		switch (codon[4]){	
+	if (m_codon.size() >= 5){
+		switch (m_codon[4]){	
 			case 'N': feat = "ptm_phosph0";
 				break;
 			case 'O': feat = "ptm_phosph1"; 
@@ -79,71 +79,61 @@ std::vector<std::string> Residue::codon_to_features(std::string){
 			default: feat = nothing;
 				break;
 		}
-		features.push_back(feat);
+		m_features.push_back(feat);
 	}
-	else features.push_back(nothing);
 	//DOMAIN
-	if (codon.size() >= 4){
-		feat = txtProc::charToString(codon[2],codon[3]);
+	if (m_codon.size() >= 4){
+		feat = txtProc::charToString(m_codon[2],m_codon[3]);
 		if (feat != nothing){
 			feat = "domain_"+feat;
-			features.push_back(feat);
-		}
-		else{
-			features.push_back(nothing);
+			m_features.push_back(feat);
 		}
 	}
-	else features.push_back(nothing);
 	//MOTIF
-	if (codon.size() >= 7){
-		feat = txtProc::charToString(codon[5],codon[6]);
+	if (m_codon.size() >= 7){
+		feat = txtProc::charToString(m_codon[5],m_codon[6]);
 		if (feat != nothing){
 			feat = "motif_"+feat;
-			features.push_back(feat);
-		}
-		else{
-			features.push_back(nothing);
+			m_features.push_back(feat);
 		}
 	}
-	else features.push_back(nothing);
-	return features;
 }
 char Residue::getAA() const{
-	return aa;
+	return m_aa;
 }
 char Residue::getAA() {
-	return aa;
+	return m_aa;
 }
 std::string Residue::getCodon() const{
-	return codon;
+	return m_codon;
 }
 std::string Residue::getCodon() {
-	return codon;
+	return m_codon;
 }
 void Residue::setAA(char new_aa){
-	aa = new_aa;
+	m_aa = new_aa;
 }
 //change amino acid char to lowercase
 void Residue::lowercase(){
-	aa = tolower(aa);
-	codon[0] = tolower(codon[0]);
+	m_aa = tolower(m_aa);
+	m_codon[0] = tolower(m_codon[0]);
 }
 std::vector<std::string> Residue::getFeatures() const{
-	return features;
+	return m_features;
 }
 std::vector<std::string> Residue::getFeatures() {
-	return features;
+	return m_features;
 }
 void Residue::add_feature(std::string new_feat){
-	features.push_back(new_feat);
+	m_features.push_back(new_feat);
 }
 
 
 std::vector<int> Residue::getFeatIndexes(){
-  return feature_indexes;
+  return m_feature_indexes;
 }
 
 
 void Residue::setFeatIndexes(std::vector<int> vec){
-  feature_indexes = vec;
+  m_feature_indexes = vec;
 }

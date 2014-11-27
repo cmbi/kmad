@@ -5,11 +5,12 @@
 #include <vector>
 class Residue{
 	private:
-		std::string codon;
-    std::vector<int> feature_indexes;
-		std::vector<std::string> features;
-		char aa;
-		std::vector<std::string> codon_to_features(std::string);
+		std::string m_codon;
+    std::vector<int> m_feature_indexes;
+		std::vector<std::string> m_features;
+		char m_aa;
+		//std::vector<std::string> codon_to_features();
+		void codon_to_features();
 	public:
 		Residue(std::string, std::vector<std::string>);
 		Residue();

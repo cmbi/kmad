@@ -10,13 +10,13 @@
 #include <sstream>
 #include <fstream>
 Profile::Profile(std::vector< std::vector<double> > mat)
-:	prfMatrix(mat){
+:	m_prfMatrix(mat){
 }
 Profile::Profile(){
 }
 //function getMatrix - returns profile matrix (double)
 std::vector< std::vector<double> > Profile::getMatrix() const{
-	return prfMatrix;
+	return m_prfMatrix;
 }
 //builds a pseudo-profile from the profile itself and the substitution matrix with appropriate weights
 void Profile::buildPseudoProfile(sequenceList& alignment,
@@ -24,14 +24,14 @@ void Profile::buildPseudoProfile(sequenceList& alignment,
                                  bool weightsModeOn){
 	createProfile(alignment,sequenceIdentityValues,weightsModeOn);
 	std::vector< std::vector<double> > newProfile;
-	for (unsigned int i = 0; i < prfMatrix[0].size(); i++){
+	for (unsigned int i = 0; i < m_prfMatrix[0].size(); i++){
 		std::vector< std::vector<double> > columnsToAdd;
-		for(unsigned int j = 0; j < prfMatrix.size(); j++){
-			if (prfMatrix[j][i] != 0){
+		for(unsigned int j = 0; j < m_prfMatrix.size(); j++){
+			if (m_prfMatrix[j][i] != 0){
         std::vector<int> column_int; 
         substitutionMatrix::getColumn(j, column_int);
 				std::vector<double> columnForJ = vecUtil::convertIntVectorToDoubleVector(column_int);
-				vecUtil::multiplyVectorByAScalar(columnForJ, prfMatrix[j][i]);
+				vecUtil::multiplyVectorByAScalar(columnForJ, m_prfMatrix[j][i]);
 				columnsToAdd.push_back(columnForJ);
 			}
 		}
@@ -40,7 +40,7 @@ void Profile::buildPseudoProfile(sequenceList& alignment,
 		newProfile.push_back(vecUtil::addUp(columnsToAdd));	
 	}
 	vecUtil::transposeVec(newProfile);
-	prfMatrix = newProfile;
+	m_prfMatrix = newProfile;
 }
 void Profile::createProfile(sequenceList& alignment, 
                             const std::vector<double>& sequenceIdentityValues,
@@ -97,14 +97,14 @@ void Profile::createProfile(sequenceList& alignment,
 		}
 		tmpResult.push_back(profileColumn);
 	}
-	prfMatrix = tmpResult;
-	vecUtil::transposeVec(prfMatrix);
+	m_prfMatrix = tmpResult;
+	vecUtil::transposeVec(m_prfMatrix);
 }
 //function countNonGaps - counts how many characters in alignment nth ('column' integer) column are not gaps 
 double Profile::countNonGaps(int column){
 	double sum = 0;
 	for (unsigned int i =0; i < 20; i++){
-		sum += double(prfMatrix[i][column]);
+		sum += double(m_prfMatrix[i][column]);
 	}
 	return sum;
 }
@@ -112,46 +112,46 @@ double Profile::countNonGaps(int column){
 double Profile::getElement(int position, char aAcid){
 	double result;
 	if (aAcid=='B'){ //take half the score for asparagine and half the score for aspartate
-		result = 0.5*prfMatrix[2][position]+ 0.5*prfMatrix[3][position];
+		result = 0.5*m_prfMatrix[2][position]+ 0.5*m_prfMatrix[3][position];
 	}
 	else if (aAcid=='Z'){ // take half the score for glutamine and half the score for glutamate
-		result = 0.5*prfMatrix[6][position]+ 0.5*prfMatrix[7][position];
+		result = 0.5*m_prfMatrix[6][position]+ 0.5*m_prfMatrix[7][position];
 	}
 	else if (aAcid=='X'){ // take average score from scores for all residues
 		result = 0;
-		for (unsigned int i = 0; i < prfMatrix.size(); i++){
-			result += 0.05*prfMatrix[i][position];
+		for (unsigned int i = 0; i < m_prfMatrix.size(); i++){
+			result += 0.05*m_prfMatrix[i][position];
 		}
 	}
 	else { // it's not any of the {B,Z,X} -> single amino acid
 		int aAcidint = substitutionMatrix::findAminoAcidsNo(aAcid);
-		result = prfMatrix[aAcidint][position];
+		result = m_prfMatrix[aAcidint][position];
 	}
 	return result;
 }
 //function getElement - returns score for nth amino acid on mth position
 double Profile::getElement(int aAcidInt, int position){
-	return prfMatrix[aAcidInt][position];
+	return m_prfMatrix[aAcidInt][position];
 }
 //function printProfile(int,int) - prints only columns from boundStart to boundEnd
 void Profile::printProfile(int boundStart, int boundEnd){
 	std::cout << "##PROFILE POSITION "<< boundStart << "-" << boundEnd-1 << "##" << std::endl;
 	for (int i = boundStart; i < boundEnd; i++){
-		for (unsigned int j = 0; j < prfMatrix.size();j++){
-			std::cout << j << ": " << prfMatrix[j][i] << " ";
+		for (unsigned int j = 0; j < m_prfMatrix.size();j++){
+			std::cout << j << ": " << m_prfMatrix[j][i] << " ";
 		}
 		std::cout << "\n";
 	}
 }
 //function printProfile - prints full profile
 void Profile::printProfile(){
-	for (unsigned int i = 0; i < prfMatrix.size(); i++){
-		for (unsigned int j = 0; j < prfMatrix[0].size();j++){
-			std::cout << prfMatrix[i][j] << " ";
+	for (unsigned int i = 0; i < m_prfMatrix.size(); i++){
+		for (unsigned int j = 0; j < m_prfMatrix[0].size();j++){
+			std::cout << m_prfMatrix[i][j] << " ";
 		}
 		std::cout << "\n";
 	}
 }
 void Profile::setMatrix(std::vector<std::vector<double> > newMatrix){
-	prfMatrix = newMatrix;
+	m_prfMatrix = newMatrix;
 }

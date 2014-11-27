@@ -43,12 +43,12 @@ private:
 	double score_USR_features(unsigned int&, std::string&); 
 	double modifier(std::string&);
 	std::string name(std::string&,int&);
-	int domainScore, phosphScore, motifScore;
-	std::vector<std::string> motifs_ids;
-	std::vector<double> motifs_probs;
-	std::vector<std::tuple<std::string,int,double,double,double,double,std::vector<int>,std::vector<int> > > rules;
-	std::vector< std::vector<double> > prfMatrix;	
-  std::vector< std::vector<double> > occurences_matrix;
+	int m_domainScore, m_phosphScore, m_motifScore;
+	std::vector<std::string> m_motifs_ids;
+	std::vector<double> m_motifs_probs;
+	std::vector<std::tuple<std::string,int,double,double,double,double,std::vector<int>,std::vector<int> > > m_rules;
+	std::vector< std::vector<double> > m_prfMatrix;	
+  std::vector< std::vector<double> > m_occurences_matrix;
 };
 
 #endif /* FEATURESPROFILE_H */
