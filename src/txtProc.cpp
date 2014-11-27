@@ -125,15 +125,16 @@ void txtProc::writeAlignmentToFile(std::vector<std::string>& sequences,
 
 //write alignment to file as a nonencoded fasta
 void txtProc::writeAlignmentWithoutCodeToFile(std::vector<std::string>& sequences,
-                                              std::vector< std::vector<std::vector<std::string> > >& sequencesWithNames, 
-                                              std::string filename){
+                                              std::vector<std::string>& sequence_names, 
+                                              std::string filename, 
+                                              int codon_length){
 	std::stringstream sstr;
 	sstr << filename << "_al";
 	std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
 	for (unsigned int i = 0; i < sequences.size() ;i++){
-		outputFile << sequencesWithNames[i][0][0]<< "\n";
+		outputFile << sequence_names[i]<< "\n";
 		std::string seq="";
-		for (unsigned int j = 0; j < sequences[i].size(); j+=4){
+		for (unsigned int j = 0; j < sequences[i].size(); j+=codon_length){
 			seq += sequences[i][j];
 		}
 		outputFile << seq << std::endl;

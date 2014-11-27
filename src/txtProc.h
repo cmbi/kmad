@@ -23,8 +23,8 @@ namespace txtProc{
                             std::vector<std::string>&,
                             std::string);
 	void writeAlignmentWithoutCodeToFile(std::vector<std::string>&, 
-                                       std::vector< std::vector< std::vector<std::string> > >&, 
-                                       std::string);
+                                       std::vector<std::string>&, 
+                                       std::string, int);
 	void process_conf_file(std::string, FeaturesProfile&, Sequences&);
 	std::vector<int> unfold(std::string, std::vector<std::string>&);
 }
