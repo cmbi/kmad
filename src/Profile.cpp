@@ -12,7 +12,7 @@
 #include <vector>
 
 
-Profile::Profile(std::vector< std::vector<double> > mat)
+Profile::Profile(profile_matrix mat)
 :	m_prfMatrix(mat){
 }
 
@@ -22,24 +22,24 @@ Profile::Profile(){
 
 
 //function getMatrix - returns profile matrix (double)
-std::vector< std::vector<double> > Profile::getMatrix() const{
+profile_matrix Profile::getMatrix() const{
 	return m_prfMatrix;
 }
 
 
 //builds a pseudo-profile from the profile itself and the substitution matrix with appropriate weights
 void Profile::buildPseudoProfile(sequenceList& alignment,
-                                 const std::vector<double>& sequenceIdentityValues, 
+                                 const identitiesList& sequenceIdentityValues, 
                                  bool weightsModeOn){
 	createProfile(alignment,sequenceIdentityValues,weightsModeOn);
-	std::vector< std::vector<double> > newProfile;
+	profile_matrix newProfile;
 	for (unsigned int i = 0; i < m_prfMatrix[0].size(); i++){
-		std::vector< std::vector<double> > columnsToAdd;
+		matrix2d columnsToAdd;
 		for(unsigned int j = 0; j < m_prfMatrix.size(); j++){
 			if (m_prfMatrix[j][i] != 0){
-        std::vector<int> column_int; 
+        sbstMatColumn column_int; 
         substitutionMatrix::getColumn(j, column_int);
-				std::vector<double> columnForJ = vecUtil::convertIntVectorToDoubleVector(column_int);
+				profileMatrixColumn columnForJ = vecUtil::convertIntVectorToDoubleVector(column_int);
 				vecUtil::multiplyVectorByAScalar(columnForJ, m_prfMatrix[j][i]);
 				columnsToAdd.push_back(columnForJ);
 			}
@@ -54,9 +54,9 @@ void Profile::buildPseudoProfile(sequenceList& alignment,
 
 
 void Profile::createProfile(sequenceList& alignment, 
-                            const std::vector<double>& sequenceIdentityValues,
+                            const identitiesList& sequenceIdentityValues,
                             bool weightsModeOn){
-	std::vector< std::vector<double> > tmpResult;
+	profile_matrix tmpResult;
 	double identitiesSum;
 	int noOfSequences;
 	if (weightsModeOn){
@@ -66,7 +66,7 @@ void Profile::createProfile(sequenceList& alignment,
 		noOfSequences = alignment.size();
 	}
 	for (unsigned int i = 0; i < alignment[0].size(); i++){
-		std::vector<double> profileColumn(20,0);
+		profileMatrixColumn profileColumn(20,0);
 		int nonGaps = 0;
 		for (unsigned int j = 0; j < alignment.size(); j++){
 			

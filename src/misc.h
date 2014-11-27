@@ -9,7 +9,7 @@
 class Residue;
 namespace misc{
 	Residue gapRes(int);
-  std::vector<Residue> pseudoResidueSequence(int, int);
+  sequence pseudoResidueSequence(int, int);
 	bool checkParameters(int, int, int, int, double, double, bool, double);
   bool file_exists(const std::string*);
 }

@@ -8,21 +8,22 @@
 class Residue;
 class Profile{
 public:
-	Profile(std::vector< std::vector<double> >); //constructor
+	Profile(profile_matrix mat); //constructor
 	Profile();
-	void buildPseudoProfile(std::vector< std::vector< Residue > >&, 
-                          const std::vector<double>&, bool);
+	void buildPseudoProfile(sequenceList& alignment, 
+                          const identitiesList& sequenceIdentityValues, 
+                          bool weightsModeOn);
 	//getters/setters
-	std::vector< std::vector<double> > getMatrix() const;
-	double getElement(int, char);
-	double getElement(int, int);
+	profile_matrix getMatrix() const;
+	double getElement(int position, char aAcid);
+	double getElement(int aAcidInt, int position);
 private:
 	//functions
-	void createProfile(std::vector<std::vector<Residue>>&,
-                     const std::vector<double>&, bool);
-
+	void createProfile(sequenceList&,
+                     const identitiesList& sequenceIdentityValues, 
+                     bool weightsModeOn);
 	//variables
-	std::vector< std::vector<double> > m_prfMatrix;
+	profile_matrix m_prfMatrix;
 };
 
 #endif /* PROFILE_H */

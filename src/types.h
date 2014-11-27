@@ -21,4 +21,6 @@ typedef std::vector<double> identitiesList;
 typedef std::vector<double> profileMatrixRow;
 typedef std::vector<double> profileMatrixColumn;
 typedef std::vector<profileMatrixRow> profile_matrix;
+typedef std::vector<std::vector<double>> matrix2d;
 typedef std::vector<int> indexList;
+typedef std::vector<int> sbstMatColumn;
