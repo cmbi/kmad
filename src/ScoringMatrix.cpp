@@ -18,6 +18,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
+
 /*constructor
 	arguments:
 		s1size - length of the 1st sequence
@@ -35,12 +37,19 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen,
 	m_gapOpeningHorizontal(m_gapOpening),
 	m_gapExtensionHorizontal(m_gapExtension)
 {
-	std::vector<double> row(m_jLength+1,0); //creates a row for the scoring matrices of length m_jLength (length of the jth sequence + 1)
-	m_matrixV.assign(m_iLength+1, row); //creates a vector of vectors 'row', of length m_iLength+1 (length of the ith sequence +1)
+  //creates a row for the scoring matrices of length m_jLength 
+  //(length of the jth sequence + 1)
+	scoringMatrixRow row(m_jLength+1,0); 
+  //creates a vector of vectors 'row', of length m_iLength+1 
+  //(length of the ith sequence +1)
+	m_matrixV.assign(m_iLength+1, row); 
 	m_matrixG.assign(m_iLength+1, row);
 	m_matrixH.assign(m_iLength+1, row);
 }
-//function calculateScoresProfile - calculates scoring matrix for sequences s1 and s2 using profile prf instead of a substitution matrix ENCODED SEQUENCES
+
+
+//function calculateScoresProfile - calculates scoring matrix for sequences 
+//s1 and s2 using profile prf instead of a substitution matrix ENCODED SEQUENCES
 void ScoringMatrix::calculateScores(sequence s2, Profile& prf, 
                                     FeaturesProfile& featPrf, int debug, 
                                     int codon_length){
@@ -50,17 +59,13 @@ void ScoringMatrix::calculateScores(sequence s2, Profile& prf,
   assert(m_matrixV.size() == m_matrixH.size());
 
 	for (unsigned int i = 1; i < m_matrixV.size(); i++){
-		m_matrixV[i][0] = -10000000; //infinity
+		m_matrixV[i][0] = -10000000; //=== infinity
 		m_matrixH[i][0] = -10000000;
-		//m_matrixG[i][0] = 0;	//makes gaps at the beginning of the vertical sequence (s1) free
-		m_matrixG[i][0] = i*m_endGapPenalty;	//makes gaps at the beginning of the vertical sequence (s1) free
-		//m_matrixG[i][0] = m_gapOpening+(i-1)*m_gapExtension; // uncomment to penalize gaps at the beginnig of s1 seq with the same penalty function as the gaps inside
+		m_matrixG[i][0] = i*m_endGapPenalty;	
 	}
 	for (unsigned int i = 1; i < m_matrixV[0].size(); i++){
 		m_matrixV[0][i] = -10000000;
-		//m_matrixH[0][i] = 0;	//makes gaps at the beginning of the horizontal sequence (s2) free
-		m_matrixH[0][i] = i*m_endGapPenalty;	//makes gaps at the beginning of the horizontal sequence (s2) free
-		//m_matrixH[0][i] = m_gapOpening+(i-1)*m_gapExtension; //uncomment to penalize gaps at the beginning of s2 seq
+		m_matrixH[0][i] = i*m_endGapPenalty;	
 		m_matrixG[0][i] = -10000000;
 	}
 	double score1,score2,score3;
@@ -69,7 +74,7 @@ void ScoringMatrix::calculateScores(sequence s2, Profile& prf,
 			///V
 			double prfScore = prf.getElement(i-1, s2[j].getAA());
 			double add_score = 0;
-      std::vector<int> features = s2[j].getFeatIndexes();
+      featuresList features = s2[j].getFeatIndexes();
 			featPrf.getScore(i-1, features, add_score);
 
 			double final_score = prfScore + add_score;
@@ -79,7 +84,6 @@ void ScoringMatrix::calculateScores(sequence s2, Profile& prf,
 
       m_matrixV[i][j] = std::max<double>(score1,
           std::max<double>(score2, score3)) + final_score;
-
 			///G
 			score1 = m_matrixV[i-1][j] + m_gapOpening;
 			score2 = m_matrixG[i-1][j] + m_gapExtension;
@@ -91,8 +95,10 @@ void ScoringMatrix::calculateScores(sequence s2, Profile& prf,
 		}
 	}
 }
+
+
 //function findBestScore - returns positions of the end of the best scoring alignment[score, i, j] (must be either in the last row or in the last column of the scoring matrix)
-std::vector<int> ScoringMatrix::findBestScore(){
+valueCoords ScoringMatrix::findBestScore(){
 	int maxI = m_matrixV.size()-1;
 	int maxJ = m_matrixV[0].size()-1;
 	int n = maxI;  //last row of m_matrixV
@@ -117,7 +123,7 @@ std::vector<int> ScoringMatrix::findBestScore(){
 			maxJ = i;
 		}
 	}
-	std::vector<int> resArr;
+	valueCoords resArr;
 	if (maxIval > maxJval){			//max score is in the last row
 		resArr.push_back(maxI);
 		resArr.push_back(m);
@@ -128,10 +134,8 @@ std::vector<int> ScoringMatrix::findBestScore(){
 	}
 	return resArr; //coords of the max score
 }
-//function getVec - returns scoring matrix
-std::vector< std::vector<double> > ScoringMatrix::getVec(){
-	return m_matrixV;
-}
+
+
 //function nwAlignment - performs a sequence vs profile(/pseudoprofile) needleman wunsch alignment 
 void ScoringMatrix::nwAlignment(sequenceList *result,
                                 sequence s2, Profile& prf, 
@@ -176,7 +180,7 @@ void ScoringMatrix::nwAlignment(sequenceList *result,
 			double prfScore = prf.getElement(i-1,s2[j].getAA());
 			double add_score = 0;
       //std::vector<std::string> features = s2[j].getFeatures();
-      std::vector<int> features = s2[j].getFeatIndexes();
+      featuresList features = s2[j].getFeatIndexes();
 			featPrf.getScore(i-1, features, add_score);
 			double final_score = prfScore + add_score;
 			if (m_matrixV[i][j] != m_matrixV[i-1][j-1] + final_score){

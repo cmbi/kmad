@@ -19,7 +19,7 @@ public:
 	double getElement(int aAcidInt, int position);
 private:
 	//functions
-	void createProfile(sequenceList&,
+	void createProfile(sequenceList& alignment,
                      const identitiesList& sequenceIdentityValues, 
                      bool weightsModeOn);
 	//variables
