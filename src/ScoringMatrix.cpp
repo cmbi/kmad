@@ -7,7 +7,6 @@
 #include "Residue.h"
 #include "substitutionMatrix.h"
 #include "Profile.h"
-#include "val.h"
 #include "misc.h"
 #include "vecUtil.h"
 #include "txtProc.h"

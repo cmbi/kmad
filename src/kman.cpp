@@ -6,7 +6,6 @@
 #include "misc.h"
 #include "msa.h"
 #include "txtProc.h"
-#include "val.h"
 #include "vecUtil.h"
 
 #include <boost/program_options.hpp>

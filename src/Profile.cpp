@@ -5,6 +5,8 @@
 #include "substitutionMatrix.h"
 #include "vecUtil.h"
 
+#include<boost/range/numeric.hpp>
+
 #include <fstream>
 #include <iostream>
 #include <sstream>

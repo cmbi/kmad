@@ -1,16 +1,17 @@
 #ifndef SBSTMATRIX_H
 #define SBSTMATRIX_H
 
+#include "types.h"
 #include <iostream>
 #include <vector>
 class Residue;
 namespace substitutionMatrix{
-	std::vector< std::vector<double> > convertToProfileFormat(std::vector<Residue>&);
+	profile_matrix convertToProfileFormat(sequence& seq);
 	//getters
-	int getElement(char, char);
-	int getElement(int, int);
-	void getColumn(unsigned int&, std::vector<int>&);
-	int findAminoAcidsNo(char);
+	int getElement(char char1, char char2);
+	int getElement(int i, int j);
+	void getColumn(unsigned int& columnNo, sbstMatColumn& column_int);
+	int findAminoAcidsNo(char aa);
 }
 
 #endif /* SBSTMARTIX_H */

@@ -15,9 +15,19 @@
 #include <iterator>
 #include <stdexcept>
 
-
+typedef std::vector<std::string> input_line;
+typedef std::vector<std::string> feat_descriptor;
+typedef std::vector<std::string> splitFeatName;
 namespace {
-	static const std::vector<char> accepted_characters = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'};
+	static const alphabetVec accepted_characters = { 'a','b','c','d','e','f','g',
+                                                   'h','i','j','k','l','m','n',
+                                                   'o','p','q','r','s','t','u',
+                                                   'v','w','x','y','z','A','B',
+                                                   'C','D','E','F','G','H','I',
+                                                   'J','K','L','M','N','O','P',
+                                                   'Q','R','S','T','U','V','W',
+                                                   'X','Y','Z','0','1','2','3',
+                                                   '4','5','6','7','8','9'};
 }
 
 
@@ -40,22 +50,22 @@ std::vector<std::string> txtProc::split(const std::string &s, char delim) {
 
 
 //function processFASTA - reads fasta file with encoded sequence
-//writes sequences + seqNames to vector<vector<string>>; motifs' ids to vector<string> ids and motifs' probabilities to vector<double> probs
-//std::vector< std::vector< std::vector<std::string> > > txtProc::read_fasta(std::string filename,
+//writes sequences + seqNames to vector<vector<string>>; motifs' ids to 
+//vector<string> ids and motifs' probabilities to vector<double> probs
 Sequences txtProc::read_fasta(std::string filename,
                               int codonLength, 
-                              std::vector<std::string>* ids, 
-                              std::vector<double>* probs){
-	std::vector< std::vector< std::vector<std::string> > > resultSequences;
+                              ids_list* ids, 
+                              probs_list* probs){
+	codonSeqWithNamesList resultSequences;
   if (!misc::file_exists(&filename)){
     throw std::runtime_error("Input file doesn't exist");
   }
   else{
 	  std::string fastaSymbol = ">";
 	  std::ifstream fastafile (filename.c_str());
-	  std::vector<std::string> newName;
-	  std::vector<std::string> newSequence;
-	  std::vector< std::vector<std::string> > newEntry;
+	  seqNames newName;
+	  codonSeq newSequence;
+	  codonSeqWithName newEntry;
 	  bool sequences = true;
 	  int seqNo = -1;
 	  std::string line;
@@ -91,8 +101,8 @@ Sequences txtProc::read_fasta(std::string filename,
 	  			//else means we're already in the motifs probs section
 	  			else{
 	  				std::istringstream iss(line);
-	  				std::vector<std::string> motif((std::istream_iterator<std::string>(iss)),
-                                            std::istream_iterator<std::string>());
+	  				input_line motif((std::istream_iterator<std::string>(iss)),
+                              std::istream_iterator<std::string>());
 	  				if (motif.size() == 2){
 	  					ids->push_back(motif[0]);
 	  					probs->push_back(convertStringToDouble(motif[1]));
@@ -111,8 +121,8 @@ Sequences txtProc::read_fasta(std::string filename,
 
 
 //function writeAlignmentToFile
-void txtProc::writeAlignmentToFile(std::vector<std::string>& sequences,
-                                   std::vector<std::string>& sequence_names, 
+void txtProc::writeAlignmentToFile(string_sequences& sequences,
+                                   seqNames& sequence_names, 
                                    std::string filename){
 	std::stringstream sstr;
 	sstr << filename << "_al";
@@ -124,8 +134,8 @@ void txtProc::writeAlignmentToFile(std::vector<std::string>& sequences,
 
 
 //write alignment to file as a nonencoded fasta
-void txtProc::writeAlignmentWithoutCodeToFile(std::vector<std::string>& sequences,
-                                              std::vector<std::string>& sequence_names, 
+void txtProc::writeAlignmentWithoutCodeToFile(string_sequences& sequences,
+                                              seqNames& sequence_names, 
                                               std::string filename, 
                                               int codon_length){
 	std::stringstream sstr;
@@ -192,11 +202,13 @@ bool txtProc::acceptedChar(char my_char){
 }
 
 
-void txtProc::process_conf_file(std::string filename, FeaturesProfile& feat_profile, Sequences& sequences_aa){
+void txtProc::process_conf_file(std::string filename, 
+                                FeaturesProfile& feat_profile, 
+                                Sequences& sequences_aa){
 	std::ifstream conf_file(filename.c_str());
 	std::string line;
-	std::vector<std::tuple<std::string, std::string, int, int, int, double, double, double, double, std::string, std::string> > usr_feature_rules;
-	std::vector<std::tuple<std::string, std::string, int, int, int> > feature_rules;
+	rulesTuplesList usr_feature_rules;
+	defaultRulesList feature_rules;
   bool features = true;
   std::string tag_usr = "## USER DEFINED";
 	while(!safeGetline(conf_file, line).eof()){
@@ -209,14 +221,27 @@ void txtProc::process_conf_file(std::string filename, FeaturesProfile& feat_prof
        else if (line[0] != '#' && features){
 			  line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
 			  line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
-			  std::vector<std::string> tmp_vector = split(line,';');
-			  feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], std::stoi(tmp_vector[2]), std::stoi(tmp_vector[3]), std::stoi(tmp_vector[4])));
+			  feat_descriptor tmp_vector = split(line,';');
+			  feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], 
+                                                std::stoi(tmp_vector[2]), 
+                                                std::stoi(tmp_vector[3]), 
+                                                std::stoi(tmp_vector[4])));
        }
 		   else if (line[0] != '#'){
 		  	line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
 			  line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
-		  	std::vector<std::string> tmp_vector = split(line,';');
-		  	usr_feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], std::stoi(tmp_vector[2]), std::stoi(tmp_vector[3]), std::stoi(tmp_vector[4]),std::stod(tmp_vector[5]),std::stod(tmp_vector[6]),std::stod(tmp_vector[7]),std::stod(tmp_vector[8]),tmp_vector[9],tmp_vector[10]));
+		  	feat_descriptor tmp_vector = split(line,';');
+		  	usr_feature_rules.push_back(std::make_tuple(tmp_vector[0], 
+                                                    tmp_vector[1], 
+                                                    std::stoi(tmp_vector[2]), 
+                                                    std::stoi(tmp_vector[3]), 
+                                                    std::stoi(tmp_vector[4]),
+                                                    std::stod(tmp_vector[5]),
+                                                    std::stod(tmp_vector[6]),
+                                                    std::stod(tmp_vector[7]),
+                                                    std::stod(tmp_vector[8]),
+                                                    tmp_vector[9],
+                                                    tmp_vector[10]));
 		}
 	}
 	feat_profile.add_USR_features(usr_feature_rules);
@@ -225,31 +250,36 @@ void txtProc::process_conf_file(std::string filename, FeaturesProfile& feat_prof
 }
 
 
-// converts the string form the conf file to vector of positions of features to be scored
-std::vector<int> txtProc::unfold(std::string conf_string, std::vector<std::string>& listOfFeatures){
-	std::vector<std::string> tmp_vector = split(conf_string,',');
-	std::vector<int> out_vector;
-	//for (unsigned int i = 0; i < tmp_vector.size(); i++){
+// converts the string form the conf file to vector of positions of features 
+// to be scored
+featuresList txtProc::unfold(std::string conf_string, 
+                             featureNamesList& listOfFeatures){
+  featureNamesList tmp_vector = split(conf_string,',');
+	featuresList out_vector;
   for (auto &item: tmp_vector){
-		if (split(item,'_').size() > 1){						// this is a single feature entry, e.g. 'PF_A'
+		if (split(item,'_').size() > 1){						
+      // this is a single feature entry, e.g. 'PF_A'
       std::string feat_name = std::string("USR_") + item;
 			out_vector.push_back(vecUtil::findIndex(feat_name, listOfFeatures));
 		}
-		else if (split(item,'[').size() == 1){						// this is an entry with only the tag specified (without any exceptions)
+		else if (split(item,'[').size() == 1){						
+      // this is an entry with only the tag specified (without any exceptions)
 			for (unsigned int j = 0; j < listOfFeatures.size(); j++){
-				std::vector<std::string> singlefeat = split(listOfFeatures[j],'_');
+				splitFeatName singlefeat = split(listOfFeatures[j],'_');
 				if (singlefeat.size() > 1 && singlefeat[1] == item){
           out_vector.push_back(j);
         }
 			}
 		}
-		else{//TAG with exceptions
-			std::vector<std::string> tagfeat = split(item,'[');
+		else{
+      //TAG with exceptions
+			splitFeatName tagfeat = split(item,'[');
 			std::string tag = tagfeat[0];
-			std::vector<std::string> exceptions = split(split(tagfeat[1],']')[0],'.');
+			featureNamesList exceptions = split(split(tagfeat[1],']')[0], '.');
 			for (unsigned int j = 0; j < listOfFeatures.size(); j++){
-				std::vector<std::string> singlefeat = split(listOfFeatures[j],'_');
-				if (singlefeat.size() > 1 && singlefeat[1] == tag && !vecUtil::contains(exceptions, singlefeat[2])){
+				splitFeatName singlefeat = split(listOfFeatures[j],'_');
+				if (singlefeat.size() > 1 && singlefeat[1] == tag && 
+            !vecUtil::contains(exceptions, singlefeat[2])){
 					out_vector.push_back(j);
 				}
 			}

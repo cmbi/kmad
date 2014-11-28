@@ -78,8 +78,7 @@ am_kman_OBJECTS = src/kman.$(OBJEXT) src/FeaturesProfile.$(OBJEXT) \
 	src/Profile.$(OBJEXT) src/Residue.$(OBJEXT) \
 	src/ScoringMatrix.$(OBJEXT) src/Sequences.$(OBJEXT) \
 	src/txtProc.$(OBJEXT) src/vecUtil.$(OBJEXT) src/misc.$(OBJEXT) \
-	src/substitutionMatrix.$(OBJEXT) src/val.$(OBJEXT) \
-	src/msa.$(OBJEXT)
+	src/substitutionMatrix.$(OBJEXT) src/msa.$(OBJEXT)
 kman_OBJECTS = $(am_kman_OBJECTS)
 am__DEPENDENCIES_1 =
 am__DEPENDENCIES_2 = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
@@ -89,8 +88,7 @@ am_test_kman_OBJECTS = tests/test_vecutil.$(OBJEXT) \
 	src/Residue.$(OBJEXT) src/ScoringMatrix.$(OBJEXT) \
 	src/Sequences.$(OBJEXT) src/txtProc.$(OBJEXT) \
 	src/vecUtil.$(OBJEXT) src/misc.$(OBJEXT) \
-	src/substitutionMatrix.$(OBJEXT) src/val.$(OBJEXT) \
-	src/msa.$(OBJEXT)
+	src/substitutionMatrix.$(OBJEXT) src/msa.$(OBJEXT)
 test_kman_OBJECTS = $(am_test_kman_OBJECTS)
 test_kman_DEPENDENCIES = $(am__DEPENDENCIES_2)
 DEFAULT_INCLUDES = -I.
@@ -242,7 +240,6 @@ kman_SOURCES = src/kman.cpp \
 								src/vecUtil.cpp \
 								src/misc.cpp \
 								src/substitutionMatrix.cpp \
-								src/val.cpp \
 								src/msa.cpp
 
 kman_LDADD = $(shared_LDADD)
@@ -256,7 +253,6 @@ test_kman_SOURCES = tests/test_vecutil.cpp \
 										src/vecUtil.cpp \
 										src/misc.cpp \
 										src/substitutionMatrix.cpp \
-										src/val.cpp \
 										src/msa.cpp
 
 test_kman_LDADD = $(shared_LDADD)
@@ -386,7 +382,6 @@ src/vecUtil.$(OBJEXT): src/$(am__dirstamp) \
 src/misc.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/substitutionMatrix.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/val.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/msa.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 kman$(EXEEXT): $(kman_OBJECTS) $(kman_DEPENDENCIES) $(EXTRA_kman_DEPENDENCIES) 
 	@rm -f kman$(EXEEXT)
@@ -415,7 +410,6 @@ mostlyclean-compile:
 	-rm -f src/msa.$(OBJEXT)
 	-rm -f src/substitutionMatrix.$(OBJEXT)
 	-rm -f src/txtProc.$(OBJEXT)
-	-rm -f src/val.$(OBJEXT)
 	-rm -f src/vecUtil.$(OBJEXT)
 	-rm -f tests/test_vecutil.$(OBJEXT)
 
@@ -432,7 +426,6 @@ include src/$(DEPDIR)/misc.Po
 include src/$(DEPDIR)/msa.Po
 include src/$(DEPDIR)/substitutionMatrix.Po
 include src/$(DEPDIR)/txtProc.Po
-include src/$(DEPDIR)/val.Po
 include src/$(DEPDIR)/vecUtil.Po
 include tests/$(DEPDIR)/test_vecutil.Po
 
