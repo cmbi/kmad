@@ -62,7 +62,7 @@ void Profile::createProfile(sequenceList& alignment,
 	double identitiesSum;
 	int noOfSequences;
 	if (weightsModeOn){
-		identitiesSum = vecUtil::sum(sequenceIdentityValues);
+    identitiesSum = boost::accumulate(sequenceIdentityValues, 0);
 	}
 	else{
 		noOfSequences = alignment.size();

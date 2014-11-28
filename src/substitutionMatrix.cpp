@@ -3,6 +3,8 @@
 #include "Residue.h"
 #include "misc.h"
 #include "vecUtil.h"
+
+#include<boost/range/numeric.hpp>
 #include <iostream>
 #include <vector>
 typedef std::vector<char> alphaList;

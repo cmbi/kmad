@@ -31,6 +31,7 @@ typedef std::vector<double> profileMatrixColumn;
 typedef std::vector<profileMatrixRow> profile_matrix;
 typedef std::vector<std::vector<double>> matrix2d;
 typedef std::vector<std::vector<int>> sbst_matrix;
+typedef std::vector<std::vector<int>> sbst_matrix_columns;
 typedef std::vector<int> indexList;
 typedef std::vector<int> sbstMatColumn;
 typedef std::tuple<std::string, std::string, int, int, int> defaultRuleTuple;

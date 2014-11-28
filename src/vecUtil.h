@@ -7,23 +7,17 @@
 #include<string>
 class Residue;
 namespace vecUtil{
-	bool contains(std::vector<std::string>&, std::string&);
-	int findIndex(std::string&, std::vector<std::string>&);
-	void transposeVec(std::vector< std::vector<int> >&);
-	void transposeVec(std::vector< std::vector<double> >&);
-	void divideVectorByAScalar(std::vector<double>&, int);
-	void divideVectorByAScalar(std::vector<double>&, double&);
-	void multiplyVectorByAScalar(std::vector<double>&, int);
-	void multiplyVectorByAScalar(std::vector<double>&, double&);
-	std::vector<double> addUp(std::vector< std::vector<double> >&);
-	double sum(const std::vector<double>&);
-	std::vector<double> convertIntVectorToDoubleVector(std::vector<int>&);
-	std::vector<std::string> flattenWithoutFeatures(const std::vector<std::vector<std::string> >&);
-	std::vector<std::string> flatten(const std::vector<std::vector<std::string> >&);
-	std::vector<std::string> flatten(const std::vector<std::vector<Residue>>&);
-	std::vector<Residue> push_front(std::vector<Residue>&, Residue);
-	std::vector<double> average(std::vector<std::vector<double>>&);
-	std::vector<double> average(const std::vector<std::vector<int>>&);
+	bool contains(featureNamesList& vec, std::string& x);
+	int findIndex(std::string& val, featureNamesList& vec);
+	void transposeVec(profile_matrix& vec);
+	void divideVectorByAScalar(profileMatrixRow& vec, int scalar);
+	void divideVectorByAScalar(profileMatrixRow& vec, double& scalar);
+	void multiplyVectorByAScalar(profileMatrixRow& vec, double& scalar);
+	profileMatrixRow addUp(matrix2d & vec);
+	profileMatrixColumn convertIntVectorToDoubleVector(sbstMatColumn&);
+	string_sequences flatten(const sequenceList&);
+	sequence push_front(sequence&, Residue);
+	profileMatrixRow average(const sbst_matrix_columns& vec);
 }
 
 #endif /* VECUTIL_H */

@@ -3,6 +3,9 @@
 #include "vecUtil.h"
 #include "txtProc.h"
 #include "misc.h"
+
+#include<boost/range/numeric.hpp>
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -88,7 +91,7 @@ void FeaturesProfile::countOccurences(const sequenceList& alignment,
 	double identitiesSum;
 	int noOfSequences;
 	if (weightsModeOn){
-		identitiesSum = vecUtil::sum(sequenceIdentityValues);
+    identitiesSum = boost::accumulate(sequenceIdentityValues, 0);
 	}
 	else{
 		noOfSequences = alignment.size();
