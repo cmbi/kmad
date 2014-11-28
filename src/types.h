@@ -7,6 +7,10 @@ class Residue;
 
 
 typedef std::vector<std::string> string_sequences;
+typedef std::vector<std::string> seqNames;
+typedef std::vector<std::string> codonSeq;
+typedef std::vector<codonSeq> codonSeqList;
+typedef std::vector<codonSeqList> codonSeqWithNamesList;
 typedef std::vector<std::string> ids_list;
 typedef std::vector<double> probs_list;
 typedef std::vector<int> featuresList;

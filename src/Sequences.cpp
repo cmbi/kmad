@@ -11,10 +11,10 @@
 #include <vector>
 #include <ctime>
 
-Sequences::Sequences(std::vector<std::vector<std::vector<std::string> > >& s){
-	std::vector<std::string> additional_features;
+
+Sequences::Sequences(codonSeqWithNamesList &s){
+	featureNamesList additional_features;
 	for (unsigned int i = 0; i < s.size(); i++){
-		//sequence_names.push_back(s[i][0]);
 		m_sequence_names.push_back(s[i][0][0]);
 		sequence new_seq;
 		for (unsigned int j = 0; j < s[i][1].size(); j++){
@@ -35,14 +35,14 @@ Sequences::Sequences(){
 //function performMSAfirstround - performs the first round of alignments, 
 //all vs query seq (first calculates profile based only on the query seq, then 
 //aligns all sequences and calculates identity of each sequence to the query seq.)
-std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile, 
-                                                         FeaturesProfile& outputFeaturesProfile, 
-                                                         double penalty, 
-                                                         double endPenalty, 
-                                                         double extensionPenalty, 
-                                                         bool weightsModeOn, 
-                                                         int codon_length, 
-                                                         std::vector<double>& identities){
+string_sequences Sequences::performMSAfirstround(Profile& outputProfile, 
+                                                 FeaturesProfile& outputFeaturesProfile, 
+                                                 double penalty, 
+                                                 double endPenalty, 
+                                                 double extensionPenalty, 
+                                                 bool weightsModeOn, 
+                                                 int codon_length, 
+                                                 identitiesList& identities){
 	outputProfile = Profile(substitutionMatrix::convertToProfileFormat(m_sequences_aa[0])); 
   //working alignment - without lowercase around cut out residues
 	sequenceList alignmentWithoutLowercase;	
@@ -50,13 +50,9 @@ std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile,
 	sequenceList alignmentWithLowercase;		
 	alignmentWithoutLowercase.push_back(m_sequences_aa[0]);
 	alignmentWithLowercase.push_back(m_sequences_aa[0]);
-  //'true' stored for every sequence which identity with the 1st one is higher 
-  //than 80%, only based on these profile will be built
-	std::vector<bool> sequenceIdentity; 					
   // identity of the 1st one to itself
-	identities.push_back(1); 
   //to build the first profile based only on the first seqeunce
-	sequenceIdentity.push_back(true);					
+	identities.push_back(1); 
 	outputFeaturesProfile.expandListOfFeatures(m_sequences_aa);
   //create features profile based on the 1st seq
 	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,
@@ -76,7 +72,6 @@ std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile,
 			alignmentWithoutLowercase.push_back(alNoLower);
 			alignmentWithLowercase.push_back(alWithLower);
 		}
-		else sequenceIdentity.push_back(false);	
 	}
   //create features profile based on the 1st seq
 	outputFeaturesProfile.createProfile(alignmentWithoutLowercase, 
@@ -88,9 +83,11 @@ std::vector<std::string> Sequences::performMSAfirstround(Profile& outputProfile,
                                    weightsModeOn);
 	return vecUtil::flatten(alignmentWithLowercase);		
 }
+
+
 //perform next round of MSA (good for all rounds except for the first one - 
 //you need a profile)
-void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment, 
+void Sequences::performMSAnextRounds(string_sequences* prevAlignment, 
                                      Profile& outputProfile,
                                      FeaturesProfile& outputFeaturesProfile, 
                                      double penalty, 
@@ -99,7 +96,7 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment,
                                      bool weightsModeOn, 
                                      double identityCutoff,
                                      int codon_length, 
-                                     std::vector<double>& identities, 
+                                     identitiesList& identities, 
                                      int& prev_alignments){
 	int next_alignments = countAlignments(identityCutoff, identities);
 	if (next_alignments > prev_alignments){
@@ -129,7 +126,8 @@ void Sequences::performMSAnextRounds(std::vector<std::string>* prevAlignment,
 		outputProfile.buildPseudoProfile(alignmentWithoutLowercase,identities,
                                      weightsModeOn);
 		*prevAlignment = vecUtil::flatten(alignmentWithLowercase);
-		prev_alignments = next_alignments; //number of performed alignments
+    //update number of performed alignments
+		prev_alignments = next_alignments; 
 	}
 }
 
@@ -218,7 +216,7 @@ void Sequences::alignPairwise(sequence& alNoLower,
 
 //count alignments that will be performed in this round
 int Sequences::countAlignments(double identity_cutoff, 
-                               std::vector<double>& identities){
+                               identitiesList& identities){
 	int count = 0;
 	//for (unsigned int i = 0; i < identities.size(); i++){
   for (auto &item: identities){
@@ -232,9 +230,7 @@ int Sequences::countAlignments(double identity_cutoff,
 
 //adds features from the tuple 'feature_rules'(usr defined) to relevant 
 //residues (also specified in 'feature_rules')
-void Sequences::add_usr_features(std::vector<std::tuple<std::string,std::string, 
-                                 int, int, int, double, double, double, double, 
-                                 std::string, std::string> >& feature_rules){
+void Sequences::add_usr_features(rulesTuplesList& feature_rules){
 	//for (unsigned int i = 0; i < feature_rules.size(); i++){
 	for (auto &rule: feature_rules){
 		std::string feat_name = std::string("USR_")
@@ -254,7 +250,7 @@ void Sequences::add_usr_features(std::vector<std::tuple<std::string,std::string,
 }
 
 
-std::vector< std::string> Sequences::get_names(){
+seqNames Sequences::get_names(){
   return m_sequence_names;
 }
 
@@ -262,8 +258,8 @@ void Sequences::add_feature_indexes(FeaturesProfile& fprf){
   std::string nothing = "AA";
   for (auto &seq: m_sequences_aa){
     for (auto &res: seq){
-        std::vector<std::string> features = res.getFeatures();
-        std::vector<int> indexes;
+        featureNamesList features = res.getFeatures();
+        featuresList indexes;
         for (auto &feat: features){
           if (feat != nothing){
             indexes.push_back(fprf.findFeaturesIndex(feat));

@@ -1,48 +1,58 @@
 #ifndef SEQUENCES_H
 #define SEQUENCES_H
+
+
 #include "types.h"
 #include <iostream>
 #include <vector>
+
+
 class Residue;
 class Profile;
 class FeaturesProfile;
 class Sequences{
 public:
 	//constructor
-	Sequences(std::vector< std::vector< std::vector< std::string> > >& );
+  Sequences(codonSeqWithNamesList& s);
   Sequences();
 	//getters
-  std::vector<std::string> get_names();
+  seqNames get_names();
 	//main functionality
-	std::vector<std::string> performMSAfirstround(Profile&, FeaturesProfile&, 
-                                                double, double, double, 
-                                                bool, int, 
-                                                std::vector<double>&);
-	void performMSAnextRounds(std::vector<std::string>*,
-                            Profile&, FeaturesProfile&, 
-                            double, double, double, 
-                            bool, double, 
-                            int, std::vector<double>&, 
-                            int&);
-	void add_usr_features(std::vector<std::tuple<std::string, std::string, int, 
-                                               int, int, double, double, 
-                                               double, double, std::string, 
-                                               std::string > >&);
+	string_sequences performMSAfirstround(Profile& outputProfile, 
+                                        FeaturesProfile& outputFeaturesProfile, 
+                                        double penalty, double endPenalty, 
+                                        double extensionPenalty, 
+                                        bool weightsModeOn, int codon_length, 
+                                        identitiesList& identities);
+
+	void performMSAnextRounds(string_sequences* prevAlignment,
+                            Profile& outputProfile, 
+                            FeaturesProfile& outputFeaturesProfile, 
+                            double penalty, double endPenalty, 
+                            double extensionPenalty, 
+                            bool weightsModeOn, double identityCutoff, 
+                            int codon_length, identitiesList& identities, 
+                            int& prev_alignments);
+  void add_usr_features(rulesTuplesList& feature_rules);
 private:
 	//functions
-	void removeGaps(std::vector<Residue>&, std::vector<Residue>&, 
-                  std::vector<std::vector<Residue>>&);
-	void alignPairwise(std::vector<Residue>&, std::vector<Residue>&, 
-                     std::vector<Residue>&,
-                     Profile&, FeaturesProfile&,
-                     double, double, double, int, int);
-	double calcIdentity(const std::vector<Residue>&);
-	int countAlignments(double, std::vector<double>&);
-  void add_feature_indexes(FeaturesProfile&);
+	void removeGaps(sequence& alignmentWithLowercase, 
+                  sequence& alignmentWithoutLowercase, 
+                  sequenceList& alignment);
+	void alignPairwise(sequence& alNoLower, 
+                     sequence& alWithLower, 
+                     sequence& seq2,
+                     Profile& prf, FeaturesProfile& featPrf,
+                     double penalty, double endPenalty, double extensionPenalty,
+                     int deb, int codon_length);
+	double calcIdentity(const sequence& alignedSequence);
+	int countAlignments(double identity_cutoff, identitiesList& identities);
+  void add_feature_indexes(FeaturesProfile& fprf);
 	//variables 
 	int m_seqNr;
 	int m_firstSequenceSize;
-	std::vector<std::vector<Residue>> m_sequences_aa;
-	std::vector<std::string> m_sequence_names;
+	sequenceList m_sequences_aa;
+	seqNames m_sequence_names;
 };
+
 #endif /* SEQUENCES_H */
