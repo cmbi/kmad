@@ -3,6 +3,9 @@
 #include <vector>
 #include <tuple>
 
+class Residue;
+
+
 typedef std::vector<std::string> string_sequences;
 typedef std::vector<std::string> ids_list;
 typedef std::vector<double> probs_list;

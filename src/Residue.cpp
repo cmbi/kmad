@@ -3,7 +3,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
-Residue::Residue(std::string codon, std::vector<std::string> additional_features)
+
+
+Residue::Residue(std::string codon, featureNamesList additional_features)
 : m_codon(codon){
 	m_aa = codon[0];
 	codon_to_features();
@@ -11,7 +13,11 @@ Residue::Residue(std::string codon, std::vector<std::string> additional_features
 		m_features.push_back(feat);
 	}
 }
+
+
 Residue::Residue(){}
+
+
 // adds features (in this order: ptm, domains, motifs)
 void Residue::codon_to_features(){
 	std::string nothing = "AA";
@@ -127,12 +133,12 @@ void Residue::lowercase(){
 }
 
 
-std::vector<std::string> Residue::getFeatures() const{
+featureNamesList Residue::getFeatures() const{
 	return m_features;
 }
 
 
-std::vector<std::string> Residue::getFeatures() {
+featureNamesList Residue::getFeatures() {
 	return m_features;
 }
 
@@ -142,11 +148,11 @@ void Residue::add_feature(std::string new_feat){
 }
 
 
-std::vector<int> Residue::getFeatIndexes(){
+featuresList Residue::getFeatIndexes(){
   return m_feature_indexes;
 }
 
 
-void Residue::setFeatIndexes(std::vector<int> vec){
-  m_feature_indexes = vec;
+void Residue::setFeatIndexes(featuresList new_features){
+  m_feature_indexes = new_features;
 }

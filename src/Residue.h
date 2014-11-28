@@ -1,18 +1,18 @@
 #ifndef RESIDUE_H
 #define RESIDUE_H
 
+#include "types.h"
 #include <iostream>
 #include <vector>
 class Residue{
 	private:
 		std::string m_codon;
-    std::vector<int> m_feature_indexes;
-		std::vector<std::string> m_features;
+    featuresList m_feature_indexes;
+		featureNamesList m_features;
 		char m_aa;
-		//std::vector<std::string> codon_to_features();
 		void codon_to_features();
 	public:
-		Residue(std::string, std::vector<std::string>);
+		Residue(std::string codon, featureNamesList additional_features);
 		Residue();
 		char getAA() const;
 		char getAA();
@@ -20,11 +20,11 @@ class Residue{
 		std::string getCodon();
 		void setAA(char);
 		void lowercase();
-		void add_feature(std::string);
-		std::vector<std::string> getFeatures() const;
-		std::vector<std::string> getFeatures();
-    std::vector<int> getFeatIndexes();
-    void setFeatIndexes(std::vector<int>);
+		void add_feature(std::string new_feat);
+		featureNamesList getFeatures() const;
+		featureNamesList getFeatures();
+    featuresList getFeatIndexes();
+    void setFeatIndexes(featuresList new_features);
 };
 
 #endif /* RESIDUE_H */
