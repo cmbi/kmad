@@ -5,13 +5,10 @@
 #include <vector>
 
 
-Residue::Residue(std::string codon, featureNamesList additional_features)
+Residue::Residue(std::string codon)
 : m_codon(codon){
 	m_aa = codon[0];
 	codon_to_features();
-  for (auto &feat: additional_features){
-		m_features.push_back(feat);
-	}
 }
 
 
@@ -111,22 +108,11 @@ char Residue::getAA() const{
 }
 
 
-char Residue::getAA() {
-	return m_aa;
-}
-
-
 std::string Residue::getCodon() const{
 	return m_codon;
 }
 
 
-std::string Residue::getCodon() {
-	return m_codon;
-}
-
-
-//change amino acid char to lowercase
 void Residue::lowercase(){
 	m_aa = tolower(m_aa);
 	m_codon[0] = tolower(m_codon[0]);
@@ -134,11 +120,6 @@ void Residue::lowercase(){
 
 
 featureNamesList Residue::getFeatures() const{
-	return m_features;
-}
-
-
-featureNamesList Residue::getFeatures() {
 	return m_features;
 }
 

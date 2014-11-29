@@ -1,7 +1,3 @@
-//ScoringMatrix class implementation
-//
-//responsible for pairwise alignments
-//creates scoring matrix, backtraces alignment path, etc.
 #include "ScoringMatrix.h"
 #include "FeaturesProfile.h"
 #include "Residue.h"
@@ -19,13 +15,6 @@
 #include <vector>
 
 
-/*constructor
-	arguments:
-		s1size - length of the 1st sequence
-		s2size - length of the 2nd sequence
-		pen - gap opening penalty
-*/
-//constructor
 ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen, 
                              double endPenalty, double extensionPenalty)
 :	m_iLength(s1size),
@@ -47,10 +36,8 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen,
 }
 
 
-//function calculateScoresProfile - calculates scoring matrix for sequences 
-//s1 and s2 using profile prf instead of a substitution matrix ENCODED SEQUENCES
 void ScoringMatrix::calculateScores(sequence s2, Profile& prf, 
-                                    FeaturesProfile& featPrf, int debug, 
+                                    FeaturesProfile& featPrf, 
                                     int codon_length){
 	s2 = vecUtil::push_front(s2,misc::gapRes(codon_length));
 
@@ -96,7 +83,6 @@ void ScoringMatrix::calculateScores(sequence s2, Profile& prf,
 }
 
 
-//function findBestScore - returns positions of the end of the best scoring alignment[score, i, j] (must be either in the last row or in the last column of the scoring matrix)
 valueCoords ScoringMatrix::findBestScore(){
 	int maxI = m_matrixV.size()-1;
 	int maxJ = m_matrixV[0].size()-1;
@@ -135,7 +121,6 @@ valueCoords ScoringMatrix::findBestScore(){
 }
 
 
-//function nwAlignment - performs a sequence vs profile(/pseudoprofile) needleman wunsch alignment 
 void ScoringMatrix::nwAlignment(sequenceList *result,
                                 sequence s2, Profile& prf, 
                                 FeaturesProfile& featPrf,

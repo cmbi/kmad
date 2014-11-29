@@ -13,12 +13,11 @@
 
 
 Sequences::Sequences(codonSeqWithNamesList &s){
-	featureNamesList additional_features;
 	for (unsigned int i = 0; i < s.size(); i++){
 		m_sequence_names.push_back(s[i][0][0]);
 		sequence new_seq;
 		for (unsigned int j = 0; j < s[i][1].size(); j++){
-			Residue newRes(s[i][1][j], additional_features);
+			Residue newRes(s[i][1][j]);
 			new_seq.push_back(newRes);
 		}
 		m_sequences_aa.push_back(new_seq);
@@ -32,9 +31,6 @@ Sequences::Sequences(){
 }
 
 
-//function performMSAfirstround - performs the first round of alignments, 
-//all vs query seq (first calculates profile based only on the query seq, then 
-//aligns all sequences and calculates identity of each sequence to the query seq.)
 string_sequences Sequences::performMSAfirstround(Profile& outputProfile, 
                                                  FeaturesProfile& outputFeaturesProfile, 
                                                  double penalty, 
@@ -65,7 +61,7 @@ string_sequences Sequences::performMSAfirstround(Profile& outputProfile,
   for (auto &seqI: m_sequences_aa){
 		alignPairwise(alNoLower, alWithLower, seqI, outputProfile, 
                   outputFeaturesProfile, penalty, endPenalty, extensionPenalty, 
-                  0, codon_length);
+                  codon_length);
 		double identity = calcIdentity(alNoLower);
 		identities.push_back(identity);
 		if (identity > 0.9){
@@ -78,15 +74,13 @@ string_sequences Sequences::performMSAfirstround(Profile& outputProfile,
                                       identities, 
                                       weightsModeOn, 
                                       codon_length);
-	outputProfile.buildPseudoProfile(alignmentWithoutLowercase,
-                                   identities,
-                                   weightsModeOn);
+	outputProfile.processProfile(alignmentWithoutLowercase,
+                               identities,
+                               weightsModeOn);
 	return vecUtil::flatten(alignmentWithLowercase);		
 }
 
 
-//perform next round of MSA (good for all rounds except for the first one - 
-//you need a profile)
 void Sequences::performMSAnextRounds(string_sequences* prevAlignment, 
                                      Profile& outputProfile,
                                      FeaturesProfile& outputFeaturesProfile, 
@@ -115,7 +109,7 @@ void Sequences::performMSAnextRounds(string_sequences* prevAlignment,
         // NW alignment of the ith seq against the profile
 				alignPairwise(alNoLower, alWithLower, m_sequences_aa[i], outputProfile,
                       outputFeaturesProfile,penalty,endPenalty,extensionPenalty,
-                      0, codon_length); 
+                      codon_length); 
 				alignmentWithoutLowercase.push_back(alNoLower);
 				alignmentWithLowercase.push_back(alWithLower);
 			}
@@ -123,8 +117,8 @@ void Sequences::performMSAnextRounds(string_sequences* prevAlignment,
     //create features profile based on the 1st seq
 		outputFeaturesProfile.createProfile(alignmentWithoutLowercase,identities, 
                                         weightsModeOn, codon_length);
-		outputProfile.buildPseudoProfile(alignmentWithoutLowercase,identities,
-                                     weightsModeOn);
+		outputProfile.processProfile(alignmentWithoutLowercase,identities,
+                                 weightsModeOn);
 		*prevAlignment = vecUtil::flatten(alignmentWithLowercase);
     //update number of performed alignments
 		prev_alignments = next_alignments; 
@@ -132,8 +126,6 @@ void Sequences::performMSAnextRounds(string_sequences* prevAlignment,
 }
 
 
-//function calcIdentity, calculates identity with the query sequence (takes 
-//aligned sequence with the gaps cut out)
 double Sequences::calcIdentity(const sequence& alignedSequence){
 	double identicalResidues=0;
 	for (unsigned int i = 0; i < alignedSequence.size(); i++){
@@ -145,11 +137,6 @@ double Sequences::calcIdentity(const sequence& alignedSequence){
 }
 
 
-//function removeGaps - takes pairwise alignment vector<string>, removes 
-//characters from the 2nd sequence that match gaps from 1st seq and returns 
-//vector<string> of 2 elements, where the 1st one is 2nd sequence with cut out 
-//chars and 2nd one is 2nd sequence with cut out chars and lowercase chars 
-//before and after that
 void Sequences::removeGaps(sequence& alignmentWithLowercase, 
                            sequence& alignmentWithoutLowercase, 
                            sequenceList& alignment){
@@ -191,21 +178,21 @@ void Sequences::removeGaps(sequence& alignmentWithLowercase,
 	alignmentWithLowercase = newS2lower;
 	alignmentWithoutLowercase = newS2;
 }
-//function alignPairwise -> takes a sequence and profiles, returns a ready 
-//alignment of the two, with gaps cut out
+
+
 void Sequences::alignPairwise(sequence& alNoLower, 
                               sequence& alWithLower, 
                               sequence& seq2, 
                               Profile& prf, 
                               FeaturesProfile& featPrf, 
                               double penalty, double endPenalty, 
-                              double extensionPenalty, int deb, 
+                              double extensionPenalty, 
                               int codon_length){
 	int profileLength = prf.getMatrix()[0].size();
 	sequenceList alignment;
 	ScoringMatrix scores(profileLength, seq2.size(), penalty, 
                        endPenalty, extensionPenalty);
-	scores.calculateScores(seq2, prf, featPrf, deb, 
+	scores.calculateScores(seq2, prf, featPrf, 
                          codon_length);
 	scores.nwAlignment(&alignment, seq2, prf, featPrf, 
                      codon_length);
@@ -214,7 +201,6 @@ void Sequences::alignPairwise(sequence& alNoLower,
 }
 
 
-//count alignments that will be performed in this round
 int Sequences::countAlignments(double identity_cutoff, 
                                identitiesList& identities){
 	int count = 0;
@@ -228,8 +214,6 @@ int Sequences::countAlignments(double identity_cutoff,
 }
 
 
-//adds features from the tuple 'feature_rules'(usr defined) to relevant 
-//residues (also specified in 'feature_rules')
 void Sequences::add_usr_features(rulesTuplesList& feature_rules){
 	//for (unsigned int i = 0; i < feature_rules.size(); i++){
 	for (auto &rule: feature_rules){
@@ -253,6 +237,7 @@ void Sequences::add_usr_features(rulesTuplesList& feature_rules){
 seqNames Sequences::get_names(){
   return m_sequence_names;
 }
+
 
 void Sequences::add_feature_indexes(FeaturesProfile& fprf){
   std::string nothing = "AA";

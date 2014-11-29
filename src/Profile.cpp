@@ -23,15 +23,13 @@ Profile::Profile(){
 }
 
 
-//function getMatrix - returns profile matrix (double)
 profile_matrix Profile::getMatrix() const{
 	return m_prfMatrix;
 }
 
 
-//builds a pseudo-profile from the profile itself and the substitution matrix with appropriate weights
-void Profile::buildPseudoProfile(sequenceList& alignment,
-                                 const identitiesList& sequenceIdentityValues, 
+void Profile::processProfile(sequenceList& alignment,
+                             const identitiesList& sequenceIdentityValues, 
                                  bool weightsModeOn){
 	createProfile(alignment,sequenceIdentityValues,weightsModeOn);
 	profile_matrix newProfile;

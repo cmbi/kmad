@@ -12,8 +12,7 @@
 Residue misc::gapRes(int codon_length){
 	std::string single_codon(codon_length,'A');
 	single_codon[0] = '-';
-	featureNamesList additional_features;
-	Residue res(single_codon, additional_features);
+	Residue res(single_codon);
 	return res;
 }
 
@@ -22,8 +21,7 @@ Residue misc::gapRes(int codon_length){
 //by a codon of length codon_length
 sequence misc::pseudoResidueSequence(int seqLength, int codon_length){
 	std::string single_codon(codon_length, 'A');
-	featureNamesList additional_features;	
-	Residue single_res(single_codon,additional_features);
+	Residue single_res(single_codon);
 	sequence result(seqLength, single_res);
 	return result;
 }

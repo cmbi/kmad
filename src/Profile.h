@@ -8,21 +8,37 @@
 class Residue;
 class Profile{
 public:
-	Profile(profile_matrix mat); //constructor
+  ///
+  /// constructor; creates a Profile object with profile matrix mat
+  /// 
+	Profile(profile_matrix mat);
+  ///
+  /// constructor; creates an empty profile
+  ///
 	Profile();
-	void buildPseudoProfile(sequenceList& alignment, 
-                          const identitiesList& sequenceIdentityValues, 
-                          bool weightsModeOn);
-	//getters/setters
+  ///
+  /// builds a profile from the matrix of occurences and the substitution 
+  /// matrix with appropriate weights
+  ///
+	void processProfile(sequenceList& alignment, 
+                      const identitiesList& sequenceIdentityValues, 
+                      bool weightsModeOn);
+  ///
+  /// returns the profile matrix
+  ///
 	profile_matrix getMatrix() const;
+  ///
+  /// returns a score for amino acid aAcid on a certain position
+  ///
 	double getElement(int position, char aAcid);
+  ///
+  /// returns a score for amino acid with index aAcidInt on a certain position
+  ///
 	double getElement(int aAcidInt, int position);
 private:
-	//functions
 	void createProfile(sequenceList& alignment,
                      const identitiesList& sequenceIdentityValues, 
                      bool weightsModeOn);
-	//variables
 	profile_matrix m_prfMatrix;
 };
 
