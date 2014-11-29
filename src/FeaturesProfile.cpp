@@ -35,9 +35,6 @@ namespace {
 }
 
 
-//constructor, creates empty profile, takes domain and phosphorylation 
-//scores(dom, phosph) and motifs' ids and probabilities(m_ids, m_probs), 
-//lcr - low complexity regions gap penlat modifier
 FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr, 
                                  ids_list m_ids, 
                                  probs_list m_probs)
@@ -50,9 +47,6 @@ FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr,
 }
 
 
-// creates a features profile - counts occurences of each feature on each 
-// position an normalize it by the number of non gaps (easily changeable to 
-// number of sequences);(with or without weights)
 void FeaturesProfile::createProfile(const sequenceList& alignment, 
                                     const identitiesList& sequenceIdentityValues, 
                                     bool weightsModeOn, int codon_length){
@@ -60,6 +54,8 @@ void FeaturesProfile::createProfile(const sequenceList& alignment,
                   weightsModeOn, codon_length);
   processProfile();
 }
+
+
 void FeaturesProfile::processProfile(){
   m_prfMatrix.clear();
   for (unsigned int i = 0; i < m_occurences_matrix.size(); i++){
@@ -82,6 +78,8 @@ void FeaturesProfile::processProfile(){
     m_prfMatrix.push_back(feature_row);
   }
 }
+
+
 void FeaturesProfile::countOccurences(const sequenceList& alignment, 
                                     const identitiesList& sequenceIdentityValues, 
                                     bool weightsModeOn, int codon_length){
@@ -133,7 +131,8 @@ void FeaturesProfile::countOccurences(const sequenceList& alignment,
 	} 
 	vecUtil::transposeVec(m_occurences_matrix);
 }
-//get motif's probability (by its id)
+
+
 double FeaturesProfile::get_motifs_prob(std::string& m_id){
 	double prob = 0;
 	std::string id_code = txtProc::split(m_id, '_')[1];
@@ -155,7 +154,6 @@ void FeaturesProfile::getScore(unsigned int position, featuresList& features,
 }
 
 
-//returns score for a feature on nth position (by feature's name)
 double FeaturesProfile::score_motifs(unsigned int& position, std::string& feat_name){
 	int featuresIndex = findFeaturesIndex(feat_name);
 	double result;
@@ -165,7 +163,6 @@ double FeaturesProfile::score_motifs(unsigned int& position, std::string& feat_n
 }
 
 
-//function findFeaturesIndex - takes features' name, e.g. "phosphN"
 int FeaturesProfile::findFeaturesIndex(std::string& feat_name){
 	int featuresIndex = -1;
 	for (unsigned int i = 0; i < listOfFeatures.size();i++){
@@ -178,7 +175,6 @@ int FeaturesProfile::findFeaturesIndex(std::string& feat_name){
 }
 
 
-//function expandListOfFeatures - expand it by domains and motifs found in the alignment
 void FeaturesProfile::expandListOfFeatures(const sequenceList& sequences){
 	for(unsigned int i = 0; i < sequences.size();i++){	
 		for (unsigned int j = 0; j < sequences[i].size(); j++){
@@ -200,7 +196,6 @@ void FeaturesProfile::expandListOfFeatures(const sequenceList& sequences){
 }
 
 
-//get score for domain "dom_name" on certain position
 double FeaturesProfile::score_domains(unsigned int& position, std::string& dom_name){
 	double result  = 0;
 	for (unsigned int i = 0; i < domain_indexes.size(); i++){
@@ -216,7 +211,6 @@ double FeaturesProfile::score_domains(unsigned int& position, std::string& dom_n
 }
 
 
-// get a score for a certain ptm encoded aligned to the 'position' position
 double FeaturesProfile::score_PTMs(unsigned int& position, std::string& ptm_name){
 	double result  = 0;
 	std::string ptm_type = ptm_name;
@@ -295,7 +289,6 @@ profile_matrix FeaturesProfile::getMatrix(){
 }
 
 
-//returns score modifier for a given feature
 double FeaturesProfile::get_modifier(std::string& feat_name){
 	std::string feat_code = txtProc::split(feat_name,'_')[0];
 	double modifier = 1;
@@ -312,8 +305,6 @@ double FeaturesProfile::get_modifier(std::string& feat_name){
 }
 
 
-// sets rules for aligning features, unfolds last two elements in each tuple 
-// to vectors (vectors of features(strings))
 void FeaturesProfile::setRules(rulesTuplesList& new_rules){
   for (auto &rule: new_rules){
 		featuresList incr_feat = txtProc::unfold(std::get<9>(rule), listOfFeatures);
@@ -339,8 +330,6 @@ void FeaturesProfile::setRules(rulesTuplesList& new_rules){
 }
 
 
-//adds user defined features fo listOfFeatures, called from 
-//txtProc::process_conf_file(....)
 void FeaturesProfile::add_USR_features(rulesTuplesList& new_rules){
   for (auto &rule: new_rules){
 		std::string feature_i = std::string("USR_") + std::get<0>(rule) \
