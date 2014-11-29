@@ -6,11 +6,30 @@
 #include <vector>
 class Residue;
 namespace substitutionMatrix{
+  ///
+  /// Creates a profile matrix (20 x sequence length)
+  /// based on a single sequence
+  ///
 	profile_matrix convertToProfileFormat(sequence& seq);
-	//getters
+  ///
+  /// gets score from the sbst matrix for the given amino acids
+  /// @param char1 amino acid code
+  /// @param char2 amino acid code
+  ///
 	int getElement(char char1, char char2);
+  ///
+  /// gets score from the sbst matrix for the given amino acids
+  /// @param i amino acid index
+  /// @param j amino acid index
+  ///
 	int getElement(int i, int j);
+  /// 
+  /// assigns a column from the susbtitution matrix to the 'column_int'
+  ///
 	void getColumn(unsigned int& columnNo, sbstMatColumn& column_int);
+  ///
+  /// returns index of the given amino acid
+  ///
 	int findAminoAcidsNo(char aa);
 }
 

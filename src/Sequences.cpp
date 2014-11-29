@@ -81,7 +81,7 @@ string_sequences Sequences::performMSAfirstround(Profile& outputProfile,
 }
 
 
-void Sequences::performMSAnextRounds(string_sequences* prevAlignment, 
+void Sequences::performMSAnextRounds(string_sequences& prevAlignment, 
                                      Profile& outputProfile,
                                      FeaturesProfile& outputFeaturesProfile, 
                                      double penalty, 
@@ -119,7 +119,7 @@ void Sequences::performMSAnextRounds(string_sequences* prevAlignment,
                                         weightsModeOn, codon_length);
 		outputProfile.processProfile(alignmentWithoutLowercase,identities,
                                  weightsModeOn);
-		*prevAlignment = vecUtil::flatten(alignmentWithLowercase);
+		prevAlignment = vecUtil::flatten(alignmentWithLowercase);
     //update number of performed alignments
 		prev_alignments = next_alignments; 
 	}

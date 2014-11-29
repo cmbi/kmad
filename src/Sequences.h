@@ -42,7 +42,7 @@ public:
   /// performs next round of MSA (good for all rounds except for the first one
   /// - you need a profile)
   ///
-	void performMSAnextRounds(string_sequences* prevAlignment,
+	void performMSAnextRounds(string_sequences& prevAlignment,
                             Profile& outputProfile, 
                             FeaturesProfile& outputFeaturesProfile, 
                             double penalty, double endPenalty, 

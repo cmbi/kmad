@@ -8,10 +8,25 @@
 
 class Residue;
 namespace misc{
-	Residue gapRes(int);
-  sequence pseudoResidueSequence(int, int);
-	bool checkParameters(int, int, int, int, double, double, bool, double);
-  bool file_exists(const std::string*);
+  ///
+  /// creates a gap Residue object
+  ///
+	Residue gapRes(int codon_length);
+  ///
+  /// creates a polyA sequence of length seqLength, where each resdue is coded 
+  /// by a codon of length codon_length
+  ///
+  sequence pseudoResidueSequence(int seqLength, int codon_length);
+  ///
+  /// looks for mistakes in the given command line arguments
+  ///
+	bool checkParameters(int codonLength, int phosph, int domain, int motif, 
+                       double gep, double gop, bool weightsOn, 
+                       double endPenalty);
+  ///
+  /// returns True if the file 'name' exists
+  ///
+  bool file_exists(const std::string* name);
 }
 
 #endif /* MISC_H */

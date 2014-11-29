@@ -8,7 +8,6 @@
 #include <vector>
 
 
-//creates a gap codon of length codon_length
 Residue misc::gapRes(int codon_length){
 	std::string single_codon(codon_length,'A');
 	single_codon[0] = '-';
@@ -17,8 +16,6 @@ Residue misc::gapRes(int codon_length){
 }
 
 
-//creates a polyA sequence of length seqLength, where each resdue is coded 
-//by a codon of length codon_length
 sequence misc::pseudoResidueSequence(int seqLength, int codon_length){
 	std::string single_codon(codon_length, 'A');
 	Residue single_res(single_codon);
@@ -27,7 +24,6 @@ sequence misc::pseudoResidueSequence(int seqLength, int codon_length){
 }
 
 
-//look for mistakes in the given command line arguments
 bool misc::checkParameters(int codonLength, int phosph, int domain, int motif,
                            double gep, double gop, bool weightsOn, 
                            double endPenalty){

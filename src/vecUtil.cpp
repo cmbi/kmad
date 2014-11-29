@@ -6,7 +6,6 @@
 #include <algorithm>
 
 
-//checks if the vector of strings vec contains the string x
 bool vecUtil::contains(featureNamesList& vec, std::string& x){
 	if (std::find(vec.begin(),vec.end(),x) != vec.end()) return true;
 	else return false;
@@ -54,7 +53,6 @@ void vecUtil::multiplyVectorByAScalar(profileMatrixRow& vec, double& scalar){
 }
 
 
-//function addUp - takes 2D matrix, adds up elements from each column, returns a 1D vector
 profileMatrixRow vecUtil::addUp(matrix2d& vec){
   profileMatrixRow newVec;
 	for (unsigned int i = 0; i < vec[0].size(); i++){
@@ -68,7 +66,6 @@ profileMatrixRow vecUtil::addUp(matrix2d& vec){
 }
 
 
-//convertIntVectorToDoubleVector
 profileMatrixColumn vecUtil::convertIntVectorToDoubleVector(sbstMatColumn& vec){
   profileMatrixColumn result;
   for (auto &item: vec){
@@ -77,7 +74,7 @@ profileMatrixColumn vecUtil::convertIntVectorToDoubleVector(sbstMatColumn& vec){
 	return result;
 }
 
-//flatten a vector of vectors of residues to a vector of strings
+
 string_sequences vecUtil::flatten(const sequenceList& vec){
 	string_sequences result;
   for (auto &row: vec){
@@ -90,7 +87,7 @@ string_sequences vecUtil::flatten(const sequenceList& vec){
 	return result;
 }
 
-//add an element to the beginning of the vector
+
 sequence vecUtil::push_front(sequence& seq, Residue newElement){
 	reverse(seq.begin(),seq.end());
 	seq.push_back(newElement);
@@ -99,7 +96,6 @@ sequence vecUtil::push_front(sequence& seq, Residue newElement){
 }
 
 
-//calculate average for every column in vector 
 profileMatrixRow vecUtil::average(const sbst_matrix_columns& vec){
   profileMatrixRow result;
 	for (unsigned int i = 0; i < vec[0].size(); i++){
@@ -113,7 +109,6 @@ profileMatrixRow vecUtil::average(const sbst_matrix_columns& vec){
 }
 
 
-//returns index of the first occurence of val in vec
 int vecUtil::findIndex(std::string& val, featureNamesList& vec){
 	int res = -1;
 	for (unsigned int i = 0; i < vec.size(); i++){

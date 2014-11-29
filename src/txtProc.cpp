@@ -37,7 +37,6 @@ double txtProc::convertStringToDouble(std::string& s){
 }
 
 
-//splits a string by the delimiter, returns a vector of strings
 std::vector<std::string> txtProc::split(const std::string &s, char delim) {
     std::vector<std::string> elems;
     std::stringstream ss(s);
@@ -49,9 +48,6 @@ std::vector<std::string> txtProc::split(const std::string &s, char delim) {
 }
 
 
-//function processFASTA - reads fasta file with encoded sequence
-//writes sequences + seqNames to vector<vector<string>>; motifs' ids to 
-//vector<string> ids and motifs' probabilities to vector<double> probs
 Sequences txtProc::read_fasta(std::string filename,
                               int codonLength, 
                               ids_list* ids, 
@@ -120,7 +116,6 @@ Sequences txtProc::read_fasta(std::string filename,
 }
 
 
-//function writeAlignmentToFile
 void txtProc::writeAlignmentToFile(string_sequences& sequences,
                                    seqNames& sequence_names, 
                                    std::string filename){
@@ -133,7 +128,6 @@ void txtProc::writeAlignmentToFile(string_sequences& sequences,
 }
 
 
-//write alignment to file as a nonencoded fasta
 void txtProc::writeAlignmentWithoutCodeToFile(string_sequences& sequences,
                                               seqNames& sequence_names, 
                                               std::string filename, 
@@ -189,7 +183,6 @@ std::istream& txtProc::safeGetline(std::istream& is, std::string& t)
 }
 
 
-//check if the character is supported
 bool txtProc::acceptedChar(char my_char){
 	bool result = false;
   for (auto &acc_char: accepted_characters){
@@ -250,8 +243,6 @@ void txtProc::process_conf_file(std::string filename,
 }
 
 
-// converts the string form the conf file to vector of positions of features 
-// to be scored
 featuresList txtProc::unfold(std::string conf_string, 
                              featureNamesList& listOfFeatures){
   featureNamesList tmp_vector = split(conf_string,',');
