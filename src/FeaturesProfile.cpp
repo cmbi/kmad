@@ -49,9 +49,8 @@ FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr,
 
 void FeaturesProfile::createProfile(const sequenceList& alignment, 
                                     const identitiesList& sequenceIdentityValues, 
-                                    bool weightsModeOn, int codon_length){
-  countOccurences(alignment, sequenceIdentityValues, 
-                  weightsModeOn, codon_length);
+                                    int codon_length){
+  countOccurences(alignment, sequenceIdentityValues, codon_length);
   processProfile();
 }
 
@@ -81,52 +80,32 @@ void FeaturesProfile::processProfile(){
 
 
 void FeaturesProfile::countOccurences(const sequenceList& alignment, 
-                                    const identitiesList& sequenceIdentityValues, 
-                                    bool weightsModeOn, int codon_length){
+                                      const identitiesList& sequenceIdentityValues, 
+                                      int codon_length){
   m_occurences_matrix.clear();
 	std::string nothing = "AA";
-	double weight;
-	double identitiesSum;
-	int noOfSequences;
-	if (weightsModeOn){
-    identitiesSum = boost::accumulate(sequenceIdentityValues, 0);
-	}
-	else{
-		noOfSequences = alignment.size();
-	}
+	int noOfSequences = alignment.size();
+
 	for (unsigned int i = 0; i < alignment[0].size();i++){
 		profileMatrixColumn profileColumn(listOfFeatures.size(),0);
 		int nonGaps = 0;
 		for (unsigned int j = 0; j < alignment.size();j++){
 			if (alignment[j][i].getAA() != '-'){
-				if (weightsModeOn){
-					weight = sequenceIdentityValues[j];
-				}
-				else{
-					weight = 1;
-				}
 				featureNamesList features = alignment[j][i].getFeatures();	
 				for (unsigned int k = 0; k < features.size(); k++){
 					std::string feat_name = features[k];
 					if (feat_name != nothing){
 						int featIndex = findFeaturesIndex(feat_name);
 						if (featIndex != -1){
-              // seq. idenity * modifier (motif/domain/ptm...); 
-              // w/o weights: weight == 1 
-							profileColumn[featIndex] += get_modifier(feat_name) * weight; 
+							profileColumn[featIndex] += get_modifier(feat_name); 
 						}
 					}
 				}
 			nonGaps++;
 			}
 		}
-		if (weightsModeOn){
-			vecUtil::divideVectorByAScalar(profileColumn,identitiesSum);
-		}
-		else{
-			vecUtil::divideVectorByAScalar(profileColumn,noOfSequences);
-			//vecUtil::divideVectorByAScalar(profileColumn,nonGaps);
-    }
+	  vecUtil::divideVectorByAScalar(profileColumn,noOfSequences);
+	  //vecUtil::divideVectorByAScalar(profileColumn,nonGaps);
 		m_occurences_matrix.push_back(profileColumn);
 	} 
 	vecUtil::transposeVec(m_occurences_matrix);
@@ -136,6 +115,7 @@ void FeaturesProfile::countOccurences(const sequenceList& alignment,
 double FeaturesProfile::get_motifs_prob(std::string& m_id){
 	double prob = 0;
 	std::string id_code = txtProc::split(m_id, '_')[1];
+  assert(m_motifs_ids.size() == m_motifs_probs.size());
 	for (unsigned int i = 0; i < m_motifs_ids.size(); i++){
 		if (m_motifs_ids[i] == id_code) {
 			prob = m_motifs_probs[i];

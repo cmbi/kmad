@@ -32,7 +32,7 @@ public:
   ///
   void createProfile(const sequenceList& alignment, 
                      const identitiesList& sequenceIdentityValues, 
-                     bool weightsModeOn, int codon_length);
+                     int codon_length);
   void processProfile();
   ///
   /// processes the matrix of feature occurences creating a matrix of scores
@@ -40,7 +40,7 @@ public:
   ///
 	void countOccurences(const sequenceList& alignment, 
                        const identitiesList& sequenceIdentityValues, 
-                       bool weightsModeOn, int codon_length);
+                       int codon_length);
   ///
   /// Takes a list of sequences, finds motifs and domains in it and adds them 
   /// to the list of features

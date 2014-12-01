@@ -19,7 +19,6 @@ string_sequences msa::run_msa(Sequences sequences,
                               int motifScore,
                               int phosphScore,
                               int codonLength,
-                              bool weightsModeOn, 
                               ids_list motifs_ids,
                               probs_list motifs_probs){
 
@@ -35,7 +34,6 @@ string_sequences msa::run_msa(Sequences sequences,
                                                                                 gapPen, 
                                                                                 endPenalty, 
                                                                                 gapExt, 
-                                                                                weightsModeOn, 
                                                                                 codonLength, 
                                                                                 identities));
   		string_sequences alignment;
@@ -44,7 +42,7 @@ string_sequences msa::run_msa(Sequences sequences,
   			double cutoff = double(i)/10;
   			sequences.performMSAnextRounds(alignment, prf, fprf, gapPen, 
                                        endPenalty, gapExt,
-                                       weightsModeOn, cutoff, codonLength, 
+                                       cutoff, codonLength, 
                                        identities, prev_alignments);
   			//prev_alignments - number of alignments performed in the previous round - 
         //to omit this round if the number of aligned sequences is the same as
@@ -52,8 +50,7 @@ string_sequences msa::run_msa(Sequences sequences,
   		}
   		prev_alignments = 0;  // to align (again) all sequences to the profile
   		sequences.performMSAnextRounds(alignment, prf, fprf, 
-                                     gapPen, endPenalty, gapExt, 
-                                     weightsModeOn, 0, 
+                                     gapPen, endPenalty, gapExt, 0, 
                                      codonLength, identities, 
                                      prev_alignments);
       return alignment;

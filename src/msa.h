@@ -13,7 +13,7 @@ namespace msa{
   /// performs the full multiple sequence alignment, returns aligned sequences
   ///
   string_sequences run_msa(Sequences, std::string, double, double, 
-                           double, double, int, int, int, int, bool,
+                           double, double, int, int, int, int,
                            ids_list, probs_list);
 }
 

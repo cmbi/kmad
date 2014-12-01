@@ -54,7 +54,7 @@ void ScoringMatrix::calculateScores(sequence s2, Profile& prf,
 		m_matrixH[0][i] = i*m_endGapPenalty;	
 		m_matrixG[0][i] = -10000000;
 	}
-	double score1,score2,score3;
+	double score1,score2,score3 = 0;
 	for (unsigned int i = 1; i < m_matrixV.size();i++){
 		for (unsigned int j = 1; j < m_matrixV[i].size(); j++){
 			///V
@@ -125,7 +125,8 @@ void ScoringMatrix::nwAlignment(sequenceList *result,
                                 sequence s2, Profile& prf, 
                                 FeaturesProfile& featPrf,
                                 int codon_length){
-  //creating polyA pseudoSequence representing the profile, to know later where are the gaps in the profile
+  //creating polyA pseudoSequence representing the profile, 
+  //to know later where are the gaps in the profile
 	sequence s1 = misc::pseudoResidueSequence(prf.getMatrix()[0].size()+1, 
                                             codon_length); 
 	Residue gap_code = misc::gapRes(codon_length);
@@ -155,6 +156,10 @@ void ScoringMatrix::nwAlignment(sequenceList *result,
 			newS1.push_back(newChar1);
 		}
 	}
+
+  assert(m_matrixV.size() == m_matrixG.size());
+  assert(m_matrixV.size() == m_matrixH.size());
+
 	//trace back the matrix
 	while (i > 0 || j > 0){
 		//double gapMod = featPrf.getGapMod(i-1,s2[j].getFeatures());

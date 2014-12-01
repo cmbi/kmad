@@ -25,8 +25,7 @@ sequence misc::pseudoResidueSequence(int seqLength, int codon_length){
 
 
 bool misc::checkParameters(int codonLength, int phosph, int domain, int motif,
-                           double gep, double gop, bool weightsOn, 
-                           double endPenalty){
+                           double gep, double gop, double endPenalty){
 	bool alright = true;
 	if (codonLength < 1 || codonLength > 10){
 		alright = false;

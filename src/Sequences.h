@@ -36,7 +36,7 @@ public:
                                         FeaturesProfile& outputFeaturesProfile, 
                                         double penalty, double endPenalty, 
                                         double extensionPenalty, 
-                                        bool weightsModeOn, int codon_length, 
+                                        int codon_length, 
                                         identitiesList& identities);
   ///
   /// performs next round of MSA (good for all rounds except for the first one
@@ -47,7 +47,7 @@ public:
                             FeaturesProfile& outputFeaturesProfile, 
                             double penalty, double endPenalty, 
                             double extensionPenalty, 
-                            bool weightsModeOn, double identityCutoff, 
+                            double identityCutoff, 
                             int codon_length, identitiesList& identities, 
                             int& prev_alignments);
   ///

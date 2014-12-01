@@ -17,7 +17,7 @@ namespace po = boost::program_options;
 int main(int argc, char *argv[]){
   	int codon_length, phosphScore, domainScore, motifScore = 0;
   	double gapExt, gapPen, endPenalty, lcr_mod = 0;
-  	bool weightsModeOn, out_encoded = false;
+  	bool out_encoded = false;
   	std::string filename, outputPrefix, conf_file;
   	po::options_description desc("Allowed options");
   	desc.add_options()
@@ -43,10 +43,6 @@ int main(int argc, char *argv[]){
                                       "Output alignment with encoded features")
   		("end,n", po::value<double>(&endPenalty)->default_value(-0.1),
                                   "penalty for gaps at the end (and beginning)")
-  		("weights,w", po::value<bool>(&weightsModeOn)->implicit_value(true)
-                                    ->default_value(false),
-                                    "all sequences contribute to the profile \
-                                    with weights(=similarity)")
  		  ("conf", po::value<std::string>(&conf_file), "configure file");
   	po::variables_map vm;
   	po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -57,8 +53,7 @@ int main(int argc, char *argv[]){
   	}
   	if (vm.count("input") && vm.count("gap_penalty") && 
         misc::checkParameters(codon_length, phosphScore, domainScore,
-                              motifScore, gapExt, gapPen, weightsModeOn,
-                              endPenalty)){
+                              motifScore, gapExt, gapPen, endPenalty)){
   		time_t start = clock();
   		ids_list motifs_ids;
   		probs_list motifs_probs;
@@ -82,7 +77,6 @@ int main(int argc, char *argv[]){
                                                 motifScore, 
                                                 phosphScore,
                                                 codon_length, 
-                                                weightsModeOn,
                                                 motifs_ids, 
                                                 motifs_probs);
       if (out_encoded){

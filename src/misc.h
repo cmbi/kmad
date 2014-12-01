@@ -21,8 +21,7 @@ namespace misc{
   /// looks for mistakes in the given command line arguments
   ///
 	bool checkParameters(int codonLength, int phosph, int domain, int motif, 
-                       double gep, double gop, bool weightsOn, 
-                       double endPenalty);
+                       double gep, double gop, double endPenalty);
   ///
   /// returns True if the file 'name' exists
   ///

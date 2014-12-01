@@ -36,7 +36,6 @@ string_sequences Sequences::performMSAfirstround(Profile& outputProfile,
                                                  double penalty, 
                                                  double endPenalty, 
                                                  double extensionPenalty, 
-                                                 bool weightsModeOn, 
                                                  int codon_length, 
                                                  identitiesList& identities){
 	outputProfile = Profile(substitutionMatrix::convertToProfileFormat(m_sequences_aa[0])); 
@@ -52,7 +51,7 @@ string_sequences Sequences::performMSAfirstround(Profile& outputProfile,
 	outputFeaturesProfile.expandListOfFeatures(m_sequences_aa);
   //create features profile based on the 1st seq
 	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,
-                                      identities, weightsModeOn, codon_length); 	
+                                      identities, codon_length); 	
   add_feature_indexes(outputFeaturesProfile);
   //pairwise alignment without lowercase characters
 	sequence alNoLower; 
@@ -72,11 +71,9 @@ string_sequences Sequences::performMSAfirstround(Profile& outputProfile,
   //create features profile based on the 1st seq
 	outputFeaturesProfile.createProfile(alignmentWithoutLowercase, 
                                       identities, 
-                                      weightsModeOn, 
                                       codon_length);
 	outputProfile.processProfile(alignmentWithoutLowercase,
-                               identities,
-                               weightsModeOn);
+                               identities);
 	return vecUtil::flatten(alignmentWithLowercase);		
 }
 
@@ -87,7 +84,6 @@ void Sequences::performMSAnextRounds(string_sequences& prevAlignment,
                                      double penalty, 
                                      double endPenalty, 
                                      double extensionPenalty,
-                                     bool weightsModeOn, 
                                      double identityCutoff,
                                      int codon_length, 
                                      identitiesList& identities, 
@@ -116,9 +112,8 @@ void Sequences::performMSAnextRounds(string_sequences& prevAlignment,
 		}
     //create features profile based on the 1st seq
 		outputFeaturesProfile.createProfile(alignmentWithoutLowercase,identities, 
-                                        weightsModeOn, codon_length);
-		outputProfile.processProfile(alignmentWithoutLowercase,identities,
-                                 weightsModeOn);
+                                        codon_length);
+		outputProfile.processProfile(alignmentWithoutLowercase,identities);
 		prevAlignment = vecUtil::flatten(alignmentWithLowercase);
     //update number of performed alignments
 		prev_alignments = next_alignments; 

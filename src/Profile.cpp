@@ -29,9 +29,8 @@ profile_matrix Profile::getMatrix() const{
 
 
 void Profile::processProfile(sequenceList& alignment,
-                             const identitiesList& sequenceIdentityValues, 
-                                 bool weightsModeOn){
-	createProfile(alignment,sequenceIdentityValues,weightsModeOn);
+                             const identitiesList& sequenceIdentityValues){
+	createProfile(alignment,sequenceIdentityValues);
 	profile_matrix newProfile;
 	for (unsigned int i = 0; i < m_prfMatrix[0].size(); i++){
 		matrix2d columnsToAdd;
@@ -54,58 +53,37 @@ void Profile::processProfile(sequenceList& alignment,
 
 
 void Profile::createProfile(sequenceList& alignment, 
-                            const identitiesList& sequenceIdentityValues,
-                            bool weightsModeOn){
+                            const identitiesList& sequenceIdentityValues){
 	profile_matrix tmpResult;
-	double identitiesSum;
-	int noOfSequences;
-	if (weightsModeOn){
-    identitiesSum = boost::accumulate(sequenceIdentityValues, 0);
-	}
-	else{
-		noOfSequences = alignment.size();
-	}
+	int noOfSequences = alignment.size();
 	for (unsigned int i = 0; i < alignment[0].size(); i++){
 		profileMatrixColumn profileColumn(20,0);
 		int nonGaps = 0;
 		for (unsigned int j = 0; j < alignment.size(); j++){
-			
-			double weight;
-			if (weightsModeOn){
-				weight = sequenceIdentityValues[j];
-			}
-			else{
-				weight = 1;
-			}
 			char seqChar(alignment[j][i].getAA());
 			if (seqChar != '-'){
 				if (seqChar == 'B'){ 		//either D or N, so I'll add half a point to both
-					profileColumn[2]+=0.5*weight;
-					profileColumn[3]+=0.5*weight;
+					profileColumn[2]+=0.5;
+					profileColumn[3]+=0.5;
 				}
 				else if (seqChar == 'Z'){ 	//either D or N, so I'll add half a point to both
-					profileColumn[6]+=0.5*weight;
-					profileColumn[7]+=0.5*weight;
+					profileColumn[6]+=0.5;
+					profileColumn[7]+=0.5;
 				}
 				else if (seqChar == 'X'){
 					for (unsigned int k = 0; k < profileColumn.size();k++){
-						profileColumn[k]+=0.05*weight;
+						profileColumn[k]+=0.05;
 					}
 				}
 				else{	
 					int aAcidInt = substitutionMatrix::findAminoAcidsNo(seqChar);
-					profileColumn[aAcidInt]+=weight;				
+					profileColumn[aAcidInt] += 1;				
 				}
 				nonGaps++;
 			}
 		}
-		if (weightsModeOn){
-			vecUtil::divideVectorByAScalar(profileColumn,identitiesSum);
-		}	
-		else{
-			vecUtil::divideVectorByAScalar(profileColumn,noOfSequences);
-			//vecUtil::divideVectorByAScalar(profileColumn,nonGaps);
-		}
+		vecUtil::divideVectorByAScalar(profileColumn,noOfSequences);
+		//vecUtil::divideVectorByAScalar(profileColumn,nonGaps);
 		tmpResult.push_back(profileColumn);
 	}
 	m_prfMatrix = tmpResult;
