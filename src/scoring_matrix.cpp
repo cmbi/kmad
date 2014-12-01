@@ -61,7 +61,7 @@ void ScoringMatrix::calculateScores(ResidueSequence s2, Profile& prf,
 			double prfScore = prf.getElement(i-1, s2[j].getAA());
 			double add_score = 0;
       FeaturesList features = s2[j].getFeatIndexes();
-			featPrf.getScore(i-1, features, add_score);
+			featPrf.get_score(i-1, features, add_score);
 
 			double final_score = prfScore + add_score;
 			score1 = m_matrixV[i-1][j-1];
@@ -174,7 +174,7 @@ void ScoringMatrix::nwAlignment(SequenceList *result,
 			double add_score = 0;
       //std::vector<std::string> features = s2[j].getFeatures();
       FeaturesList features = s2[j].getFeatIndexes();
-			featPrf.getScore(i-1, features, add_score);
+			featPrf.get_score(i-1, features, add_score);
 			double final_score = prfScore + add_score;
 			if (m_matrixV[i][j] != m_matrixV[i-1][j-1] + final_score){
 				if( i > 0 && j > 0 && m_matrixV[i][j] == m_matrixG[i-1][j-1]+final_score){

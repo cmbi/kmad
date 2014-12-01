@@ -238,26 +238,26 @@ void txtProc::process_conf_file(std::string filename,
                                                     tmp_vector[10]));
 		}
 	}
-	feat_profile.add_USR_features(usr_feature_rules);
+	feat_profile.add_usr_features(usr_feature_rules);
 	sequences_aa.add_usr_features(usr_feature_rules);
-	feat_profile.setRules(usr_feature_rules);
+	feat_profile.set_rules(usr_feature_rules);
 }
 
 
 FeaturesList txtProc::unfold(std::string conf_string, 
-                             FeatureNamesList& listOfFeatures){
+                             FeatureNamesList& list_of_features){
   FeatureNamesList tmp_vector = split(conf_string,',');
 	FeaturesList out_vector;
   for (auto &item: tmp_vector){
 		if (split(item,'_').size() > 1){						
       // this is a single feature entry, e.g. 'PF_A'
       std::string feat_name = std::string("USR_") + item;
-			out_vector.push_back(vecUtil::findIndex(feat_name, listOfFeatures));
+			out_vector.push_back(vecUtil::findIndex(feat_name, list_of_features));
 		}
 		else if (split(item,'[').size() == 1){						
       // this is an entry with only the tag specified (without any exceptions)
-			for (unsigned int j = 0; j < listOfFeatures.size(); j++){
-				SplitFeatName singlefeat = split(listOfFeatures[j],'_');
+			for (unsigned int j = 0; j < list_of_features.size(); j++){
+				SplitFeatName singlefeat = split(list_of_features[j],'_');
 				if (singlefeat.size() > 1 && singlefeat[1] == item){
           out_vector.push_back(j);
         }
@@ -268,8 +268,8 @@ FeaturesList txtProc::unfold(std::string conf_string,
 			SplitFeatName tagfeat = split(item,'[');
 			std::string tag = tagfeat[0];
 			FeatureNamesList exceptions = split(split(tagfeat[1],']')[0], '.');
-			for (unsigned int j = 0; j < listOfFeatures.size(); j++){
-				SplitFeatName singlefeat = split(listOfFeatures[j],'_');
+			for (unsigned int j = 0; j < list_of_features.size(); j++){
+				SplitFeatName singlefeat = split(list_of_features[j],'_');
 				if (singlefeat.size() > 1 && singlefeat[1] == tag && 
             !vecUtil::contains(exceptions, singlefeat[2])){
 					out_vector.push_back(j);

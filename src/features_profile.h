@@ -1,6 +1,7 @@
 #ifndef FEATURESPROFILE_H
 #define FEATURESPROFILE_H
 #include "types.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -24,53 +25,50 @@ public:
   /// @param features list of features assigned to the residue
   /// @param add_score output score
   ///
-	void getScore(unsigned int position, FeaturesList& features, 
+	void get_score(unsigned int position, FeaturesList& features, 
                 double& add_score);
-	ProfileMatrix getMatrix();
   ///
   /// creates a profile matrix from the given alignment
   ///
-  void createProfile(const SequenceList& alignment, 
-                     const IdentitiesList& sequenceIdentityValues, 
+  void CreateProfile(const SequenceList& alignment, 
                      int codon_length);
-  void processProfile();
+  void ProcessProfile();
   ///
   /// processes the matrix of feature occurences creating a matrix of scores
   /// for aligning features at certain positions
   ///
-	void countOccurences(const SequenceList& alignment, 
-                       const IdentitiesList& sequenceIdentityValues, 
+	void CountOccurences(const SequenceList& alignment, 
                        int codon_length);
   ///
   /// Takes a list of sequences, finds motifs and domains in it and adds them 
   /// to the list of features
   ///
-	void expandListOfFeatures(const SequenceList&);
+	void ExpandListOfFeatures(const SequenceList&);
   ///
   /// Sets rules for aligning user defined features
   ///
-  void setRules(RuleTuplesList& new_rules);
+  void set_rules(RuleTuplesList& new_rules);
   ///
   /// Adds user defined features to the list of features
   ///
-  void add_USR_features(RuleTuplesList& new_rules);
+  void add_usr_features(RuleTuplesList& new_rules);
   /// Finds index of a certain feature in the profile
-	int findFeaturesIndex(std::string& feat_name);
+	int FindFeaturesIndex(std::string& feat_name);
 private:
-	double get_motifs_prob(std::string& m_id);
-	double score_motifs(unsigned int& position, std::string& feat_name);
-	double score_domains(unsigned int& position, std::string& dom_name);
-	double score_PTMs(unsigned int& position, std::string& ptm_name);
-	double score_USR_features(unsigned int& position, std::string& feat_name); 
+	double GetMotifsProb(std::string& m_id);
+	double ScoreMotifs(unsigned int& position, std::string& feat_name);
+	double ScoreDomains(unsigned int& position, std::string& dom_name);
+	double ScorePTMs(unsigned int& position, std::string& ptm_name);
+	double ScoreUsrFeatures(unsigned int& position, std::string& feat_name); 
   ///
   /// returns score modifier for a given feature
   ///
-	double get_modifier(std::string& feat_name);
-	int m_domainScore, m_phosphScore, m_motifScore;
+	double GetModifier(std::string& feat_name);
+	int m_domain_score, m_phosph_score, m_motif_score;
 	IDsList m_motifs_ids;
 	ProbsList m_motifs_probs;
   PrcRulesList m_rules;
-	ProfileMatrix m_prfMatrix;	
+	ProfileMatrix m_prf_matrix;	
   ProfileMatrix m_occurences_matrix;
 };
 

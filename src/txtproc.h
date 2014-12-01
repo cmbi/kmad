@@ -66,7 +66,7 @@ namespace txtProc{
   /// scored
   ///
 	FeaturesList unfold(std::string conf_string, 
-                      FeatureNamesList& listOfFeatures);
+                      FeatureNamesList& list_of_features);
 }
 
 #endif /* TXTPROC_H */

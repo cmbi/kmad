@@ -33,12 +33,12 @@ Sequences::Sequences(){
 
 
 StringSequences Sequences::performMSAfirstround(Profile& outputProfile, 
-                                                 FeaturesProfile& outputFeaturesProfile, 
-                                                 double penalty, 
-                                                 double endPenalty, 
-                                                 double extensionPenalty, 
-                                                 int codon_length, 
-                                                 IdentitiesList& identities){
+                                                FeaturesProfile& outputFeaturesProfile, 
+                                                double penalty, 
+                                                double endPenalty, 
+                                                double extensionPenalty, 
+                                                int codon_length, 
+                                                IdentitiesList& identities){
 	outputProfile = Profile(substitutionMatrix::convertToProfileFormat(m_sequences_aa[0])); 
   //working alignment - without lowercase around cut out residues
 	SequenceList alignmentWithoutLowercase;	
@@ -49,10 +49,9 @@ StringSequences Sequences::performMSAfirstround(Profile& outputProfile,
   // identity of the 1st one to itself
   //to build the first profile based only on the first seqeunce
 	identities.push_back(1); 
-	outputFeaturesProfile.expandListOfFeatures(m_sequences_aa);
+	outputFeaturesProfile.ExpandListOfFeatures(m_sequences_aa);
   //create features profile based on the 1st seq
-	outputFeaturesProfile.createProfile(alignmentWithoutLowercase,
-                                      identities, codon_length); 	
+	outputFeaturesProfile.CreateProfile(alignmentWithoutLowercase, codon_length); 	
   add_feature_indexes(outputFeaturesProfile);
   //pairwise alignment without lowercase characters
 	ResidueSequence alNoLower; 
@@ -116,9 +115,9 @@ void Sequences::performMSAnextRounds(StringSequences& prevAlignment,
 			}
 		}
     //create features profile based on the 1st seq
-		outputFeaturesProfile.createProfile(alignmentWithoutLowercase,identities, 
+		outputFeaturesProfile.CreateProfile(alignmentWithoutLowercase, 
                                         codon_length);
-		outputProfile.processProfile(alignmentWithoutLowercase,identities);
+		outputProfile.processProfile(alignmentWithoutLowercase);
 		prevAlignment = vecUtil::flatten(alignmentWithLowercase);
     //update number of performed alignments
 		prev_alignments = next_alignments; 
@@ -245,7 +244,7 @@ void Sequences::add_feature_indexes(FeaturesProfile& fprf){
         FeaturesList indexes;
         for (auto &feat: features){
           if (feat != nothing){
-            indexes.push_back(fprf.findFeaturesIndex(feat));
+            indexes.push_back(fprf.FindFeaturesIndex(feat));
           }
         }
         res.setFeatIndexes(indexes);

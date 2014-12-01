@@ -28,9 +28,8 @@ ProfileMatrix Profile::getMatrix() const{
 }
 
 
-void Profile::processProfile(SequenceList& alignment,
-                             const IdentitiesList& sequenceIdentityValues){
-	createProfile(alignment,sequenceIdentityValues);
+void Profile::processProfile(SequenceList& alignment){
+	createProfile(alignment);
 	ProfileMatrix newProfile;
 	for (unsigned int i = 0; i < m_prfMatrix[0].size(); i++){
 		Matrix2D columnsToAdd;
@@ -52,8 +51,7 @@ void Profile::processProfile(SequenceList& alignment,
 }
 
 
-void Profile::createProfile(SequenceList& alignment, 
-                            const IdentitiesList& sequenceIdentityValues){
+void Profile::createProfile(SequenceList& alignment){
 	ProfileMatrix tmpResult;
 	int noOfSequences = alignment.size();
 	for (unsigned int i = 0; i < alignment[0].size(); i++){
