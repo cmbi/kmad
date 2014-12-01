@@ -11,7 +11,7 @@ public:
   ///
   /// constructor; creates a Profile object with profile matrix mat
   /// 
-	Profile(profile_matrix mat);
+	Profile(ProfileMatrix mat);
   ///
   /// constructor; creates an empty profile
   ///
@@ -21,11 +21,11 @@ public:
   /// matrix with appropriate weights
   ///
 	void processProfile(SequenceList& alignment, 
-                      const identitiesList& sequenceIdentityValues);
+                      const IdentitiesList& sequenceIdentityValues);
   ///
   /// returns the profile matrix
   ///
-	profile_matrix getMatrix() const;
+	ProfileMatrix getMatrix() const;
   ///
   /// returns a score for amino acid aAcid on a certain position
   ///
@@ -36,8 +36,8 @@ public:
 	double getElement(int aAcidInt, int position);
 private:
 	void createProfile(SequenceList& alignment,
-                     const identitiesList& sequenceIdentityValues);
-	profile_matrix m_prfMatrix;
+                     const IdentitiesList& sequenceIdentityValues);
+	ProfileMatrix m_prfMatrix;
 };
 
 #endif /* PROFILE_H */

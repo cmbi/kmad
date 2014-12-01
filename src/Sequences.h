@@ -37,7 +37,7 @@ public:
                                         double penalty, double endPenalty, 
                                         double extensionPenalty, 
                                         int codon_length, 
-                                        identitiesList& identities);
+                                        IdentitiesList& identities);
   ///
   /// performs next round of MSA (good for all rounds except for the first one
   /// - you need a profile)
@@ -48,13 +48,13 @@ public:
                             double penalty, double endPenalty, 
                             double extensionPenalty, 
                             double identityCutoff, 
-                            int codon_length, identitiesList& identities, 
+                            int codon_length, IdentitiesList& identities, 
                             int& prev_alignments);
   ///
   /// adds features from the tuple 'feature_rules'(usr defined) to relevant 
   /// residues (also specified in 'feature_rules')
   ///
-  void add_usr_features(rulesTuplesList& feature_rules);
+  void add_usr_features(RuleTuplesList& feature_rules);
 private:
   ///
   /// takes pairwise alignment, removes 
@@ -86,7 +86,7 @@ private:
   ///
   /// count alignments that will be performed in this round
   /// 
-	int countAlignments(double identity_cutoff, identitiesList& identities);
+	int countAlignments(double identity_cutoff, IdentitiesList& identities);
   void add_feature_indexes(FeaturesProfile& fprf);
 	int m_seqNr;
 	int m_firstSequenceSize;

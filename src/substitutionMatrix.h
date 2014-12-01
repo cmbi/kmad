@@ -10,7 +10,7 @@ namespace substitutionMatrix{
   /// Creates a profile matrix (20 x sequence length)
   /// based on a single sequence
   ///
-	profile_matrix convertToProfileFormat(ResidueSequence& seq);
+	ProfileMatrix convertToProfileFormat(ResidueSequence& seq);
   ///
   /// gets score from the sbst matrix for the given amino acids
   /// @param char1 amino acid code
@@ -26,7 +26,7 @@ namespace substitutionMatrix{
   /// 
   /// assigns a column from the susbtitution matrix to the 'column_int'
   ///
-	void getColumn(unsigned int& columnNo, sbstMatColumn& column_int);
+	void getColumn(unsigned int& columnNo, SbstMatColumn& column_int);
   ///
   /// returns index of the given amino acid
   ///

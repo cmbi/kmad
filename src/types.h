@@ -19,21 +19,21 @@ typedef std::vector<std::string> FeatureNamesList;
 typedef std::vector<Residue> ResidueSequence;
 typedef std::vector<ResidueSequence> SequenceList;
 typedef std::tuple<std::string, std::string, int, int, int, double, double,
-                   double, double, std::string, std::string> rulesTuple;
-typedef std::vector<rulesTuple> rulesTuplesList;
+                   double, double, std::string, std::string> RulesTuple;
+typedef std::vector<RulesTuple> RuleTuplesList;
 typedef	std::tuple<std::string, int, double, double, double,
                    double, std::vector<int>,
-                   std::vector<int> > processedRules;
-typedef std::vector<processedRules> prcRulesList;
-typedef std::vector<double> identitiesList;
-typedef std::vector<double> profileMatrixRow;
-typedef std::vector<double> profileMatrixColumn;
-typedef std::vector<profileMatrixRow> profile_matrix;
-typedef std::vector<std::vector<double>> matrix2d;
-typedef std::vector<std::vector<int>> sbst_matrix;
-typedef std::vector<std::vector<int>> sbst_matrix_columns;
-typedef std::vector<int> indexList;
-typedef std::vector<int> sbstMatColumn;
-typedef std::tuple<std::string, std::string, int, int, int> defaultRuleTuple;
-typedef std::vector<defaultRuleTuple> defaultRulesList;
-typedef std::vector<char> alphabetVec;
+                   std::vector<int> > ProcessedRules;
+typedef std::vector<ProcessedRules> PrcRulesList;
+typedef std::vector<double> IdentitiesList;
+typedef std::vector<double> ProfileMatrixRow;
+typedef std::vector<double> ProfileMatrixColumn;
+typedef std::vector<ProfileMatrixRow> ProfileMatrix;
+typedef std::vector<std::vector<double>> Matrix2D;
+typedef std::vector<std::vector<int>> SbstMatrix;
+typedef std::vector<int> SbstMatColumn;
+typedef std::vector<SbstMatColumn> SbstMatrixColumns;
+typedef std::vector<int> IndexList;
+typedef std::tuple<std::string, std::string, int, int, int> DefaultRuleTuple;
+typedef std::vector<DefaultRuleTuple> DefaultRulesList;
+typedef std::vector<char> AlphabetVec;

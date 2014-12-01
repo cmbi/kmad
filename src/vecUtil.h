@@ -20,25 +20,25 @@ namespace vecUtil{
   ///
   /// transposes a vector
   ///
-	void transposeVec(profile_matrix& vec);
+	void transposeVec(ProfileMatrix& vec);
   ///
   /// divides vector by an integer
   ///
-	void divideVectorByAScalar(profileMatrixRow& vec, int scalar);
+	void divideVectorByAScalar(ProfileMatrixRow& vec, int scalar);
   ///
   /// divides vector by a double
   ///
-	void divideVectorByAScalar(profileMatrixRow& vec, double& scalar);
+	void divideVectorByAScalar(ProfileMatrixRow& vec, double& scalar);
   ///
   /// mutliplies vector by a double
   ///
-	void multiplyVectorByAScalar(profileMatrixRow& vec, double& scalar);
+	void multiplyVectorByAScalar(ProfileMatrixRow& vec, double& scalar);
   ///
   /// adds up scores in every column (result from each column is an element of
   /// the output vector)
   ///
-	profileMatrixRow addUp(matrix2d & vec);
-	profileMatrixColumn convertIntVectorToDoubleVector(sbstMatColumn&);
+	ProfileMatrixRow addUp(Matrix2D & vec);
+	ProfileMatrixColumn convertIntVectorToDoubleVector(SbstMatColumn&);
   ///
   /// converts sequences of Residue object to string sequences
   ///
@@ -50,7 +50,7 @@ namespace vecUtil{
   ///
   /// calcualtes an average for each column in the given vec
   ///
-	profileMatrixRow average(const sbst_matrix_columns& vec);
+	ProfileMatrixRow average(const SbstMatrixColumns& vec);
 }
 
 #endif /* VECUTIL_H */

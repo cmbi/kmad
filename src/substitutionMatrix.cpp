@@ -7,15 +7,15 @@
 #include<boost/range/numeric.hpp>
 #include <iostream>
 #include <vector>
-typedef std::vector<char> alphaList;
-typedef std::vector<sbstMatColumn> sbstMatColumnsList;
+typedef std::vector<char> AlphaList;
+typedef std::vector<SbstMatColumn> SbstMatColumnsList;
  
 namespace {
-	static const alphabetVec alphabet = {'A','R','N','D','C','Q','E','G',
+	static const AlphabetVec alphabet = {'A','R','N','D','C','Q','E','G',
                                        'H','I','L','K','M','F','P','S',
                                        'T','W','Y','V'};
 	//BLOSUM62
-	static const sbst_matrix simScores = {{4, -1, -2, -2, 0, -1, -1, 0, -2, -1, 
+	static const SbstMatrix simScores = {{4, -1, -2, -2, 0, -1, -1, 0, -2, -1, 
                                          -1, -1, -1, -2, -1, 1, 0, -3, -2, 0},
                                         {-1, 5, 0, -2, -3, 1, 0, -2, 0, -3, -2,
                                           2, -1, -3, -2, -1, -1, -3, -2, -3},
@@ -81,9 +81,9 @@ int substitutionMatrix::getElement(char char1, char char2){
 }
 
 
-profile_matrix substitutionMatrix::convertToProfileFormat(ResidueSequence& seq){
-	profile_matrix result(seq.size());
-	sbstMatColumnsList newSbstRow;
+ProfileMatrix substitutionMatrix::convertToProfileFormat(ResidueSequence& seq){
+	ProfileMatrix result(seq.size());
+	SbstMatColumnsList newSbstRow;
 	for (unsigned int i = 0; i < result.size(); i++){
 		if (seq[i].getAA() == 'B'){
 			newSbstRow.clear();
@@ -103,7 +103,7 @@ profile_matrix substitutionMatrix::convertToProfileFormat(ResidueSequence& seq){
 		}
 		else{
 			int aAcidInt = findAminoAcidsNo(seq[i].getAA());
-      sbstMatColumn sbst_column_int = simScores[aAcidInt];
+      SbstMatColumn sbst_column_int = simScores[aAcidInt];
 			result[i] = vecUtil::convertIntVectorToDoubleVector(sbst_column_int);//adds a column to the result(converted from int to double)
 		}
 	}
@@ -118,7 +118,7 @@ int substitutionMatrix::getElement(int i,int j){
 
 
 void substitutionMatrix::getColumn(unsigned int& columnNo, 
-                                   sbstMatColumn& column_int){
+                                   SbstMatColumn& column_int){
 	column_int = simScores[columnNo];
 }
 

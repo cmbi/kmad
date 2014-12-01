@@ -28,8 +28,8 @@ namespace {
                                      "ptm_Oglyc1", "ptm_Oglyc2",
                                      "ptm_Oglyc3", "domain_0",
                                      "motif_0", "lcr"};
-	indexList domain_indexes = {29};
-	indexList motif_indexes = {30};
+	IndexList domain_indexes = {29};
+	IndexList motif_indexes = {30};
   std::string nothing = "AA";
 	std::string domain = "domain";
 }
@@ -48,7 +48,7 @@ FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr,
 
 
 void FeaturesProfile::createProfile(const SequenceList& alignment, 
-                                    const identitiesList& sequenceIdentityValues, 
+                                    const IdentitiesList& sequenceIdentityValues, 
                                     int codon_length){
   countOccurences(alignment, sequenceIdentityValues, codon_length);
   processProfile();
@@ -59,7 +59,7 @@ void FeaturesProfile::processProfile(){
   m_prfMatrix.clear();
   for (unsigned int i = 0; i < m_occurences_matrix.size(); i++){
     std::string feat_name = listOfFeatures[i];
-    profileMatrixRow feature_row(m_occurences_matrix[i].size());
+    ProfileMatrixRow feature_row(m_occurences_matrix[i].size());
     for (unsigned int j = 0; j < m_occurences_matrix[i].size(); j++){
       if (feat_name.substr(0,3) == "ptm"){
         feature_row[j] = score_PTMs(j, feat_name);
@@ -80,14 +80,14 @@ void FeaturesProfile::processProfile(){
 
 
 void FeaturesProfile::countOccurences(const SequenceList& alignment, 
-                                      const identitiesList& sequenceIdentityValues, 
+                                      const IdentitiesList& sequenceIdentityValues, 
                                       int codon_length){
   m_occurences_matrix.clear();
 	std::string nothing = "AA";
 	int noOfSequences = alignment.size();
 
 	for (unsigned int i = 0; i < alignment[0].size();i++){
-		profileMatrixColumn profileColumn(listOfFeatures.size(),0);
+		ProfileMatrixColumn profileColumn(listOfFeatures.size(),0);
 		int nonGaps = 0;
 		for (unsigned int j = 0; j < alignment.size();j++){
 			if (alignment[j][i].getAA() != '-'){
@@ -264,7 +264,7 @@ double FeaturesProfile::score_USR_features(unsigned int& position,
 }
  
 
-profile_matrix FeaturesProfile::getMatrix(){
+ProfileMatrix FeaturesProfile::getMatrix(){
 	return m_prfMatrix;
 }
 
@@ -285,7 +285,7 @@ double FeaturesProfile::get_modifier(std::string& feat_name){
 }
 
 
-void FeaturesProfile::setRules(rulesTuplesList& new_rules){
+void FeaturesProfile::setRules(RuleTuplesList& new_rules){
   for (auto &rule: new_rules){
 		FeaturesList incr_feat = txtProc::unfold(std::get<9>(rule), listOfFeatures);
 		FeaturesList red_feat = txtProc::unfold(std::get<10>(rule), listOfFeatures);
@@ -294,7 +294,7 @@ void FeaturesProfile::setRules(rulesTuplesList& new_rules){
 		// incr_features_positions and red_features_positions are positions(indexes
     // in the profile, not positions in sequence) of features that will be 
     // scored in the listOfFeatures vector
-		processedRules new_tuple = std::make_tuple(std::string("USR_") 
+		ProcessedRules new_tuple = std::make_tuple(std::string("USR_") 
                                                 + std::get<0>(rule) 
                                                 + std::string("_")
                                                 + std::get<1>(rule),
@@ -310,7 +310,7 @@ void FeaturesProfile::setRules(rulesTuplesList& new_rules){
 }
 
 
-void FeaturesProfile::add_USR_features(rulesTuplesList& new_rules){
+void FeaturesProfile::add_USR_features(RuleTuplesList& new_rules){
   for (auto &rule: new_rules){
 		std::string feature_i = std::string("USR_") + std::get<0>(rule) \
                             + std::string("_") + std::get<1>(rule);

@@ -26,12 +26,12 @@ public:
   ///
 	void getScore(unsigned int position, FeaturesList& features, 
                 double& add_score);
-	profile_matrix getMatrix();
+	ProfileMatrix getMatrix();
   ///
   /// creates a profile matrix from the given alignment
   ///
   void createProfile(const SequenceList& alignment, 
-                     const identitiesList& sequenceIdentityValues, 
+                     const IdentitiesList& sequenceIdentityValues, 
                      int codon_length);
   void processProfile();
   ///
@@ -39,7 +39,7 @@ public:
   /// for aligning features at certain positions
   ///
 	void countOccurences(const SequenceList& alignment, 
-                       const identitiesList& sequenceIdentityValues, 
+                       const IdentitiesList& sequenceIdentityValues, 
                        int codon_length);
   ///
   /// Takes a list of sequences, finds motifs and domains in it and adds them 
@@ -49,11 +49,11 @@ public:
   ///
   /// Sets rules for aligning user defined features
   ///
-  void setRules(rulesTuplesList& new_rules);
+  void setRules(RuleTuplesList& new_rules);
   ///
   /// Adds user defined features to the list of features
   ///
-  void add_USR_features(rulesTuplesList& new_rules);
+  void add_USR_features(RuleTuplesList& new_rules);
   /// Finds index of a certain feature in the profile
 	int findFeaturesIndex(std::string& feat_name);
 private:
@@ -69,9 +69,9 @@ private:
 	int m_domainScore, m_phosphScore, m_motifScore;
 	IDsList m_motifs_ids;
 	ProbsList m_motifs_probs;
-  prcRulesList m_rules;
-	profile_matrix m_prfMatrix;	
-  profile_matrix m_occurences_matrix;
+  PrcRulesList m_rules;
+	ProfileMatrix m_prfMatrix;	
+  ProfileMatrix m_occurences_matrix;
 };
 
 #endif /* FEATURESPROFILE_H */

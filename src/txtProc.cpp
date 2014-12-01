@@ -15,11 +15,11 @@
 #include <iterator>
 #include <stdexcept>
 
-typedef std::vector<std::string> input_line;
-typedef std::vector<std::string> feat_descriptor;
-typedef std::vector<std::string> splitFeatName;
+typedef std::vector<std::string> InputLine;
+typedef std::vector<std::string> FeatDescriptor;
+typedef std::vector<std::string> SplitFeatName;
 namespace {
-	static const alphabetVec accepted_characters = { 'a','b','c','d','e','f','g',
+	static const AlphabetVec accepted_characters = { 'a','b','c','d','e','f','g',
                                                    'h','i','j','k','l','m','n',
                                                    'o','p','q','r','s','t','u',
                                                    'v','w','x','y','z','A','B',
@@ -97,7 +97,7 @@ Sequences txtProc::read_fasta(std::string filename,
 	  			//else means we're already in the motifs probs section
 	  			else{
 	  				std::istringstream iss(line);
-	  				input_line motif((std::istream_iterator<std::string>(iss)),
+	  				InputLine motif((std::istream_iterator<std::string>(iss)),
                               std::istream_iterator<std::string>());
 	  				if (motif.size() == 2){
 	  					ids->push_back(motif[0]);
@@ -200,8 +200,8 @@ void txtProc::process_conf_file(std::string filename,
                                 Sequences& sequences_aa){
 	std::ifstream conf_file(filename.c_str());
 	std::string line;
-	rulesTuplesList usr_feature_rules;
-	defaultRulesList feature_rules;
+	RuleTuplesList usr_feature_rules;
+	DefaultRulesList feature_rules;
   bool features = true;
   std::string tag_usr = "## USER DEFINED";
 	while(!safeGetline(conf_file, line).eof()){
@@ -214,7 +214,7 @@ void txtProc::process_conf_file(std::string filename,
        else if (line[0] != '#' && features){
 			  line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
 			  line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
-			  feat_descriptor tmp_vector = split(line,';');
+			  FeatDescriptor tmp_vector = split(line,';');
 			  feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], 
                                                 std::stoi(tmp_vector[2]), 
                                                 std::stoi(tmp_vector[3]), 
@@ -223,7 +223,7 @@ void txtProc::process_conf_file(std::string filename,
 		   else if (line[0] != '#'){
 		  	line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
 			  line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
-		  	feat_descriptor tmp_vector = split(line,';');
+		  	FeatDescriptor tmp_vector = split(line,';');
 		  	usr_feature_rules.push_back(std::make_tuple(tmp_vector[0], 
                                                     tmp_vector[1], 
                                                     std::stoi(tmp_vector[2]), 
@@ -256,7 +256,7 @@ FeaturesList txtProc::unfold(std::string conf_string,
 		else if (split(item,'[').size() == 1){						
       // this is an entry with only the tag specified (without any exceptions)
 			for (unsigned int j = 0; j < listOfFeatures.size(); j++){
-				splitFeatName singlefeat = split(listOfFeatures[j],'_');
+				SplitFeatName singlefeat = split(listOfFeatures[j],'_');
 				if (singlefeat.size() > 1 && singlefeat[1] == item){
           out_vector.push_back(j);
         }
@@ -264,11 +264,11 @@ FeaturesList txtProc::unfold(std::string conf_string,
 		}
 		else{
       //TAG with exceptions
-			splitFeatName tagfeat = split(item,'[');
+			SplitFeatName tagfeat = split(item,'[');
 			std::string tag = tagfeat[0];
 			FeatureNamesList exceptions = split(split(tagfeat[1],']')[0], '.');
 			for (unsigned int j = 0; j < listOfFeatures.size(); j++){
-				splitFeatName singlefeat = split(listOfFeatures[j],'_');
+				SplitFeatName singlefeat = split(listOfFeatures[j],'_');
 				if (singlefeat.size() > 1 && singlefeat[1] == tag && 
             !vecUtil::contains(exceptions, singlefeat[2])){
 					out_vector.push_back(j);

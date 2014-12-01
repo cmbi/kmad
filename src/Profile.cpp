@@ -14,7 +14,7 @@
 #include <vector>
 
 
-Profile::Profile(profile_matrix mat)
+Profile::Profile(ProfileMatrix mat)
 :	m_prfMatrix(mat){
 }
 
@@ -23,22 +23,22 @@ Profile::Profile(){
 }
 
 
-profile_matrix Profile::getMatrix() const{
+ProfileMatrix Profile::getMatrix() const{
 	return m_prfMatrix;
 }
 
 
 void Profile::processProfile(SequenceList& alignment,
-                             const identitiesList& sequenceIdentityValues){
+                             const IdentitiesList& sequenceIdentityValues){
 	createProfile(alignment,sequenceIdentityValues);
-	profile_matrix newProfile;
+	ProfileMatrix newProfile;
 	for (unsigned int i = 0; i < m_prfMatrix[0].size(); i++){
-		matrix2d columnsToAdd;
+		Matrix2D columnsToAdd;
 		for(unsigned int j = 0; j < m_prfMatrix.size(); j++){
 			if (m_prfMatrix[j][i] != 0){
-        sbstMatColumn column_int; 
+        SbstMatColumn column_int; 
         substitutionMatrix::getColumn(j, column_int);
-				profileMatrixColumn columnForJ = vecUtil::convertIntVectorToDoubleVector(column_int);
+				ProfileMatrixColumn columnForJ = vecUtil::convertIntVectorToDoubleVector(column_int);
 				vecUtil::multiplyVectorByAScalar(columnForJ, m_prfMatrix[j][i]);
 				columnsToAdd.push_back(columnForJ);
 			}
@@ -53,11 +53,11 @@ void Profile::processProfile(SequenceList& alignment,
 
 
 void Profile::createProfile(SequenceList& alignment, 
-                            const identitiesList& sequenceIdentityValues){
-	profile_matrix tmpResult;
+                            const IdentitiesList& sequenceIdentityValues){
+	ProfileMatrix tmpResult;
 	int noOfSequences = alignment.size();
 	for (unsigned int i = 0; i < alignment[0].size(); i++){
-		profileMatrixColumn profileColumn(20,0);
+		ProfileMatrixColumn profileColumn(20,0);
 		int nonGaps = 0;
 		for (unsigned int j = 0; j < alignment.size(); j++){
 			char seqChar(alignment[j][i].getAA());

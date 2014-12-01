@@ -27,7 +27,7 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen,
 {
   //creates a row for the scoring matrices of length m_jLength 
   //(length of the jth sequence + 1)
-	scoringMatrixRow row(m_jLength+1,0); 
+	ScoringMatrixRow row(m_jLength+1,0); 
   //creates a vector of vectors 'row', of length m_iLength+1 
   //(length of the ith sequence +1)
 	m_matrixV.assign(m_iLength+1, row); 
@@ -83,7 +83,7 @@ void ScoringMatrix::calculateScores(ResidueSequence s2, Profile& prf,
 }
 
 
-valueCoords ScoringMatrix::findBestScore(){
+ValueCoords ScoringMatrix::findBestScore(){
 	int maxI = m_matrixV.size()-1;
 	int maxJ = m_matrixV[0].size()-1;
 	int n = maxI; // last row of m_matrixV
@@ -112,7 +112,7 @@ valueCoords ScoringMatrix::findBestScore(){
 			maxJ = i;
 		}
 	}
-	valueCoords resArr;
+	ValueCoords resArr;
 	if (maxIval > maxJval){			//max score is in the last row
 		resArr.push_back(maxI);
 		resArr.push_back(m);

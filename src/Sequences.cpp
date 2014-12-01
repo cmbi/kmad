@@ -37,7 +37,7 @@ StringSequences Sequences::performMSAfirstround(Profile& outputProfile,
                                                  double endPenalty, 
                                                  double extensionPenalty, 
                                                  int codon_length, 
-                                                 identitiesList& identities){
+                                                 IdentitiesList& identities){
 	outputProfile = Profile(substitutionMatrix::convertToProfileFormat(m_sequences_aa[0])); 
   //working alignment - without lowercase around cut out residues
 	SequenceList alignmentWithoutLowercase;	
@@ -90,7 +90,7 @@ void Sequences::performMSAnextRounds(StringSequences& prevAlignment,
                                      double extensionPenalty,
                                      double identityCutoff,
                                      int codon_length, 
-                                     identitiesList& identities, 
+                                     IdentitiesList& identities, 
                                      int& prev_alignments){
 	int next_alignments = countAlignments(identityCutoff, identities);
 	if (next_alignments > prev_alignments){
@@ -201,7 +201,7 @@ void Sequences::alignPairwise(ResidueSequence& alNoLower,
 
 
 int Sequences::countAlignments(double identity_cutoff, 
-                               identitiesList& identities){
+                               IdentitiesList& identities){
 	int count = 0;
   for (auto &item: identities){
 		if (item > identity_cutoff){
@@ -212,7 +212,7 @@ int Sequences::countAlignments(double identity_cutoff,
 }
 
 
-void Sequences::add_usr_features(rulesTuplesList& feature_rules){
+void Sequences::add_usr_features(RuleTuplesList& feature_rules){
 	for (auto &rule: feature_rules){
 		std::string feat_name = std::string("USR_")
                             + std::get<0>(rule)

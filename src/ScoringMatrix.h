@@ -8,9 +8,9 @@
 class Residue;
 class Profile;
 class FeaturesProfile;
-typedef std::vector<double> scoringMatrixRow;
-typedef std::vector<scoringMatrixRow> scoringMatrix;
-typedef std::vector<int> valueCoords;
+typedef std::vector<double> ScoringMatrixRow;
+typedef std::vector<ScoringMatrixRow> SingleScoringMatrix;
+typedef std::vector<int> ValueCoords;
 class ScoringMatrix{
 public:
   /// 
@@ -39,7 +39,7 @@ private:
   /// finds the best score either in the last column or in the last row of the 
   /// V matrix (takes the end gap penaltie into account)
   ///
-	valueCoords findBestScore();
+	ValueCoords findBestScore();
 	int m_iLength;
 	int m_jLength;
 	double m_gapOpening;
@@ -47,7 +47,7 @@ private:
 	double m_endGapPenalty;
 	double m_gapOpeningHorizontal;
 	double m_gapExtensionHorizontal;
-	scoringMatrix m_matrixV,m_matrixG,m_matrixH;
+	SingleScoringMatrix m_matrixV,m_matrixG,m_matrixH;
 };
 
 #endif /* SCORINGMATRIX_H */
