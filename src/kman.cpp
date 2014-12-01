@@ -23,8 +23,9 @@ int main(int argc, char *argv[]){
   	desc.add_options()
   		("help,h", "produce help message")
   		("input,i", po::value<std::string>(&filename), "input file name")
-  		("output,o", po::value<std::string>(&outputPrefix), "output file prefix")
-  		("gap_penalty,g", po::value<double>(&gapPen),
+  		("output,o", po::value<std::string>(&outputPrefix), 
+                                          "output file prefix")
+  		("gap_penalty,g", po::value<double>(&gapPen)->default_value(-5),
                                           "gap opening penalty")
   		("gap_extension,e",po::value<double>(&gapExt)->default_value(-1.),
                                            "gap extension penalty")
@@ -51,9 +52,10 @@ int main(int argc, char *argv[]){
       		std::cout << desc << std::endl;
       		return 1;
   	}
-  	if (vm.count("input") && vm.count("gap_penalty") && 
-        misc::checkParameters(codon_length, phosphScore, domainScore,
-                              motifScore, gapExt, gapPen, endPenalty)){
+  	if (vm.count("input") && vm.count("gap_penalty") 
+        && vm.count("output")
+        && misc::checkParameters(codon_length, phosphScore, domainScore,
+                                 motifScore, gapExt, gapPen, endPenalty)){
   		time_t start = clock();
   		ids_list motifs_ids;
   		probs_list motifs_probs;
