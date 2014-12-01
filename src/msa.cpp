@@ -47,7 +47,6 @@ StringSequences msa::run_msa(Sequences sequences,
   			//prev_alignments - number of alignments performed in the previous round - 
         //to omit this round if the number of aligned sequences is the same as
         //in the previous round
-        std::cout << "cutoff" << cutoff << std::endl;
   		}
   		prev_alignments = 0;  // to align (again) all sequences to the profile
   		sequences.performMSAnextRounds(alignment, prf, fprf, 

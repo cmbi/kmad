@@ -191,10 +191,10 @@ void Sequences::alignPairwise(ResidueSequence& alNoLower,
 	SequenceList alignment;
 	ScoringMatrix scores(profileLength, seq2.size(), penalty, 
                        endPenalty, extensionPenalty);
-	scores.calculateScores(seq2, prf, featPrf, 
+	scores.CalculateScores(seq2, prf, featPrf, 
                          codon_length);
-	scores.nwAlignment(&alignment, seq2, prf, featPrf, 
-                     codon_length);
+	scores.PerformNWAlignment(&alignment, seq2, prf, featPrf, 
+                            codon_length);
 
 	removeGaps(alWithLower,alNoLower,alignment); 
 }
