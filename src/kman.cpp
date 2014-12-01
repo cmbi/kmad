@@ -57,8 +57,8 @@ int main(int argc, char *argv[]){
         && misc::checkParameters(codon_length, phosphScore, domainScore,
                                  motifScore, gapExt, gapPen, endPenalty)){
   		time_t start = clock();
-  		ids_list motifs_ids;
-  		probs_list motifs_probs;
+  		IDsList motifs_ids;
+  		ProbsList motifs_probs;
       Sequences sequences;
       try{
           sequences = txtProc::read_fasta(filename, 
@@ -71,8 +71,8 @@ int main(int argc, char *argv[]){
         std::cout << "Exception: " << e.what() << "\n";
         return -1;
       }
-      string_sequences seq_names = sequences.get_names();
-      string_sequences alignment = msa::run_msa(sequences, conf_file,
+      StringSequences seq_names = sequences.get_names();
+      StringSequences alignment = msa::run_msa(sequences, conf_file,
                                                 gapPen, gapExt,
                                                 endPenalty, lcr_mod, 
                                                 domainScore,

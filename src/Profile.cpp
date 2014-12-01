@@ -28,7 +28,7 @@ profile_matrix Profile::getMatrix() const{
 }
 
 
-void Profile::processProfile(sequenceList& alignment,
+void Profile::processProfile(SequenceList& alignment,
                              const identitiesList& sequenceIdentityValues){
 	createProfile(alignment,sequenceIdentityValues);
 	profile_matrix newProfile;
@@ -52,7 +52,7 @@ void Profile::processProfile(sequenceList& alignment,
 }
 
 
-void Profile::createProfile(sequenceList& alignment, 
+void Profile::createProfile(SequenceList& alignment, 
                             const identitiesList& sequenceIdentityValues){
 	profile_matrix tmpResult;
 	int noOfSequences = alignment.size();

@@ -12,11 +12,11 @@ namespace vecUtil{
   ///
   /// checks if vec contains string x
   ///
-	bool contains(featureNamesList& vec, std::string& x);
+	bool contains(FeatureNamesList& vec, std::string& x);
   ///
   /// returns index of the feature in the list of features
   ///
-	int findIndex(std::string& val, featureNamesList& vec);
+	int findIndex(std::string& val, FeatureNamesList& vec);
   ///
   /// transposes a vector
   ///
@@ -42,11 +42,11 @@ namespace vecUtil{
   ///
   /// converts sequences of Residue object to string sequences
   ///
-	string_sequences flatten(const sequenceList&);
+	StringSequences flatten(const SequenceList&);
   ///
   /// adds an element to the front of the vector
   ///
-	sequence push_front(sequence&, Residue);
+	ResidueSequence push_front(ResidueSequence& seq, Residue newRes);
   ///
   /// calcualtes an average for each column in the given vec
   ///

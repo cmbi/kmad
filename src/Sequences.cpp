@@ -12,10 +12,10 @@
 #include <ctime>
 
 
-Sequences::Sequences(codonSeqWithNamesList &s){
+Sequences::Sequences(CodonSeqWithNamesList &s){
 	for (unsigned int i = 0; i < s.size(); i++){
 		m_sequence_names.push_back(s[i][0][0]);
-		sequence new_seq;
+		ResidueSequence new_seq;
 		for (unsigned int j = 0; j < s[i][1].size(); j++){
 			Residue newRes(s[i][1][j]);
 			new_seq.push_back(newRes);
@@ -31,7 +31,7 @@ Sequences::Sequences(){
 }
 
 
-string_sequences Sequences::performMSAfirstround(Profile& outputProfile, 
+StringSequences Sequences::performMSAfirstround(Profile& outputProfile, 
                                                  FeaturesProfile& outputFeaturesProfile, 
                                                  double penalty, 
                                                  double endPenalty, 
@@ -40,9 +40,9 @@ string_sequences Sequences::performMSAfirstround(Profile& outputProfile,
                                                  identitiesList& identities){
 	outputProfile = Profile(substitutionMatrix::convertToProfileFormat(m_sequences_aa[0])); 
   //working alignment - without lowercase around cut out residues
-	sequenceList alignmentWithoutLowercase;	
+	SequenceList alignmentWithoutLowercase;	
   //lowercase before and after cut out residues -- final result 
-	sequenceList alignmentWithLowercase;		
+	SequenceList alignmentWithLowercase;		
 	alignmentWithoutLowercase.push_back(m_sequences_aa[0]);
 	alignmentWithLowercase.push_back(m_sequences_aa[0]);
   // identity of the 1st one to itself
@@ -54,31 +54,35 @@ string_sequences Sequences::performMSAfirstround(Profile& outputProfile,
                                       identities, codon_length); 	
   add_feature_indexes(outputFeaturesProfile);
   //pairwise alignment without lowercase characters
-	sequence alNoLower; 
+	ResidueSequence alNoLower; 
   //pairwise alignment with lowercase characters where chars were removed
-	sequence alWithLower; 
+	ResidueSequence alWithLower; 
   for (auto &seqI: m_sequences_aa){
 		alignPairwise(alNoLower, alWithLower, seqI, outputProfile, 
                   outputFeaturesProfile, penalty, endPenalty, extensionPenalty, 
                   codon_length);
 		double identity = calcIdentity(alNoLower);
 		identities.push_back(identity);
+    /*
 		if (identity > 0.9){
 			alignmentWithoutLowercase.push_back(alNoLower);
 			alignmentWithLowercase.push_back(alWithLower);
 		}
+    */
 	}
   //create features profile based on the 1st seq
+  /*
 	outputFeaturesProfile.createProfile(alignmentWithoutLowercase, 
                                       identities, 
                                       codon_length);
 	outputProfile.processProfile(alignmentWithoutLowercase,
                                identities);
+  */
 	return vecUtil::flatten(alignmentWithLowercase);		
 }
 
 
-void Sequences::performMSAnextRounds(string_sequences& prevAlignment, 
+void Sequences::performMSAnextRounds(StringSequences& prevAlignment, 
                                      Profile& outputProfile,
                                      FeaturesProfile& outputFeaturesProfile, 
                                      double penalty, 
@@ -92,20 +96,20 @@ void Sequences::performMSAnextRounds(string_sequences& prevAlignment,
 	if (next_alignments > prev_alignments){
     //working alignment - without lowercase around cut out residues
     //would make latter aligning more complicated
-		sequenceList alignmentWithoutLowercase;	
+		SequenceList alignmentWithoutLowercase;	
     //lowercase before and after cut out residues -- final result 
-		sequenceList alignmentWithLowercase;		
+		SequenceList alignmentWithLowercase;		
 		alignmentWithoutLowercase.push_back(m_sequences_aa[0]);
 		alignmentWithLowercase.push_back(m_sequences_aa[0]);
     // tmp pairwise alignment (and so is alWithLower)
-		sequence alNoLower; 
-		sequence alWithLower;
+		ResidueSequence alNoLower; 
+		ResidueSequence alWithLower;
 		for (int i = 1; i < m_seqNr; i++){
 			if (identities[i] > identityCutoff){
         // NW alignment of the ith seq against the profile
 				alignPairwise(alNoLower, alWithLower, m_sequences_aa[i], outputProfile,
-                      outputFeaturesProfile,penalty,endPenalty,extensionPenalty,
-                      codon_length); 
+                      outputFeaturesProfile, penalty, endPenalty,
+                      extensionPenalty, codon_length); 
 				alignmentWithoutLowercase.push_back(alNoLower);
 				alignmentWithLowercase.push_back(alWithLower);
 			}
@@ -121,8 +125,8 @@ void Sequences::performMSAnextRounds(string_sequences& prevAlignment,
 }
 
 
-double Sequences::calcIdentity(const sequence& alignedSequence){
-	double identicalResidues=0;
+double Sequences::calcIdentity(const ResidueSequence& alignedSequence){
+	double identicalResidues = 0;
 	for (unsigned int i = 0; i < alignedSequence.size(); i++){
 		if (alignedSequence[i].getAA() == m_sequences_aa[0][i].getAA()){
 			identicalResidues++;
@@ -132,13 +136,13 @@ double Sequences::calcIdentity(const sequence& alignedSequence){
 }
 
 
-void Sequences::removeGaps(sequence& alignmentWithLowercase, 
-                           sequence& alignmentWithoutLowercase, 
-                           sequenceList& alignment){
-	sequence s1 = alignment[0];
-	sequence s2 = alignment[1];
-	sequence newS2;
-	sequence newS2lower;
+void Sequences::removeGaps(ResidueSequence& alignmentWithLowercase, 
+                           ResidueSequence& alignmentWithoutLowercase, 
+                           SequenceList& alignment){
+	ResidueSequence s1 = alignment[0];
+	ResidueSequence s2 = alignment[1];
+	ResidueSequence newS2;
+	ResidueSequence newS2lower;
 	char gap = '-';
 	bool lowerFlag = false;
 	for (unsigned int i = 0; i < alignment[0].size(); i++){
@@ -175,16 +179,16 @@ void Sequences::removeGaps(sequence& alignmentWithLowercase,
 }
 
 
-void Sequences::alignPairwise(sequence& alNoLower, 
-                              sequence& alWithLower, 
-                              sequence& seq2, 
+void Sequences::alignPairwise(ResidueSequence& alNoLower, 
+                              ResidueSequence& alWithLower, 
+                              ResidueSequence& seq2, 
                               Profile& prf, 
                               FeaturesProfile& featPrf, 
                               double penalty, double endPenalty, 
                               double extensionPenalty, 
                               int codon_length){
 	int profileLength = prf.getMatrix()[0].size();
-	sequenceList alignment;
+	SequenceList alignment;
 	ScoringMatrix scores(profileLength, seq2.size(), penalty, 
                        endPenalty, extensionPenalty);
 	scores.calculateScores(seq2, prf, featPrf, 
@@ -227,7 +231,7 @@ void Sequences::add_usr_features(rulesTuplesList& feature_rules){
 }
 
 
-seqNames Sequences::get_names(){
+SeqNames Sequences::get_names(){
   return m_sequence_names;
 }
 
@@ -236,8 +240,8 @@ void Sequences::add_feature_indexes(FeaturesProfile& fprf){
   std::string nothing = "AA";
   for (auto &seq: m_sequences_aa){
     for (auto &res: seq){
-        featureNamesList features = res.getFeatures();
-        featuresList indexes;
+        FeatureNamesList features = res.getFeatures();
+        FeaturesList indexes;
         for (auto &feat: features){
           if (feat != nothing){
             indexes.push_back(fprf.findFeaturesIndex(feat));

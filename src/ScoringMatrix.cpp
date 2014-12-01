@@ -36,7 +36,7 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen,
 }
 
 
-void ScoringMatrix::calculateScores(sequence s2, Profile& prf, 
+void ScoringMatrix::calculateScores(ResidueSequence s2, Profile& prf, 
                                     FeaturesProfile& featPrf, 
                                     int codon_length){
 	s2 = vecUtil::push_front(s2,misc::gapRes(codon_length));
@@ -60,7 +60,7 @@ void ScoringMatrix::calculateScores(sequence s2, Profile& prf,
 			///V
 			double prfScore = prf.getElement(i-1, s2[j].getAA());
 			double add_score = 0;
-      featuresList features = s2[j].getFeatIndexes();
+      FeaturesList features = s2[j].getFeatIndexes();
 			featPrf.getScore(i-1, features, add_score);
 
 			double final_score = prfScore + add_score;
@@ -86,14 +86,16 @@ void ScoringMatrix::calculateScores(sequence s2, Profile& prf,
 valueCoords ScoringMatrix::findBestScore(){
 	int maxI = m_matrixV.size()-1;
 	int maxJ = m_matrixV[0].size()-1;
-	int n = maxI;  //last row of m_matrixV
+	int n = maxI; // last row of m_matrixV
 	int m = maxJ; // last column of m_matrixV
 	double maxIval = m_matrixV[maxI][maxJ];
 	double maxJval = m_matrixV[maxI][maxJ];
 	double real_val;
 	double max = m_matrixV[maxI][maxJ];
 	for (int i = 0; i < n ; i++){		//finds max score in the last row
-		real_val = m_matrixV[i][m]+m_endGapPenalty*(m_matrixV.size()-i); // add end gap penalties to the score to calc the 'real' score of the alignment
+    // add end gap penalties to the score to calc the 'real' score 
+    // of the alignment
+		real_val = m_matrixV[i][m]+m_endGapPenalty*(m_matrixV.size()-i); 
 		if (real_val > max){
 			maxIval = real_val;
 			max = real_val;
@@ -101,7 +103,9 @@ valueCoords ScoringMatrix::findBestScore(){
 		} 
 	}
 	for (int i = 0; i < m; i++){		//finds max score in the last column	
-		real_val = m_matrixV[n][i]+m_endGapPenalty*(m_matrixV[0].size()-i); //add end gap penalties to the score, to calc the 'real' score of the alignment
+		real_val = m_matrixV[n][i]+m_endGapPenalty*(m_matrixV[0].size()-i); 
+    // add end gap penalties to the score, to calc the 'real' score 
+    // of the alignment
 		if (real_val > max){
 			maxJval = real_val;
 			max = real_val;
@@ -121,19 +125,19 @@ valueCoords ScoringMatrix::findBestScore(){
 }
 
 
-void ScoringMatrix::nwAlignment(sequenceList *result,
-                                sequence s2, Profile& prf, 
+void ScoringMatrix::nwAlignment(SequenceList *result,
+                                ResidueSequence s2, Profile& prf, 
                                 FeaturesProfile& featPrf,
                                 int codon_length){
   //creating polyA pseudoSequence representing the profile, 
   //to know later where are the gaps in the profile
-	sequence s1 = misc::pseudoResidueSequence(prf.getMatrix()[0].size()+1, 
-                                            codon_length); 
+	ResidueSequence s1 = misc::pseudoResidueSequence(prf.getMatrix()[0].size()+1, 
+                                                   codon_length); 
 	Residue gap_code = misc::gapRes(codon_length);
 	s2 = vecUtil::push_front(s2,gap_code);
-	sequence newS1;
-	sequence newS2;
-	sequenceList ali; //alignment
+	ResidueSequence newS1;
+	ResidueSequence newS2;
+	SequenceList ali; //alignment
 	Residue newChar1;
 	Residue newChar2;	
 	int i = s1.size()-1;
@@ -169,7 +173,7 @@ void ScoringMatrix::nwAlignment(sequenceList *result,
 			double prfScore = prf.getElement(i-1,s2[j].getAA());
 			double add_score = 0;
       //std::vector<std::string> features = s2[j].getFeatures();
-      featuresList features = s2[j].getFeatIndexes();
+      FeaturesList features = s2[j].getFeatIndexes();
 			featPrf.getScore(i-1, features, add_score);
 			double final_score = prfScore + add_score;
 			if (m_matrixV[i][j] != m_matrixV[i-1][j-1] + final_score){

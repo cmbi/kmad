@@ -27,12 +27,12 @@ public:
   ///
   /// Fills in the scoring matrices m_matrixV, m_matrixG, m_matrixH
   ///
-	void calculateScores(sequence s2, Profile& prf, FeaturesProfile& featPrf, 
-                       int codon_length);
+	void calculateScores(ResidueSequence s2, Profile& prf, 
+                       FeaturesProfile& featPrf, int codon_length);
   ///
   /// traces back the alignment path in the scoring matrices
   ///
-	void nwAlignment(sequenceList* result, sequence s2, 
+	void nwAlignment(SequenceList* result, ResidueSequence s2, 
                    Profile& prf, FeaturesProfile& featPrf, int codon_length);
 private:
   ///

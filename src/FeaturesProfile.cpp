@@ -12,7 +12,7 @@
 #include <tuple>
 namespace {
 	// 0 - highest level of annotation, 3 - lowest, P - predicted
-	featureNamesList listOfFeatures = {"ptm_phosph0", "ptm_phosph1",
+	FeatureNamesList listOfFeatures = {"ptm_phosph0", "ptm_phosph1",
                                      "ptm_phosph2", "ptm_phosph3",
                                      "ptm_phosphP", "ptm_acet0",
                                      "ptm_acet1", "ptm_acet2", 
@@ -36,8 +36,8 @@ namespace {
 
 
 FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr, 
-                                 ids_list m_ids, 
-                                 probs_list m_probs)
+                                 IDsList m_ids, 
+                                 ProbsList m_probs)
 :	m_domainScore(dom),
 	m_phosphScore(phosph),
 	m_motifScore(motif),
@@ -47,7 +47,7 @@ FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr,
 }
 
 
-void FeaturesProfile::createProfile(const sequenceList& alignment, 
+void FeaturesProfile::createProfile(const SequenceList& alignment, 
                                     const identitiesList& sequenceIdentityValues, 
                                     int codon_length){
   countOccurences(alignment, sequenceIdentityValues, codon_length);
@@ -79,7 +79,7 @@ void FeaturesProfile::processProfile(){
 }
 
 
-void FeaturesProfile::countOccurences(const sequenceList& alignment, 
+void FeaturesProfile::countOccurences(const SequenceList& alignment, 
                                       const identitiesList& sequenceIdentityValues, 
                                       int codon_length){
   m_occurences_matrix.clear();
@@ -91,7 +91,7 @@ void FeaturesProfile::countOccurences(const sequenceList& alignment,
 		int nonGaps = 0;
 		for (unsigned int j = 0; j < alignment.size();j++){
 			if (alignment[j][i].getAA() != '-'){
-				featureNamesList features = alignment[j][i].getFeatures();	
+				FeatureNamesList features = alignment[j][i].getFeatures();	
 				for (unsigned int k = 0; k < features.size(); k++){
 					std::string feat_name = features[k];
 					if (feat_name != nothing){
@@ -126,7 +126,7 @@ double FeaturesProfile::get_motifs_prob(std::string& m_id){
 }
 
 
-void FeaturesProfile::getScore(unsigned int position, featuresList& features, 
+void FeaturesProfile::getScore(unsigned int position, FeaturesList& features, 
                                double& add_score){
   for (unsigned int i = 0; i < features.size(); i++){
        add_score += m_prfMatrix[features[i]][position];
@@ -155,10 +155,10 @@ int FeaturesProfile::findFeaturesIndex(std::string& feat_name){
 }
 
 
-void FeaturesProfile::expandListOfFeatures(const sequenceList& sequences){
+void FeaturesProfile::expandListOfFeatures(const SequenceList& sequences){
 	for(unsigned int i = 0; i < sequences.size();i++){	
 		for (unsigned int j = 0; j < sequences[i].size(); j++){
-			featureNamesList features = sequences[i][j].getFeatures();
+			FeatureNamesList features = sequences[i][j].getFeatures();
 			for (unsigned int k = 0; k < features.size();k++){
 				std::string feature_k = features[k];
 				if (!vecUtil::contains(listOfFeatures,feature_k) && feature_k != nothing){	//check whether this domain is already in the list of features
@@ -240,7 +240,7 @@ double FeaturesProfile::score_USR_features(unsigned int& position,
 		if (std::get<0>(rule) == feat_name){
 			double add_tmp = std::get<2>(rule);
       //positions of increasing features
-			featuresList incr_features = std::get<6>(rule);  
+			FeaturesList incr_features = std::get<6>(rule);  
       //go through features that increase the score
       for (auto &feat: incr_features){
 				double prf_score = m_occurences_matrix[feat][position];
@@ -250,7 +250,7 @@ double FeaturesProfile::score_USR_features(unsigned int& position,
 			}
 			//the same for decreasing features
 			add_tmp = std::get<4>(rule);
-			featuresList decr_features = std::get<7>(rule);
+			FeaturesList decr_features = std::get<7>(rule);
       //go through features that increase the score
       for (auto &feat: decr_features){
 				double prf_score = m_occurences_matrix[feat][position];
@@ -287,8 +287,8 @@ double FeaturesProfile::get_modifier(std::string& feat_name){
 
 void FeaturesProfile::setRules(rulesTuplesList& new_rules){
   for (auto &rule: new_rules){
-		featuresList incr_feat = txtProc::unfold(std::get<9>(rule), listOfFeatures);
-		featuresList red_feat = txtProc::unfold(std::get<10>(rule), listOfFeatures);
+		FeaturesList incr_feat = txtProc::unfold(std::get<9>(rule), listOfFeatures);
+		FeaturesList red_feat = txtProc::unfold(std::get<10>(rule), listOfFeatures);
 		// new_tuple <tag+name, incr_rule_1, incr_rule_2, red_rule_1, red_rule_2, 
     // incr_features_positions, red_features_positions>
 		// incr_features_positions and red_features_positions are positions(indexes

@@ -9,7 +9,7 @@
 #include <tuple>
 
 
-string_sequences msa::run_msa(Sequences sequences,
+StringSequences msa::run_msa(Sequences sequences,
                               std::string conf_filename,
                               double gapPen,
                               double gapExt,
@@ -19,8 +19,8 @@ string_sequences msa::run_msa(Sequences sequences,
                               int motifScore,
                               int phosphScore,
                               int codonLength,
-                              ids_list motifs_ids,
-                              probs_list motifs_probs){
+                              IDsList motifs_ids,
+                              ProbsList motifs_probs){
 
   		Profile prf;
   		FeaturesProfile fprf(domainScore, phosphScore, motifScore, lcr_mod, 
@@ -36,7 +36,7 @@ string_sequences msa::run_msa(Sequences sequences,
                                                                                 gapExt, 
                                                                                 codonLength, 
                                                                                 identities));
-  		string_sequences alignment;
+  		StringSequences alignment;
   		int prev_alignments = 0;
   		for (int i = 8; i >= 0; i--){
   			double cutoff = double(i)/10;
@@ -47,6 +47,7 @@ string_sequences msa::run_msa(Sequences sequences,
   			//prev_alignments - number of alignments performed in the previous round - 
         //to omit this round if the number of aligned sequences is the same as
         //in the previous round
+        std::cout << "cutoff" << cutoff << std::endl;
   		}
   		prev_alignments = 0;  // to align (again) all sequences to the profile
   		sequences.performMSAnextRounds(alignment, prf, fprf, 

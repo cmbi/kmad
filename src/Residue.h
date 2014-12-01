@@ -33,20 +33,20 @@ class Residue{
     ///
     /// returns list of features assigned to the residue
     ///
-		featureNamesList getFeatures() const;
+		FeatureNamesList getFeatures() const;
     ///
     /// return a list of feature indexes (from the profile) assigned to the
     /// residue
     ///
-    featuresList getFeatIndexes();
+    FeaturesList getFeatIndexes();
     ///
     /// sets feature indexes
     ///
-    void setFeatIndexes(featuresList new_features);
+    void setFeatIndexes(FeaturesList new_features);
 	private:
 		std::string m_codon;
-    featuresList m_feature_indexes;
-		featureNamesList m_features;
+    FeaturesList m_feature_indexes;
+		FeatureNamesList m_features;
 		char m_aa;
 		void codon_to_features();
 };

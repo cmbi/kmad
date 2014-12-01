@@ -6,18 +6,18 @@
 class Residue;
 
 
-typedef std::vector<std::string> string_sequences;
-typedef std::vector<std::string> seqNames;
-typedef std::vector<std::string> codonSeq;
-typedef std::vector<codonSeq> codonSeqList;
-typedef std::vector<codonSeq> codonSeqWithName;
-typedef std::vector<codonSeqList> codonSeqWithNamesList;
-typedef std::vector<std::string> ids_list;
-typedef std::vector<double> probs_list;
-typedef std::vector<int> featuresList;
-typedef std::vector<std::string> featureNamesList;
-typedef std::vector<Residue> sequence;
-typedef std::vector<sequence> sequenceList;
+typedef std::vector<std::string> StringSequences;
+typedef std::vector<std::string> SeqNames;
+typedef std::vector<std::string> CodonSeq;
+typedef std::vector<CodonSeq> CodonSeqList;
+typedef std::vector<CodonSeq> CodonSeqWithName;
+typedef std::vector<CodonSeqList> CodonSeqWithNamesList;
+typedef std::vector<std::string> IDsList;
+typedef std::vector<double> ProbsList;
+typedef std::vector<int> FeaturesList;
+typedef std::vector<std::string> FeatureNamesList;
+typedef std::vector<Residue> ResidueSequence;
+typedef std::vector<ResidueSequence> SequenceList;
 typedef std::tuple<std::string, std::string, int, int, int, double, double,
                    double, double, std::string, std::string> rulesTuple;
 typedef std::vector<rulesTuple> rulesTuplesList;

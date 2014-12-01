@@ -81,7 +81,7 @@ int substitutionMatrix::getElement(char char1, char char2){
 }
 
 
-profile_matrix substitutionMatrix::convertToProfileFormat(sequence& seq){
+profile_matrix substitutionMatrix::convertToProfileFormat(ResidueSequence& seq){
 	profile_matrix result(seq.size());
 	sbstMatColumnsList newSbstRow;
 	for (unsigned int i = 0; i < result.size(); i++){

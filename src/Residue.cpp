@@ -119,7 +119,7 @@ void Residue::lowercase(){
 }
 
 
-featureNamesList Residue::getFeatures() const{
+FeatureNamesList Residue::getFeatures() const{
 	return m_features;
 }
 
@@ -129,11 +129,11 @@ void Residue::add_feature(std::string new_feat){
 }
 
 
-featuresList Residue::getFeatIndexes(){
+FeaturesList Residue::getFeatIndexes(){
   return m_feature_indexes;
 }
 
 
-void Residue::setFeatIndexes(featuresList new_features){
+void Residue::setFeatIndexes(FeaturesList new_features){
   m_feature_indexes = new_features;
 }

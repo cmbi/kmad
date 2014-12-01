@@ -16,7 +16,7 @@ public:
   /// constructor; creates a list of residues out of a list of sequences with
   /// names
   ///
-  Sequences(codonSeqWithNamesList& s);
+  Sequences(CodonSeqWithNamesList& s);
   ///
   /// constructor; creates an empty object Sequences
   /// 
@@ -24,7 +24,7 @@ public:
   ///
   /// returns a list of sequence names (fasta headers)
   ///
-  seqNames get_names();
+  SeqNames get_names();
   ///
   /// performs the first round of alignments, 
   /// all vs query seq (first calculates profile 
@@ -32,7 +32,7 @@ public:
   /// aligns all sequences and calculates 
   /// identity of each sequence to the query seq.)
   ///
-	string_sequences performMSAfirstround(Profile& outputProfile, 
+	StringSequences performMSAfirstround(Profile& outputProfile, 
                                         FeaturesProfile& outputFeaturesProfile, 
                                         double penalty, double endPenalty, 
                                         double extensionPenalty, 
@@ -42,7 +42,7 @@ public:
   /// performs next round of MSA (good for all rounds except for the first one
   /// - you need a profile)
   ///
-	void performMSAnextRounds(string_sequences& prevAlignment,
+	void performMSAnextRounds(StringSequences& prevAlignment,
                             Profile& outputProfile, 
                             FeaturesProfile& outputFeaturesProfile, 
                             double penalty, double endPenalty, 
@@ -64,16 +64,16 @@ private:
   /// is 2nd sequence with cut out chars and lowercase chars 
   /// before and after that
   ///
-	void removeGaps(sequence& alignmentWithLowercase, 
-                  sequence& alignmentWithoutLowercase, 
-                  sequenceList& alignment);
+	void removeGaps(ResidueSequence& alignmentWithLowercase, 
+                  ResidueSequence& alignmentWithoutLowercase, 
+                  SequenceList& alignment);
   ///
   /// takes a sequence and profiles, returns an
   /// alignment of the two, with gaps cut out
   ///
-	void alignPairwise(sequence& alNoLower, 
-                     sequence& alWithLower, 
-                     sequence& seq2,
+	void alignPairwise(ResidueSequence& alNoLower, 
+                     ResidueSequence& alWithLower, 
+                     ResidueSequence& seq2,
                      Profile& prf, FeaturesProfile& featPrf,
                      double penalty, double endPenalty, double extensionPenalty,
                      int codon_length);
@@ -82,7 +82,7 @@ private:
   /// @param alignedSequence sequence aligned to the profile with the gaps cut
   /// out (its length is equal to the profile's length) 
   ///
-	double calcIdentity(const sequence& alignedSequence);
+	double calcIdentity(const ResidueSequence& alignedSequence);
   ///
   /// count alignments that will be performed in this round
   /// 
@@ -90,8 +90,8 @@ private:
   void add_feature_indexes(FeaturesProfile& fprf);
 	int m_seqNr;
 	int m_firstSequenceSize;
-	sequenceList m_sequences_aa;
-	seqNames m_sequence_names;
+	SequenceList m_sequences_aa;
+	SeqNames m_sequence_names;
 };
 
 #endif /* SEQUENCES_H */

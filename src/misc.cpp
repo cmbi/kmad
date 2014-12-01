@@ -16,10 +16,10 @@ Residue misc::gapRes(int codon_length){
 }
 
 
-sequence misc::pseudoResidueSequence(int seqLength, int codon_length){
+ResidueSequence misc::pseudoResidueSequence(int seqLength, int codon_length){
 	std::string single_codon(codon_length, 'A');
 	Residue single_res(single_codon);
-	sequence result(seqLength, single_res);
+	ResidueSequence result(seqLength, single_res);
 	return result;
 }
 

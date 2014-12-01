@@ -16,7 +16,7 @@ namespace misc{
   /// creates a polyA sequence of length seqLength, where each resdue is coded 
   /// by a codon of length codon_length
   ///
-  sequence pseudoResidueSequence(int seqLength, int codon_length);
+  ResidueSequence pseudoResidueSequence(int seqLength, int codon_length);
   ///
   /// looks for mistakes in the given command line arguments
   ///

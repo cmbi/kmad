@@ -42,18 +42,18 @@ namespace txtProc{
   /// writes motif ids and probabilities to ids and probs
   ///
 	Sequences read_fasta(std::string filename, int codonLength, 
-                       ids_list* ids, probs_list* probs);
+                       IDsList* ids, ProbsList* probs);
   ///
   /// writes alignment to file (encoded)
   ///
-	void writeAlignmentToFile(string_sequences& sequences, 
-                            seqNames& sequence_names,
+	void writeAlignmentToFile(StringSequences& sequences, 
+                            SeqNames& sequence_names,
                             std::string filename);
   ///
   /// writes alignment to a file in the regular fasta format (decoded)
   ///
-	void writeAlignmentWithoutCodeToFile(string_sequences& sequences, 
-                                       seqNames& sequence_names, 
+	void writeAlignmentWithoutCodeToFile(StringSequences& sequences, 
+                                       SeqNames& sequence_names, 
                                        std::string filename, int codon_length);
   ///
   /// reades configuration file, adds user defined features and their alignment
@@ -65,8 +65,8 @@ namespace txtProc{
   /// from a conf_file string creates a list of indexes of features to be
   /// scored
   ///
-	featuresList unfold(std::string conf_string, 
-                      featureNamesList& listOfFeatures);
+	FeaturesList unfold(std::string conf_string, 
+                      FeatureNamesList& listOfFeatures);
 }
 
 #endif /* TXTPROC_H */

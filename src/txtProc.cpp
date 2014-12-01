@@ -50,18 +50,18 @@ std::vector<std::string> txtProc::split(const std::string &s, char delim) {
 
 Sequences txtProc::read_fasta(std::string filename,
                               int codonLength, 
-                              ids_list* ids, 
-                              probs_list* probs){
-	codonSeqWithNamesList resultSequences;
+                              IDsList* ids, 
+                              ProbsList* probs){
+	CodonSeqWithNamesList resultSequences;
   if (!misc::file_exists(&filename)){
     throw std::runtime_error("Input file doesn't exist");
   }
   else{
 	  std::string fastaSymbol = ">";
 	  std::ifstream fastafile (filename.c_str());
-	  seqNames newName;
-	  codonSeq newSequence;
-	  codonSeqWithName newEntry;
+	  SeqNames newName;
+	  CodonSeq newSequence;
+	  CodonSeqWithName newEntry;
 	  bool sequences = true;
 	  int seqNo = -1;
 	  std::string line;
@@ -116,8 +116,8 @@ Sequences txtProc::read_fasta(std::string filename,
 }
 
 
-void txtProc::writeAlignmentToFile(string_sequences& sequences,
-                                   seqNames& sequence_names, 
+void txtProc::writeAlignmentToFile(StringSequences& sequences,
+                                   SeqNames& sequence_names, 
                                    std::string filename){
 	std::stringstream sstr;
 	sstr << filename << "_al";
@@ -128,8 +128,8 @@ void txtProc::writeAlignmentToFile(string_sequences& sequences,
 }
 
 
-void txtProc::writeAlignmentWithoutCodeToFile(string_sequences& sequences,
-                                              seqNames& sequence_names, 
+void txtProc::writeAlignmentWithoutCodeToFile(StringSequences& sequences,
+                                              SeqNames& sequence_names, 
                                               std::string filename, 
                                               int codon_length){
 	std::stringstream sstr;
@@ -243,10 +243,10 @@ void txtProc::process_conf_file(std::string filename,
 }
 
 
-featuresList txtProc::unfold(std::string conf_string, 
-                             featureNamesList& listOfFeatures){
-  featureNamesList tmp_vector = split(conf_string,',');
-	featuresList out_vector;
+FeaturesList txtProc::unfold(std::string conf_string, 
+                             FeatureNamesList& listOfFeatures){
+  FeatureNamesList tmp_vector = split(conf_string,',');
+	FeaturesList out_vector;
   for (auto &item: tmp_vector){
 		if (split(item,'_').size() > 1){						
       // this is a single feature entry, e.g. 'PF_A'
@@ -266,7 +266,7 @@ featuresList txtProc::unfold(std::string conf_string,
       //TAG with exceptions
 			splitFeatName tagfeat = split(item,'[');
 			std::string tag = tagfeat[0];
-			featureNamesList exceptions = split(split(tagfeat[1],']')[0], '.');
+			FeatureNamesList exceptions = split(split(tagfeat[1],']')[0], '.');
 			for (unsigned int j = 0; j < listOfFeatures.size(); j++){
 				splitFeatName singlefeat = split(listOfFeatures[j],'_');
 				if (singlefeat.size() > 1 && singlefeat[1] == tag && 

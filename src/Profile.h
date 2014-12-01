@@ -20,7 +20,7 @@ public:
   /// builds a profile from the matrix of occurences and the substitution 
   /// matrix with appropriate weights
   ///
-	void processProfile(sequenceList& alignment, 
+	void processProfile(SequenceList& alignment, 
                       const identitiesList& sequenceIdentityValues);
   ///
   /// returns the profile matrix
@@ -35,7 +35,7 @@ public:
   ///
 	double getElement(int aAcidInt, int position);
 private:
-	void createProfile(sequenceList& alignment,
+	void createProfile(SequenceList& alignment,
                      const identitiesList& sequenceIdentityValues);
 	profile_matrix m_prfMatrix;
 };

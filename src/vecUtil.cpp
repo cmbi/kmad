@@ -6,7 +6,7 @@
 #include <algorithm>
 
 
-bool vecUtil::contains(featureNamesList& vec, std::string& x){
+bool vecUtil::contains(FeatureNamesList& vec, std::string& x){
 	if (std::find(vec.begin(),vec.end(),x) != vec.end()) return true;
 	else return false;
 }
@@ -75,8 +75,8 @@ profileMatrixColumn vecUtil::convertIntVectorToDoubleVector(sbstMatColumn& vec){
 }
 
 
-string_sequences vecUtil::flatten(const sequenceList& vec){
-	string_sequences result;
+StringSequences vecUtil::flatten(const SequenceList& vec){
+	StringSequences result;
   for (auto &row: vec){
 		std::string newSeq = "";
     for(auto &item: row){
@@ -88,9 +88,9 @@ string_sequences vecUtil::flatten(const sequenceList& vec){
 }
 
 
-sequence vecUtil::push_front(sequence& seq, Residue newElement){
+ResidueSequence vecUtil::push_front(ResidueSequence& seq, Residue newRes){
 	reverse(seq.begin(),seq.end());
-	seq.push_back(newElement);
+	seq.push_back(newRes);
 	reverse(seq.begin(),seq.end());
 	return seq;
 }
@@ -109,7 +109,7 @@ profileMatrixRow vecUtil::average(const sbst_matrix_columns& vec){
 }
 
 
-int vecUtil::findIndex(std::string& val, featureNamesList& vec){
+int vecUtil::findIndex(std::string& val, FeatureNamesList& vec){
 	int res = -1;
 	for (unsigned int i = 0; i < vec.size(); i++){
 		if (vec[i] == val){
