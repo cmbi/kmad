@@ -54,7 +54,7 @@ Sequences txtProc::read_fasta(std::string filename,
                               IDsList* ids, 
                               ProbsList* probs){
 	CodonSeqWithNamesList resultSequences;
-  if (!misc::file_exists(&filename)){
+  if (!misc::CheckIfFileExists(&filename)){
     throw std::runtime_error("Input file doesn't exist");
   }
   else{

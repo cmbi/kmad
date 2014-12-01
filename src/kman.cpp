@@ -54,7 +54,7 @@ int main(int argc, char *argv[]){
   	}
   	if (vm.count("input") && vm.count("gap_penalty") 
         && vm.count("output")
-        && misc::checkParameters(codon_length, phosph_score, domain_score,
+        && misc::CheckParameters(codon_length, phosph_score, domain_score,
                                  motif_score, gap_ext_pen, gap_open_pen, 
                                  end_pen)){
   		time_t start = clock();

@@ -39,7 +39,7 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen,
 void ScoringMatrix::calculateScores(ResidueSequence s2, Profile& prf, 
                                     FeaturesProfile& featPrf, 
                                     int codon_length){
-	s2 = vecUtil::push_front(s2,misc::gapRes(codon_length));
+	s2 = vecUtil::push_front(s2,misc::CreateGapResidue(codon_length));
 
   assert(m_matrixV.size() == m_matrixG.size());
   assert(m_matrixV.size() == m_matrixH.size());
@@ -131,9 +131,9 @@ void ScoringMatrix::nwAlignment(SequenceList *result,
                                 int codon_length){
   //creating polyA pseudoSequence representing the profile, 
   //to know later where are the gaps in the profile
-	ResidueSequence s1 = misc::pseudoResidueSequence(prf.get_matrix()[0].size()+1, 
+	ResidueSequence s1 = misc::PseudoResidueSequence(prf.get_matrix()[0].size()+1, 
                                                    codon_length); 
-	Residue gap_code = misc::gapRes(codon_length);
+	Residue gap_code = misc::CreateGapResidue(codon_length);
 	s2 = vecUtil::push_front(s2,gap_code);
 	ResidueSequence newS1;
 	ResidueSequence newS2;
