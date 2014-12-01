@@ -6,30 +6,30 @@ shared_LDADD	=	$(BOOST_PROGRAM_OPTIONS_LIB) \
 
 
 kman_SOURCES	=	src/kman.cpp \
-								src/FeaturesProfile.cpp \
-								src/Profile.cpp \
-								src/Residue.cpp \
-								src/ScoringMatrix.cpp \
-								src/Sequences.cpp \
-								src/txtProc.cpp \
-								src/vecUtil.cpp \
+								src/features_profile.cpp \
+								src/profile.cpp \
+								src/residue.cpp \
+								src/scoring_matrix.cpp \
+								src/sequences.cpp \
+								src/txtproc.cpp \
+								src/vec_util.cpp \
 								src/misc.cpp \
-								src/substitutionMatrix.cpp \
+								src/substitution_matrix.cpp \
 								src/msa.cpp
 
 
 kman_LDADD = $(shared_LDADD)
 
 test_kman_SOURCES = tests/test_vecutil.cpp \
-										src/FeaturesProfile.cpp \
-										src/Profile.cpp \
-										src/Residue.cpp \
-										src/ScoringMatrix.cpp \
-										src/Sequences.cpp \
-										src/txtProc.cpp \
-										src/vecUtil.cpp \
+										src/features_profile.cpp \
+										src/profile.cpp \
+										src/residue.cpp \
+										src/scoring_matrix.cpp \
+										src/sequences.cpp \
+										src/txtproc.cpp \
+										src/vec_util.cpp \
 										src/misc.cpp \
-										src/substitutionMatrix.cpp \
+										src/substitution_matrix.cpp \
 										src/msa.cpp
 
 test_kman_LDADD	=	$(shared_LDADD)

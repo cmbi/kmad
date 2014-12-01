@@ -1,5 +1,5 @@
-#include "Residue.h"
-#include "txtProc.h"
+#include "residue.h"
+#include "txtproc.h"
 #include <iostream>
 #include <string>
 #include <vector>

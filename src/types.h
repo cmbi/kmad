@@ -1,4 +1,4 @@
-#include "Residue.h"
+#include "residue.h"
 #include <iostream>
 #include <vector>
 #include <tuple>

@@ -1,8 +1,7 @@
-//SubtitutionMatrix class implementation
-#include "substitutionMatrix.h"
-#include "Residue.h"
+#include "substitution_matrix.h"
+#include "residue.h"
 #include "misc.h"
-#include "vecUtil.h"
+#include "vec_util.h"
 
 #include<boost/range/numeric.hpp>
 #include <iostream>

@@ -1,5 +1,5 @@
-#include "vecUtil.h"
-#include "Residue.h"
+#include "vec_util.h"
+#include "residue.h"
 #include <iostream>
 #include <vector>
 #include <string>

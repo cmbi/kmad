@@ -1,9 +1,9 @@
 //Profile class implementation
-#include "Profile.h"
-#include "Residue.h"
+#include "profile.h"
+#include "residue.h"
 #include "misc.h"
-#include "substitutionMatrix.h"
-#include "vecUtil.h"
+#include "substitution_matrix.h"
+#include "vec_util.h"
 
 #include<boost/range/numeric.hpp>
 

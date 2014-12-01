@@ -1,9 +1,10 @@
 #include "misc.h"
-#include "txtProc.h"
-#include "vecUtil.h"
-#include "Residue.h"
-#include "Sequences.h"
-#include "FeaturesProfile.h"
+#include "txtproc.h"
+#include "vec_util.h"
+#include "residue.h"
+#include "sequences.h"
+#include "features_profile.h"
+
 #include <iostream>
 #include <vector>
 #include <string>

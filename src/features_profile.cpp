@@ -1,7 +1,7 @@
-#include "FeaturesProfile.h"
-#include "Residue.h"
-#include "vecUtil.h"
-#include "txtProc.h"
+#include "features_profile.h"
+#include "residue.h"
+#include "vec_util.h"
+#include "txtproc.h"
 #include "misc.h"
 
 #include<boost/range/numeric.hpp>

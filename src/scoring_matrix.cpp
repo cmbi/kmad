@@ -1,11 +1,11 @@
-#include "ScoringMatrix.h"
-#include "FeaturesProfile.h"
-#include "Residue.h"
-#include "substitutionMatrix.h"
-#include "Profile.h"
+#include "scoring_matrix.h"
+#include "features_profile.h"
+#include "residue.h"
+#include "substitution_matrix.h"
+#include "profile.h"
 #include "misc.h"
-#include "vecUtil.h"
-#include "txtProc.h"
+#include "vec_util.h"
+#include "txtproc.h"
 
 #include <algorithm>
 #include <cassert>

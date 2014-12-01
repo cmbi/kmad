@@ -74,21 +74,22 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am_kman_OBJECTS = src/kman.$(OBJEXT) src/FeaturesProfile.$(OBJEXT) \
-	src/Profile.$(OBJEXT) src/Residue.$(OBJEXT) \
-	src/ScoringMatrix.$(OBJEXT) src/Sequences.$(OBJEXT) \
-	src/txtProc.$(OBJEXT) src/vecUtil.$(OBJEXT) src/misc.$(OBJEXT) \
-	src/substitutionMatrix.$(OBJEXT) src/msa.$(OBJEXT)
+am_kman_OBJECTS = src/kman.$(OBJEXT) src/features_profile.$(OBJEXT) \
+	src/profile.$(OBJEXT) src/residue.$(OBJEXT) \
+	src/scoring_matrix.$(OBJEXT) src/sequences.$(OBJEXT) \
+	src/txtproc.$(OBJEXT) src/vec_util.$(OBJEXT) \
+	src/misc.$(OBJEXT) src/substitution_matrix.$(OBJEXT) \
+	src/msa.$(OBJEXT)
 kman_OBJECTS = $(am_kman_OBJECTS)
 am__DEPENDENCIES_1 =
 am__DEPENDENCIES_2 = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 kman_DEPENDENCIES = $(am__DEPENDENCIES_2)
 am_test_kman_OBJECTS = tests/test_vecutil.$(OBJEXT) \
-	src/FeaturesProfile.$(OBJEXT) src/Profile.$(OBJEXT) \
-	src/Residue.$(OBJEXT) src/ScoringMatrix.$(OBJEXT) \
-	src/Sequences.$(OBJEXT) src/txtProc.$(OBJEXT) \
-	src/vecUtil.$(OBJEXT) src/misc.$(OBJEXT) \
-	src/substitutionMatrix.$(OBJEXT) src/msa.$(OBJEXT)
+	src/features_profile.$(OBJEXT) src/profile.$(OBJEXT) \
+	src/residue.$(OBJEXT) src/scoring_matrix.$(OBJEXT) \
+	src/sequences.$(OBJEXT) src/txtproc.$(OBJEXT) \
+	src/vec_util.$(OBJEXT) src/misc.$(OBJEXT) \
+	src/substitution_matrix.$(OBJEXT) src/msa.$(OBJEXT)
 test_kman_OBJECTS = $(am_test_kman_OBJECTS)
 test_kman_DEPENDENCIES = $(am__DEPENDENCIES_2)
 DEFAULT_INCLUDES = -I.
@@ -231,28 +232,28 @@ shared_LDADD = $(BOOST_PROGRAM_OPTIONS_LIB) \
 								$(BOOST_UNIT_TEST_FRAMEWORK_LIB)
 
 kman_SOURCES = src/kman.cpp \
-								src/FeaturesProfile.cpp \
-								src/Profile.cpp \
-								src/Residue.cpp \
-								src/ScoringMatrix.cpp \
-								src/Sequences.cpp \
-								src/txtProc.cpp \
-								src/vecUtil.cpp \
+								src/features_profile.cpp \
+								src/profile.cpp \
+								src/residue.cpp \
+								src/scoring_matrix.cpp \
+								src/sequences.cpp \
+								src/txtproc.cpp \
+								src/vec_util.cpp \
 								src/misc.cpp \
-								src/substitutionMatrix.cpp \
+								src/substitution_matrix.cpp \
 								src/msa.cpp
 
 kman_LDADD = $(shared_LDADD)
 test_kman_SOURCES = tests/test_vecutil.cpp \
-										src/FeaturesProfile.cpp \
-										src/Profile.cpp \
-										src/Residue.cpp \
-										src/ScoringMatrix.cpp \
-										src/Sequences.cpp \
-										src/txtProc.cpp \
-										src/vecUtil.cpp \
+										src/features_profile.cpp \
+										src/profile.cpp \
+										src/residue.cpp \
+										src/scoring_matrix.cpp \
+										src/sequences.cpp \
+										src/txtproc.cpp \
+										src/vec_util.cpp \
 										src/misc.cpp \
-										src/substitutionMatrix.cpp \
+										src/substitution_matrix.cpp \
 										src/msa.cpp
 
 test_kman_LDADD = $(shared_LDADD)
@@ -365,22 +366,22 @@ src/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) src/$(DEPDIR)
 	@: > src/$(DEPDIR)/$(am__dirstamp)
 src/kman.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/FeaturesProfile.$(OBJEXT): src/$(am__dirstamp) \
+src/features_profile.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/Profile.$(OBJEXT): src/$(am__dirstamp) \
+src/profile.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/Residue.$(OBJEXT): src/$(am__dirstamp) \
+src/residue.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/ScoringMatrix.$(OBJEXT): src/$(am__dirstamp) \
+src/scoring_matrix.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/Sequences.$(OBJEXT): src/$(am__dirstamp) \
+src/sequences.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/txtProc.$(OBJEXT): src/$(am__dirstamp) \
+src/txtproc.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
-src/vecUtil.$(OBJEXT): src/$(am__dirstamp) \
+src/vec_util.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
 src/misc.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
-src/substitutionMatrix.$(OBJEXT): src/$(am__dirstamp) \
+src/substitution_matrix.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
 src/msa.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 kman$(EXEEXT): $(kman_OBJECTS) $(kman_DEPENDENCIES) $(EXTRA_kman_DEPENDENCIES) 
@@ -400,33 +401,33 @@ test_kman$(EXEEXT): $(test_kman_OBJECTS) $(test_kman_DEPENDENCIES) $(EXTRA_test_
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
-	-rm -f src/FeaturesProfile.$(OBJEXT)
-	-rm -f src/Profile.$(OBJEXT)
-	-rm -f src/Residue.$(OBJEXT)
-	-rm -f src/ScoringMatrix.$(OBJEXT)
-	-rm -f src/Sequences.$(OBJEXT)
+	-rm -f src/features_profile.$(OBJEXT)
 	-rm -f src/kman.$(OBJEXT)
 	-rm -f src/misc.$(OBJEXT)
 	-rm -f src/msa.$(OBJEXT)
-	-rm -f src/substitutionMatrix.$(OBJEXT)
-	-rm -f src/txtProc.$(OBJEXT)
-	-rm -f src/vecUtil.$(OBJEXT)
+	-rm -f src/profile.$(OBJEXT)
+	-rm -f src/residue.$(OBJEXT)
+	-rm -f src/scoring_matrix.$(OBJEXT)
+	-rm -f src/sequences.$(OBJEXT)
+	-rm -f src/substitution_matrix.$(OBJEXT)
+	-rm -f src/txtproc.$(OBJEXT)
+	-rm -f src/vec_util.$(OBJEXT)
 	-rm -f tests/test_vecutil.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
-include src/$(DEPDIR)/FeaturesProfile.Po
-include src/$(DEPDIR)/Profile.Po
-include src/$(DEPDIR)/Residue.Po
-include src/$(DEPDIR)/ScoringMatrix.Po
-include src/$(DEPDIR)/Sequences.Po
+include src/$(DEPDIR)/features_profile.Po
 include src/$(DEPDIR)/kman.Po
 include src/$(DEPDIR)/misc.Po
 include src/$(DEPDIR)/msa.Po
-include src/$(DEPDIR)/substitutionMatrix.Po
-include src/$(DEPDIR)/txtProc.Po
-include src/$(DEPDIR)/vecUtil.Po
+include src/$(DEPDIR)/profile.Po
+include src/$(DEPDIR)/residue.Po
+include src/$(DEPDIR)/scoring_matrix.Po
+include src/$(DEPDIR)/sequences.Po
+include src/$(DEPDIR)/substitution_matrix.Po
+include src/$(DEPDIR)/txtproc.Po
+include src/$(DEPDIR)/vec_util.Po
 include tests/$(DEPDIR)/test_vecutil.Po
 
 .cpp.o:

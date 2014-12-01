@@ -2,7 +2,7 @@
 #define BOOST_TEST_MODULE Main
 
 
-#include "vecUtil.h"
+#include "vec_util.h"
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/auto_unit_test.hpp>

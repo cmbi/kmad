@@ -1,8 +1,8 @@
 #include "msa.h"
-#include "txtProc.h"
-#include "FeaturesProfile.h"
-#include "Profile.h"
-#include "Sequences.h"
+#include "txtproc.h"
+#include "features_profile.h"
+#include "profile.h"
+#include "sequences.h"
 
 #include <iostream>
 #include <vector>

@@ -1,7 +1,7 @@
 #ifndef TXTPROC_H
 #define TXTPROC_H
 
-#include "Sequences.h"
+#include "sequences.h"
 
 #include <iostream>
 #include <string>

@@ -1,12 +1,12 @@
-#include "FeaturesProfile.h"
-#include "Profile.h"
-#include "Residue.h"
-#include "ScoringMatrix.h"
-#include "Sequences.h"
+#include "features_profile.h"
+#include "profile.h"
+#include "residue.h"
+#include "scoring_matrix.h"
+#include "sequences.h"
 #include "misc.h"
 #include "msa.h"
-#include "txtProc.h"
-#include "vecUtil.h"
+#include "txtproc.h"
+#include "vec_util.h"
 
 #include <boost/program_options.hpp>
 #include <ctime>

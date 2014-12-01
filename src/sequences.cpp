@@ -1,10 +1,11 @@
-#include "Sequences.h"
-#include "Residue.h"
-#include "FeaturesProfile.h"
-#include "Profile.h"
-#include "ScoringMatrix.h"
-#include "substitutionMatrix.h"
-#include "vecUtil.h"
+#include "sequences.h"
+#include "residue.h"
+#include "features_profile.h"
+#include "profile.h"
+#include "scoring_matrix.h"
+#include "substitution_matrix.h"
+#include "vec_util.h"
+
 #include <iostream>
 #include <tuple>
 #include <string>
