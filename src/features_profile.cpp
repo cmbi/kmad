@@ -88,8 +88,8 @@ void FeaturesProfile::CountOccurences(const SequenceList& alignment,
 		ProfileMatrixColumn profile_column(list_of_features.size(),0);
 		int non_gaps = 0;
 		for (unsigned int j = 0; j < alignment.size();j++){
-			if (alignment[j][i].getAA() != '-'){
-				FeatureNamesList features = alignment[j][i].getFeatures();	
+			if (alignment[j][i].get_aa() != '-'){
+				FeatureNamesList features = alignment[j][i].get_features();	
 				for (unsigned int k = 0; k < features.size(); k++){
 					std::string feat_name = features[k];
 					if (feat_name != nothing){
@@ -102,17 +102,17 @@ void FeaturesProfile::CountOccurences(const SequenceList& alignment,
 			non_gaps++;
 			}
 		}
-	  vecUtil::divideVectorByAScalar(profile_column, no_of_sequences);
-	  //vecUtil::divideVectorByAScalar(profileColumn,nonGaps);
+	  vec_util::divideVectorByAScalar(profile_column, no_of_sequences);
+	  //vec_util::divideVectorByAScalar(profileColumn,nonGaps);
 		m_occurences_matrix.push_back(profile_column);
 	} 
-	vecUtil::transposeVec(m_occurences_matrix);
+	vec_util::transposeVec(m_occurences_matrix);
 }
 
 
 double FeaturesProfile::GetMotifsProb(std::string& m_id){
 	double prob = 0;
-	std::string id_code = txtProc::split(m_id, '_')[1];
+	std::string id_code = txtproc::split(m_id, '_')[1];
   assert(m_motifs_ids.size() == m_motifs_probs.size());
 	for (unsigned int i = 0; i < m_motifs_ids.size(); i++){
 		if (m_motifs_ids[i] == id_code) {
@@ -156,10 +156,10 @@ int FeaturesProfile::FindFeaturesIndex(std::string& feat_name){
 void FeaturesProfile::ExpandListOfFeatures(const SequenceList& sequences){
 	for(unsigned int i = 0; i < sequences.size();i++){	
 		for (unsigned int j = 0; j < sequences[i].size(); j++){
-			FeatureNamesList features = sequences[i][j].getFeatures();
+			FeatureNamesList features = sequences[i][j].get_features();
 			for (unsigned int k = 0; k < features.size();k++){
 				std::string feature_k = features[k];
-				if (!vecUtil::contains(list_of_features, feature_k) && feature_k != nothing){	//check whether this domain is already in the list of features
+				if (!vec_util::contains(list_of_features, feature_k) && feature_k != nothing){	//check whether this domain is already in the list of features
 					list_of_features.push_back(feature_k);
 					if (feature_k.substr(0,6) == "domain"){
 						domain_indexes.push_back(list_of_features.size()-1); //to later look for domains only in these positions (not necessary but saves time)
@@ -264,7 +264,7 @@ double FeaturesProfile::ScoreUsrFeatures(unsigned int& position,
 
 
 double FeaturesProfile::GetModifier(std::string& feat_name){
-	std::string feat_code = txtProc::split(feat_name,'_')[0];
+	std::string feat_code = txtproc::split(feat_name,'_')[0];
 	double modifier = 1;
 	if (feat_code == "ptm"){
 		modifier = m_phosph_score;
@@ -281,8 +281,8 @@ double FeaturesProfile::GetModifier(std::string& feat_name){
 
 void FeaturesProfile::set_rules(RuleTuplesList& new_rules){
   for (auto &rule: new_rules){
-		FeaturesList incr_feat = txtProc::unfold(std::get<9>(rule), list_of_features);
-		FeaturesList red_feat = txtProc::unfold(std::get<10>(rule), list_of_features);
+		FeaturesList incr_feat = txtproc::unfold(std::get<9>(rule), list_of_features);
+		FeaturesList red_feat = txtproc::unfold(std::get<10>(rule), list_of_features);
 		// new_tuple <tag+name, incr_rule_1, incr_rule_2, red_rule_1, red_rule_2, 
     // incr_features_positions, red_features_positions>
 		// incr_features_positions and red_features_positions are positions(indexes
@@ -308,7 +308,7 @@ void FeaturesProfile::add_usr_features(RuleTuplesList& new_rules){
   for (auto &rule: new_rules){
 		std::string feature_i = std::string("USR_") + std::get<0>(rule) \
                             + std::string("_") + std::get<1>(rule);
-		if (!vecUtil::contains(list_of_features,feature_i)){
+		if (!vec_util::contains(list_of_features,feature_i)){
 			list_of_features.push_back(feature_i);
 		}
 	}

@@ -39,7 +39,7 @@ ScoringMatrix::ScoringMatrix(int s1size,int s2size, double pen,
 void ScoringMatrix::calculateScores(ResidueSequence s2, Profile& prf, 
                                     FeaturesProfile& featPrf, 
                                     int codon_length){
-	s2 = vecUtil::push_front(s2,misc::CreateGapResidue(codon_length));
+	s2 = vec_util::push_front(s2,misc::CreateGapResidue(codon_length));
 
   assert(m_matrixV.size() == m_matrixG.size());
   assert(m_matrixV.size() == m_matrixH.size());
@@ -58,9 +58,9 @@ void ScoringMatrix::calculateScores(ResidueSequence s2, Profile& prf,
 	for (unsigned int i = 1; i < m_matrixV.size();i++){
 		for (unsigned int j = 1; j < m_matrixV[i].size(); j++){
 			///V
-			double prfScore = prf.get_element(i-1, s2[j].getAA());
+			double prfScore = prf.get_element(i-1, s2[j].get_aa());
 			double add_score = 0;
-      FeaturesList features = s2[j].getFeatIndexes();
+      FeaturesList features = s2[j].get_feat_indexes();
 			featPrf.get_score(i-1, features, add_score);
 
 			double final_score = prfScore + add_score;
@@ -134,7 +134,7 @@ void ScoringMatrix::nwAlignment(SequenceList *result,
 	ResidueSequence s1 = misc::PseudoResidueSequence(prf.get_matrix()[0].size()+1, 
                                                    codon_length); 
 	Residue gap_code = misc::CreateGapResidue(codon_length);
-	s2 = vecUtil::push_front(s2,gap_code);
+	s2 = vec_util::push_front(s2,gap_code);
 	ResidueSequence newS1;
 	ResidueSequence newS2;
 	SequenceList ali; //alignment
@@ -166,14 +166,12 @@ void ScoringMatrix::nwAlignment(SequenceList *result,
 
 	//trace back the matrix
 	while (i > 0 || j > 0){
-		//double gapMod = featPrf.getGapMod(i-1,s2[j].getFeatures());
 		if (i > 0 && j > 0 && currentMatrix == "V"){	//match/mismatch
 			newChar1 = s1[i];
 			newChar2 = s2[j];
-			double prfScore = prf.get_element(i-1,s2[j].getAA());
+			double prfScore = prf.get_element(i-1,s2[j].get_aa());
 			double add_score = 0;
-      //std::vector<std::string> features = s2[j].getFeatures();
-      FeaturesList features = s2[j].getFeatIndexes();
+      FeaturesList features = s2[j].get_feat_indexes();
 			featPrf.get_score(i-1, features, add_score);
 			double final_score = prfScore + add_score;
 			if (m_matrixV[i][j] != m_matrixV[i-1][j-1] + final_score){

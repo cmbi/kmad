@@ -39,7 +39,7 @@ StringSequences Sequences::performMSAfirstround(Profile& outputProfile,
                                                 double extensionPenalty, 
                                                 int codon_length, 
                                                 IdentitiesList& identities){
-	outputProfile = Profile(substitutionMatrix::convertToProfileFormat(m_sequences_aa[0])); 
+	outputProfile = Profile(substitution_matrix::convertToProfileFormat(m_sequences_aa[0])); 
   //working alignment - without lowercase around cut out residues
 	SequenceList alignmentWithoutLowercase;	
   //lowercase before and after cut out residues -- final result 
@@ -78,7 +78,7 @@ StringSequences Sequences::performMSAfirstround(Profile& outputProfile,
 	outputProfile.processProfile(alignmentWithoutLowercase,
                                identities);
   */
-	return vecUtil::flatten(alignmentWithLowercase);		
+	return vec_util::flatten(alignmentWithLowercase);		
 }
 
 
@@ -118,7 +118,7 @@ void Sequences::performMSAnextRounds(StringSequences& prevAlignment,
 		outputFeaturesProfile.CreateProfile(alignmentWithoutLowercase, 
                                         codon_length);
 		outputProfile.ProcessProfile(alignmentWithoutLowercase);
-		prevAlignment = vecUtil::flatten(alignmentWithLowercase);
+		prevAlignment = vec_util::flatten(alignmentWithLowercase);
     //update number of performed alignments
 		prev_alignments = next_alignments; 
 	}
@@ -128,7 +128,7 @@ void Sequences::performMSAnextRounds(StringSequences& prevAlignment,
 double Sequences::calcIdentity(const ResidueSequence& alignedSequence){
 	double identicalResidues = 0;
 	for (unsigned int i = 0; i < alignedSequence.size(); i++){
-		if (alignedSequence[i].getAA() == m_sequences_aa[0][i].getAA()){
+		if (alignedSequence[i].get_aa() == m_sequences_aa[0][i].get_aa()){
 			identicalResidues++;
 		}
 	}
@@ -146,11 +146,11 @@ void Sequences::removeGaps(ResidueSequence& alignmentWithLowercase,
 	char gap = '-';
 	bool lowerFlag = false;
 	for (unsigned int i = 0; i < alignment[0].size(); i++){
-		char s1char = s1[i].getAA();
+		char s1char = s1[i].get_aa();
 		if (s1char == gap){
 			if (newS2lower.size() > 0){
         //change previous character to lowercase
-				newS2lower[newS2lower.size()-1].lowercase(); 
+				newS2lower[newS2lower.size()-1].change_to_lowercase(); 
 			}
       // flag to true so that the next character is also lowercase
 			lowerFlag = true; 
@@ -158,7 +158,7 @@ void Sequences::removeGaps(ResidueSequence& alignmentWithLowercase,
 		else{
 			if (lowerFlag){   //lowercase char
 				Residue newRes = s2[i];
-				newRes.lowercase();
+				newRes.change_to_lowercase();
         //add lowercase char to the alignment with lowercases
 				newS2lower.push_back(newRes); 
         //add uppercase alignment to the alignment without lowercases
@@ -240,14 +240,14 @@ void Sequences::add_feature_indexes(FeaturesProfile& fprf){
   std::string nothing = "AA";
   for (auto &seq: m_sequences_aa){
     for (auto &res: seq){
-        FeatureNamesList features = res.getFeatures();
+        FeatureNamesList features = res.get_features();
         FeaturesList indexes;
         for (auto &feat: features){
           if (feat != nothing){
             indexes.push_back(fprf.FindFeaturesIndex(feat));
           }
         }
-        res.setFeatIndexes(indexes);
+        res.set_feat_indexes(indexes);
     }
   }
 }

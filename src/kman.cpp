@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
   		ProbsList motifs_probs;
       Sequences sequences;
       try{
-          sequences = txtProc::read_fasta(filename, 
+          sequences = txtproc::read_fasta(filename, 
                                           codon_length, 
                                           &motifs_ids, 
                                           &motifs_probs);
@@ -83,10 +83,10 @@ int main(int argc, char *argv[]){
                                                motifs_ids, 
                                                motifs_probs);
       if (out_encoded){
-  		  txtProc::writeAlignmentToFile(alignment, seq_names, output_prefix);						
+  		  txtproc::writeAlignmentToFile(alignment, seq_names, output_prefix);						
       }
       else{
-  		  txtProc::writeAlignmentWithoutCodeToFile(alignment, seq_names, 
+  		  txtproc::writeAlignmentWithoutCodeToFile(alignment, seq_names, 
                                                  output_prefix, codon_length);						
       }
   		time_t end = clock();

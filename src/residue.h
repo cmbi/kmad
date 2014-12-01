@@ -17,15 +17,15 @@ class Residue{
     ///
     /// returns the residue's amino acid code
     ///
-		char getAA() const;
+		char get_aa() const;
     ///
     /// returns residue's codon
     ///
-		std::string getCodon() const;
+		std::string get_codon() const;
     ///
     /// changes amino acid charactre to lowercase
     ///
-		void lowercase();
+		void change_to_lowercase();
     ///
     /// adds a new feature to the residue's list of features
     ///
@@ -33,22 +33,22 @@ class Residue{
     ///
     /// returns list of features assigned to the residue
     ///
-		FeatureNamesList getFeatures() const;
+		FeatureNamesList get_features() const;
     ///
     /// return a list of feature indexes (from the profile) assigned to the
     /// residue
     ///
-    FeaturesList getFeatIndexes();
+    FeaturesList get_feat_indexes();
     ///
     /// sets feature indexes
     ///
-    void setFeatIndexes(FeaturesList new_features);
+    void set_feat_indexes(FeaturesList new_features);
 	private:
+		void CodonToFeatures();
 		std::string m_codon;
     FeaturesList m_feature_indexes;
 		FeatureNamesList m_features;
 		char m_aa;
-		void codon_to_features();
 };
 
 #endif /* RESIDUE_H */

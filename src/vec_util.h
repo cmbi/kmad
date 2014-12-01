@@ -8,7 +8,7 @@
 
 
 class Residue;
-namespace vecUtil{
+namespace vec_util{
   ///
   /// checks if vec contains string x
   ///

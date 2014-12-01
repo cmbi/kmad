@@ -10,7 +10,7 @@
 
 class FeaturesProfile;
 class Sequences;
-namespace txtProc{
+namespace txtproc{
   ///
   /// converts a string to double
   ///

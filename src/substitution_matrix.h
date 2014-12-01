@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 class Residue;
-namespace substitutionMatrix{
+namespace substitution_matrix{
   ///
   /// Creates a profile matrix (20 x sequence length)
   /// based on a single sequence

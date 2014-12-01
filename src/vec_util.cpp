@@ -6,13 +6,13 @@
 #include <algorithm>
 
 
-bool vecUtil::contains(FeatureNamesList& vec, std::string& x){
+bool vec_util::contains(FeatureNamesList& vec, std::string& x){
 	if (std::find(vec.begin(),vec.end(),x) != vec.end()) return true;
 	else return false;
 }
 
 
-void vecUtil::transposeVec(ProfileMatrix& vec){
+void vec_util::transposeVec(ProfileMatrix& vec){
   ProfileMatrix newVec;
   ProfileMatrixRow newRow;
 	for (unsigned int i = 0; i < vec[0].size(); i++){
@@ -26,7 +26,7 @@ void vecUtil::transposeVec(ProfileMatrix& vec){
 }
 
 
-void vecUtil::divideVectorByAScalar(ProfileMatrixRow& vec, int scalar){
+void vec_util::divideVectorByAScalar(ProfileMatrixRow& vec, int scalar){
   ProfileMatrixRow result;
   for (auto &item: vec){
 		result.push_back(item/scalar);	
@@ -35,7 +35,7 @@ void vecUtil::divideVectorByAScalar(ProfileMatrixRow& vec, int scalar){
 }
 
 
-void vecUtil::divideVectorByAScalar(ProfileMatrixRow& vec, double& scalar){
+void vec_util::divideVectorByAScalar(ProfileMatrixRow& vec, double& scalar){
   ProfileMatrixRow result;
   for (auto &item: vec){
 		result.push_back(item/scalar);	
@@ -44,7 +44,7 @@ void vecUtil::divideVectorByAScalar(ProfileMatrixRow& vec, double& scalar){
 }
 
 
-void vecUtil::multiplyVectorByAScalar(ProfileMatrixRow& vec, double& scalar){
+void vec_util::multiplyVectorByAScalar(ProfileMatrixRow& vec, double& scalar){
   ProfileMatrixRow result;
   for (auto &item: vec){
 		result.push_back(item*scalar);
@@ -53,7 +53,7 @@ void vecUtil::multiplyVectorByAScalar(ProfileMatrixRow& vec, double& scalar){
 }
 
 
-ProfileMatrixRow vecUtil::addUp(Matrix2D& vec){
+ProfileMatrixRow vec_util::addUp(Matrix2D& vec){
   ProfileMatrixRow newVec;
 	for (unsigned int i = 0; i < vec[0].size(); i++){
 		double sum = 0;
@@ -66,7 +66,7 @@ ProfileMatrixRow vecUtil::addUp(Matrix2D& vec){
 }
 
 
-ProfileMatrixColumn vecUtil::convertIntVectorToDoubleVector(SbstMatColumn& vec){
+ProfileMatrixColumn vec_util::convertIntVectorToDoubleVector(SbstMatColumn& vec){
   ProfileMatrixColumn result;
   for (auto &item: vec){
 		result.push_back(double(item));
@@ -75,12 +75,12 @@ ProfileMatrixColumn vecUtil::convertIntVectorToDoubleVector(SbstMatColumn& vec){
 }
 
 
-StringSequences vecUtil::flatten(const SequenceList& vec){
+StringSequences vec_util::flatten(const SequenceList& vec){
 	StringSequences result;
   for (auto &row: vec){
 		std::string newSeq = "";
     for(auto &item: row){
-			newSeq += item.getCodon();
+			newSeq += item.get_codon();
 		}
 		result.push_back(newSeq);
 	}
@@ -88,7 +88,7 @@ StringSequences vecUtil::flatten(const SequenceList& vec){
 }
 
 
-ResidueSequence vecUtil::push_front(ResidueSequence& seq, Residue newRes){
+ResidueSequence vec_util::push_front(ResidueSequence& seq, Residue newRes){
 	reverse(seq.begin(),seq.end());
 	seq.push_back(newRes);
 	reverse(seq.begin(),seq.end());
@@ -96,7 +96,7 @@ ResidueSequence vecUtil::push_front(ResidueSequence& seq, Residue newRes){
 }
 
 
-ProfileMatrixRow vecUtil::average(const SbstMatrixColumns& vec){
+ProfileMatrixRow vec_util::average(const SbstMatrixColumns& vec){
   ProfileMatrixRow result;
 	for (unsigned int i = 0; i < vec[0].size(); i++){
 		double sum = 0;
@@ -109,7 +109,7 @@ ProfileMatrixRow vecUtil::average(const SbstMatrixColumns& vec){
 }
 
 
-int vecUtil::findIndex(std::string& val, FeatureNamesList& vec){
+int vec_util::findIndex(std::string& val, FeatureNamesList& vec){
 	int res = -1;
 	for (unsigned int i = 0; i < vec.size(); i++){
 		if (vec[i] == val){

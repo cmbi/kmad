@@ -36,17 +36,17 @@ void Profile::ProcessProfile(SequenceList& alignment){
 		for(unsigned int j = 0; j < m_prf_matrix.size(); j++){
 			if (m_prf_matrix[j][i] != 0){
         SbstMatColumn column_int; 
-        substitutionMatrix::getColumn(j, column_int);
-				ProfileMatrixColumn column_j = vecUtil::convertIntVectorToDoubleVector(column_int);
-				vecUtil::multiplyVectorByAScalar(column_j, m_prf_matrix[j][i]);
+        substitution_matrix::getColumn(j, column_int);
+				ProfileMatrixColumn column_j = vec_util::convertIntVectorToDoubleVector(column_int);
+				vec_util::multiplyVectorByAScalar(column_j, m_prf_matrix[j][i]);
 				columns_to_add.push_back(column_j);
 			}
 		}
     //add up columns from substitution matrix for amino acids seen on ith 
     //position(times occurence/totalNrOfSeq))
-		new_profile.push_back(vecUtil::addUp(columns_to_add));	
+		new_profile.push_back(vec_util::addUp(columns_to_add));	
 	}
-	vecUtil::transposeVec(new_profile);
+	vec_util::transposeVec(new_profile);
 	m_prf_matrix = new_profile;
 }
 
@@ -58,7 +58,7 @@ void Profile::CreateProfile(SequenceList& alignment){
 		ProfileMatrixColumn profile_column(20,0);
 		int non_gaps = 0;
 		for (unsigned int j = 0; j < alignment.size(); j++){
-			char seq_char(alignment[j][i].getAA());
+			char seq_char(alignment[j][i].get_aa());
 			if (seq_char != '-'){
 				if (seq_char == 'B'){ 		//either D or N, so I'll add half a point to both
 					profile_column[2]+=0.5;
@@ -74,18 +74,18 @@ void Profile::CreateProfile(SequenceList& alignment){
 					}
 				}
 				else{	
-					int aacid_index = substitutionMatrix::findAminoAcidsIndex(seq_char);
+					int aacid_index = substitution_matrix::findAminoAcidsIndex(seq_char);
 					profile_column[aacid_index] += 1;				
 				}
 				non_gaps++;
 			}
 		}
-		vecUtil::divideVectorByAScalar(profile_column,no_of_sequences);
-		//vecUtil::divideVectorByAScalar(profileColumn,nonGaps);
+		vec_util::divideVectorByAScalar(profile_column,no_of_sequences);
+		//vec_util::divideVectorByAScalar(profileColumn,nonGaps);
 		tmp_result.push_back(profile_column);
 	}
 	m_prf_matrix = tmp_result;
-	vecUtil::transposeVec(m_prf_matrix);
+	vec_util::transposeVec(m_prf_matrix);
 }
 
 
@@ -104,7 +104,7 @@ double Profile::get_element(int position, char aacid){
 		}
 	}
 	else { // it's not any of the {B,Z,X} -> single amino acid
-		int aacid_index = substitutionMatrix::findAminoAcidsIndex(aacid);
+		int aacid_index = substitution_matrix::findAminoAcidsIndex(aacid);
 		result = m_prf_matrix[aacid_index][position];
 	}
 	return result;

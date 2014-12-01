@@ -8,7 +8,7 @@
 Residue::Residue(std::string codon)
 : m_codon(codon){
 	m_aa = codon[0];
-	codon_to_features();
+	CodonToFeatures();
 }
 
 
@@ -16,7 +16,7 @@ Residue::Residue(){}
 
 
 // adds features (in this order: ptm, domains, motifs)
-void Residue::codon_to_features(){
+void Residue::CodonToFeatures(){
 	std::string nothing = "AA";
 	std::string feat = "";
 	if (m_codon.size() >= 5){
@@ -86,7 +86,7 @@ void Residue::codon_to_features(){
 	}
 	//DOMAIN
 	if (m_codon.size() >= 4){
-		feat = txtProc::charToString(m_codon[2],m_codon[3]);
+		feat = txtproc::charToString(m_codon[2],m_codon[3]);
 		if (feat != nothing){
 			feat = "domain_"+feat;
 			m_features.push_back(feat);
@@ -94,7 +94,7 @@ void Residue::codon_to_features(){
 	}
 	//MOTIF
 	if (m_codon.size() >= 7){
-		feat = txtProc::charToString(m_codon[5],m_codon[6]);
+		feat = txtproc::charToString(m_codon[5],m_codon[6]);
 		if (feat != nothing){
 			feat = "motif_"+feat;
 			m_features.push_back(feat);
@@ -103,23 +103,23 @@ void Residue::codon_to_features(){
 }
 
 
-char Residue::getAA() const{
+char Residue::get_aa() const{
 	return m_aa;
 }
 
 
-std::string Residue::getCodon() const{
+std::string Residue::get_codon() const{
 	return m_codon;
 }
 
 
-void Residue::lowercase(){
+void Residue::change_to_lowercase(){
 	m_aa = tolower(m_aa);
 	m_codon[0] = tolower(m_codon[0]);
 }
 
 
-FeatureNamesList Residue::getFeatures() const{
+FeatureNamesList Residue::get_features() const{
 	return m_features;
 }
 
@@ -129,11 +129,11 @@ void Residue::add_feature(std::string new_feat){
 }
 
 
-FeaturesList Residue::getFeatIndexes(){
+FeaturesList Residue::get_feat_indexes(){
   return m_feature_indexes;
 }
 
 
-void Residue::setFeatIndexes(FeaturesList new_features){
+void Residue::set_feat_indexes(FeaturesList new_features){
   m_feature_indexes = new_features;
 }

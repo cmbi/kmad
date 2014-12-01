@@ -32,13 +32,13 @@ namespace {
 }
 
 
-double txtProc::convertStringToDouble(std::string& s){
+double txtproc::convertStringToDouble(std::string& s){
 	double convertedDouble = atof(s.c_str());;
 	return convertedDouble;
 }
 
 
-std::vector<std::string> txtProc::split(const std::string &s, char delim) {
+std::vector<std::string> txtproc::split(const std::string &s, char delim) {
     std::vector<std::string> elems;
     std::stringstream ss(s);
     std::string item;
@@ -49,7 +49,7 @@ std::vector<std::string> txtProc::split(const std::string &s, char delim) {
 }
 
 
-Sequences txtProc::read_fasta(std::string filename,
+Sequences txtproc::read_fasta(std::string filename,
                               int codonLength, 
                               IDsList* ids, 
                               ProbsList* probs){
@@ -117,7 +117,7 @@ Sequences txtProc::read_fasta(std::string filename,
 }
 
 
-void txtProc::writeAlignmentToFile(StringSequences& sequences,
+void txtproc::writeAlignmentToFile(StringSequences& sequences,
                                    SeqNames& sequence_names, 
                                    std::string filename){
 	std::stringstream sstr;
@@ -129,7 +129,7 @@ void txtProc::writeAlignmentToFile(StringSequences& sequences,
 }
 
 
-void txtProc::writeAlignmentWithoutCodeToFile(StringSequences& sequences,
+void txtproc::writeAlignmentWithoutCodeToFile(StringSequences& sequences,
                                               SeqNames& sequence_names, 
                                               std::string filename, 
                                               int codon_length){
@@ -147,19 +147,19 @@ void txtProc::writeAlignmentWithoutCodeToFile(StringSequences& sequences,
 }
 
 
-std::string txtProc::charToString(char mychar){
+std::string txtproc::charToString(char mychar){
 	return std::string(1,mychar);
 }
 
 
-std::string txtProc::charToString(char mychar1, char mychar2){
+std::string txtproc::charToString(char mychar1, char mychar2){
 	std::string newstring = std::string(1,mychar1);
 	newstring.push_back(mychar2);
 	return newstring;
 }
 
 
-std::istream& txtProc::safeGetline(std::istream& is, std::string& t)
+std::istream& txtproc::safeGetline(std::istream& is, std::string& t)
 {
 	t.clear();
 	std::streambuf* sb = is.rdbuf();
@@ -184,7 +184,7 @@ std::istream& txtProc::safeGetline(std::istream& is, std::string& t)
 }
 
 
-bool txtProc::acceptedChar(char my_char){
+bool txtproc::acceptedChar(char my_char){
 	bool result = false;
   for (auto &acc_char: accepted_characters){
 		if (acc_char == my_char){
@@ -196,7 +196,7 @@ bool txtProc::acceptedChar(char my_char){
 }
 
 
-void txtProc::process_conf_file(std::string filename, 
+void txtproc::process_conf_file(std::string filename, 
                                 FeaturesProfile& feat_profile, 
                                 Sequences& sequences_aa){
 	std::ifstream conf_file(filename.c_str());
@@ -244,7 +244,7 @@ void txtProc::process_conf_file(std::string filename,
 }
 
 
-FeaturesList txtProc::unfold(std::string conf_string, 
+FeaturesList txtproc::unfold(std::string conf_string, 
                              FeatureNamesList& list_of_features){
   FeatureNamesList tmp_vector = split(conf_string,',');
 	FeaturesList out_vector;
@@ -252,7 +252,7 @@ FeaturesList txtProc::unfold(std::string conf_string,
 		if (split(item,'_').size() > 1){						
       // this is a single feature entry, e.g. 'PF_A'
       std::string feat_name = std::string("USR_") + item;
-			out_vector.push_back(vecUtil::findIndex(feat_name, list_of_features));
+			out_vector.push_back(vec_util::findIndex(feat_name, list_of_features));
 		}
 		else if (split(item,'[').size() == 1){						
       // this is an entry with only the tag specified (without any exceptions)
@@ -271,7 +271,7 @@ FeaturesList txtProc::unfold(std::string conf_string,
 			for (unsigned int j = 0; j < list_of_features.size(); j++){
 				SplitFeatName singlefeat = split(list_of_features[j],'_');
 				if (singlefeat.size() > 1 && singlefeat[1] == tag && 
-            !vecUtil::contains(exceptions, singlefeat[2])){
+            !vec_util::contains(exceptions, singlefeat[2])){
 					out_vector.push_back(j);
 				}
 			}
