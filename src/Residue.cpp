@@ -18,7 +18,7 @@ Residue::Residue(){}
 // adds features (in this order: ptm, domains, motifs)
 void Residue::codon_to_features(){
 	std::string nothing = "AA";
-	std::string feat;
+	std::string feat = "";
 	if (m_codon.size() >= 5){
 		switch (m_codon[4]){	
 			case 'N': feat = "ptm_phosph0";

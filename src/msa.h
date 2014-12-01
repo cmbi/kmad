@@ -12,9 +12,11 @@ namespace msa{
   ///
   /// performs the full multiple sequence alignment, returns aligned sequences
   ///
-  string_sequences run_msa(Sequences, std::string, double, double, 
-                           double, double, int, int, int, int,
-                           ids_list, probs_list);
+  string_sequences run_msa(Sequences sequences, std::string conf_filename, 
+                           double gapPen, double gapExt, 
+                           double endPenalty, double lcr_mod, int domainScore, 
+                           int motifScore, int phosphScore, int codonLength,
+                           ids_list motifs_ids, probs_list motifs_probs);
 }
 
 #endif /* MSA_H */

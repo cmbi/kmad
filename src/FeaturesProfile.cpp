@@ -136,7 +136,7 @@ void FeaturesProfile::getScore(unsigned int position, featuresList& features,
 
 double FeaturesProfile::score_motifs(unsigned int& position, std::string& feat_name){
 	int featuresIndex = findFeaturesIndex(feat_name);
-	double result;
+	double result = 0;
 	if (featuresIndex == -1) result = 0;
 	else result = m_occurences_matrix[featuresIndex][position];	
   return result;
@@ -177,7 +177,7 @@ void FeaturesProfile::expandListOfFeatures(const sequenceList& sequences){
 
 
 double FeaturesProfile::score_domains(unsigned int& position, std::string& dom_name){
-	double result  = 0;
+	double result = 0;
 	for (unsigned int i = 0; i < domain_indexes.size(); i++){
 		int dom_index = domain_indexes[i];
 		if (listOfFeatures[dom_index] == dom_name){
@@ -211,6 +211,7 @@ double FeaturesProfile::score_PTMs(unsigned int& position, std::string& ptm_name
 	}
 	// now go through list of features to find in which rows in profile 
   // are the features that we're gonna score for
+  assert(m_occurences_matrix.size() == listOfFeatures.size());
 	for (unsigned int i = 0; i < listOfFeatures.size(); i++){
 		std::string i_name = listOfFeatures[i];	
 		std::string i_type = i_name;
@@ -251,7 +252,6 @@ double FeaturesProfile::score_USR_features(unsigned int& position,
 			add_tmp = std::get<4>(rule);
 			featuresList decr_features = std::get<7>(rule);
       //go through features that increase the score
-			//for (unsigned int j = 0; j < decr_features.size(); j++){ 
       for (auto &feat: decr_features){
 				double prf_score = m_occurences_matrix[feat][position];
 				if (prf_score != 0){

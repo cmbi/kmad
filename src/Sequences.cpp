@@ -199,7 +199,6 @@ void Sequences::alignPairwise(sequence& alNoLower,
 int Sequences::countAlignments(double identity_cutoff, 
                                identitiesList& identities){
 	int count = 0;
-	//for (unsigned int i = 0; i < identities.size(); i++){
   for (auto &item: identities){
 		if (item > identity_cutoff){
 			count++;
@@ -210,7 +209,6 @@ int Sequences::countAlignments(double identity_cutoff,
 
 
 void Sequences::add_usr_features(rulesTuplesList& feature_rules){
-	//for (unsigned int i = 0; i < feature_rules.size(); i++){
 	for (auto &rule: feature_rules){
 		std::string feat_name = std::string("USR_")
                             + std::get<0>(rule)
