@@ -30,28 +30,29 @@ StringSequences msa::run_msa(Sequences sequences,
   		}
       std::vector<double> identities;
   		//first round of the alignment - all vs 1st
-  		std::vector<std::string> multipleAlignment(sequences.performMSAfirstround(prf, fprf, 
-                                                                                gapPen, 
-                                                                                endPenalty, 
-                                                                                gapExt, 
-                                                                                codonLength, 
-                                                                                identities));
+  		std::vector<std::string> multipleAlignment;
+      multipleAlignment = sequences.PerformMSAfirstRound(prf, fprf, 
+                                                         gapPen, 
+                                                         endPenalty, 
+                                                         gapExt, 
+                                                         codonLength, 
+                                                         identities);
   		StringSequences alignment;
   		int prev_alignments = 0;
   		for (int i = 8; i >= 0; i--){
   			double cutoff = double(i)/10;
-  			sequences.performMSAnextRounds(alignment, prf, fprf, gapPen, 
-                                       endPenalty, gapExt,
-                                       cutoff, codonLength, 
-                                       identities, prev_alignments);
+  			sequences.PerformMSAnextRound(alignment, prf, fprf, gapPen, 
+                                      endPenalty, gapExt,
+                                      cutoff, codonLength, 
+                                      identities, prev_alignments);
   			//prev_alignments - number of alignments performed in the previous round - 
         //to omit this round if the number of aligned sequences is the same as
         //in the previous round
   		}
   		prev_alignments = 0;  // to align (again) all sequences to the profile
-  		sequences.performMSAnextRounds(alignment, prf, fprf, 
-                                     gapPen, endPenalty, gapExt, 0, 
-                                     codonLength, identities, 
-                                     prev_alignments);
+  		sequences.PerformMSAnextRound(alignment, prf, fprf, 
+                                    gapPen, endPenalty, gapExt, 0, 
+                                    codonLength, identities, 
+                                    prev_alignments);
       return alignment;
 }

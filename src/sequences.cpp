@@ -23,8 +23,8 @@ Sequences::Sequences(CodonSeqWithNamesList &s){
 		}
 		m_sequences_aa.push_back(new_seq);
 	}
-	m_seqNr = s.size(); 
-	m_firstSequenceSize = s[0][1].size();
+	m_seq_nr = s.size(); 
+	m_first_sequence_size = s[0][1].size();
 }
 
 
@@ -32,175 +32,161 @@ Sequences::Sequences(){
 }
 
 
-StringSequences Sequences::performMSAfirstround(Profile& outputProfile, 
-                                                FeaturesProfile& outputFeaturesProfile, 
-                                                double penalty, 
-                                                double endPenalty, 
-                                                double extensionPenalty, 
+StringSequences Sequences::PerformMSAfirstRound(Profile& output_profile, 
+                                                FeaturesProfile& output_features_profile, 
+                                                double gap_open_pen, 
+                                                double end_pen, 
+                                                double gap_ext_pen, 
                                                 int codon_length, 
                                                 IdentitiesList& identities){
-	outputProfile = Profile(substitution_matrix::convertToProfileFormat(m_sequences_aa[0])); 
+	output_profile = Profile(substitution_matrix::ConvertToProfileFormat(m_sequences_aa[0])); 
   //working alignment - without lowercase around cut out residues
-	SequenceList alignmentWithoutLowercase;	
+	SequenceList alignment_without_lowercase;	
   //lowercase before and after cut out residues -- final result 
-	SequenceList alignmentWithLowercase;		
-	alignmentWithoutLowercase.push_back(m_sequences_aa[0]);
-	alignmentWithLowercase.push_back(m_sequences_aa[0]);
+	SequenceList alignment_with_lowercase;		
+	alignment_without_lowercase.push_back(m_sequences_aa[0]);
+	alignment_with_lowercase.push_back(m_sequences_aa[0]);
   // identity of the 1st one to itself
   //to build the first profile based only on the first seqeunce
 	identities.push_back(1); 
-	outputFeaturesProfile.ExpandListOfFeatures(m_sequences_aa);
+	output_features_profile.ExpandListOfFeatures(m_sequences_aa);
   //create features profile based on the 1st seq
-	outputFeaturesProfile.CreateProfile(alignmentWithoutLowercase, codon_length); 	
-  add_feature_indexes(outputFeaturesProfile);
+	output_features_profile.CreateProfile(alignment_without_lowercase, codon_length); 	
+  add_feature_indexes(output_features_profile);
   //pairwise alignment without lowercase characters
-	ResidueSequence alNoLower; 
+	ResidueSequence al_without_lower; 
   //pairwise alignment with lowercase characters where chars were removed
-	ResidueSequence alWithLower; 
+	ResidueSequence al_with_lower; 
   for (auto &seqI: m_sequences_aa){
-		alignPairwise(alNoLower, alWithLower, seqI, outputProfile, 
-                  outputFeaturesProfile, penalty, endPenalty, extensionPenalty, 
+		AlignPairwise(al_without_lower, al_with_lower, seqI, output_profile, 
+                  output_features_profile, gap_open_pen, end_pen, gap_ext_pen, 
                   codon_length);
-		double identity = calcIdentity(alNoLower);
+		double identity = CalcIdentity(al_without_lower);
 		identities.push_back(identity);
-    /*
-		if (identity > 0.9){
-			alignmentWithoutLowercase.push_back(alNoLower);
-			alignmentWithLowercase.push_back(alWithLower);
-		}
-    */
 	}
-  //create features profile based on the 1st seq
-  /*
-	outputFeaturesProfile.createProfile(alignmentWithoutLowercase, 
-                                      identities, 
-                                      codon_length);
-	outputProfile.processProfile(alignmentWithoutLowercase,
-                               identities);
-  */
-	return vec_util::flatten(alignmentWithLowercase);		
+	return vec_util::flatten(alignment_with_lowercase);		
 }
 
 
-void Sequences::performMSAnextRounds(StringSequences& prevAlignment, 
-                                     Profile& outputProfile,
-                                     FeaturesProfile& outputFeaturesProfile, 
-                                     double penalty, 
-                                     double endPenalty, 
-                                     double extensionPenalty,
-                                     double identityCutoff,
-                                     int codon_length, 
-                                     IdentitiesList& identities, 
-                                     int& prev_alignments){
-	int next_alignments = countAlignments(identityCutoff, identities);
+void Sequences::PerformMSAnextRound(StringSequences& prev_alignment, 
+                                    Profile& output_profile,
+                                    FeaturesProfile& output_features_profile, 
+                                    double gap_open_pen, 
+                                    double end_pen, 
+                                    double gap_ext_pen,
+                                    double identity_cutoff,
+                                    int codon_length, 
+                                    IdentitiesList& identities, 
+                                    int& prev_alignments){
+	int next_alignments = CountAlignments(identity_cutoff, identities);
 	if (next_alignments > prev_alignments){
     //working alignment - without lowercase around cut out residues
     //would make latter aligning more complicated
-		SequenceList alignmentWithoutLowercase;	
+		SequenceList alignment_without_lowercase;	
     //lowercase before and after cut out residues -- final result 
-		SequenceList alignmentWithLowercase;		
-		alignmentWithoutLowercase.push_back(m_sequences_aa[0]);
-		alignmentWithLowercase.push_back(m_sequences_aa[0]);
-    // tmp pairwise alignment (and so is alWithLower)
-		ResidueSequence alNoLower; 
-		ResidueSequence alWithLower;
-		for (int i = 1; i < m_seqNr; i++){
-			if (identities[i] > identityCutoff){
+		SequenceList alignment_with_lowercase;		
+		alignment_without_lowercase.push_back(m_sequences_aa[0]);
+		alignment_with_lowercase.push_back(m_sequences_aa[0]);
+    // tmp pairwise alignment (and so is al_with_lower)
+		ResidueSequence al_without_lower; 
+		ResidueSequence al_with_lower;
+		for (int i = 1; i < m_seq_nr; i++){
+			if (identities[i] > identity_cutoff){
         // NW alignment of the ith seq against the profile
-				alignPairwise(alNoLower, alWithLower, m_sequences_aa[i], outputProfile,
-                      outputFeaturesProfile, penalty, endPenalty,
-                      extensionPenalty, codon_length); 
-				alignmentWithoutLowercase.push_back(alNoLower);
-				alignmentWithLowercase.push_back(alWithLower);
+				AlignPairwise(al_without_lower, al_with_lower, m_sequences_aa[i], output_profile,
+                      output_features_profile, gap_open_pen, end_pen,
+                      gap_ext_pen, codon_length); 
+				alignment_without_lowercase.push_back(al_without_lower);
+				alignment_with_lowercase.push_back(al_with_lower);
 			}
 		}
     //create features profile based on the 1st seq
-		outputFeaturesProfile.CreateProfile(alignmentWithoutLowercase, 
-                                        codon_length);
-		outputProfile.ProcessProfile(alignmentWithoutLowercase);
-		prevAlignment = vec_util::flatten(alignmentWithLowercase);
+		output_features_profile.CreateProfile(alignment_without_lowercase, 
+                                          codon_length);
+		output_profile.ProcessProfile(alignment_without_lowercase);
+		prev_alignment = vec_util::flatten(alignment_with_lowercase);
     //update number of performed alignments
 		prev_alignments = next_alignments; 
 	}
 }
 
 
-double Sequences::calcIdentity(const ResidueSequence& alignedSequence){
-	double identicalResidues = 0;
-	for (unsigned int i = 0; i < alignedSequence.size(); i++){
-		if (alignedSequence[i].get_aa() == m_sequences_aa[0][i].get_aa()){
-			identicalResidues++;
+double Sequences::CalcIdentity(const ResidueSequence& aligned_sequence){
+	double identical_residues = 0;
+	for (unsigned int i = 0; i < aligned_sequence.size(); i++){
+		if (aligned_sequence[i].get_aa() == m_sequences_aa[0][i].get_aa()){
+			identical_residues++;
 		}
 	}
-	return identicalResidues/double(m_firstSequenceSize);
+	return identical_residues/double(m_first_sequence_size);
 }
 
 
-void Sequences::removeGaps(ResidueSequence& alignmentWithLowercase, 
-                           ResidueSequence& alignmentWithoutLowercase, 
+void Sequences::RemoveGaps(ResidueSequence& alignment_with_lowercase, 
+                           ResidueSequence& alignment_without_lowercase, 
                            SequenceList& alignment){
 	ResidueSequence s1 = alignment[0];
 	ResidueSequence s2 = alignment[1];
-	ResidueSequence newS2;
-	ResidueSequence newS2lower;
+	ResidueSequence new_s2;
+	ResidueSequence new_s2_lower;
 	char gap = '-';
-	bool lowerFlag = false;
+	bool lower_flag = false;
 	for (unsigned int i = 0; i < alignment[0].size(); i++){
 		char s1char = s1[i].get_aa();
 		if (s1char == gap){
-			if (newS2lower.size() > 0){
+			if (new_s2_lower.size() > 0){
         //change previous character to lowercase
-				newS2lower[newS2lower.size()-1].change_to_lowercase(); 
+				new_s2_lower[new_s2_lower.size()-1].change_to_lowercase(); 
 			}
       // flag to true so that the next character is also lowercase
-			lowerFlag = true; 
+			lower_flag = true; 
 		}
 		else{
-			if (lowerFlag){   //lowercase char
-				Residue newRes = s2[i];
-				newRes.change_to_lowercase();
+			if (lower_flag){   //lowercase char
+				Residue new_residue = s2[i];
+				new_residue.change_to_lowercase();
         //add lowercase char to the alignment with lowercases
-				newS2lower.push_back(newRes); 
+				new_s2_lower.push_back(new_residue); 
         //add uppercase alignment to the alignment without lowercases
-				newS2.push_back(s2[i]);      	
-				lowerFlag = false;
+				new_s2.push_back(s2[i]);      	
+				lower_flag = false;
 			}
 			else{ 		
         //uppercase char
         // adds the same uppercase char to both alignments (with lowercases and 
         // without lowercases)
-				newS2lower.push_back(s2[i]); 
-				newS2.push_back(s2[i]);
+				new_s2_lower.push_back(s2[i]); 
+				new_s2.push_back(s2[i]);
 			}
 		}
 	}
-	alignmentWithLowercase = newS2lower;
-	alignmentWithoutLowercase = newS2;
+	alignment_with_lowercase = new_s2_lower;
+	alignment_without_lowercase = new_s2;
 }
 
 
-void Sequences::alignPairwise(ResidueSequence& alNoLower, 
-                              ResidueSequence& alWithLower, 
+void Sequences::AlignPairwise(ResidueSequence& al_without_lower, 
+                              ResidueSequence& al_with_lower, 
                               ResidueSequence& seq2, 
                               Profile& prf, 
-                              FeaturesProfile& featPrf, 
-                              double penalty, double endPenalty, 
-                              double extensionPenalty, 
+                              FeaturesProfile& feat_prf, 
+                              double gap_open_pen, double end_pen, 
+                              double gap_ext_pen, 
                               int codon_length){
-	int profileLength = prf.get_matrix()[0].size();
+	int profile_length = prf.get_matrix()[0].size();
 	SequenceList alignment;
-	ScoringMatrix scores(profileLength, seq2.size(), penalty, 
-                       endPenalty, extensionPenalty);
-	scores.CalculateScores(seq2, prf, featPrf, 
+	ScoringMatrix scores(profile_length, seq2.size(), gap_open_pen, 
+                       end_pen, gap_ext_pen);
+	scores.CalculateScores(seq2, prf, feat_prf, 
                          codon_length);
-	scores.PerformNWAlignment(&alignment, seq2, prf, featPrf, 
+	scores.PerformNWAlignment(&alignment, seq2, prf, feat_prf, 
                             codon_length);
 
-	removeGaps(alWithLower,alNoLower,alignment); 
+	RemoveGaps(al_with_lower, al_without_lower, alignment); 
 }
 
 
-int Sequences::countAlignments(double identity_cutoff, 
+int Sequences::CountAlignments(double identity_cutoff, 
                                IdentitiesList& identities){
 	int count = 0;
   for (auto &item: identities){

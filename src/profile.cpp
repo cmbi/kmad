@@ -36,7 +36,7 @@ void Profile::ProcessProfile(SequenceList& alignment){
 		for(unsigned int j = 0; j < m_prf_matrix.size(); j++){
 			if (m_prf_matrix[j][i] != 0){
         SbstMatColumn column_int; 
-        substitution_matrix::getColumn(j, column_int);
+        substitution_matrix::get_column(j, column_int);
 				ProfileMatrixColumn column_j = vec_util::convertIntVectorToDoubleVector(column_int);
 				vec_util::multiplyVectorByAScalar(column_j, m_prf_matrix[j][i]);
 				columns_to_add.push_back(column_j);
@@ -74,7 +74,7 @@ void Profile::CreateProfile(SequenceList& alignment){
 					}
 				}
 				else{	
-					int aacid_index = substitution_matrix::findAminoAcidsIndex(seq_char);
+					int aacid_index = substitution_matrix::FindAminoAcidsIndex(seq_char);
 					profile_column[aacid_index] += 1;				
 				}
 				non_gaps++;
@@ -104,7 +104,7 @@ double Profile::get_element(int position, char aacid){
 		}
 	}
 	else { // it's not any of the {B,Z,X} -> single amino acid
-		int aacid_index = substitution_matrix::findAminoAcidsIndex(aacid);
+		int aacid_index = substitution_matrix::FindAminoAcidsIndex(aacid);
 		result = m_prf_matrix[aacid_index][position];
 	}
 	return result;
