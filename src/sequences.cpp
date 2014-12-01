@@ -117,7 +117,7 @@ void Sequences::performMSAnextRounds(StringSequences& prevAlignment,
     //create features profile based on the 1st seq
 		outputFeaturesProfile.CreateProfile(alignmentWithoutLowercase, 
                                         codon_length);
-		outputProfile.processProfile(alignmentWithoutLowercase);
+		outputProfile.ProcessProfile(alignmentWithoutLowercase);
 		prevAlignment = vecUtil::flatten(alignmentWithLowercase);
     //update number of performed alignments
 		prev_alignments = next_alignments; 
@@ -187,7 +187,7 @@ void Sequences::alignPairwise(ResidueSequence& alNoLower,
                               double penalty, double endPenalty, 
                               double extensionPenalty, 
                               int codon_length){
-	int profileLength = prf.getMatrix()[0].size();
+	int profileLength = prf.get_matrix()[0].size();
 	SequenceList alignment;
 	ScoringMatrix scores(profileLength, seq2.size(), penalty, 
                        endPenalty, extensionPenalty);

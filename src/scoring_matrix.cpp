@@ -58,7 +58,7 @@ void ScoringMatrix::calculateScores(ResidueSequence s2, Profile& prf,
 	for (unsigned int i = 1; i < m_matrixV.size();i++){
 		for (unsigned int j = 1; j < m_matrixV[i].size(); j++){
 			///V
-			double prfScore = prf.getElement(i-1, s2[j].getAA());
+			double prfScore = prf.get_element(i-1, s2[j].getAA());
 			double add_score = 0;
       FeaturesList features = s2[j].getFeatIndexes();
 			featPrf.get_score(i-1, features, add_score);
@@ -131,7 +131,7 @@ void ScoringMatrix::nwAlignment(SequenceList *result,
                                 int codon_length){
   //creating polyA pseudoSequence representing the profile, 
   //to know later where are the gaps in the profile
-	ResidueSequence s1 = misc::pseudoResidueSequence(prf.getMatrix()[0].size()+1, 
+	ResidueSequence s1 = misc::pseudoResidueSequence(prf.get_matrix()[0].size()+1, 
                                                    codon_length); 
 	Residue gap_code = misc::gapRes(codon_length);
 	s2 = vecUtil::push_front(s2,gap_code);
@@ -170,7 +170,7 @@ void ScoringMatrix::nwAlignment(SequenceList *result,
 		if (i > 0 && j > 0 && currentMatrix == "V"){	//match/mismatch
 			newChar1 = s1[i];
 			newChar2 = s2[j];
-			double prfScore = prf.getElement(i-1,s2[j].getAA());
+			double prfScore = prf.get_element(i-1,s2[j].getAA());
 			double add_score = 0;
       //std::vector<std::string> features = s2[j].getFeatures();
       FeaturesList features = s2[j].getFeatIndexes();

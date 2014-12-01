@@ -136,7 +136,7 @@ double FeaturesProfile::ScoreMotifs(unsigned int& position, std::string& feat_na
 	int features_index = FindFeaturesIndex(feat_name);
 	double result = 0;
 	if (features_index == -1) result = 0;
-	else result = m_occurences_matrix[featuresIndex][position];	
+	else result = m_occurences_matrix[features_index][position];	
   return result;
 }
 

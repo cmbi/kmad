@@ -20,22 +20,22 @@ public:
   /// builds a profile from the matrix of occurences and the substitution 
   /// matrix with appropriate weights
   ///
-	void processProfile(SequenceList& alignment);
+	void ProcessProfile(SequenceList& alignment);
   ///
   /// returns the profile matrix
   ///
-	ProfileMatrix getMatrix() const;
+	ProfileMatrix get_matrix() const;
   ///
   /// returns a score for amino acid aAcid on a certain position
   ///
-	double getElement(int position, char aAcid);
+	double get_element(int position, char aacid);
   ///
   /// returns a score for amino acid with index aAcidInt on a certain position
   ///
-	double getElement(int aAcidInt, int position);
+	double get_element(int aacid_index, int position);
 private:
-	void createProfile(SequenceList& alignment);
-	ProfileMatrix m_prfMatrix;
+	void CreateProfile(SequenceList& alignment);
+	ProfileMatrix m_prf_matrix;
 };
 
 #endif /* PROFILE_H */

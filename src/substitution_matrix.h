@@ -30,7 +30,7 @@ namespace substitutionMatrix{
   ///
   /// returns index of the given amino acid
   ///
-	int findAminoAcidsNo(char aa);
+	int findAminoAcidsIndex(char aa);
 }
 
 #endif /* SBSTMARTIX_H */

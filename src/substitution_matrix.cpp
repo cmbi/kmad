@@ -101,7 +101,7 @@ ProfileMatrix substitutionMatrix::convertToProfileFormat(ResidueSequence& seq){
 			result[i] = vecUtil::average(simScores);
 		}
 		else{
-			int aAcidInt = findAminoAcidsNo(seq[i].getAA());
+			int aAcidInt = findAminoAcidsIndex(seq[i].getAA());
       SbstMatColumn sbst_column_int = simScores[aAcidInt];
 			result[i] = vecUtil::convertIntVectorToDoubleVector(sbst_column_int);//adds a column to the result(converted from int to double)
 		}
@@ -122,7 +122,7 @@ void substitutionMatrix::getColumn(unsigned int& columnNo,
 }
 
 
-int substitutionMatrix::findAminoAcidsNo(char aa){
+int substitutionMatrix::findAminoAcidsIndex(char aa){
 	int aAcidint = -1;
 	for (unsigned int i = 0; i < alphabet.size();i++){
 		if (aa == alphabet[i]){
