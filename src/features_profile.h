@@ -17,7 +17,7 @@ public:
   /// @param m_ids list of motif ids
   /// @param m_probs list of motif probabilities
   ///
-  FeaturesProfile(int dom, int phosph, int motif, int lcr, 
+  FeaturesProfile(int dom, int phosph, int motif, 
                   IDsList m_ids, ProbsList m_probs);
   ///
   /// extracts the score for features on a particular position from profile

@@ -16,7 +16,7 @@
 namespace po = boost::program_options;
 int main(int argc, char *argv[]) {
     int codon_length, phosph_score, domain_score, motif_score = 0;
-    double gap_ext_pen, gap_open_pen, end_pen, lcr_mod = 0;
+    double gap_ext_pen, gap_open_pen, end_pen = 0;
     bool out_encoded = false;
     std::string filename, output_prefix, conf_file;
     po::options_description desc("Allowed options");
@@ -35,9 +35,6 @@ int main(int argc, char *argv[]) {
                                   "score for aligning phosphorylated residues")
       ("domain,d", po::value<int>(&domain_score)->default_value(0),
                                   "score for aligning domains")
-      ("lcr,l", po::value<double>(&lcr_mod)->default_value(1),
-                                  "gap penalty modifier inside a low \
-                                   complexity region")
       ("motif,m", po::value<int>(&motif_score)->default_value(0),
                                  "probability multiplier for motifs")
       ("out-encoded", po::value<bool>(&out_encoded)->implicit_value(true)
@@ -53,12 +50,27 @@ int main(int argc, char *argv[]) {
           std::cout << desc << std::endl;
           return 1;
     }
-    if (vm.count("input") && vm.count("gap_penalty") 
-        && vm.count("output")
-        && misc::CheckParameters(codon_length, phosph_score, domain_score,
-                                 motif_score, gap_ext_pen, gap_open_pen, 
-                                 end_pen)) {
+    if (vm.count("input") && vm.count("gap_penalty") && vm.count("output")) {
       time_t start = clock();
+      // Parameter check
+      if (codon_length < 1 || codon_length > 10) {
+        std::cout << "Codon length ('-c' flag) should be between 1 and 10"
+                  << std::endl;
+        std::exit(EXIT_FAILURE);
+      } else if (gap_open_pen >= 0 || gap_ext_pen >= 0) {
+        std::cout << "Gap opening penalty (-g) and gap extension penalty (-e) \
+                      need to be lower than 0" << std::endl;
+        std::exit(EXIT_FAILURE);
+      } else if (end_pen > 0) {
+        std::cout << "End gap penalty value (-n) cannot be a positive number"
+                  << std::endl;
+        std::exit(EXIT_FAILURE);
+      } else if (phosph_score < 0 || domain_score < 0 || motif_score < 0) {
+        std::cout << "Scores for aligning features cannot be negative"
+                  << std::endl;
+        std::exit(EXIT_FAILURE);
+      }
+      //
       IDsList motifs_ids;
       ProbsList motifs_probs;
       Sequences sequences;
@@ -74,7 +86,7 @@ int main(int argc, char *argv[]) {
       StringSequences seq_names = sequences.get_names();
       StringSequences alignment = msa::run_msa(sequences, conf_file,
                                                gap_open_pen, gap_ext_pen,
-                                               end_pen, lcr_mod, 
+                                               end_pen,
                                                domain_score,
                                                motif_score, 
                                                phosph_score,

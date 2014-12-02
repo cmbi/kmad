@@ -18,11 +18,6 @@ namespace misc{
   ///
   ResidueSequence PseudoResidueSequence(int seq_length, int codon_length);
   ///
-  /// looks for mistakes in the given command line arguments
-  ///
-  bool CheckParameters(int codon_length, int phosph, int domain, int motif, 
-                       double gep, double gop, double end_penalty);
-  ///
   /// returns True if the file 'name' exists
   ///
   bool CheckIfFileExists(const std::string* name);

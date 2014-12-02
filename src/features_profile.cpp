@@ -35,7 +35,7 @@ namespace {
 }
 
 
-FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif, int lcr, 
+FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif,
                                  IDsList m_ids, 
                                  ProbsList m_probs)
 : m_domain_score(dom),
