@@ -73,18 +73,6 @@ void txtproc::writeAlignmentWithoutCodeToFile(StringSequences& sequences,
 }
 
 
-std::string txtproc::charToString(char mychar) {
-  return std::string(1, mychar);
-}
-
-
-std::string txtproc::charToString(char mychar1, char mychar2) {
-  std::string newstring = std::string(1, mychar1);
-  newstring.push_back(mychar2);
-  return newstring;
-}
-
-
 std::istream& txtproc::safeGetline(std::istream& is, std::string& t) {
   t.clear();
   std::streambuf* sb = is.rdbuf();

@@ -12,14 +12,6 @@ class FeaturesProfile;
 class Sequences;
 namespace txtproc{
   ///
-  /// converts a char to a string
-  ///
-  std::string charToString(char mychar);
-  ///
-  /// conactenates two chars to a string
-  ///
-  std::string charToString(char mychar1, char mychar2);
-  ///
   /// writes a line of text from the istream to string t 
   /// (removes newline characters)
   ///
