@@ -21,7 +21,7 @@ typedef std::vector<ResidueSequence> SequenceList;
 typedef std::tuple<std::string, std::string, int, int, int, double, double,
                    double, double, std::string, std::string> RulesTuple;
 typedef std::vector<RulesTuple> RuleTuplesList;
-typedef	std::tuple<std::string, int, double, double, double,
+typedef  std::tuple<std::string, int, double, double, double,
                    double, std::vector<int>,
                    std::vector<int> > ProcessedRules;
 typedef std::vector<ProcessedRules> PrcRulesList;

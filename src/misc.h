@@ -11,7 +11,7 @@ namespace misc{
   ///
   /// creates a gap Residue object
   ///
-	Residue CreateGapResidue(int codon_length);
+  Residue CreateGapResidue(int codon_length);
   ///
   /// creates a polyA sequence of length seqLength, where each resdue is coded 
   /// by a codon of length codon_length
@@ -20,7 +20,7 @@ namespace misc{
   ///
   /// looks for mistakes in the given command line arguments
   ///
-	bool CheckParameters(int codon_length, int phosph, int domain, int motif, 
+  bool CheckParameters(int codon_length, int phosph, int domain, int motif, 
                        double gep, double gop, double end_penalty);
   ///
   /// returns True if the file 'name' exists
