@@ -24,25 +24,6 @@ ResidueSequence misc::PseudoResidueSequence(int seq_length, int codon_length) {
 }
 
 
-bool misc::CheckParameters(int codon_length, int phosph, int domain, int motif,
-                           double gep, double gop, double end_pen) {
-  bool alright = true;
-  if (codon_length < 1 || codon_length > 10) {
-    alright = false;
-    std::cout << "please change the codon's length to more than \
-                 0 and less than 11" << std::endl;
-  } else if (gep >= 0 || gop >= 0 || end_pen > 0) {
-    alright = false;
-    std::cout << "you set gap penalty value(s) to positive (or zero)" 
-              << std::endl;
-  } else if (phosph < 0 || domain < 0 || motif < 0) {
-    alright = false;
-    std::cout << "you're penalizing alignment of features";
-  }
-  return alright;
-}
-
-
 bool misc::CheckIfFileExists(const std::string* name) {
   const char *cstr = name->c_str();
   std::ifstream infile(cstr);

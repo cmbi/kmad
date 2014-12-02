@@ -14,7 +14,6 @@ StringSequences msa::run_msa(Sequences sequences,
                               double gap_open_pen,
                               double gap_ext_pen,
                               double end_pen,
-                              double lcr_mod,
                               int domain_score, 
                               int motif_score,
                               int phosph_score,
@@ -23,7 +22,7 @@ StringSequences msa::run_msa(Sequences sequences,
                               ProbsList motifs_probs) {
 
       Profile prf;
-      FeaturesProfile fprf(domain_score, phosph_score, motif_score, lcr_mod, 
+      FeaturesProfile fprf(domain_score, phosph_score, motif_score,
                            motifs_ids, motifs_probs);
       if (!conf_filename.empty()) {
         txtproc::process_conf_file(conf_filename, fprf, sequences);
