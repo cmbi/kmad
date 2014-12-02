@@ -177,7 +177,7 @@ void Sequences::AlignPairwise(ResidueSequence& al_without_lower,
                        end_pen, gap_ext_pen);
   scores.CalculateScores(seq2, prf, feat_prf, 
                          codon_length);
-  scores.PerformNWAlignment(&alignment, seq2, prf, feat_prf, 
+  scores.PerformNWAlignment(alignment, seq2, prf, feat_prf, 
                             codon_length);
 
   RemoveGaps(al_with_lower, al_without_lower, alignment); 

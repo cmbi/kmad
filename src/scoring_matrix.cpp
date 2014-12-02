@@ -17,7 +17,7 @@
 
 ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen, 
                              double end_pen, double gap_ext_pen)
-:  m_i_length(s1_size),
+: m_i_length(s1_size),
   m_j_length(s2_size),  
   m_gap_opening(pen),
   m_gap_extension(gap_ext_pen),
@@ -27,12 +27,12 @@ ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
 {
   //creates a row for the scoring matrices of length m_j_length 
   //(length of the jth sequence + 1)
-  ScoringMatrixRow row(m_j_length+1,0); 
+  ScoringMatrixRow row(m_j_length + 1,0); 
   //creates a vector of vectors 'row', of length m_i_length+1 
   //(length of the ith sequence +1)
-  m_matrix_v.assign(m_i_length+1, row); 
-  m_matrix_g.assign(m_i_length+1, row);
-  m_matrix_h.assign(m_i_length+1, row);
+  m_matrix_v.assign(m_i_length + 1, row); 
+  m_matrix_g.assign(m_i_length + 1, row);
+  m_matrix_h.assign(m_i_length + 1, row);
 }
 
 
@@ -47,15 +47,15 @@ void ScoringMatrix::CalculateScores(ResidueSequence s2, Profile& prf,
   for (unsigned int i = 1; i < m_matrix_v.size(); i++) {
     m_matrix_v[i][0] = -10000000; //=== infinity
     m_matrix_h[i][0] = -10000000;
-    m_matrix_g[i][0] = i*m_end_pen;  
+    m_matrix_g[i][0] = i * m_end_pen;  
   }
   for (unsigned int i = 1; i < m_matrix_v[0].size(); i++) {
     m_matrix_v[0][i] = -10000000;
-    m_matrix_h[0][i] = i*m_end_pen;  
+    m_matrix_h[0][i] = i * m_end_pen;  
     m_matrix_g[0][i] = -10000000;
   }
-  double score1,score2,score3 = 0;
-  for (unsigned int i = 1; i < m_matrix_v.size();i++) {
+  double score1, score2, score3 = 0;
+  for (unsigned int i = 1; i < m_matrix_v.size(); i++) {
     for (unsigned int j = 1; j < m_matrix_v[i].size(); j++) {
       ///V
       double prf_score = prf.get_element(i-1, s2[j].get_aa());
@@ -95,7 +95,7 @@ ValueCoords ScoringMatrix::FindBestScore() {
   for (int i = 0; i < n ; i++) {    //finds max score in the last row
     // add end gap penalties to the score to calc the 'real' score 
     // of the alignment
-    real_val = m_matrix_v[i][m]+m_end_pen*(m_matrix_v.size()-i); 
+    real_val = m_matrix_v[i][m] + m_end_pen * (m_matrix_v.size() - i); 
     if (real_val > max) {
       max_i_val = real_val;
       max = real_val;
@@ -103,7 +103,7 @@ ValueCoords ScoringMatrix::FindBestScore() {
     } 
   }
   for (int i = 0; i < m; i++) {    //finds max score in the last column  
-    real_val = m_matrix_v[n][i]+m_end_pen*(m_matrix_v[0].size()-i); 
+    real_val = m_matrix_v[n][i] + m_end_pen * (m_matrix_v[0].size() - i); 
     // add end gap penalties to the score, to calc the 'real' score 
     // of the alignment
     if (real_val > max) {
@@ -124,7 +124,7 @@ ValueCoords ScoringMatrix::FindBestScore() {
 }
 
 
-void ScoringMatrix::PerformNWAlignment(SequenceList *result,
+void ScoringMatrix::PerformNWAlignment(SequenceList& result,
                                        ResidueSequence s2, Profile& prf, 
                                        FeaturesProfile& feat_prf,
                                       int codon_length) {
@@ -207,5 +207,5 @@ void ScoringMatrix::PerformNWAlignment(SequenceList *result,
   std::reverse(new_s2.begin(),new_s2.end());
   ali.push_back(new_s1);
   ali.push_back(new_s2);
-  *result = ali;
+  result = ali;
 }

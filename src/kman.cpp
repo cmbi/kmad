@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
                                           "output file prefix")
       ("gap_penalty,g", po::value<double>(&gap_open_pen)->default_value(-5),
                                           "gap opening penalty")
-      ("gap_extension,e",po::value<double>(&gap_ext_pen)->default_value(-1.),
+      ("gap_extension,e", po::value<double>(&gap_ext_pen)->default_value(-1.),
                                            "gap extension penalty")
       ("codon_length,c", po::value<int>(&codon_length)->implicit_value(7)
                                         ->default_value(1),"codon length")

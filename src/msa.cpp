@@ -40,7 +40,7 @@ StringSequences msa::run_msa(Sequences sequences,
       StringSequences alignment;
       int prev_alignments = 0;
       for (int i = 8; i >= 0; i--) {
-        double cutoff = double(i)/10;
+        double cutoff = double(i) / 10;
         sequences.PerformMSAnextRound(alignment, prf, fprf, gap_open_pen, 
                                       end_pen, gap_ext_pen,
                                       cutoff, codon_length, 

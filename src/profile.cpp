@@ -63,15 +63,15 @@ void Profile::CreateProfile(SequenceList& alignment) {
       if (seq_char != '-') {
         //either D or N, so add half a point to both
         if (seq_char == 'B') {     
-          profile_column[2]+=0.5;
-          profile_column[3]+=0.5;
+          profile_column[2] += 0.5;
+          profile_column[3] += 0.5;
         } else if (seq_char == 'Z') {   
           //either D or N, so add half a point to both
-          profile_column[6]+=0.5;
-          profile_column[7]+=0.5;
+          profile_column[6] += 0.5;
+          profile_column[7] += 0.5;
         } else if (seq_char == 'X') {
-          for (unsigned int k = 0; k < profile_column.size();k++) {
-            profile_column[k]+=0.05;
+          for (unsigned int k = 0; k < profile_column.size(); k++) {
+            profile_column[k] += 0.05;
           }
         } else {  
           int aacid_index = substitution_matrix::FindAminoAcidsIndex(seq_char);
@@ -91,17 +91,17 @@ void Profile::CreateProfile(SequenceList& alignment) {
 
 double Profile::get_element(int position, char aacid) {
   double result;
-  if (aacid=='B') { 
+  if (aacid == 'B') { 
     // take half the score for asparagine and half the score for aspartate
-    result = 0.5*m_prf_matrix[2][position]+ 0.5*m_prf_matrix[3][position];
-  } else if (aacid=='Z') { 
+    result = 0.5 * m_prf_matrix[2][position] + 0.5 * m_prf_matrix[3][position];
+  } else if (aacid == 'Z') { 
     // take half the score for glutamine and half the score for glutamate
-    result = 0.5*m_prf_matrix[6][position]+ 0.5*m_prf_matrix[7][position];
-  } else if (aacid=='X') { 
+    result = 0.5 * m_prf_matrix[6][position] + 0.5 * m_prf_matrix[7][position];
+  } else if (aacid == 'X') { 
     // take average score from scores for all residues
     result = 0;
     for (unsigned int i = 0; i < m_prf_matrix.size(); i++) {
-      result += 0.05*m_prf_matrix[i][position];
+      result += 0.05 * m_prf_matrix[i][position];
     }
   } else { 
     // it's not any of the {B,Z,X} -> single amino acid

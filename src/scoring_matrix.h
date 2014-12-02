@@ -35,7 +35,7 @@ public:
   ///
   /// traces back the alignment path in the scoring matrices
   ///
-  void PerformNWAlignment(SequenceList* result, ResidueSequence s2, 
+  void PerformNWAlignment(SequenceList& result, ResidueSequence s2, 
                           Profile& prf, FeaturesProfile& feat_prf, 
                           int codon_length);
 private:

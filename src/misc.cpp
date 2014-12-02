@@ -9,7 +9,7 @@
 
 
 Residue misc::CreateGapResidue(int codon_length) {
-  std::string single_codon(codon_length,'A');
+  std::string single_codon(codon_length, 'A');
   single_codon[0] = '-';
   Residue res(single_codon);
   return res;
