@@ -58,8 +58,8 @@ namespace {
 
 
 int substitution_matrix::get_element(char char1, char char2) {
-  int index1=0;
-  int index2=0;
+  int index1 = 0;
+  int index2 = 0;
   for (unsigned int i = 0; i < Alphabet.size(); i++) {
     if (Alphabet[i] == char1) {
       index1 = i;
@@ -72,7 +72,8 @@ int substitution_matrix::get_element(char char1, char char2) {
 }
 
 
-ProfileMatrix substitution_matrix::ConvertToProfileFormat(ResidueSequence& seq) {
+ProfileMatrix substitution_matrix::ConvertToProfileFormat(
+    ResidueSequence& seq) {
   ProfileMatrix result(seq.size());
   SbstMatColumnsList new_sbst_row;
   for (unsigned int i = 0; i < result.size(); i++) {
@@ -99,7 +100,7 @@ ProfileMatrix substitution_matrix::ConvertToProfileFormat(ResidueSequence& seq) 
 }
 
 
-int substitution_matrix::get_element(int i,int j) {
+int substitution_matrix::get_element(int i, int j) {
   return SimScores[i][j];
 }
 
@@ -112,7 +113,7 @@ void substitution_matrix::get_column(unsigned int& column_no,
 
 int substitution_matrix::FindAminoAcidsIndex(char aa) {
   int aacid_index = -1;
-  for (unsigned int i = 0; i < Alphabet.size();i++) {
+  for (unsigned int i = 0; i < Alphabet.size(); i++) {
     if (aa == Alphabet[i]) {
       aacid_index = i;
       break;

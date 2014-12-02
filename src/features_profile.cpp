@@ -121,7 +121,7 @@ double FeaturesProfile::GetMotifsProb(std::string& m_id) {
 
 void FeaturesProfile::get_score(unsigned int position, FeaturesList& features, 
                                 double& add_score) {
-  for (auto &feat: features) {
+  for (auto &feat : features) {
        add_score += m_prf_matrix[feat][position];
   }
 }
@@ -250,13 +250,13 @@ double FeaturesProfile::ScoreUsrFeatures(unsigned int& position,
                                          std::string& feat_name) {
   //first find tuple(s) with rules for this feature
   double result = 0;
-  for (auto &rule: m_rules) {
+  for (auto &rule : m_rules) {
     if (std::get<0>(rule) == feat_name) {
       double add_tmp = std::get<2>(rule);
       //positions of increasing features
       FeaturesList incr_features = std::get<6>(rule);  
       //go through features that increase the score
-      for (auto &feat: incr_features) {
+      for (auto &feat : incr_features) {
         double prf_score = m_occurences_matrix[feat][position];
         if (prf_score != 0) {
            result += add_tmp*prf_score;
@@ -266,7 +266,7 @@ double FeaturesProfile::ScoreUsrFeatures(unsigned int& position,
       add_tmp = std::get<4>(rule);
       FeaturesList decr_features = std::get<7>(rule);
       //go through features that increase the score
-      for (auto &feat: decr_features) {
+      for (auto &feat : decr_features) {
         double prf_score = m_occurences_matrix[feat][position];
         if (prf_score != 0) {
           result -= add_tmp*prf_score;
@@ -293,7 +293,7 @@ double FeaturesProfile::GetModifier(std::string& feat_name) {
 
 
 void FeaturesProfile::set_rules(RuleTuplesList& new_rules) {
-  for (auto &rule: new_rules) {
+  for (auto &rule : new_rules) {
     FeaturesList incr_feat = txtproc::unfold(std::get<9>(rule), 
                                              list_of_features);
     FeaturesList red_feat = txtproc::unfold(std::get<10>(rule), 
@@ -320,7 +320,7 @@ void FeaturesProfile::set_rules(RuleTuplesList& new_rules) {
 
 
 void FeaturesProfile::add_usr_features(RuleTuplesList& new_rules) {
-  for (auto &rule: new_rules) {
+  for (auto &rule : new_rules) {
     std::string feature_i = std::string("USR_") + std::get<0>(rule) \
                             + std::string("_") + std::get<1>(rule);
     if (!vec_util::CheckIfContains(list_of_features, feature_i)) {

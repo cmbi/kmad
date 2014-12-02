@@ -20,20 +20,22 @@ typedef std::vector<std::string> InputLine;
 typedef std::vector<std::string> FeatDescriptor;
 typedef std::vector<std::string> SplitFeatName;
 namespace {
-  static const AlphabetVec AcceptedCharacters = { 'a','b','c','d','e','f','g',
-                                                   'h','i','j','k','l','m','n',
-                                                   'o','p','q','r','s','t','u',
-                                                   'v','w','x','y','z','A','B',
-                                                   'C','D','E','F','G','H','I',
-                                                   'J','K','L','M','N','O','P',
-                                                   'Q','R','S','T','U','V','W',
-                                                   'X','Y','Z','0','1','2','3',
-                                                   '4','5','6','7','8','9'};
+  static const AlphabetVec AcceptedCharacters = { 'a', 'b', 'c', 'd', 'e', 'f',
+                                                  'g', 'h', 'i', 'j', 'k', 'l',
+                                                  'm', 'n', 'o', 'p', 'q', 'r', 
+                                                  's', 't', 'u', 'v', 'w', 'x', 
+                                                  'y', 'z', 'A', 'B', 'C', 'D', 
+                                                  'E', 'F', 'G', 'H', 'I', 'J', 
+                                                  'K', 'L', 'M', 'N', 'O', 'P',
+                                                  'Q', 'R', 'S', 'T', 'U', 'V',
+                                                  'W', 'X', 'Y', 'Z', '0', '1',
+                                                  '2', '3', '4', '5', '6', '7', 
+                                                  '8', '9'};
 }
 
 
 double txtproc::convertStringToDouble(std::string& s) {
-  double convertedDouble = atof(s.c_str());;
+  double convertedDouble = atof(s.c_str());
   return convertedDouble;
 }
 
@@ -66,7 +68,7 @@ Sequences txtproc::read_fasta(std::string filename,
     int seqNo = -1;
     std::string line;
     while(!safeGetline(fastafile, line).eof()) {
-        std::string firstChar = line.substr(0,1);
+        std::string firstChar = line.substr(0, 1);
         if (line != std::string("## PROBABILITIES")) {
           if (sequences && firstChar == fastaSymbol) {
             seqNo++;
@@ -84,7 +86,8 @@ Sequences txtproc::read_fasta(std::string filename,
                     if (acceptedChar(line[j])) {
                       newResidue += line[j];
                     } else {
-                      std::cout << "I found a weird character (" << line[j] << "), so you probbaly want to go through your files and double check them"  << std::endl;
+                      std::cout << "I found a weird character (" << line[j] 
+                                << std::endl;
                       std::exit(0);
                     }
                 }
@@ -117,8 +120,8 @@ void txtproc::writeAlignmentToFile(StringSequences& sequences,
                                    std::string filename) {
   std::stringstream sstr;
   sstr << filename << "_al";
-  std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
-  for (unsigned int i = 0; i < sequences.size() ;i++) {
+  std::ofstream outputFile(sstr.str().c_str(), std::ios::out);
+  for (unsigned int i = 0; i < sequences.size(); i++) {
     outputFile << sequence_names[i] << "\n" << sequences[i] << "\n";
   }
 }
@@ -130,10 +133,10 @@ void txtproc::writeAlignmentWithoutCodeToFile(StringSequences& sequences,
                                               int codon_length) {
   std::stringstream sstr;
   sstr << filename << "_al";
-  std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
-  for (unsigned int i = 0; i < sequences.size() ;i++) {
-    outputFile << sequence_names[i]<< "\n";
-    std::string seq="";
+  std::ofstream outputFile(sstr.str().c_str(), std::ios::out);
+  for (unsigned int i = 0; i < sequences.size(); i++) {
+    outputFile << sequence_names[i] << "\n";
+    std::string seq = "";
     for (unsigned int j = 0; j < sequences[i].size(); j+=codon_length) {
       seq += sequences[i][j];
     }
@@ -143,12 +146,12 @@ void txtproc::writeAlignmentWithoutCodeToFile(StringSequences& sequences,
 
 
 std::string txtproc::charToString(char mychar) {
-  return std::string(1,mychar);
+  return std::string(1, mychar);
 }
 
 
 std::string txtproc::charToString(char mychar1, char mychar2) {
-  std::string newstring = std::string(1,mychar1);
+  std::string newstring = std::string(1, mychar1);
   newstring.push_back(mychar2);
   return newstring;
 }
@@ -180,7 +183,7 @@ std::istream& txtproc::safeGetline(std::istream& is, std::string& t) {
 
 bool txtproc::acceptedChar(char my_char) {
   bool result = false;
-  for (auto &acc_char: AcceptedCharacters) {
+  for (auto &acc_char : AcceptedCharacters) {
     if (acc_char == my_char) {
       result = true;
       break;
@@ -208,7 +211,7 @@ void txtproc::process_conf_file(std::string filename,
        } else if (line[0] != '#' && features) {
          line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
          line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
-         FeatDescriptor tmp_vector = split(line,';');
+         FeatDescriptor tmp_vector = split(line, ';');
          feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], 
                                                  std::stoi(tmp_vector[2]), 
                                                  std::stoi(tmp_vector[3]), 
@@ -216,7 +219,7 @@ void txtproc::process_conf_file(std::string filename,
        } else if (line[0] != '#') {
          line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
          line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
-         FeatDescriptor tmp_vector = split(line,';');
+         FeatDescriptor tmp_vector = split(line, ';');
          usr_feature_rules.push_back(std::make_tuple(tmp_vector[0], 
                                                      tmp_vector[1], 
                                                      std::stoi(tmp_vector[2]), 
@@ -238,28 +241,28 @@ void txtproc::process_conf_file(std::string filename,
 
 FeaturesList txtproc::unfold(std::string conf_string, 
                              FeatureNamesList& list_of_features) {
-  FeatureNamesList tmp_vector = split(conf_string,',');
+  FeatureNamesList tmp_vector = split(conf_string, ',');
   FeaturesList out_vector;
-  for (auto &item: tmp_vector) {
-    if (split(item,'_').size() > 1) {            
+  for (auto &item : tmp_vector) {
+    if (split(item, '_').size() > 1) {            
       // this is a single feature entry, e.g. 'PF_A'
       std::string feat_name = std::string("USR_") + item;
       out_vector.push_back(vec_util::FindIndex(feat_name, list_of_features));
-    } else if (split(item,'[').size() == 1) {            
+    } else if (split(item, '[').size() == 1) {            
       // this is an entry with only the tag specified (without any exceptions)
       for (unsigned int j = 0; j < list_of_features.size(); j++) {
-        SplitFeatName singlefeat = split(list_of_features[j],'_');
+        SplitFeatName singlefeat = split(list_of_features[j], '_');
         if (singlefeat.size() > 1 && singlefeat[1] == item) {
           out_vector.push_back(j);
         }
       }
     } else {
       //TAG with exceptions
-      SplitFeatName tagfeat = split(item,'[');
+      SplitFeatName tagfeat = split(item, '[');
       std::string tag = tagfeat[0];
-      FeatureNamesList exceptions = split(split(tagfeat[1],']')[0], '.');
+      FeatureNamesList exceptions = split(split(tagfeat[1], ']')[0], '.');
       for (unsigned int j = 0; j < list_of_features.size(); j++) {
-        SplitFeatName singlefeat = split(list_of_features[j],'_');
+        SplitFeatName singlefeat = split(list_of_features[j], '_');
         if (singlefeat.size() > 1 && singlefeat[1] == tag && 
             !vec_util::CheckIfContains(exceptions, singlefeat[2])) {
           out_vector.push_back(j);

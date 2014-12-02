@@ -57,7 +57,7 @@ StringSequences Sequences::PerformMSAfirstRound(Profile& output_profile,
   ResidueSequence al_without_lower; 
   //pairwise alignment with lowercase characters where chars were removed
   ResidueSequence al_with_lower; 
-  for (auto &seqI: m_sequences_aa) {
+  for (auto &seqI : m_sequences_aa) {
     AlignPairwise(al_without_lower, al_with_lower, seqI, output_profile, 
                   output_features_profile, gap_open_pen, end_pen, gap_ext_pen, 
                   codon_length);
@@ -187,7 +187,7 @@ void Sequences::AlignPairwise(ResidueSequence& al_without_lower,
 int Sequences::CountAlignments(double identity_cutoff, 
                                IdentitiesList& identities) {
   int count = 0;
-  for (auto &item: identities) {
+  for (auto &item : identities) {
     if (item > identity_cutoff) {
       count++;
     }
@@ -197,14 +197,14 @@ int Sequences::CountAlignments(double identity_cutoff,
 
 
 void Sequences::add_usr_features(RuleTuplesList& feature_rules) {
-  for (auto &rule: feature_rules) {
+  for (auto &rule : feature_rules) {
     std::string feat_name = std::string("USR_")
                             + std::get<0>(rule)
                             + std::string("_")
                             + std::get<1>(rule);
     int sequence_no = std::get<2>(rule);
     int start = std::get<3>(rule);
-    int end = std::get<4>(rule)+1;
+    int end = std::get<4>(rule) + 1;
     signed int seq_length = m_sequences_aa[sequence_no].size();
     if (sequence_no < (signed)m_sequences_aa.size()) {
       for (int j = start; j < end && j < seq_length; j++) {
@@ -222,11 +222,11 @@ SeqNames Sequences::get_names() {
 
 void Sequences::add_feature_indexes(FeaturesProfile& fprf) {
   std::string nothing = "AA";
-  for (auto &seq: m_sequences_aa) {
-    for (auto &res: seq) {
+  for (auto &seq : m_sequences_aa) {
+    for (auto &res : seq) {
         FeatureNamesList features = res.get_features();
         FeaturesList indexes;
-        for (auto &feat: features) {
+        for (auto &feat : features) {
           if (feat != nothing) {
             indexes.push_back(fprf.FindFeaturesIndex(feat));
           }
