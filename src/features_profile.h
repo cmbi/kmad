@@ -25,7 +25,7 @@ public:
   /// @param features list of features assigned to the residue
   /// @param add_score output score
   ///
-	void get_score(unsigned int position, FeaturesList& features, 
+  void get_score(unsigned int position, FeaturesList& features, 
                 double& add_score);
   ///
   /// creates a profile matrix from the given alignment
@@ -37,13 +37,13 @@ public:
   /// processes the matrix of feature occurences creating a matrix of scores
   /// for aligning features at certain positions
   ///
-	void CountOccurences(const SequenceList& alignment, 
+  void CountOccurences(const SequenceList& alignment, 
                        int codon_length);
   ///
   /// Takes a list of sequences, finds motifs and domains in it and adds them 
   /// to the list of features
   ///
-	void ExpandListOfFeatures(const SequenceList&);
+  void ExpandListOfFeatures(const SequenceList&);
   ///
   /// Sets rules for aligning user defined features
   ///
@@ -53,22 +53,22 @@ public:
   ///
   void add_usr_features(RuleTuplesList& new_rules);
   /// Finds index of a certain feature in the profile
-	int FindFeaturesIndex(std::string& feat_name);
+  int FindFeaturesIndex(std::string& feat_name);
 private:
-	double GetMotifsProb(std::string& m_id);
-	double ScoreMotifs(unsigned int& position, std::string& feat_name);
-	double ScoreDomains(unsigned int& position, std::string& dom_name);
-	double ScorePTMs(unsigned int& position, std::string& ptm_name);
-	double ScoreUsrFeatures(unsigned int& position, std::string& feat_name); 
+  double GetMotifsProb(std::string& m_id);
+  double ScoreMotifs(unsigned int& position, std::string& feat_name);
+  double ScoreDomains(unsigned int& position, std::string& dom_name);
+  double ScorePTMs(unsigned int& position, std::string& ptm_name);
+  double ScoreUsrFeatures(unsigned int& position, std::string& feat_name); 
   ///
   /// returns score modifier for a given feature
   ///
-	double GetModifier(std::string& feat_name);
-	int m_domain_score, m_phosph_score, m_motif_score;
-	IDsList m_motifs_ids;
-	ProbsList m_motifs_probs;
+  double GetModifier(std::string& feat_name);
+  int m_domain_score, m_phosph_score, m_motif_score;
+  IDsList m_motifs_ids;
+  ProbsList m_motifs_probs;
   PrcRulesList m_rules;
-	ProfileMatrix m_prf_matrix;	
+  ProfileMatrix m_prf_matrix;  
   ProfileMatrix m_occurences_matrix;
 };
 

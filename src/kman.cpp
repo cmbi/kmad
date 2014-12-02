@@ -14,61 +14,60 @@
 #include <stdexcept>
 #include <string>
 namespace po = boost::program_options;
-int main(int argc, char *argv[]){
-  	int codon_length, phosph_score, domain_score, motif_score = 0;
-  	double gap_ext_pen, gap_open_pen, end_pen, lcr_mod = 0;
-  	bool out_encoded = false;
-  	std::string filename, output_prefix, conf_file;
-  	po::options_description desc("Allowed options");
-  	desc.add_options()
-  		("help,h", "produce help message")
-  		("input,i", po::value<std::string>(&filename), "input file name")
-  		("output,o", po::value<std::string>(&output_prefix), 
+int main(int argc, char *argv[]) {
+    int codon_length, phosph_score, domain_score, motif_score = 0;
+    double gap_ext_pen, gap_open_pen, end_pen, lcr_mod = 0;
+    bool out_encoded = false;
+    std::string filename, output_prefix, conf_file;
+    po::options_description desc("Allowed options");
+    desc.add_options()
+      ("help,h", "produce help message")
+      ("input,i", po::value<std::string>(&filename), "input file name")
+      ("output,o", po::value<std::string>(&output_prefix), 
                                           "output file prefix")
-  		("gap_penalty,g", po::value<double>(&gap_open_pen)->default_value(-5),
+      ("gap_penalty,g", po::value<double>(&gap_open_pen)->default_value(-5),
                                           "gap opening penalty")
-  		("gap_extension,e",po::value<double>(&gap_ext_pen)->default_value(-1.),
+      ("gap_extension,e", po::value<double>(&gap_ext_pen)->default_value(-1.),
                                            "gap extension penalty")
-  		("codon_length,c", po::value<int>(&codon_length)->implicit_value(7)
+      ("codon_length,c", po::value<int>(&codon_length)->implicit_value(7)
                                         ->default_value(1),"codon length")
-  		("phosph,p", po::value<int>(&phosph_score)->default_value(0),
+      ("phosph,p", po::value<int>(&phosph_score)->default_value(0),
                                   "score for aligning phosphorylated residues")
-  		("domain,d", po::value<int>(&domain_score)->default_value(0),
+      ("domain,d", po::value<int>(&domain_score)->default_value(0),
                                   "score for aligning domains")
-  		("lcr,l", po::value<double>(&lcr_mod)->default_value(1),
-                                  "gap penalty modifier inside a low complexity region")
-  		("motif,m", po::value<int>(&motif_score)->default_value(0),
+      ("lcr,l", po::value<double>(&lcr_mod)->default_value(1),
+                                  "gap penalty modifier inside a low \
+                                   complexity region")
+      ("motif,m", po::value<int>(&motif_score)->default_value(0),
                                  "probability multiplier for motifs")
       ("out-encoded", po::value<bool>(&out_encoded)->implicit_value(true)
                                       ->default_value(false),
                                       "Output alignment with encoded features")
-  		("end,n", po::value<double>(&end_pen)->default_value(-0.1),
+      ("end,n", po::value<double>(&end_pen)->default_value(-0.1),
                                   "penalty for gaps at the end (and beginning)")
- 		  ("conf", po::value<std::string>(&conf_file), "configure file");
-  	po::variables_map vm;
-  	po::store(po::parse_command_line(argc, argv, desc), vm);
-  	po::notify(vm);
-  	if (vm.count("help")) {
-      		std::cout << desc << std::endl;
-      		return 1;
-  	}
-  	if (vm.count("input") && vm.count("gap_penalty") 
+      ("conf", po::value<std::string>(&conf_file), "configure file");
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+    if (vm.count("help")) {
+          std::cout << desc << std::endl;
+          return 1;
+    }
+    if (vm.count("input") && vm.count("gap_penalty") 
         && vm.count("output")
         && misc::CheckParameters(codon_length, phosph_score, domain_score,
                                  motif_score, gap_ext_pen, gap_open_pen, 
-                                 end_pen)){
-  		time_t start = clock();
-  		IDsList motifs_ids;
-  		ProbsList motifs_probs;
+                                 end_pen)) {
+      time_t start = clock();
+      IDsList motifs_ids;
+      ProbsList motifs_probs;
       Sequences sequences;
-      try{
+      try {
           sequences = txtproc::read_fasta(filename, 
                                           codon_length, 
                                           &motifs_ids, 
                                           &motifs_probs);
-      }
-      catch(const std::exception& e)
-      {
+      } catch(const std::exception& e) {
         std::cout << "Exception: " << e.what() << "\n";
         return -1;
       }
@@ -82,18 +81,17 @@ int main(int argc, char *argv[]){
                                                codon_length, 
                                                motifs_ids, 
                                                motifs_probs);
-      if (out_encoded){
-  		  txtproc::writeAlignmentToFile(alignment, seq_names, output_prefix);						
+      if (out_encoded) {
+        txtproc::writeAlignmentToFile(alignment, seq_names, output_prefix);            
+      } else {
+        txtproc::writeAlignmentWithoutCodeToFile(alignment, seq_names, 
+                                                 output_prefix, codon_length);            
       }
-      else{
-  		  txtproc::writeAlignmentWithoutCodeToFile(alignment, seq_names, 
-                                                 output_prefix, codon_length);						
-      }
-  		time_t end = clock();
-  		std::cout << "time: " << double(end - start)/CLOCKS_PER_SEC << std::endl;
-  	}
-  	else{
-  		std::cout << "input file and/or gap penalty not specified, try --help for more information" << std::endl;
-  	}
+      time_t end = clock();
+      std::cout << "time: " << double(end - start)/CLOCKS_PER_SEC << std::endl;
+    } else{
+      std::cout << "input file and/or gap penalty not specified, try --help \
+                    for more information" << std::endl;
+    }
 }
 

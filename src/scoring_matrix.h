@@ -25,17 +25,17 @@ public:
   /// @param extensionPenalty gap extension penalty
   /// @param endPenalty penalty for gaps at the beginning and the end
   ///
-	ScoringMatrix(int s1_size, int s2_size, double gap_open_pen, double end_pen, 
+  ScoringMatrix(int s1_size, int s2_size, double gap_open_pen, double end_pen, 
                 double gap_ext_pen);
   ///
   /// Fills in the scoring matrices m_matrix_v, m_matrix_g, m_matrix_h
   ///
-	void CalculateScores(ResidueSequence s2, Profile& prf, 
+  void CalculateScores(ResidueSequence s2, Profile& prf, 
                        FeaturesProfile& feat_prf, int codon_length);
   ///
   /// traces back the alignment path in the scoring matrices
   ///
-	void PerformNWAlignment(SequenceList* result, ResidueSequence s2, 
+  void PerformNWAlignment(SequenceList& result, ResidueSequence s2, 
                           Profile& prf, FeaturesProfile& feat_prf, 
                           int codon_length);
 private:
@@ -43,15 +43,15 @@ private:
   /// finds the best score either in the last column or in the last row of the 
   /// V matrix (takes the end gap penaltie into account)
   ///
-	ValueCoords FindBestScore();
-	int m_i_length;
-	int m_j_length;
-	double m_gap_opening;
-	double m_gap_extension;
-	double m_end_pen;
-	double m_gap_opening_horizontal;
-	double m_gap_extension_horizontal;
-	SingleScoringMatrix m_matrix_v,m_matrix_g,m_matrix_h;
+  ValueCoords FindBestScore();
+  int m_i_length;
+  int m_j_length;
+  double m_gap_opening;
+  double m_gap_extension;
+  double m_end_pen;
+  double m_gap_opening_horizontal;
+  double m_gap_extension_horizontal;
+  SingleScoringMatrix m_matrix_v,m_matrix_g,m_matrix_h;
 };
 
 #endif /* SCORINGMATRIX_H */
