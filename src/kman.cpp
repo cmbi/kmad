@@ -1,3 +1,4 @@
+#include "fasta.h"
 #include "features_profile.h"
 #include "profile.h"
 #include "residue.h"
@@ -75,10 +76,10 @@ int main(int argc, char *argv[]) {
       ProbsList motifs_probs;
       Sequences sequences;
       try {
-          sequences = txtproc::read_fasta(filename, 
-                                          codon_length, 
-                                          &motifs_ids, 
-                                          &motifs_probs);
+          sequences = fasta::parse_fasta(filename, 
+                                         codon_length, 
+                                         &motifs_ids, 
+                                         &motifs_probs);
       } catch(const std::exception& e) {
         std::cout << "Exception: " << e.what() << "\n";
         std::exit(EXIT_FAILURE);

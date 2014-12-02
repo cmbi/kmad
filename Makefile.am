@@ -6,6 +6,7 @@ shared_LDADD	=	$(BOOST_PROGRAM_OPTIONS_LIB) \
 
 
 kman_SOURCES	=	src/kman.cpp \
+								src/fasta.cpp \
 								src/features_profile.cpp \
 								src/profile.cpp \
 								src/residue.cpp \
@@ -21,6 +22,7 @@ kman_SOURCES	=	src/kman.cpp \
 kman_LDADD = $(shared_LDADD)
 
 test_kman_SOURCES = tests/test_vecutil.cpp \
+										src/fasta.cpp \
 										src/features_profile.cpp \
 										src/profile.cpp \
 										src/residue.cpp \

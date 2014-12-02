@@ -12,10 +12,6 @@ class FeaturesProfile;
 class Sequences;
 namespace txtproc{
   ///
-  /// converts a string to double
-  ///
-  double convertStringToDouble(std::string& s);
-  ///
   /// converts a char to a string
   ///
   std::string charToString(char mychar);
@@ -37,12 +33,6 @@ namespace txtproc{
   /// characters
   ///
   bool acceptedChar(char my_char);
-  ///
-  /// reads a 'fasta' file, returns a Sequences object, 
-  /// writes motif ids and probabilities to ids and probs
-  ///
-  Sequences read_fasta(std::string filename, int codonLength, 
-                       IDsList* ids, ProbsList* probs);
   ///
   /// writes alignment to file (encoded)
   ///
