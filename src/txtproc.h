@@ -17,10 +17,6 @@ namespace txtproc{
   ///
   std::istream& safeGetline(std::istream& is, std::string& t);
   ///
-  /// splits a string by the delimiter, returns a vector of strings
-  ///
-  std::vector<std::string> split(const std::string& s, char delim);
-  ///
   /// checks if character from the fasta file is on the list of accepetd
   /// characters
   ///

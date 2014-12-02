@@ -37,3 +37,5 @@ typedef std::vector<int> IndexList;
 typedef std::tuple<std::string, std::string, int, int, int> DefaultRuleTuple;
 typedef std::vector<DefaultRuleTuple> DefaultRulesList;
 typedef std::vector<char> AlphabetVec;
+typedef std::vector<std::string> FeatNameSplit;
+typedef std::vector<std::string> NameSplit;

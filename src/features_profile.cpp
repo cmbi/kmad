@@ -4,12 +4,14 @@
 #include "txtproc.h"
 #include "misc.h"
 
-#include<boost/range/numeric.hpp>
+#include <boost/range/numeric.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include <iostream>
 #include <string>
 #include <vector>
 #include <tuple>
+
 namespace {
   // 0 - highest level of annotation, 3 - lowest, P - predicted
   FeatureNamesList list_of_features = {"ptm_phosph0", "ptm_phosph1",
@@ -107,7 +109,11 @@ void FeaturesProfile::CountOccurences(const SequenceList& alignment,
 
 double FeaturesProfile::GetMotifsProb(std::string& m_id) {
   double prob = 0;
-  std::string id_code = txtproc::split(m_id, '_')[1];
+
+  FeatNameSplit motif_name;
+  boost::split(motif_name, m_id, boost::is_any_of("_"));
+  std::string id_code = motif_name[1];
+
   assert(m_motifs_ids.size() == m_motifs_probs.size());
   for (unsigned int i = 0; i < m_motifs_ids.size(); i++) {
     if (m_motifs_ids[i] == id_code) {
@@ -279,7 +285,11 @@ double FeaturesProfile::ScoreUsrFeatures(unsigned int& position,
 
 
 double FeaturesProfile::GetModifier(std::string& feat_name) {
-  std::string feat_code = txtproc::split(feat_name, '_')[0];
+
+  FeatNameSplit feat_name_vec;
+  boost::split(feat_name_vec, feat_name, boost::is_any_of("_"));
+  std::string feat_code  = feat_name_vec[0];
+
   double modifier = 1;
   if (feat_code == "ptm") {
     modifier = m_phosph_score;
