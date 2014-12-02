@@ -6,15 +6,6 @@
 #include <algorithm>
 
 
-bool vec_util::CheckIfContains(FeatureNamesList& vec, std::string& x) {
-  if (std::find(vec.begin(), vec.end(), x) != vec.end()) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-
 void vec_util::TransposeVec(ProfileMatrix& vec) {
   ProfileMatrix new_vec;
   ProfileMatrixRow new_row;

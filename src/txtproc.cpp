@@ -191,8 +191,9 @@ FeaturesList txtproc::Unfold(std::string conf_string,
         FeatNameSplit singlefeat;
         boost::split(singlefeat, list_of_features[j], boost::is_any_of("_"));
 
-        if (singlefeat.size() > 1 && singlefeat[1] == tag && 
-            !vec_util::CheckIfContains(exceptions, singlefeat[2])) {
+        if (singlefeat.size() > 1 && singlefeat[1] == tag  
+            && (std::find(exceptions.begin(), exceptions.end(), 
+                          singlefeat[2]) == exceptions.end())) {
           out_vector.push_back(j);
         }
       }

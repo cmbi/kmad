@@ -11,10 +11,6 @@
 class Residue;
 namespace vec_util{
   ///
-  /// checks if vec contains string x
-  ///
-  bool CheckIfContains(FeatureNamesList& vec, std::string& x);
-  ///
   /// returns index of the feature in the list of features
   ///
   int FindIndex(std::string& val, FeatureNamesList& vec);

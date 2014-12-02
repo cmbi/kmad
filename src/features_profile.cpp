@@ -165,7 +165,8 @@ void FeaturesProfile::ExpandListOfFeatures(const SequenceList& sequences) {
       for (unsigned int k = 0; k < features.size(); k++) {
         std::string feature_k = features[k];
         //check whether this domain is already in the list of features
-        if (!vec_util::CheckIfContains(list_of_features, feature_k) 
+        if ((std::find(list_of_features.begin(), list_of_features.end(), 
+                      feature_k) == list_of_features.end())
             && feature_k != nothing) {  
           list_of_features.push_back(feature_k);
           if (feature_k.substr(0, 6) == "domain") {
@@ -333,7 +334,8 @@ void FeaturesProfile::add_usr_features(RuleTuplesList& new_rules) {
   for (auto &rule : new_rules) {
     std::string feature_i = std::string("USR_") + std::get<0>(rule) \
                             + std::string("_") + std::get<1>(rule);
-    if (!vec_util::CheckIfContains(list_of_features, feature_i)) {
+    if (std::find(list_of_features.begin(), list_of_features.end(), 
+          feature_i) == list_of_features.end()) {
       list_of_features.push_back(feature_i);
     }
   }
