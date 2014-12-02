@@ -54,11 +54,30 @@ int main(int argc, char *argv[]) {
           return 1;
     }
     if (vm.count("input") && vm.count("gap_penalty") 
-        && vm.count("output")
-        && misc::CheckParameters(codon_length, phosph_score, domain_score,
-                                 motif_score, gap_ext_pen, gap_open_pen, 
-                                 end_pen)) {
+        && vm.count("output")) {
       time_t start = clock();
+      // Parameter check
+      if (codon_length < 1 || codon_length > 10) {
+        std::cout << "Codon length ('-c' flag) should be between 1 and 10"
+                  << std::endl;
+        std::exit(EXIT_FAILURE);
+      } else if (gap_open_pen >= 0 || gap_ext_pen >= 0) {
+        std::cout << "Gap opening penalty (-g) and gap extension penalty (-e) \
+                      need to be lower than 0" << std::endl;
+        std::exit(EXIT_FAILURE);
+      }
+      } else if (end_pen > 0) {
+        std::cout << "End gap penalty value (-n) cannot be a positive number"
+                  << std::endl;
+        std::exit(EXIT_FAILURE);
+      }
+      } else if (phosph_score < 0 || domain_score < 0 || motif_score < 0) {
+        std::cout << "Scores for aligning features cannot be negative"
+                  << std::endl;
+        std::exit(EXIT_FAILURE);
+      }
+
+
       IDsList motifs_ids;
       ProbsList motifs_probs;
       Sequences sequences;
