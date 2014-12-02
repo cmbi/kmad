@@ -14,7 +14,7 @@
 #include <stdexcept>
 #include <string>
 namespace po = boost::program_options;
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]) {
     int codon_length, phosph_score, domain_score, motif_score = 0;
     double gap_ext_pen, gap_open_pen, end_pen, lcr_mod = 0;
     bool out_encoded = false;
@@ -57,19 +57,17 @@ int main(int argc, char *argv[]){
         && vm.count("output")
         && misc::CheckParameters(codon_length, phosph_score, domain_score,
                                  motif_score, gap_ext_pen, gap_open_pen, 
-                                 end_pen)){
+                                 end_pen)) {
       time_t start = clock();
       IDsList motifs_ids;
       ProbsList motifs_probs;
       Sequences sequences;
-      try{
+      try {
           sequences = txtproc::read_fasta(filename, 
                                           codon_length, 
                                           &motifs_ids, 
                                           &motifs_probs);
-      }
-      catch(const std::exception& e)
-      {
+      } catch(const std::exception& e) {
         std::cout << "Exception: " << e.what() << "\n";
         return -1;
       }
@@ -83,17 +81,15 @@ int main(int argc, char *argv[]){
                                                codon_length, 
                                                motifs_ids, 
                                                motifs_probs);
-      if (out_encoded){
+      if (out_encoded) {
         txtproc::writeAlignmentToFile(alignment, seq_names, output_prefix);            
-      }
-      else{
+      } else {
         txtproc::writeAlignmentWithoutCodeToFile(alignment, seq_names, 
                                                  output_prefix, codon_length);            
       }
       time_t end = clock();
       std::cout << "time: " << double(end - start)/CLOCKS_PER_SEC << std::endl;
-    }
-    else{
+    } else{
       std::cout << "input file and/or gap penalty not specified, try --help \
                     for more information" << std::endl;
     }

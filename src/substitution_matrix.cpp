@@ -57,14 +57,14 @@ namespace {
 }
 
 
-int substitution_matrix::get_element(char char1, char char2){
+int substitution_matrix::get_element(char char1, char char2) {
   int index1=0;
   int index2=0;
-  for (unsigned int i = 0; i < Alphabet.size(); i++){
-    if (Alphabet[i] == char1){
+  for (unsigned int i = 0; i < Alphabet.size(); i++) {
+    if (Alphabet[i] == char1) {
       index1 = i;
     }
-    if (Alphabet[i] == char2){
+    if (Alphabet[i] == char2) {
       index2 = i;
     }
   }
@@ -72,27 +72,23 @@ int substitution_matrix::get_element(char char1, char char2){
 }
 
 
-ProfileMatrix substitution_matrix::ConvertToProfileFormat(ResidueSequence& seq){
+ProfileMatrix substitution_matrix::ConvertToProfileFormat(ResidueSequence& seq) {
   ProfileMatrix result(seq.size());
   SbstMatColumnsList new_sbst_row;
-  for (unsigned int i = 0; i < result.size(); i++){
-    if (seq[i].get_aa() == 'B'){
+  for (unsigned int i = 0; i < result.size(); i++) {
+    if (seq[i].get_aa() == 'B') {
       new_sbst_row.clear();
       new_sbst_row.push_back(SimScores[2]);
       new_sbst_row.push_back(SimScores[3]);
       result[i] = vec_util::Average(new_sbst_row);
-    }
-    else if (seq[i].get_aa() == 'Z'){
+    } else if (seq[i].get_aa() == 'Z') {
       new_sbst_row.clear();
       new_sbst_row.push_back(SimScores[6]);
       new_sbst_row.push_back(SimScores[7]);
       result[i] = vec_util::Average(new_sbst_row);
-
-    }
-    else if (seq[i].get_aa() == 'X'){
+    } else if (seq[i].get_aa() == 'X') {
       result[i] = vec_util::Average(SimScores);
-    }
-    else{
+    } else {
       int aAcidInt = FindAminoAcidsIndex(seq[i].get_aa());
       SbstMatColumn sbst_column_int = SimScores[aAcidInt];
       result[i] = vec_util::ConvertIntVecToDoubleVec(sbst_column_int);//adds a column to the result(converted from int to double)
@@ -103,21 +99,21 @@ ProfileMatrix substitution_matrix::ConvertToProfileFormat(ResidueSequence& seq){
 }
 
 
-int substitution_matrix::get_element(int i,int j){
+int substitution_matrix::get_element(int i,int j) {
   return SimScores[i][j];
 }
 
 
 void substitution_matrix::get_column(unsigned int& column_no, 
-                                     SbstMatColumn& column_int){
+                                     SbstMatColumn& column_int) {
   column_int = SimScores[column_no];
 }
 
 
-int substitution_matrix::FindAminoAcidsIndex(char aa){
+int substitution_matrix::FindAminoAcidsIndex(char aa) {
   int aacid_index = -1;
-  for (unsigned int i = 0; i < Alphabet.size();i++){
-    if (aa == Alphabet[i]){
+  for (unsigned int i = 0; i < Alphabet.size();i++) {
+    if (aa == Alphabet[i]) {
       aacid_index = i;
       break;
     }

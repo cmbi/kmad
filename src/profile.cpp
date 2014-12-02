@@ -15,11 +15,11 @@
 
 
 Profile::Profile(ProfileMatrix mat)
-:  m_prf_matrix(mat){
+:  m_prf_matrix(mat) {
 }
 
 
-Profile::Profile(){
+Profile::Profile() {
 }
 
 
@@ -28,13 +28,13 @@ ProfileMatrix Profile::get_matrix() const{
 }
 
 
-void Profile::ProcessProfile(SequenceList& alignment){
+void Profile::ProcessProfile(SequenceList& alignment) {
   CreateProfile(alignment);
   ProfileMatrix new_profile;
-  for (unsigned int i = 0; i < m_prf_matrix[0].size(); i++){
+  for (unsigned int i = 0; i < m_prf_matrix[0].size(); i++) {
     Matrix2D columns_to_add;
-    for (unsigned int j = 0; j < m_prf_matrix.size(); j++){
-      if (m_prf_matrix[j][i] != 0){
+    for (unsigned int j = 0; j < m_prf_matrix.size(); j++) {
+      if (m_prf_matrix[j][i] != 0) {
         SbstMatColumn column_int; 
         substitution_matrix::get_column(j, column_int);
         ProfileMatrixColumn column_j = vec_util::ConvertIntVecToDoubleVec(
@@ -52,31 +52,28 @@ void Profile::ProcessProfile(SequenceList& alignment){
 }
 
 
-void Profile::CreateProfile(SequenceList& alignment){
+void Profile::CreateProfile(SequenceList& alignment) {
   ProfileMatrix tmp_result;
   int no_of_sequences = alignment.size();
-  for (unsigned int i = 0; i < alignment[0].size(); i++){
+  for (unsigned int i = 0; i < alignment[0].size(); i++) {
     ProfileMatrixColumn profile_column(20,0);
     int non_gaps = 0;
-    for (unsigned int j = 0; j < alignment.size(); j++){
+    for (unsigned int j = 0; j < alignment.size(); j++) {
       char seq_char(alignment[j][i].get_aa());
-      if (seq_char != '-'){
+      if (seq_char != '-') {
         //either D or N, so add half a point to both
-        if (seq_char == 'B'){     
+        if (seq_char == 'B') {     
           profile_column[2]+=0.5;
           profile_column[3]+=0.5;
-        }
-        else if (seq_char == 'Z'){   
+        } else if (seq_char == 'Z') {   
           //either D or N, so add half a point to both
           profile_column[6]+=0.5;
           profile_column[7]+=0.5;
-        }
-        else if (seq_char == 'X'){
-          for (unsigned int k = 0; k < profile_column.size();k++){
+        } else if (seq_char == 'X') {
+          for (unsigned int k = 0; k < profile_column.size();k++) {
             profile_column[k]+=0.05;
           }
-        }
-        else{  
+        } else {  
           int aacid_index = substitution_matrix::FindAminoAcidsIndex(seq_char);
           profile_column[aacid_index] += 1;        
         }
@@ -92,24 +89,21 @@ void Profile::CreateProfile(SequenceList& alignment){
 }
 
 
-double Profile::get_element(int position, char aacid){
+double Profile::get_element(int position, char aacid) {
   double result;
-  if (aacid=='B'){ 
+  if (aacid=='B') { 
     // take half the score for asparagine and half the score for aspartate
     result = 0.5*m_prf_matrix[2][position]+ 0.5*m_prf_matrix[3][position];
-  }
-  else if (aacid=='Z'){ 
+  } else if (aacid=='Z') { 
     // take half the score for glutamine and half the score for glutamate
     result = 0.5*m_prf_matrix[6][position]+ 0.5*m_prf_matrix[7][position];
-  }
-  else if (aacid=='X'){ 
+  } else if (aacid=='X') { 
     // take average score from scores for all residues
     result = 0;
-    for (unsigned int i = 0; i < m_prf_matrix.size(); i++){
+    for (unsigned int i = 0; i < m_prf_matrix.size(); i++) {
       result += 0.05*m_prf_matrix[i][position];
     }
-  }
-  else { 
+  } else { 
     // it's not any of the {B,Z,X} -> single amino acid
     int aacid_index = substitution_matrix::FindAminoAcidsIndex(aacid);
     result = m_prf_matrix[aacid_index][position];
@@ -118,6 +112,6 @@ double Profile::get_element(int position, char aacid){
 }
 
 
-double Profile::get_element(int aacid_index, int position){
+double Profile::get_element(int aacid_index, int position) {
   return m_prf_matrix[aacid_index][position];
 }

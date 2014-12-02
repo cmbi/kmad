@@ -20,12 +20,12 @@ StringSequences msa::run_msa(Sequences sequences,
                               int phosph_score,
                               int codon_length,
                               IDsList motifs_ids,
-                              ProbsList motifs_probs){
+                              ProbsList motifs_probs) {
 
       Profile prf;
       FeaturesProfile fprf(domain_score, phosph_score, motif_score, lcr_mod, 
                            motifs_ids, motifs_probs);
-      if (!conf_filename.empty()){
+      if (!conf_filename.empty()) {
         txtproc::process_conf_file(conf_filename, fprf, sequences);
       }
       std::vector<double> identities;
@@ -39,7 +39,7 @@ StringSequences msa::run_msa(Sequences sequences,
                                                          identities);
       StringSequences alignment;
       int prev_alignments = 0;
-      for (int i = 8; i >= 0; i--){
+      for (int i = 8; i >= 0; i--) {
         double cutoff = double(i)/10;
         sequences.PerformMSAnextRound(alignment, prf, fprf, gap_open_pen, 
                                       end_pen, gap_ext_pen,

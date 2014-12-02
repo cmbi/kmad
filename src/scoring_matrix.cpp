@@ -38,25 +38,25 @@ ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
 
 void ScoringMatrix::CalculateScores(ResidueSequence s2, Profile& prf, 
                                     FeaturesProfile& feat_prf, 
-                                    int codon_length){
+                                    int codon_length) {
   s2 = vec_util::push_front(s2, misc::CreateGapResidue(codon_length));
 
   assert(m_matrix_v.size() == m_matrix_g.size());
   assert(m_matrix_v.size() == m_matrix_h.size());
 
-  for (unsigned int i = 1; i < m_matrix_v.size(); i++){
+  for (unsigned int i = 1; i < m_matrix_v.size(); i++) {
     m_matrix_v[i][0] = -10000000; //=== infinity
     m_matrix_h[i][0] = -10000000;
     m_matrix_g[i][0] = i*m_end_pen;  
   }
-  for (unsigned int i = 1; i < m_matrix_v[0].size(); i++){
+  for (unsigned int i = 1; i < m_matrix_v[0].size(); i++) {
     m_matrix_v[0][i] = -10000000;
     m_matrix_h[0][i] = i*m_end_pen;  
     m_matrix_g[0][i] = -10000000;
   }
   double score1,score2,score3 = 0;
-  for (unsigned int i = 1; i < m_matrix_v.size();i++){
-    for (unsigned int j = 1; j < m_matrix_v[i].size(); j++){
+  for (unsigned int i = 1; i < m_matrix_v.size();i++) {
+    for (unsigned int j = 1; j < m_matrix_v[i].size(); j++) {
       ///V
       double prf_score = prf.get_element(i-1, s2[j].get_aa());
       double add_score = 0;
@@ -83,7 +83,7 @@ void ScoringMatrix::CalculateScores(ResidueSequence s2, Profile& prf,
 }
 
 
-ValueCoords ScoringMatrix::FindBestScore(){
+ValueCoords ScoringMatrix::FindBestScore() {
   int max_i = m_matrix_v.size()-1;
   int max_j = m_matrix_v[0].size()-1;
   int n = max_i; // last row of m_matrix_v
@@ -92,32 +92,31 @@ ValueCoords ScoringMatrix::FindBestScore(){
   double max_j_val = m_matrix_v[max_i][max_j];
   double real_val;
   double max = m_matrix_v[max_i][max_j];
-  for (int i = 0; i < n ; i++){    //finds max score in the last row
+  for (int i = 0; i < n ; i++) {    //finds max score in the last row
     // add end gap penalties to the score to calc the 'real' score 
     // of the alignment
     real_val = m_matrix_v[i][m]+m_end_pen*(m_matrix_v.size()-i); 
-    if (real_val > max){
+    if (real_val > max) {
       max_i_val = real_val;
       max = real_val;
       max_i = i;
     } 
   }
-  for (int i = 0; i < m; i++){    //finds max score in the last column  
+  for (int i = 0; i < m; i++) {    //finds max score in the last column  
     real_val = m_matrix_v[n][i]+m_end_pen*(m_matrix_v[0].size()-i); 
     // add end gap penalties to the score, to calc the 'real' score 
     // of the alignment
-    if (real_val > max){
+    if (real_val > max) {
       max_j_val = real_val;
       max = real_val;
       max_j = i;
     }
   }
   ValueCoords res_arr;
-  if (max_i_val > max_j_val){      //max score is in the last row
+  if (max_i_val > max_j_val) {      //max score is in the last row
     res_arr.push_back(max_i);
     res_arr.push_back(m);
-  }
-  else{          //max score is in the last column
+  } else {          //max score is in the last column
     res_arr.push_back(n);    // max score position (i)
     res_arr.push_back(max_j);    //max score position (j)
   }
@@ -128,7 +127,7 @@ ValueCoords ScoringMatrix::FindBestScore(){
 void ScoringMatrix::PerformNWAlignment(SequenceList *result,
                                        ResidueSequence s2, Profile& prf, 
                                        FeaturesProfile& feat_prf,
-                                      int codon_length){
+                                      int codon_length) {
   //creating polyA pseudoSequence representing the profile, 
   //to know later where are the gaps in the profile
   ResidueSequence s1 = misc::PseudoResidueSequence(prf.get_matrix()[0].size()+1, 
@@ -145,18 +144,18 @@ void ScoringMatrix::PerformNWAlignment(SequenceList *result,
   std::string current_matrix = "V";
   //if bestScore isn't in the lower right corner, then add gaps to new_s1 or new_s2
   ValueCoords best_score = FindBestScore();
-  //if (FindBestScore()[0] != (signed)m_matrix_v.size()-1 || FindBestScore()[1] != (signed)m_matrix_v[0].size()-1){
+  //if (FindBestScore()[0] != (signed)m_matrix_v.size()-1 || FindBestScore()[1] != (signed)m_matrix_v[0].size()-1) {
   if (best_score[0] != (signed)m_matrix_v.size()-1 
-      || best_score[1] != (signed)m_matrix_v[0].size()-1){
+      || best_score[1] != (signed)m_matrix_v[0].size()-1) {
     i = best_score[0];
     j = best_score[1];
-    for (int k = s1.size()-1; k > i; k--){
+    for (int k = s1.size()-1; k > i; k--) {
       new_char1 = s1[k];
       new_char2 = gap_code;
       new_s1.push_back(new_char1);
       new_s2.push_back(new_char2);
     }
-    for (int k = s2.size()-1; k > j; k--){
+    for (int k = s2.size()-1; k > j; k--) {
       new_char1 = gap_code;
       new_char2 = s2[k];
       new_s2.push_back(new_char2);
@@ -168,8 +167,8 @@ void ScoringMatrix::PerformNWAlignment(SequenceList *result,
   assert(m_matrix_v.size() == m_matrix_h.size());
 
   //trace back the matrix
-  while (i > 0 || j > 0){
-    if (i > 0 && j > 0 && current_matrix == "V"){  //match/mismatch
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && current_matrix == "V") {  //match/mismatch
       new_char1 = s1[i];
       new_char2 = s2[j];
       double prf_score = prf.get_element(i-1,s2[j].get_aa());
@@ -177,28 +176,26 @@ void ScoringMatrix::PerformNWAlignment(SequenceList *result,
       FeaturesList features = s2[j].get_feat_indexes();
       feat_prf.get_score(i-1, features, add_score);
       double final_score = prf_score + add_score;
-      if (m_matrix_v[i][j] != m_matrix_v[i-1][j-1] + final_score){
-        if ( i > 0 && j > 0 && m_matrix_v[i][j] == m_matrix_g[i-1][j-1]+final_score){
+      if (m_matrix_v[i][j] != m_matrix_v[i-1][j-1] + final_score) {
+        if ( i > 0 && j > 0 && m_matrix_v[i][j] == m_matrix_g[i-1][j-1]+final_score) {
           current_matrix = "G";  
-        }
-        else if (i > 0 && j > 0 && m_matrix_v[i][j] == m_matrix_h[i-1][j-1]+final_score){
+        } else if (i > 0 && j > 0 
+                   && m_matrix_v[i][j] == m_matrix_h[i-1][j-1]+final_score) {
           current_matrix = "H";
         }
       }
       i--;
       j--;
-    }
-    else if (i > 0 && current_matrix == "G"){  //gap in seq2
+    } else if (i > 0 && current_matrix == "G") {  //gap in seq2
       new_char1 = s1[i];
       new_char2 = gap_code;
       if (m_matrix_g[i][j] == m_matrix_v[i-1][j] + m_gap_opening)
         current_matrix = "V";
       i--;
-    }
-    else if (j > 0 && current_matrix == "H"){  //gap in profile
+    } else if (j > 0 && current_matrix == "H") {  //gap in profile
       new_char1 = gap_code;
       new_char2 = s2[j];
-      if (m_matrix_h[i][j] == m_matrix_v[i][j-1] + m_gap_opening_horizontal){
+      if (m_matrix_h[i][j] == m_matrix_v[i][j-1] + m_gap_opening_horizontal) {
         current_matrix = "V";
       }
       j--;

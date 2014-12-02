@@ -32,7 +32,7 @@ namespace {
 }
 
 
-double txtproc::convertStringToDouble(std::string& s){
+double txtproc::convertStringToDouble(std::string& s) {
   double convertedDouble = atof(s.c_str());;
   return convertedDouble;
 }
@@ -52,12 +52,11 @@ std::vector<std::string> txtproc::split(const std::string &s, char delim) {
 Sequences txtproc::read_fasta(std::string filename,
                               int codonLength, 
                               IDsList* ids, 
-                              ProbsList* probs){
+                              ProbsList* probs) {
   CodonSeqWithNamesList resultSequences;
-  if (!misc::CheckIfFileExists(&filename)){
+  if (!misc::CheckIfFileExists(&filename)) {
     throw std::runtime_error("Input file doesn't exist");
-  }
-  else{
+  } else {
     std::string fastaSymbol = ">";
     std::ifstream fastafile (filename.c_str());
     SeqNames newName;
@@ -66,27 +65,25 @@ Sequences txtproc::read_fasta(std::string filename,
     bool sequences = true;
     int seqNo = -1;
     std::string line;
-    while(!safeGetline(fastafile, line).eof()){
+    while(!safeGetline(fastafile, line).eof()) {
         std::string firstChar = line.substr(0,1);
-        if (line != std::string("## PROBABILITIES")){
-          if (sequences && firstChar == fastaSymbol){
+        if (line != std::string("## PROBABILITIES")) {
+          if (sequences && firstChar == fastaSymbol) {
             seqNo++;
             resultSequences.push_back(newEntry);
             newName.push_back(line);
             resultSequences[seqNo].push_back(newName);
             newName.clear();
             resultSequences[seqNo].push_back(newSequence);
-          }
-          else if (sequences){
-            for (unsigned int i = 0; i < line.size();i++){
-              if (i % codonLength == 0){
+          } else if (sequences) {
+            for (unsigned int i = 0; i < line.size();i++) {
+              if (i % codonLength == 0) {
                 std::string newResidue = "";
                 //j for goes through all codon postions of this residue
-                for (unsigned int j = i;j < i + codonLength; j++){
-                    if (acceptedChar(line[j])){
+                for (unsigned int j = i;j < i + codonLength; j++) {
+                    if (acceptedChar(line[j])) {
                       newResidue += line[j];
-                    }
-                    else{
+                    } else {
                       std::cout << "I found a weird character (" << line[j] << "), so you probbaly want to go through your files and double check them"  << std::endl;
                       std::exit(0);
                     }
@@ -94,19 +91,17 @@ Sequences txtproc::read_fasta(std::string filename,
                 resultSequences[seqNo][1].push_back(newResidue);
               }
             }
-          }
-          //else means we're already in the motifs probs section
-          else{
+          } else{
+            //else means we're already in the motifs probs section
             std::istringstream iss(line);
             InputLine motif ((std::istream_iterator<std::string>(iss)),
                               std::istream_iterator<std::string>());
-            if (motif.size() == 2){
+            if (motif.size() == 2) {
               ids->push_back(motif[0]);
               probs->push_back(convertStringToDouble(motif[1]));
             }
           }
-        }
-        else{
+        } else {
           sequences = false;
         }
       }
@@ -119,11 +114,11 @@ Sequences txtproc::read_fasta(std::string filename,
 
 void txtproc::writeAlignmentToFile(StringSequences& sequences,
                                    SeqNames& sequence_names, 
-                                   std::string filename){
+                                   std::string filename) {
   std::stringstream sstr;
   sstr << filename << "_al";
   std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
-  for (unsigned int i = 0; i < sequences.size() ;i++){
+  for (unsigned int i = 0; i < sequences.size() ;i++) {
     outputFile << sequence_names[i] << "\n" << sequences[i] << "\n";
   }
 }
@@ -132,14 +127,14 @@ void txtproc::writeAlignmentToFile(StringSequences& sequences,
 void txtproc::writeAlignmentWithoutCodeToFile(StringSequences& sequences,
                                               SeqNames& sequence_names, 
                                               std::string filename, 
-                                              int codon_length){
+                                              int codon_length) {
   std::stringstream sstr;
   sstr << filename << "_al";
   std::ofstream outputFile(sstr.str().c_str(),std::ios::out);
-  for (unsigned int i = 0; i < sequences.size() ;i++){
+  for (unsigned int i = 0; i < sequences.size() ;i++) {
     outputFile << sequence_names[i]<< "\n";
     std::string seq="";
-    for (unsigned int j = 0; j < sequences[i].size(); j+=codon_length){
+    for (unsigned int j = 0; j < sequences[i].size(); j+=codon_length) {
       seq += sequences[i][j];
     }
     outputFile << seq << std::endl;
@@ -147,19 +142,19 @@ void txtproc::writeAlignmentWithoutCodeToFile(StringSequences& sequences,
 }
 
 
-std::string txtproc::charToString(char mychar){
+std::string txtproc::charToString(char mychar) {
   return std::string(1,mychar);
 }
 
 
-std::string txtproc::charToString(char mychar1, char mychar2){
+std::string txtproc::charToString(char mychar1, char mychar2) {
   std::string newstring = std::string(1,mychar1);
   newstring.push_back(mychar2);
   return newstring;
 }
 
 
-std::istream& txtproc::safeGetline(std::istream& is, std::string& t){
+std::istream& txtproc::safeGetline(std::istream& is, std::string& t) {
   t.clear();
   std::streambuf* sb = is.rdbuf();
     for (;;) {
@@ -183,10 +178,10 @@ std::istream& txtproc::safeGetline(std::istream& is, std::string& t){
 }
 
 
-bool txtproc::acceptedChar(char my_char){
+bool txtproc::acceptedChar(char my_char) {
   bool result = false;
-  for (auto &acc_char: AcceptedCharacters){
-    if (acc_char == my_char){
+  for (auto &acc_char: AcceptedCharacters) {
+    if (acc_char == my_char) {
       result = true;
       break;
     }
@@ -197,44 +192,42 @@ bool txtproc::acceptedChar(char my_char){
 
 void txtproc::process_conf_file(std::string filename, 
                                 FeaturesProfile& feat_profile, 
-                                Sequences& sequences_aa){
+                                Sequences& sequences_aa) {
   std::ifstream conf_file(filename.c_str());
   std::string line;
   RuleTuplesList usr_feature_rules;
   DefaultRulesList feature_rules;
   bool features = true;
   std::string tag_usr = "## USER DEFINED";
-  while(!safeGetline(conf_file, line).eof()){
-       if (features){
+  while(!safeGetline(conf_file, line).eof()) {
+       if (features) {
           std::size_t found = line.find(tag_usr);
-          if (found != std::string::npos){
+          if (found != std::string::npos) {
             features = false;
           }
-       }
-       else if (line[0] != '#' && features){
-        line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
-        line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
-        FeatDescriptor tmp_vector = split(line,';');
-        feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], 
-                                                std::stoi(tmp_vector[2]), 
-                                                std::stoi(tmp_vector[3]), 
-                                                std::stoi(tmp_vector[4])));
-       }
-       else if (line[0] != '#'){
-        line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
-        line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
-        FeatDescriptor tmp_vector = split(line,';');
-        usr_feature_rules.push_back(std::make_tuple(tmp_vector[0], 
-                                                    tmp_vector[1], 
-                                                    std::stoi(tmp_vector[2]), 
-                                                    std::stoi(tmp_vector[3]), 
-                                                    std::stoi(tmp_vector[4]),
-                                                    std::stod(tmp_vector[5]),
-                                                    std::stod(tmp_vector[6]),
-                                                    std::stod(tmp_vector[7]),
-                                                    std::stod(tmp_vector[8]),
-                                                    tmp_vector[9],
-                                                    tmp_vector[10]));
+       } else if (line[0] != '#' && features) {
+         line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
+         line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
+         FeatDescriptor tmp_vector = split(line,';');
+         feature_rules.push_back(std::make_tuple(tmp_vector[0], tmp_vector[1], 
+                                                 std::stoi(tmp_vector[2]), 
+                                                 std::stoi(tmp_vector[3]), 
+                                                 std::stoi(tmp_vector[4])));
+       } else if (line[0] != '#') {
+         line.erase(std::remove(line.begin(), line.end(), '\t'), line.end());
+         line.erase(std::remove(line.begin(), line.end(), ' '), line.end());
+         FeatDescriptor tmp_vector = split(line,';');
+         usr_feature_rules.push_back(std::make_tuple(tmp_vector[0], 
+                                                     tmp_vector[1], 
+                                                     std::stoi(tmp_vector[2]), 
+                                                     std::stoi(tmp_vector[3]), 
+                                                     std::stoi(tmp_vector[4]),
+                                                     std::stod(tmp_vector[5]),
+                                                     std::stod(tmp_vector[6]),
+                                                     std::stod(tmp_vector[7]),
+                                                     std::stod(tmp_vector[8]),
+                                                     tmp_vector[9],
+                                                     tmp_vector[10]));
     }
   }
   feat_profile.add_usr_features(usr_feature_rules);
@@ -244,33 +237,31 @@ void txtproc::process_conf_file(std::string filename,
 
 
 FeaturesList txtproc::unfold(std::string conf_string, 
-                             FeatureNamesList& list_of_features){
+                             FeatureNamesList& list_of_features) {
   FeatureNamesList tmp_vector = split(conf_string,',');
   FeaturesList out_vector;
-  for (auto &item: tmp_vector){
-    if (split(item,'_').size() > 1){            
+  for (auto &item: tmp_vector) {
+    if (split(item,'_').size() > 1) {            
       // this is a single feature entry, e.g. 'PF_A'
       std::string feat_name = std::string("USR_") + item;
       out_vector.push_back(vec_util::FindIndex(feat_name, list_of_features));
-    }
-    else if (split(item,'[').size() == 1){            
+    } else if (split(item,'[').size() == 1) {            
       // this is an entry with only the tag specified (without any exceptions)
-      for (unsigned int j = 0; j < list_of_features.size(); j++){
+      for (unsigned int j = 0; j < list_of_features.size(); j++) {
         SplitFeatName singlefeat = split(list_of_features[j],'_');
-        if (singlefeat.size() > 1 && singlefeat[1] == item){
+        if (singlefeat.size() > 1 && singlefeat[1] == item) {
           out_vector.push_back(j);
         }
       }
-    }
-    else{
+    } else {
       //TAG with exceptions
       SplitFeatName tagfeat = split(item,'[');
       std::string tag = tagfeat[0];
       FeatureNamesList exceptions = split(split(tagfeat[1],']')[0], '.');
-      for (unsigned int j = 0; j < list_of_features.size(); j++){
+      for (unsigned int j = 0; j < list_of_features.size(); j++) {
         SplitFeatName singlefeat = split(list_of_features[j],'_');
         if (singlefeat.size() > 1 && singlefeat[1] == tag && 
-            !vec_util::CheckIfContains(exceptions, singlefeat[2])){
+            !vec_util::CheckIfContains(exceptions, singlefeat[2])) {
           out_vector.push_back(j);
         }
       }
