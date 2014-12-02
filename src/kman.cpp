@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
                                           &motifs_probs);
       } catch(const std::exception& e) {
         std::cout << "Exception: " << e.what() << "\n";
-        return -1;
+        std::exit(EXIT_FAILURE);
       }
       StringSequences seq_names = sequences.get_names();
       StringSequences alignment = msa::run_msa(sequences, conf_file,

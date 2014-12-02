@@ -88,7 +88,7 @@ Sequences txtproc::read_fasta(std::string filename,
                     } else {
                       std::cout << "I found a weird character (" << line[j] 
                                 << std::endl;
-                      std::exit(0);
+                      std::exit(EXIT_FAILURE);
                     }
                 }
                 resultSequences[seqNo][1].push_back(newResidue);
