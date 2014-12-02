@@ -34,7 +34,7 @@ namespace {
 }
 
 
-void txtproc::writeAlignmentToFile(StringSequences& sequences,
+void txtproc::WriteAlignmentToFile(StringSequences& sequences,
                                    SeqNames& sequence_names, 
                                    std::string filename) {
   std::stringstream sstr;
@@ -46,7 +46,7 @@ void txtproc::writeAlignmentToFile(StringSequences& sequences,
 }
 
 
-void txtproc::writeAlignmentWithoutCodeToFile(StringSequences& sequences,
+void txtproc::WriteAlignmentWithoutCodeToFile(StringSequences& sequences,
                                               SeqNames& sequence_names, 
                                               std::string filename, 
                                               int codon_length) {
@@ -64,7 +64,7 @@ void txtproc::writeAlignmentWithoutCodeToFile(StringSequences& sequences,
 }
 
 
-std::istream& txtproc::safeGetline(std::istream& is, std::string& t) {
+std::istream& txtproc::SafeGetline(std::istream& is, std::string& t) {
   t.clear();
   std::streambuf* sb = is.rdbuf();
     for (;;) {
@@ -88,7 +88,7 @@ std::istream& txtproc::safeGetline(std::istream& is, std::string& t) {
 }
 
 
-bool txtproc::acceptedChar(char my_char) {
+bool txtproc::AcceptedChar(char my_char) {
   bool result = false;
   for (auto &acc_char : AcceptedCharacters) {
     if (acc_char == my_char) {
@@ -100,7 +100,7 @@ bool txtproc::acceptedChar(char my_char) {
 }
 
 
-void txtproc::process_conf_file(std::string filename, 
+void txtproc::ProcessConfFile(std::string filename, 
                                 FeaturesProfile& feat_profile, 
                                 Sequences& sequences_aa) {
   std::ifstream conf_file(filename.c_str());
@@ -109,7 +109,7 @@ void txtproc::process_conf_file(std::string filename,
   DefaultRulesList feature_rules;
   bool features = true;
   std::string tag_usr = "## USER DEFINED";
-  while(!safeGetline(conf_file, line).eof()) {
+  while(!SafeGetline(conf_file, line).eof()) {
        if (features) {
           std::size_t found = line.find(tag_usr);
           if (found != std::string::npos) {
@@ -148,7 +148,7 @@ void txtproc::process_conf_file(std::string filename,
 }
 
 
-FeaturesList txtproc::unfold(std::string conf_string, 
+FeaturesList txtproc::Unfold(std::string conf_string, 
                              FeatureNamesList& list_of_features) {
   FeatDescriptor tmp_vector;
   boost::split(tmp_vector, conf_string, boost::is_any_of(","));

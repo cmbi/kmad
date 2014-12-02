@@ -25,7 +25,7 @@ StringSequences msa::run_msa(Sequences sequences,
       FeaturesProfile fprf(domain_score, phosph_score, motif_score,
                            motifs_ids, motifs_probs);
       if (!conf_filename.empty()) {
-        txtproc::process_conf_file(conf_filename, fprf, sequences);
+        txtproc::ProcessConfFile(conf_filename, fprf, sequences);
       }
       std::vector<double> identities;
       //first round of the alignment - all vs 1st

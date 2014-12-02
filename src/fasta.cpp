@@ -27,7 +27,7 @@ Sequences fasta::parse_fasta(std::string filename,
     bool sequences = true;
     int seqNo = -1;
     std::string line;
-    while(!txtproc::safeGetline(fastafile, line).eof()) {
+    while(!txtproc::SafeGetline(fastafile, line).eof()) {
         std::string firstChar = line.substr(0, 1);
         if (line != std::string("## PROBABILITIES")) {
           if (sequences && firstChar == fastaSymbol) {
@@ -43,7 +43,7 @@ Sequences fasta::parse_fasta(std::string filename,
                 std::string newResidue = "";
                 //j for goes through all codon postions of this residue
                 for (unsigned int j = i;j < i + codonLength; j++) {
-                    if (txtproc::acceptedChar(line[j])) {
+                    if (txtproc::AcceptedChar(line[j])) {
                       newResidue += line[j];
                     } else {
                       std::cout << "I found a weird character (" << line[j] 

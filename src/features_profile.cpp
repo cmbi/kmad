@@ -304,9 +304,9 @@ double FeaturesProfile::GetModifier(std::string& feat_name) {
 
 void FeaturesProfile::set_rules(RuleTuplesList& new_rules) {
   for (auto &rule : new_rules) {
-    FeaturesList incr_feat = txtproc::unfold(std::get<9>(rule), 
+    FeaturesList incr_feat = txtproc::Unfold(std::get<9>(rule), 
                                              list_of_features);
-    FeaturesList red_feat = txtproc::unfold(std::get<10>(rule), 
+    FeaturesList red_feat = txtproc::Unfold(std::get<10>(rule), 
                                             list_of_features);
     // new_tuple <tag+name, incr_rule_1, incr_rule_2, red_rule_1, red_rule_2, 
     // incr_features_positions, red_features_positions>
