@@ -37,16 +37,16 @@ void Profile::ProcessProfile(SequenceList& alignment){
 			if (m_prf_matrix[j][i] != 0){
         SbstMatColumn column_int; 
         substitution_matrix::get_column(j, column_int);
-				ProfileMatrixColumn column_j = vec_util::convertIntVectorToDoubleVector(column_int);
-				vec_util::multiplyVectorByAScalar(column_j, m_prf_matrix[j][i]);
+				ProfileMatrixColumn column_j = vec_util::ConvertIntVectorToDoubleVector(column_int);
+				vec_util::MultiplyVectorByAScalar(column_j, m_prf_matrix[j][i]);
 				columns_to_add.push_back(column_j);
 			}
 		}
     //add up columns from substitution matrix for amino acids seen on ith 
     //position(times occurence/totalNrOfSeq))
-		new_profile.push_back(vec_util::addUp(columns_to_add));	
+		new_profile.push_back(vec_util::AddUp(columns_to_add));	
 	}
-	vec_util::transposeVec(new_profile);
+	vec_util::TransposeVec(new_profile);
 	m_prf_matrix = new_profile;
 }
 
@@ -80,12 +80,12 @@ void Profile::CreateProfile(SequenceList& alignment){
 				non_gaps++;
 			}
 		}
-		vec_util::divideVectorByAScalar(profile_column,no_of_sequences);
-		//vec_util::divideVectorByAScalar(profileColumn,nonGaps);
+		vec_util::DivideVectorByAScalar(profile_column,no_of_sequences);
+		//vec_util::DivideVectorByAScalar(profileColumn,nonGaps);
 		tmp_result.push_back(profile_column);
 	}
 	m_prf_matrix = tmp_result;
-	vec_util::transposeVec(m_prf_matrix);
+	vec_util::TransposeVec(m_prf_matrix);
 }
 
 

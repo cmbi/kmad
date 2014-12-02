@@ -64,7 +64,7 @@ StringSequences Sequences::PerformMSAfirstRound(Profile& output_profile,
 		double identity = CalcIdentity(al_without_lower);
 		identities.push_back(identity);
 	}
-	return vec_util::flatten(alignment_with_lowercase);		
+	return vec_util::Flatten(alignment_with_lowercase);		
 }
 
 
@@ -104,7 +104,7 @@ void Sequences::PerformMSAnextRound(StringSequences& prev_alignment,
 		output_features_profile.CreateProfile(alignment_without_lowercase, 
                                           codon_length);
 		output_profile.ProcessProfile(alignment_without_lowercase);
-		prev_alignment = vec_util::flatten(alignment_with_lowercase);
+		prev_alignment = vec_util::Flatten(alignment_with_lowercase);
     //update number of performed alignments
 		prev_alignments = next_alignments; 
 	}

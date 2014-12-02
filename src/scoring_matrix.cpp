@@ -39,7 +39,7 @@ ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
 void ScoringMatrix::CalculateScores(ResidueSequence s2, Profile& prf, 
                                     FeaturesProfile& feat_prf, 
                                     int codon_length){
-	s2 = vec_util::push_front(s2, misc::CreateGapResidue(codon_length));
+	s2 = vec_util::PushFront(s2, misc::CreateGapResidue(codon_length));
 
   assert(m_matrix_v.size() == m_matrix_g.size());
   assert(m_matrix_v.size() == m_matrix_h.size());
@@ -134,7 +134,7 @@ void ScoringMatrix::PerformNWAlignment(SequenceList *result,
 	ResidueSequence s1 = misc::PseudoResidueSequence(prf.get_matrix()[0].size()+1, 
                                                    codon_length); 
 	Residue gap_code = misc::CreateGapResidue(codon_length);
-	s2 = vec_util::push_front(s2,gap_code);
+	s2 = vec_util::PushFront(s2,gap_code);
 	ResidueSequence new_s1;
 	ResidueSequence new_s2;
 	SequenceList ali; //alignment
