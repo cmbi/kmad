@@ -20,7 +20,7 @@ typedef std::vector<std::string> InputLine;
 typedef std::vector<std::string> FeatDescriptor;
 typedef std::vector<std::string> SplitFeatName;
 namespace {
-	static const AlphabetVec accepted_characters = { 'a','b','c','d','e','f','g',
+	static const AlphabetVec AcceptedCharacters = { 'a','b','c','d','e','f','g',
                                                    'h','i','j','k','l','m','n',
                                                    'o','p','q','r','s','t','u',
                                                    'v','w','x','y','z','A','B',
@@ -186,7 +186,7 @@ std::istream& txtproc::safeGetline(std::istream& is, std::string& t)
 
 bool txtproc::acceptedChar(char my_char){
 	bool result = false;
-  for (auto &acc_char: accepted_characters){
+  for (auto &acc_char: AcceptedCharacters){
 		if (acc_char == my_char){
 			result = true;
 			break;
@@ -252,7 +252,7 @@ FeaturesList txtproc::unfold(std::string conf_string,
 		if (split(item,'_').size() > 1){						
       // this is a single feature entry, e.g. 'PF_A'
       std::string feat_name = std::string("USR_") + item;
-			out_vector.push_back(vec_util::findIndex(feat_name, list_of_features));
+			out_vector.push_back(vec_util::FindIndex(feat_name, list_of_features));
 		}
 		else if (split(item,'[').size() == 1){						
       // this is an entry with only the tag specified (without any exceptions)
@@ -271,7 +271,7 @@ FeaturesList txtproc::unfold(std::string conf_string,
 			for (unsigned int j = 0; j < list_of_features.size(); j++){
 				SplitFeatName singlefeat = split(list_of_features[j],'_');
 				if (singlefeat.size() > 1 && singlefeat[1] == tag && 
-            !vec_util::contains(exceptions, singlefeat[2])){
+            !vec_util::CheckIfContains(exceptions, singlefeat[2])){
 					out_vector.push_back(j);
 				}
 			}

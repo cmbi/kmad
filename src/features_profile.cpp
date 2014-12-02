@@ -102,11 +102,11 @@ void FeaturesProfile::CountOccurences(const SequenceList& alignment,
 			non_gaps++;
 			}
 		}
-	  vec_util::divideVectorByAScalar(profile_column, no_of_sequences);
-	  //vec_util::divideVectorByAScalar(profileColumn,nonGaps);
+	  vec_util::DivideVectorByAScalar(profile_column, no_of_sequences);
+	  //vec_util::DivideVectorByAScalar(profileColumn,nonGaps);
 		m_occurences_matrix.push_back(profile_column);
 	} 
-	vec_util::transposeVec(m_occurences_matrix);
+	vec_util::TransposeVec(m_occurences_matrix);
 }
 
 
@@ -159,7 +159,7 @@ void FeaturesProfile::ExpandListOfFeatures(const SequenceList& sequences){
 			FeatureNamesList features = sequences[i][j].get_features();
 			for (unsigned int k = 0; k < features.size();k++){
 				std::string feature_k = features[k];
-				if (!vec_util::contains(list_of_features, feature_k) && feature_k != nothing){	//check whether this domain is already in the list of features
+				if (!vec_util::CheckIfContains(list_of_features, feature_k) && feature_k != nothing){	//check whether this domain is already in the list of features
 					list_of_features.push_back(feature_k);
 					if (feature_k.substr(0,6) == "domain"){
 						domain_indexes.push_back(list_of_features.size()-1); //to later look for domains only in these positions (not necessary but saves time)
@@ -308,7 +308,7 @@ void FeaturesProfile::add_usr_features(RuleTuplesList& new_rules){
   for (auto &rule: new_rules){
 		std::string feature_i = std::string("USR_") + std::get<0>(rule) \
                             + std::string("_") + std::get<1>(rule);
-		if (!vec_util::contains(list_of_features,feature_i)){
+		if (!vec_util::CheckIfContains(list_of_features,feature_i)){
 			list_of_features.push_back(feature_i);
 		}
 	}
