@@ -4,12 +4,14 @@
 #include "txtproc.h"
 #include "misc.h"
 
-#include<boost/range/numeric.hpp>
+#include <boost/range/numeric.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include <iostream>
 #include <string>
 #include <vector>
 #include <tuple>
+
 namespace {
   // 0 - highest level of annotation, 3 - lowest, P - predicted
   FeatureNamesList list_of_features = {"ptm_phosph0", "ptm_phosph1",
@@ -107,7 +109,11 @@ void FeaturesProfile::CountOccurences(const SequenceList& alignment,
 
 double FeaturesProfile::GetMotifsProb(std::string& m_id) {
   double prob = 0;
-  std::string id_code = txtproc::split(m_id, '_')[1];
+
+  FeatNameSplit motif_name;
+  boost::split(motif_name, m_id, boost::is_any_of("_"));
+  std::string id_code = motif_name[1];
+
   assert(m_motifs_ids.size() == m_motifs_probs.size());
   for (unsigned int i = 0; i < m_motifs_ids.size(); i++) {
     if (m_motifs_ids[i] == id_code) {
@@ -279,7 +285,11 @@ double FeaturesProfile::ScoreUsrFeatures(unsigned int& position,
 
 
 double FeaturesProfile::GetModifier(std::string& feat_name) {
-  std::string feat_code = txtproc::split(feat_name, '_')[0];
+
+  FeatNameSplit feat_name_vec;
+  boost::split(feat_name_vec, feat_name, boost::is_any_of("_"));
+  std::string feat_code  = feat_name_vec[0];
+
   double modifier = 1;
   if (feat_code == "ptm") {
     modifier = m_phosph_score;
@@ -294,9 +304,9 @@ double FeaturesProfile::GetModifier(std::string& feat_name) {
 
 void FeaturesProfile::set_rules(RuleTuplesList& new_rules) {
   for (auto &rule : new_rules) {
-    FeaturesList incr_feat = txtproc::unfold(std::get<9>(rule), 
+    FeaturesList incr_feat = txtproc::Unfold(std::get<9>(rule), 
                                              list_of_features);
-    FeaturesList red_feat = txtproc::unfold(std::get<10>(rule), 
+    FeaturesList red_feat = txtproc::Unfold(std::get<10>(rule), 
                                             list_of_features);
     // new_tuple <tag+name, incr_rule_1, incr_rule_2, red_rule_1, red_rule_2, 
     // incr_features_positions, red_features_positions>

@@ -95,9 +95,9 @@ int main(int argc, char *argv[]) {
                                                motifs_ids, 
                                                motifs_probs);
       if (out_encoded) {
-        txtproc::writeAlignmentToFile(alignment, seq_names, output_prefix);            
+        txtproc::WriteAlignmentToFile(alignment, seq_names, output_prefix);            
       } else {
-        txtproc::writeAlignmentWithoutCodeToFile(alignment, seq_names, 
+        txtproc::WriteAlignmentWithoutCodeToFile(alignment, seq_names, 
                                                  output_prefix, codon_length);            
       }
       time_t end = clock();

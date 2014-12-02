@@ -86,7 +86,7 @@ void Residue::CodonToFeatures() {
   }
   //DOMAIN
   if (m_codon.size() >= 4) {
-    feat = txtproc::charToString(m_codon[2], m_codon[3]);
+    feat = std::string(1, m_codon[2]) + std::string(1, m_codon[3]);
     if (feat != nothing) {
       feat = "domain_" + feat;
       m_features.push_back(feat);
@@ -94,7 +94,7 @@ void Residue::CodonToFeatures() {
   }
   //MOTIF
   if (m_codon.size() >= 7) {
-    feat = txtproc::charToString(m_codon[5], m_codon[6]);
+    feat = std::string(1, m_codon[5]) + std::string(1, m_codon[6]);
     if (feat != nothing) {
       feat = "motif_" + feat;
       m_features.push_back(feat);
