@@ -131,8 +131,7 @@ void ScoringMatrix::PerformNWAlignment(SequenceList& result,
                                       int codon_length) {
   //creating polyA pseudoSequence representing the profile, 
   //to know later where are the gaps in the profile
-  ResidueSequence s1 = misc::PseudoResidueSequence(prf.get_matrix()[0].size()+1, 
-                                                   codon_length); 
+  ResidueSequence s1(prf.get_matrix()[0].size()+1, Residue('A', codon_length));
   Residue gap_residue = Residue('-', codon_length);
   s2 = vec_util::push_front(s2, gap_residue);
   ResidueSequence new_s1;
