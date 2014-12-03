@@ -22,10 +22,3 @@ ResidueSequence misc::PseudoResidueSequence(int seq_length, int codon_length) {
   ResidueSequence result(seq_length, single_res);
   return result;
 }
-
-
-bool misc::CheckIfFileExists(const std::string* name) {
-  const char *cstr = name->c_str();
-  std::ifstream infile(cstr);
-  return infile.good();
-}

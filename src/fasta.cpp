@@ -2,11 +2,16 @@
 #include "misc.h"
 #include "txtproc.h"
 
+#include <boost/filesystem.hpp>
+
 #include <iostream>
 #include <vector>
 #include <sstream>
 #include <iterator>
 #include <stdexcept>
+
+
+namespace fs = boost::filesystem;
 
 
 typedef std::vector<std::string> InputLine;
@@ -16,8 +21,10 @@ Sequences fasta::parse_fasta(std::string filename,
                              IDsList* ids, 
                              ProbsList* probs) {
   CodonSeqWithNamesList resultSequences;
-  if (!misc::CheckIfFileExists(&filename)) {
-    throw std::runtime_error("Input file doesn't exist");
+  fs::path p(filename);
+  if (!fs::exists(p)) {
+    std::cout << "Input file doesn't exist" << std::endl;
+    std::exit(EXIT_FAILURE);
   } else {
     std::string fastaSymbol = ">";
     std::ifstream fastafile (filename.c_str());
@@ -70,6 +77,6 @@ Sequences fasta::parse_fasta(std::string filename,
       }
     fastafile.close();
   }
-  Sequences sequences(resultSequences);
-  return sequences;
+  Sequences sequences_out(resultSequences);
+  return sequences_out;
 }

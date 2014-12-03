@@ -1,7 +1,9 @@
 bin_PROGRAMS	=	kman test_kman
 
 shared_LDADD	=	$(BOOST_PROGRAM_OPTIONS_LIB) \
-								$(BOOST_UNIT_TEST_FRAMEWORK_LIB)
+								$(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
+								$(BOOST_SYSTEM_LIB) \
+								$(BOOST_FILESYSTEM_LIB)
 								
 
 

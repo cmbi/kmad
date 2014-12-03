@@ -13,6 +13,8 @@ AC_CONFIG_MACRO_DIR([m4])
 m4_include([m4/ax_boost_base.m4])
 m4_include([m4/ax_boost_program_options.m4])
 m4_include([m4/ax_boost_unit_test_framework.m4])
+m4_include([m4/ax_boost_system.m4])
+m4_include([m4/ax_boost_filesystem.m4])
 
 # Checks for programs.
 AC_PROG_CXX
@@ -26,8 +28,10 @@ fi
 # Checks for libraries.
 AX_BOOST_BASE # Adding the boost version fails using old autoconf. Should be
               # 1.48.
+AX_BOOST_FILESYSTEM
 AX_BOOST_PROGRAM_OPTIONS
 AX_BOOST_UNIT_TEST_FRAMEWORK
+AX_BOOST_SYSTEM
 AM_CONDITIONAL([HAVE_CPPCHECK], [test -n "$CPPCHECK"])
 
 # Checks for header files.

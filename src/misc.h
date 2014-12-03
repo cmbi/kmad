@@ -17,10 +17,6 @@ namespace misc{
   /// by a codon of length codon_length
   ///
   ResidueSequence PseudoResidueSequence(int seq_length, int codon_length);
-  ///
-  /// returns True if the file 'name' exists
-  ///
-  bool CheckIfFileExists(const std::string* name);
 }
 
 #endif /* MISC_H */
