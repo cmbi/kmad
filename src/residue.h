@@ -11,6 +11,11 @@ class Residue{
     ///
     Residue(std::string codon);
     ///
+    /// constructore - creates a residue with no features, with given amino
+    /// acid
+    /// 
+    Residue(char aa, int codon_length);
+    ///
     /// constructor; creates an empty Residue object
     ///
     Residue();

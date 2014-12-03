@@ -39,7 +39,9 @@ ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
 void ScoringMatrix::CalculateScores(ResidueSequence s2, Profile& prf, 
                                     FeaturesProfile& feat_prf, 
                                     int codon_length) {
-  s2 = vec_util::push_front(s2, misc::CreateGapResidue(codon_length));
+  Residue gap_residue = Residue('_', codon_length);
+  //s2 = vec_util::push_front(s2, misc::CreateGapResidue(codon_length));
+  s2 = vec_util::push_front(s2, gap_residue);
 
   assert(m_matrix_v.size() == m_matrix_g.size());
   assert(m_matrix_v.size() == m_matrix_h.size());
