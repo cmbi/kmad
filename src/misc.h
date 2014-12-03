@@ -9,10 +9,6 @@
 class Residue;
 namespace misc{
   ///
-  /// creates a gap Residue object
-  ///
-  Residue CreateGapResidue(int codon_length);
-  ///
   /// creates a polyA sequence of length seqLength, where each resdue is coded 
   /// by a codon of length codon_length
   ///
