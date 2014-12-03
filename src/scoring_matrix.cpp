@@ -39,7 +39,8 @@ ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
 void ScoringMatrix::CalculateScores(ResidueSequence s2, Profile& prf, 
                                     FeaturesProfile& feat_prf, 
                                     int codon_length) {
-  s2 = vec_util::push_front(s2, misc::CreateGapResidue(codon_length));
+  Residue gap_residue = Residue('-', codon_length);
+  s2 = vec_util::push_front(s2, gap_residue);
 
   assert(m_matrix_v.size() == m_matrix_g.size());
   assert(m_matrix_v.size() == m_matrix_h.size());
@@ -130,10 +131,9 @@ void ScoringMatrix::PerformNWAlignment(SequenceList& result,
                                       int codon_length) {
   //creating polyA pseudoSequence representing the profile, 
   //to know later where are the gaps in the profile
-  ResidueSequence s1 = misc::PseudoResidueSequence(prf.get_matrix()[0].size()+1, 
-                                                   codon_length); 
-  Residue gap_code = misc::CreateGapResidue(codon_length);
-  s2 = vec_util::push_front(s2,gap_code);
+  ResidueSequence s1(prf.get_matrix()[0].size()+1, Residue('A', codon_length));
+  Residue gap_residue = Residue('-', codon_length);
+  s2 = vec_util::push_front(s2, gap_residue);
   ResidueSequence new_s1;
   ResidueSequence new_s2;
   SequenceList ali; //alignment
@@ -151,12 +151,12 @@ void ScoringMatrix::PerformNWAlignment(SequenceList& result,
     j = best_score[1];
     for (int k = s1.size()-1; k > i; k--) {
       new_char1 = s1[k];
-      new_char2 = gap_code;
+      new_char2 = gap_residue;
       new_s1.push_back(new_char1);
       new_s2.push_back(new_char2);
     }
     for (int k = s2.size()-1; k > j; k--) {
-      new_char1 = gap_code;
+      new_char1 = gap_residue;
       new_char2 = s2[k];
       new_s2.push_back(new_char2);
       new_s1.push_back(new_char1);
@@ -188,12 +188,12 @@ void ScoringMatrix::PerformNWAlignment(SequenceList& result,
       j--;
     } else if (i > 0 && current_matrix == "G") {  //gap in seq2
       new_char1 = s1[i];
-      new_char2 = gap_code;
+      new_char2 = gap_residue;
       if (m_matrix_g[i][j] == m_matrix_v[i-1][j] + m_gap_opening)
         current_matrix = "V";
       i--;
     } else if (j > 0 && current_matrix == "H") {  //gap in profile
-      new_char1 = gap_code;
+      new_char1 = gap_residue;
       new_char2 = s2[j];
       if (m_matrix_h[i][j] == m_matrix_v[i][j-1] + m_gap_opening_horizontal) {
         current_matrix = "V";

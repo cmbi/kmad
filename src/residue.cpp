@@ -12,6 +12,13 @@ Residue::Residue(std::string codon)
 }
 
 
+Residue::Residue(char aa, int codon_length){
+  m_codon = std::string(codon_length, 'A');
+  m_codon[0] = aa;
+  m_aa = aa;
+}
+
+
 Residue::Residue() {}
 
 
