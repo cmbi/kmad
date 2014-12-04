@@ -16,7 +16,6 @@ kman_SOURCES	=	src/kman.cpp \
 								src/sequences.cpp \
 								src/txtproc.cpp \
 								src/vec_util.cpp \
-								src/misc.cpp \
 								src/substitution_matrix.cpp \
 								src/msa.cpp
 
@@ -32,7 +31,6 @@ test_kman_SOURCES = tests/test_vecutil.cpp \
 										src/sequences.cpp \
 										src/txtproc.cpp \
 										src/vec_util.cpp \
-										src/misc.cpp \
 										src/substitution_matrix.cpp \
 										src/msa.cpp
 

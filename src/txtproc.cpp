@@ -1,4 +1,3 @@
-#include "misc.h"
 #include "txtproc.h"
 #include "vec_util.h"
 #include "residue.h"

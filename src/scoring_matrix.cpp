@@ -3,7 +3,6 @@
 #include "residue.h"
 #include "substitution_matrix.h"
 #include "profile.h"
-#include "misc.h"
 #include "vec_util.h"
 #include "txtproc.h"
 
@@ -40,7 +39,7 @@ void ScoringMatrix::CalculateScores(ResidueSequence s2, Profile& prf,
                                     FeaturesProfile& feat_prf, 
                                     int codon_length) {
   Residue gap_residue = Residue('-', codon_length);
-  s2 = vec_util::push_front(s2, gap_residue);
+  s2.insert(s2.begin(), gap_residue);
 
   assert(m_matrix_v.size() == m_matrix_g.size());
   assert(m_matrix_v.size() == m_matrix_h.size());
@@ -133,7 +132,7 @@ void ScoringMatrix::PerformNWAlignment(SequenceList& result,
   //to know later where are the gaps in the profile
   ResidueSequence s1(prf.get_matrix()[0].size()+1, Residue('A', codon_length));
   Residue gap_residue = Residue('-', codon_length);
-  s2 = vec_util::push_front(s2, gap_residue);
+  s2.insert(s2.begin(), gap_residue);
   ResidueSequence new_s1;
   ResidueSequence new_s2;
   SequenceList ali; //alignment
@@ -142,9 +141,9 @@ void ScoringMatrix::PerformNWAlignment(SequenceList& result,
   int i = s1.size()-1;
   int j = s2.size()-1;
   std::string current_matrix = "V";
-  //if bestScore isn't in the lower right corner, then add gaps to new_s1 or new_s2
+  //if bestScore isn't in the lower right corner, then add gaps 
+  //to new_s1 or new_s2
   ValueCoords best_score = FindBestScore();
-  //if (FindBestScore()[0] != (signed)m_matrix_v.size()-1 || FindBestScore()[1] != (signed)m_matrix_v[0].size()-1) {
   if (best_score[0] != (signed)m_matrix_v.size()-1 
       || best_score[1] != (signed)m_matrix_v[0].size()-1) {
     i = best_score[0];
@@ -177,7 +176,8 @@ void ScoringMatrix::PerformNWAlignment(SequenceList& result,
       feat_prf.get_score(i-1, features, add_score);
       double final_score = prf_score + add_score;
       if (m_matrix_v[i][j] != m_matrix_v[i-1][j-1] + final_score) {
-        if ( i > 0 && j > 0 && m_matrix_v[i][j] == m_matrix_g[i-1][j-1]+final_score) {
+        if (i > 0 && j > 0 
+            && m_matrix_v[i][j] == m_matrix_g[i-1][j-1]+final_score) {
           current_matrix = "G";  
         } else if (i > 0 && j > 0 
                    && m_matrix_v[i][j] == m_matrix_h[i-1][j-1]+final_score) {

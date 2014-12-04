@@ -1,7 +1,6 @@
 //Profile class implementation
 #include "profile.h"
 #include "residue.h"
-#include "misc.h"
 #include "substitution_matrix.h"
 #include "vec_util.h"
 

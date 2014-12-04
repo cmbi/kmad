@@ -4,7 +4,6 @@
 #include "residue.h"
 #include "scoring_matrix.h"
 #include "sequences.h"
-#include "misc.h"
 #include "msa.h"
 #include "txtproc.h"
 #include "vec_util.h"

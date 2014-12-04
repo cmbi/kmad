@@ -82,14 +82,6 @@ StringSequences vec_util::Flatten(const SequenceList& vec) {
 }
 
 
-ResidueSequence vec_util::push_front(ResidueSequence& seq, Residue new_residue) {
-  reverse(seq.begin(), seq.end());
-  seq.push_back(new_residue);
-  reverse(seq.begin(), seq.end());
-  return seq;
-}
-
-
 ProfileMatrixRow vec_util::Average(const SbstMatrixColumns& vec) {
   ProfileMatrixRow result;
   for (unsigned int i = 0; i < vec[0].size(); i++) {

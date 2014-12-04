@@ -5,6 +5,7 @@
 #include "types.h"
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 
 class Sequences;
