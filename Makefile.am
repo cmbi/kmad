@@ -8,6 +8,7 @@ shared_LDADD	=	$(BOOST_PROGRAM_OPTIONS_LIB) \
 
 
 kman_SOURCES	=	src/kman.cpp \
+								src/config.cpp \
 								src/fasta.cpp \
 								src/features_profile.cpp \
 								src/profile.cpp \

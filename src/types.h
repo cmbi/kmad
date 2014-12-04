@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <tuple>
+#include <map>
 
 class Residue;
 
@@ -39,3 +40,5 @@ typedef std::vector<DefaultRuleTuple> DefaultRulesList;
 typedef std::vector<char> AlphabetVec;
 typedef std::vector<std::string> FeatNameSplit;
 typedef std::vector<std::string> NameSplit;
+
+typedef std::map<std::string, std::vector<double>> UsrFeatureMap;
