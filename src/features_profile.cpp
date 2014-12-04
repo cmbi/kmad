@@ -2,7 +2,6 @@
 #include "residue.h"
 #include "vec_util.h"
 #include "txtproc.h"
-#include "misc.h"
 
 #include <boost/range/numeric.hpp>
 #include <boost/algorithm/string.hpp>

@@ -1,5 +1,4 @@
 #include "fasta.h"
-#include "misc.h"
 #include "txtproc.h"
 
 #include <boost/filesystem.hpp>

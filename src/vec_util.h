@@ -41,10 +41,6 @@ namespace vec_util{
   ///
   StringSequences Flatten(const SequenceList&);
   ///
-  /// adds an element to the front of the vector
-  ///
-  ResidueSequence push_front(ResidueSequence& seq, Residue new_residue);
-  ///
   /// calcualtes an average for each column in the given vec
   ///
   ProfileMatrixRow Average(const SbstMatrixColumns& vec);
