@@ -40,5 +40,10 @@ typedef std::vector<DefaultRuleTuple> DefaultRulesList;
 typedef std::vector<char> AlphabetVec;
 typedef std::vector<std::string> FeatNameSplit;
 typedef std::vector<std::string> NameSplit;
+/*
+typedef std::tuple<std::string, int, int,
+                   FeatureNamesList, FeatureNamesList, FeatureNamesList,
+                   FeatureNamesList, FeatureNamesList, FeatureNamesList,
+                   FeaturePositions> FeatureTuple;
+                   */
 
-typedef std::map<std::string, std::vector<double>> UsrFeatureMap;
