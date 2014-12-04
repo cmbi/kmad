@@ -3,14 +3,15 @@ bin_PROGRAMS	=	kman test_kman
 shared_LDADD	=	$(BOOST_PROGRAM_OPTIONS_LIB) \
 								$(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
 								$(BOOST_SYSTEM_LIB) \
-								$(BOOST_FILESYSTEM_LIB)
+								$(BOOST_FILESYSTEM_LIB) \
+								-lconfig++
 								
 
 
 kman_SOURCES	=	src/kman.cpp \
-								src/config.cpp \
 								src/fasta.cpp \
 								src/features_profile.cpp \
+								src/f_config.cpp \
 								src/profile.cpp \
 								src/residue.cpp \
 								src/scoring_matrix.cpp \

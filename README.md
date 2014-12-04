@@ -43,22 +43,24 @@ subtract_score - score for aligning features that subtract points from the
                  alignment score; type = positive double; optional
  
 add_features - names of features that add points to the alignment; 
-               type = list of strings; optional
+               type = list of strings; OBLIGATORY (it can be an empty list)
 
 add_tags - names of feature categories that add points to the alignment;
-          type = list of strings; optional
+          type = list of strings; OBLIGATORY (it can be an empty list)
 
 add_exceptions - names of exceptions to the add_tags field;
-                 type = list of strings; optional
+                 type = list of strings; OBLIGATORY (it can be an empty list)
 
 subtract_features - names of features that subtract points from the alignment; 
-                    type = list of strings; optional
+                    type = list of strings; OBLIGATORY (it can be an empty 
+                    list)
 
 subtract_tags - names of feature categories that subtract from the alignment;
-                type = list of strings; optional
+                type = list of strings; OBLIGATORY (it can be an empty list)
 
 subtract_exceptions - names of exceptions to the subtract_tags field;
-                      type = list of strings; optional
+                      type = list of strings; OBLIGATORY (it can be an empty 
+                      list)
 
 positions - positions on which the feature is present:
             seq - sequence number (starting at 1); type = integer,
