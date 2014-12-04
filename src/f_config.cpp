@@ -52,6 +52,7 @@ f_config::UsrFeatureMap f_config::ConfParser::process_config(
         continue;
 
       lcg::Setting& add_features_set = cnfg.lookup(name + ".add_features");
+      std::cout << "found a feature: " << name << std::endl;
       for (int j = 0; j < add_features_set.getLength(); ++j) {
         feat_set.add_features.push_back(add_features_set[j]);
       }
@@ -88,7 +89,8 @@ f_config::UsrFeatureMap f_config::ConfParser::process_config(
   }
   catch(const lcg::SettingNotFoundException &nfex)
   {
-    // Ignore.
+    std::cerr << "Setting not found" << std::endl;
+    std::exit(EXIT_FAILURE);
   }
   return feat_config;
 }

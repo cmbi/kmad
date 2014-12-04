@@ -22,9 +22,9 @@ namespace f_config {
   typedef std::map<std::string, FeatureSettings> UsrFeatureMap;
   class ConfParser {
     public:
-      UsrFeatureMap parse_conf_file(const char* filename);
+      static UsrFeatureMap parse_conf_file(const char* filename);
     private:
-      UsrFeatureMap process_config(const libconfig::Config& cnfg);
+      static UsrFeatureMap process_config(const libconfig::Config& cnfg);
   };
 
 }
