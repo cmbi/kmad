@@ -77,8 +77,12 @@ f_config::UsrFeatureMap f_config::ConfParser::process_config(
       for (int j = 0; j < subtract_exceptions_set.getLength(); ++j) {
         feat_set.subtract_exceptions.push_back(subtract_exceptions_set[j]);
       }
-      lcg::Settings& positions_set = cnfg.lookup(name + ".positions");
-
+      lcg::Setting& positions_set = cnfg.lookup(name + ".positions");
+      for (int j = 0; j <  positions_set.getLength(); ++j) {
+        FeaturePositions feat_pos; 
+        positions_set.lookupValue("seq", feat_pos.seq);
+        feat_set.positions.push_back(feat_pos);
+      }
       feat_config[name] = feat_set;
     }
   }

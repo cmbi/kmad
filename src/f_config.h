@@ -17,7 +17,7 @@ namespace f_config {
     FeatureNamesList subtract_features;
     FeatureNamesList subtract_tags;
     FeatureNamesList subtract_exceptions;
-    FeaturePositions positions;
+    std::vector<FeaturePositions> positions;
   };
   typedef std::map<std::string, FeatureSettings> UsrFeatureMap;
   class ConfParser {
