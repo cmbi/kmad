@@ -5,7 +5,7 @@ AC_PREREQ([2.68])
 AC_INIT([kman], [0.0.0])
 AC_CONFIG_AUX_DIR(config)
 AM_INIT_AUTOMAKE([subdir-objects])
-AC_CONFIG_SRCDIR([src/misc.h])
+AC_CONFIG_SRCDIR([src/msa.h])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -35,7 +35,7 @@ AX_BOOST_SYSTEM
 AM_CONDITIONAL([HAVE_CPPCHECK], [test -n "$CPPCHECK"])
 
 # Checks for header files.
-AC_CHECK_HEADERS([sys/ioctl.h termios.h])
+AC_CHECK_HEADERS([sys/ioctl.h termios.h libconfig.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 # AC_CHECK_HEADER_STDBOOL # Doesn't work in old versions of autoconf
