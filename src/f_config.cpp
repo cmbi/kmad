@@ -51,34 +51,32 @@ f_config::UsrFeatureMap f_config::ConfParser::process_config(
       if (!(found_add_score || found_sbtrct_score))
         continue;
 
-      lcg::Setting& add_features_set = cnfg.lookup(name + ".add_features");
-      std::cout << "found a feature: " << name << std::endl;
+      //lcg::Setting& add_features_set = cnfg.lookup(name + ".add_features");
+      lcg::Setting& add_features_set = feature["add_features"];
       for (int j = 0; j < add_features_set.getLength(); ++j) {
         feat_set.add_features.push_back(add_features_set[j]);
       }
-      lcg::Setting& add_tags_set = cnfg.lookup(name + ".add_tags");
+      lcg::Setting& add_tags_set = feature["add_tags"];
       for (int j = 0; j < add_tags_set.getLength(); ++j) {
         feat_set.add_tags.push_back(add_tags_set[j]);
       }
-      lcg::Setting& add_exceptions_set = cnfg.lookup(name + ".add_exceptions");
+      lcg::Setting& add_exceptions_set = feature["add_exceptions"];
       for (int j = 0; j < add_exceptions_set.getLength(); ++j) {
         feat_set.add_exceptions.push_back(add_exceptions_set[j]);
       }
-      lcg::Setting& subtract_features_set = cnfg.lookup(
-          name + ".subtract_features");
+      lcg::Setting& subtract_features_set = feature["subtract_features"];
       for (int j = 0; j < subtract_features_set.getLength(); ++j) {
         feat_set.subtract_features.push_back(subtract_features_set[j]);
       }
-      lcg::Setting& subtract_tags_set = cnfg.lookup(name + ".subtract_tags");
+      lcg::Setting& subtract_tags_set = feature["subtract_tags"];
       for (int j = 0; j < subtract_tags_set.getLength(); ++j) {
         feat_set.subtract_tags.push_back(subtract_tags_set[j]);
       }
-      lcg::Setting& subtract_exceptions_set = cnfg.lookup(
-          name + ".subtract_exceptions");
+      lcg::Setting& subtract_exceptions_set = feature["subtract_exceptions"];
       for (int j = 0; j < subtract_exceptions_set.getLength(); ++j) {
         feat_set.subtract_exceptions.push_back(subtract_exceptions_set[j]);
       }
-      lcg::Setting& positions_set = cnfg.lookup(name + ".positions");
+      lcg::Setting& positions_set = feature["positions"];
       for (int j = 0; j <  positions_set.getLength(); ++j) {
         FeaturePositions feat_pos; 
         positions_set.lookupValue("seq", feat_pos.seq);
