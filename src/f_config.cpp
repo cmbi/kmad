@@ -10,11 +10,11 @@
 namespace lcg = libconfig;
 
 f_config::UsrFeatureMap f_config::ConfParser::parse_conf_file(
-    const char* filename) {
+    const std::string& filename) {
   lcg::Config cnfg;
   try
   {
-    cnfg.readFile(filename);
+    cnfg.readFile(filename.c_str());
   }
   catch (const lcg::FileIOException &fioex) {
     std::cerr << "I/O error while reading file." << std::endl;
