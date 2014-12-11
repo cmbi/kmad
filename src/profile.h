@@ -10,14 +10,14 @@ class Profile{
 public:
   ///
   /// constructor; creates a Profile object with profile matrix mat
-  /// 
+  ///
   Profile(ProfileMatrix mat);
   ///
   /// constructor; creates an empty profile
   ///
   Profile();
   ///
-  /// builds a profile from the matrix of occurences and the substitution 
+  /// builds a profile from the matrix of occurences and the substitution
   /// matrix with appropriate weights
   ///
   void ProcessProfile(SequenceList& alignment);

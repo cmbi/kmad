@@ -23,7 +23,7 @@ namespace substitution_matrix{
   /// @param j amino acid index
   ///
   int get_element(int i, int j);
-  /// 
+  ///
   /// assigns a column from the susbtitution matrix to the 'column_int'
   ///
   void get_column(unsigned int& columnNo, SbstMatColumn& column_int);

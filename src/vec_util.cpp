@@ -11,7 +11,7 @@ void vec_util::TransposeVec(ProfileMatrix& vec) {
   ProfileMatrixRow new_row;
   for (unsigned int i = 0; i < vec[0].size(); i++) {
     for (unsigned int j = 0; j < vec.size(); j++) {
-      new_row.push_back(vec[j][i]);  
+      new_row.push_back(vec[j][i]);
     }
     new_vec.push_back(new_row);
     new_row.clear();
@@ -23,7 +23,7 @@ void vec_util::TransposeVec(ProfileMatrix& vec) {
 void vec_util::DivideVectorByAScalar(ProfileMatrixRow& vec, int scalar) {
   ProfileMatrixRow result;
   for (auto &item : vec) {
-    result.push_back(item / scalar);  
+    result.push_back(item / scalar);
   }
   vec = result;
 }
@@ -32,7 +32,7 @@ void vec_util::DivideVectorByAScalar(ProfileMatrixRow& vec, int scalar) {
 void vec_util::DivideVectorByAScalar(ProfileMatrixRow& vec, double& scalar) {
   ProfileMatrixRow result;
   for (auto &item : vec) {
-    result.push_back(item / scalar);  
+    result.push_back(item / scalar);
   }
   vec = result;
 }

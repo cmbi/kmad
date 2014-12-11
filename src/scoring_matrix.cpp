@@ -14,29 +14,29 @@
 #include <vector>
 
 
-ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen, 
+ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
                              double end_pen, double gap_ext_pen)
 : m_i_length(s1_size),
-  m_j_length(s2_size),  
+  m_j_length(s2_size),
   m_gap_opening(pen),
   m_gap_extension(gap_ext_pen),
   m_end_pen(end_pen),
   m_gap_opening_horizontal(m_gap_opening),
   m_gap_extension_horizontal(m_gap_extension)
 {
-  //creates a row for the scoring matrices of length m_j_length 
+  //creates a row for the scoring matrices of length m_j_length
   //(length of the jth sequence + 1)
-  ScoringMatrixRow row(m_j_length + 1,0); 
-  //creates a vector of vectors 'row', of length m_i_length+1 
+  ScoringMatrixRow row(m_j_length + 1,0);
+  //creates a vector of vectors 'row', of length m_i_length+1
   //(length of the ith sequence +1)
-  m_matrix_v.assign(m_i_length + 1, row); 
+  m_matrix_v.assign(m_i_length + 1, row);
   m_matrix_g.assign(m_i_length + 1, row);
   m_matrix_h.assign(m_i_length + 1, row);
 }
 
 
-void ScoringMatrix::CalculateScores(ResidueSequence s2, Profile& prf, 
-                                    FeaturesProfile& feat_prf, 
+void ScoringMatrix::CalculateScores(ResidueSequence s2, Profile& prf,
+                                    FeaturesProfile& feat_prf,
                                     int codon_length) {
   Residue gap_residue = Residue('-', codon_length);
   s2.insert(s2.begin(), gap_residue);
@@ -47,11 +47,11 @@ void ScoringMatrix::CalculateScores(ResidueSequence s2, Profile& prf,
   for (unsigned int i = 1; i < m_matrix_v.size(); i++) {
     m_matrix_v[i][0] = -10000000; //=== infinity
     m_matrix_h[i][0] = -10000000;
-    m_matrix_g[i][0] = i * m_end_pen;  
+    m_matrix_g[i][0] = i * m_end_pen;
   }
   for (unsigned int i = 1; i < m_matrix_v[0].size(); i++) {
     m_matrix_v[0][i] = -10000000;
-    m_matrix_h[0][i] = i * m_end_pen;  
+    m_matrix_h[0][i] = i * m_end_pen;
     m_matrix_g[0][i] = -10000000;
   }
   double score1, score2, score3 = 0;
@@ -93,18 +93,18 @@ ValueCoords ScoringMatrix::FindBestScore() {
   double real_val;
   double max = m_matrix_v[max_i][max_j];
   for (int i = 0; i < n ; i++) {    //finds max score in the last row
-    // add end gap penalties to the score to calc the 'real' score 
+    // add end gap penalties to the score to calc the 'real' score
     // of the alignment
-    real_val = m_matrix_v[i][m] + m_end_pen * (m_matrix_v.size() - i); 
+    real_val = m_matrix_v[i][m] + m_end_pen * (m_matrix_v.size() - i);
     if (real_val > max) {
       max_i_val = real_val;
       max = real_val;
       max_i = i;
-    } 
+    }
   }
-  for (int i = 0; i < m; i++) {    //finds max score in the last column  
-    real_val = m_matrix_v[n][i] + m_end_pen * (m_matrix_v[0].size() - i); 
-    // add end gap penalties to the score, to calc the 'real' score 
+  for (int i = 0; i < m; i++) {    //finds max score in the last column
+    real_val = m_matrix_v[n][i] + m_end_pen * (m_matrix_v[0].size() - i);
+    // add end gap penalties to the score, to calc the 'real' score
     // of the alignment
     if (real_val > max) {
       max_j_val = real_val;
@@ -125,10 +125,10 @@ ValueCoords ScoringMatrix::FindBestScore() {
 
 
 void ScoringMatrix::PerformNWAlignment(SequenceList& result,
-                                       ResidueSequence s2, Profile& prf, 
+                                       ResidueSequence s2, Profile& prf,
                                        FeaturesProfile& feat_prf,
                                       int codon_length) {
-  //creating polyA pseudoSequence representing the profile, 
+  //creating polyA pseudoSequence representing the profile,
   //to know later where are the gaps in the profile
   ResidueSequence s1(prf.get_matrix()[0].size()+1, Residue('A', codon_length));
   Residue gap_residue = Residue('-', codon_length);
@@ -137,14 +137,14 @@ void ScoringMatrix::PerformNWAlignment(SequenceList& result,
   ResidueSequence new_s2;
   SequenceList ali; //alignment
   Residue new_char1;
-  Residue new_char2;  
+  Residue new_char2;
   int i = s1.size()-1;
   int j = s2.size()-1;
   std::string current_matrix = "V";
-  //if bestScore isn't in the lower right corner, then add gaps 
+  //if bestScore isn't in the lower right corner, then add gaps
   //to new_s1 or new_s2
   ValueCoords best_score = FindBestScore();
-  if (best_score[0] != (signed)m_matrix_v.size()-1 
+  if (best_score[0] != (signed)m_matrix_v.size()-1
       || best_score[1] != (signed)m_matrix_v[0].size()-1) {
     i = best_score[0];
     j = best_score[1];
@@ -176,10 +176,10 @@ void ScoringMatrix::PerformNWAlignment(SequenceList& result,
       feat_prf.get_score(i-1, features, add_score);
       double final_score = prf_score + add_score;
       if (m_matrix_v[i][j] != m_matrix_v[i-1][j-1] + final_score) {
-        if (i > 0 && j > 0 
+        if (i > 0 && j > 0
             && m_matrix_v[i][j] == m_matrix_g[i-1][j-1]+final_score) {
-          current_matrix = "G";  
-        } else if (i > 0 && j > 0 
+          current_matrix = "G";
+        } else if (i > 0 && j > 0
                    && m_matrix_v[i][j] == m_matrix_h[i-1][j-1]+final_score) {
           current_matrix = "H";
         }

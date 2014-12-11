@@ -12,12 +12,12 @@ class Sequences;
 
 namespace fasta{
   ///
-  /// parsess a 'fasta' file, returns a Sequences object, 
+  /// parsess a 'fasta' file, returns a Sequences object,
   /// writes motif ids and probabilities to ids and probs
   ///
-  Sequences parse_fasta(std::string filename, int codonLength, 
+  Sequences parse_fasta(std::string filename, int codonLength,
                         IDsList* ids, ProbsList* probs);
-  
+
 }
 
 

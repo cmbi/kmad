@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
     desc.add_options()
       ("help,h", "produce help message")
       ("input,i", po::value<std::string>(&filename), "input file name")
-      ("output,o", po::value<std::string>(&output_prefix), 
+      ("output,o", po::value<std::string>(&output_prefix),
                                           "output file prefix")
       ("gap_penalty,g", po::value<double>(&gap_open_pen)->default_value(-5),
                                           "gap opening penalty")
@@ -75,9 +75,9 @@ int main(int argc, char *argv[]) {
       ProbsList motifs_probs;
       Sequences sequences;
       try {
-          sequences = fasta::parse_fasta(filename, 
-                                         codon_length, 
-                                         &motifs_ids, 
+          sequences = fasta::parse_fasta(filename,
+                                         codon_length,
+                                         &motifs_ids,
                                          &motifs_probs);
       } catch(const std::exception& e) {
         std::cout << "Exception: " << e.what() << "\n";
@@ -88,16 +88,16 @@ int main(int argc, char *argv[]) {
                                                gap_open_pen, gap_ext_pen,
                                                end_pen,
                                                domain_score,
-                                               motif_score, 
+                                               motif_score,
                                                phosph_score,
-                                               codon_length, 
-                                               motifs_ids, 
+                                               codon_length,
+                                               motifs_ids,
                                                motifs_probs);
       if (out_encoded) {
-        txtproc::WriteAlignmentToFile(alignment, seq_names, output_prefix);            
+        txtproc::WriteAlignmentToFile(alignment, seq_names, output_prefix);
       } else {
-        txtproc::WriteAlignmentWithoutCodeToFile(alignment, seq_names, 
-                                                 output_prefix, codon_length);            
+        txtproc::WriteAlignmentWithoutCodeToFile(alignment, seq_names,
+                                                 output_prefix, codon_length);
       }
       time_t end = clock();
       std::cout << "time: " << double(end - start)/CLOCKS_PER_SEC << std::endl;

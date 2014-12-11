@@ -14,7 +14,7 @@ StringSequences msa::run_msa(Sequences sequences,
                               double gap_open_pen,
                               double gap_ext_pen,
                               double end_pen,
-                              int domain_score, 
+                              int domain_score,
                               int motif_score,
                               int phosph_score,
                               int codon_length,
@@ -30,28 +30,28 @@ StringSequences msa::run_msa(Sequences sequences,
       std::vector<double> identities;
       //first round of the alignment - all vs 1st
       std::vector<std::string> multipleAlignment;
-      multipleAlignment = sequences.PerformMSAfirstRound(prf, fprf, 
-                                                         gap_open_pen, 
-                                                         end_pen, 
-                                                         gap_ext_pen, 
-                                                         codon_length, 
+      multipleAlignment = sequences.PerformMSAfirstRound(prf, fprf,
+                                                         gap_open_pen,
+                                                         end_pen,
+                                                         gap_ext_pen,
+                                                         codon_length,
                                                          identities);
       StringSequences alignment;
       int prev_alignments = 0;
       for (int i = 8; i >= 0; i--) {
         double cutoff = double(i) / 10;
-        sequences.PerformMSAnextRound(alignment, prf, fprf, gap_open_pen, 
+        sequences.PerformMSAnextRound(alignment, prf, fprf, gap_open_pen,
                                       end_pen, gap_ext_pen,
-                                      cutoff, codon_length, 
+                                      cutoff, codon_length,
                                       identities, prev_alignments);
-        //prev_alignments - number of alignments performed in the previous 
+        //prev_alignments - number of alignments performed in the previous
         //rounds - to omit this round if the number of aligned sequences is the
         //same as in the previous round
       }
       prev_alignments = 0;  // to align (again) all sequences to the profile
-      sequences.PerformMSAnextRound(alignment, prf, fprf, 
-                                    gap_open_pen, end_pen, gap_ext_pen, 0, 
-                                    codon_length, identities, 
+      sequences.PerformMSAnextRound(alignment, prf, fprf,
+                                    gap_open_pen, end_pen, gap_ext_pen, 0,
+                                    codon_length, identities,
                                     prev_alignments);
       return alignment;
 }

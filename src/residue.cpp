@@ -27,30 +27,30 @@ void Residue::CodonToFeatures() {
   std::string nothing = "AA";
   std::string feat = "";
   if (m_codon.size() >= 5) {
-    switch (m_codon[4]) {  
+    switch (m_codon[4]) {
       case 'N': feat = "ptm_phosph0";
         break;
-      case 'O': feat = "ptm_phosph1"; 
+      case 'O': feat = "ptm_phosph1";
         break;
-      case 'P': feat = "ptm_phosph2"; 
+      case 'P': feat = "ptm_phosph2";
         break;
-      case 'Q': feat = "ptm_phosph3"; 
+      case 'Q': feat = "ptm_phosph3";
         break;
-      case 'B': feat = "ptm_acet0"; 
+      case 'B': feat = "ptm_acet0";
         break;
-      case 'C': feat = "ptm_acet1"; 
+      case 'C': feat = "ptm_acet1";
         break;
-      case 'D': feat = "ptm_acet2"; 
+      case 'D': feat = "ptm_acet2";
         break;
-      case 'E': feat = "ptm_acet3"; 
+      case 'E': feat = "ptm_acet3";
         break;
-      case 'F': feat = "ptm_Nglyc0"; 
+      case 'F': feat = "ptm_Nglyc0";
         break;
-      case 'G': feat = "ptm_Nglyc1"; 
+      case 'G': feat = "ptm_Nglyc1";
         break;
-      case 'H': feat = "ptm_Nglyc2"; 
+      case 'H': feat = "ptm_Nglyc2";
         break;
-      case 'I': feat = "ptm_Nglyc3"; 
+      case 'I': feat = "ptm_Nglyc3";
         break;
       case 'J': feat = "ptm_amid0";
         break;

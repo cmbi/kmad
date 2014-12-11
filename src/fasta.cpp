@@ -16,8 +16,8 @@ namespace fs = boost::filesystem;
 typedef std::vector<std::string> InputLine;
 
 Sequences fasta::parse_fasta(std::string filename,
-                             int codonLength, 
-                             IDsList* ids, 
+                             int codonLength,
+                             IDsList* ids,
                              ProbsList* probs) {
   CodonSeqWithNamesList resultSequences;
   fs::path p(filename);
@@ -52,7 +52,7 @@ Sequences fasta::parse_fasta(std::string filename,
                     if (txtproc::AcceptedChar(line[j])) {
                       newResidue += line[j];
                     } else {
-                      std::cout << "I found a weird character (" << line[j] 
+                      std::cout << "I found a weird character (" << line[j]
                                 << std::endl;
                       std::exit(EXIT_FAILURE);
                     }
