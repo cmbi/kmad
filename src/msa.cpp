@@ -1,5 +1,4 @@
 #include "msa.h"
-#include "txtproc.h"
 #include "features_profile.h"
 #include "profile.h"
 #include "sequences.h"
@@ -9,24 +8,16 @@
 #include <tuple>
 
 
-StringSequences msa::run_msa(Sequences sequences,
-                              std::string conf_filename,
-                              double gap_open_pen,
-                              double gap_ext_pen,
-                              double end_pen,
-                              int domain_score,
-                              int motif_score,
-                              int phosph_score,
-                              int codon_length,
-                              IDsList motifs_ids,
-                              ProbsList motifs_probs) {
+StringSequences msa::run_msa(Sequences sequences, double gap_open_pen,
+                             double gap_ext_pen, double end_pen,
+                             int domain_score, int motif_score,
+                             int phosph_score, int codon_length,
+                             IDsList motifs_ids, ProbsList motifs_probs) {
 
       Profile prf;
       FeaturesProfile fprf(domain_score, phosph_score, motif_score,
                            motifs_ids, motifs_probs);
-      if (!conf_filename.empty()) {
-        txtproc::ProcessConfFile(conf_filename, fprf, sequences);
-      }
+
       std::vector<double> identities;
       //first round of the alignment - all vs 1st
       std::vector<std::string> multipleAlignment;

@@ -1,13 +1,19 @@
 #include "types.h"
+
 #include <iostream>
 #include <libconfig.h++>
 
-namespace f_config {
-  struct FeaturePositions {
+
+namespace f_config
+{
+  struct FeaturePositions
+  {
     int seq;
     std::vector<int> positions;
   };
-  struct FeatureSettings {
+
+  struct FeatureSettings
+  {
     std::string tag;
     int add_score;
     int subtract_score;
@@ -19,12 +25,14 @@ namespace f_config {
     FeatureNamesList subtract_exceptions;
     std::vector<FeaturePositions> positions;
   };
+
   typedef std::map<std::string, FeatureSettings> UsrFeatureMap;
-  class ConfParser {
+
+  class ConfParser
+  {
     public:
       static UsrFeatureMap parse_conf_file(const std::string& filename);
     private:
       static UsrFeatureMap process_config(const libconfig::Config& cnfg);
   };
-
 }

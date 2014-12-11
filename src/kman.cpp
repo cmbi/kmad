@@ -1,4 +1,5 @@
 #include "fasta.h"
+#include "f_config.h"
 #include "features_profile.h"
 #include "profile.h"
 #include "residue.h"
@@ -13,12 +14,24 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+
+
 namespace po = boost::program_options;
+
+
 int main(int argc, char *argv[]) {
-    int codon_length, phosph_score, domain_score, motif_score = 0;
-    double gap_ext_pen, gap_open_pen, end_pen = 0;
+    int codon_length = 0;
+    int phosph_score = 0;
+    int domain_score = 0;
+    int motif_score = 0;
+    double gap_ext_pen = 0;
+    double gap_open_pen;
+    double end_pen = 0;
     bool out_encoded = false;
-    std::string filename, output_prefix, conf_file;
+    std::string filename;
+    std::string output_prefix;
+    std::string conf_file;
+
     po::options_description desc("Allowed options");
     desc.add_options()
       ("help,h", "produce help message")
@@ -70,29 +83,27 @@ int main(int argc, char *argv[]) {
                   << std::endl;
         std::exit(EXIT_FAILURE);
       }
-      //
+
       IDsList motifs_ids;
       ProbsList motifs_probs;
       Sequences sequences;
       try {
-          sequences = fasta::parse_fasta(filename,
-                                         codon_length,
-                                         &motifs_ids,
+          sequences = fasta::parse_fasta(filename, codon_length, &motifs_ids,
                                          &motifs_probs);
       } catch(const std::exception& e) {
         std::cout << "Exception: " << e.what() << "\n";
         std::exit(EXIT_FAILURE);
       }
+
+      // TODO: Load the config settings into a variable and do something with
+      //       it.
+      f_config::ConfParser::parse_conf_file(conf_file);
+
       StringSequences seq_names = sequences.get_names();
-      StringSequences alignment = msa::run_msa(sequences, conf_file,
-                                               gap_open_pen, gap_ext_pen,
-                                               end_pen,
-                                               domain_score,
-                                               motif_score,
-                                               phosph_score,
-                                               codon_length,
-                                               motifs_ids,
-                                               motifs_probs);
+      StringSequences alignment = msa::run_msa(
+          sequences, gap_open_pen, gap_ext_pen, end_pen, domain_score,
+          motif_score, phosph_score, codon_length, motifs_ids, motifs_probs);
+
       if (out_encoded) {
         txtproc::WriteAlignmentToFile(alignment, seq_names, output_prefix);
       } else {
