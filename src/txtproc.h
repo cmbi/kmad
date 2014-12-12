@@ -12,7 +12,7 @@ class FeaturesProfile;
 class Sequences;
 namespace txtproc{
   ///
-  /// writes a line of text from the istream to string t 
+  /// writes a line of text from the istream to string t
   /// (removes newline characters)
   ///
   std::istream& SafeGetline(std::istream& is, std::string& t);
@@ -24,26 +24,26 @@ namespace txtproc{
   ///
   /// writes alignment to file (encoded)
   ///
-  void WriteAlignmentToFile(StringSequences& sequences, 
+  void WriteAlignmentToFile(StringSequences& sequences,
                             SeqNames& sequence_names,
                             std::string filename);
   ///
   /// writes alignment to a file in the regular fasta format (decoded)
   ///
-  void WriteAlignmentWithoutCodeToFile(StringSequences& sequences, 
-                                       SeqNames& sequence_names, 
+  void WriteAlignmentWithoutCodeToFile(StringSequences& sequences,
+                                       SeqNames& sequence_names,
                                        std::string filename, int codon_length);
   ///
   /// reades configuration file, adds user defined features and their alignment
   /// rules
   ///
-  void ProcessConfFile(std::string filename, FeaturesProfile& feat_profile, 
+  void ProcessConfFile(std::string filename, FeaturesProfile& feat_profile,
                        Sequences& sequences_aa);
   ///
   /// from a conf_file string creates a list of indexes of features to be
   /// scored
   ///
-  FeaturesList Unfold(std::string conf_string, 
+  FeaturesList Unfold(std::string conf_string,
                       FeatureNamesList& list_of_features);
 }
 

@@ -25,7 +25,7 @@ f_config::UsrFeatureMap f_config::ConfParser::parse_conf_file(
               << " - " << pex.getError() << std::endl;
     std::exit(EXIT_FAILURE);
   }
-  
+
   return process_config(cnfg);
 }
 
@@ -42,10 +42,10 @@ f_config::UsrFeatureMap f_config::ConfParser::process_config(
       FeatureSettings feat_set;
       const lcg::Setting& feature = features[i];
       std::string name;
-      if (!feature.lookupValue("name", name)) 
+      if (!feature.lookupValue("name", name))
         continue;
       feature.lookupValue("tag", feat_set.tag);
-      bool found_add_score = feature.lookupValue("add_score", 
+      bool found_add_score = feature.lookupValue("add_score",
                                                  feat_set.add_score);
       bool found_sbtrct_score = feature.lookupValue("subtract_score",
                                                     feat_set.subtract_score);
@@ -79,7 +79,7 @@ f_config::UsrFeatureMap f_config::ConfParser::process_config(
       }
       lcg::Setting& positions_set = feature["positions"];
       for (int j = 0; j <  positions_set.getLength(); ++j) {
-        FeaturePositions feat_pos; 
+        FeaturePositions feat_pos;
         positions_set[j].lookupValue("seq", feat_pos.seq);
         lcg::Setting& single_pos_set = positions_set[j]["pos"];
         for (int k = 0; k < single_pos_set.getLength(); ++k) {
