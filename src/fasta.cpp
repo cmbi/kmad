@@ -65,7 +65,7 @@ Sequences fasta::parse_fasta(std::string filename,
             std::istringstream iss(line);
             InputLine motif ((std::istream_iterator<std::string>(iss)),
                               std::istream_iterator<std::string>());
-            if (motif.size() == 2) {
+            if (motif.size() == 2 && motif[0] != "motif") {
               ids->push_back(motif[0]);
               probs->push_back(std::stod(motif[1]));
             }
