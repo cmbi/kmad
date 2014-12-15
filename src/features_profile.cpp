@@ -219,9 +219,10 @@ double FeaturesProfile::ScorePTMs(unsigned int& position,
   } else if (ptm_level == 'P') {
     ptm_score = 0.3;
   } else {
-    std::cout << "wrong annotation level on position "
-              << position << " ptmname: " << ptm_name<< std::endl;
-    std::exit(0);
+    std::string msg = "wrong annotation level on position "
+                    + std::to_string(position)
+                    + " ptmname: " + ptm_name;
+    throw std::invalid_argument(msg);
   }
   // now go through list of features to find in which rows in profile
   // are the features that we're gonna score for

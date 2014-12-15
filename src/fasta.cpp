@@ -24,8 +24,7 @@ Sequences fasta::parse_fasta(std::string filename,
   CodonSeqWithNamesList resultSequences;
   fs::path p(filename);
   if (!fs::exists(p)) {
-    std::cout << "Input file doesn't exist" << std::endl;
-    std::exit(EXIT_FAILURE);
+    throw std::invalid_argument("File not found: " + filename);
   } else {
     std::string fastaSymbol = ">";
     std::ifstream fastafile (filename.c_str());
@@ -59,9 +58,8 @@ Sequences fasta::parse_fasta(std::string filename,
                   if (boost::regex_match(std::string(1, line[j]), re)) {
                     newResidue += line[j];
                   } else {
-                    std::cout << "I found a weird character (" << line[j]
-                              << std::endl;
-                    std::exit(EXIT_FAILURE);
+                    std::string msg = "Unexpected character: " + line[j];
+                    throw std::runtime_error(msg);
                   }
                 }
                 resultSequences[seqNo][1].push_back(newResidue);

@@ -18,12 +18,12 @@ f_config::UsrFeatureMap f_config::ConfParser::parse_conf_file(
   }
   catch (const lcg::FileIOException &fioex) {
     std::cerr << "I/O error while reading file." << std::endl;
-    std::exit(EXIT_FAILURE);
+    throw;
   }
   catch (const lcg::ParseException &pex) {
     std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine()
               << " - " << pex.getError() << std::endl;
-    std::exit(EXIT_FAILURE);
+    throw;
   }
 
   return process_config(cnfg);
@@ -93,7 +93,7 @@ f_config::UsrFeatureMap f_config::ConfParser::process_config(
   catch(const lcg::SettingNotFoundException &nfex)
   {
     std::cerr << "Setting not found" << std::endl;
-    std::exit(EXIT_FAILURE);
+    throw;
   }
   return feat_config;
 }
