@@ -2,12 +2,14 @@
 #include "txtproc.h"
 
 #include <boost/filesystem.hpp>
+#include <boost/regex.hpp>
 
 #include <iostream>
-#include <vector>
-#include <sstream>
 #include <iterator>
+#include <regex>
+#include <sstream>
 #include <stdexcept>
+#include <vector>
 
 
 namespace fs = boost::filesystem;
@@ -50,13 +52,17 @@ Sequences fasta::parse_fasta(std::string filename,
                 std::string newResidue = "";
                 //j for goes through all codon postions of this residue
                 for (unsigned int j = i;j < i + codonLength; j++) {
-                    if (txtproc::AcceptedChar(line[j])) {
-                      newResidue += line[j];
-                    } else {
-                      std::cout << "I found a weird character (" << line[j]
-                                << std::endl;
-                      std::exit(EXIT_FAILURE);
-                    }
+                  // Use boost regular expression because compiler support for
+                  // c++11 regular expressions is incomplete.
+                  boost::regex re("\\w");
+
+                  if (boost::regex_match(std::string(1, line[j]), re)) {
+                    newResidue += line[j];
+                  } else {
+                    std::cout << "I found a weird character (" << line[j]
+                              << std::endl;
+                    std::exit(EXIT_FAILURE);
+                  }
                 }
                 resultSequences[seqNo][1].push_back(newResidue);
               }

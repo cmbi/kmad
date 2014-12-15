@@ -1,11 +1,11 @@
 bin_PROGRAMS	=	kman test_kman
 
-shared_LDADD	=	$(BOOST_PROGRAM_OPTIONS_LIB) \
-								$(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
+shared_LDADD	=	$(BOOST_FILESYSTEM_LIB) \
+								$(BOOST_PROGRAM_OPTIONS_LIB) \
+								$(BOOST_REGEX_LIB) \
 								$(BOOST_SYSTEM_LIB) \
-								$(BOOST_FILESYSTEM_LIB) \
+								$(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
 								-lconfig++
-								
 
 
 kman_SOURCES	=	src/kman.cpp \

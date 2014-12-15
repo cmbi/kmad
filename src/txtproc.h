@@ -12,11 +12,6 @@ class FeaturesProfile;
 class Sequences;
 namespace txtproc{
   ///
-  /// checks if character from the fasta file is on the list of accepetd
-  /// characters
-  ///
-  bool AcceptedChar(char my_char);
-  ///
   /// writes alignment to file (encoded)
   ///
   void WriteAlignmentToFile(StringSequences& sequences,

@@ -61,15 +61,3 @@ void txtproc::WriteAlignmentWithoutCodeToFile(StringSequences& sequences,
     outputFile << seq << std::endl;
   }
 }
-
-
-bool txtproc::AcceptedChar(char my_char) {
-  bool result = false;
-  for (auto &acc_char : AcceptedCharacters) {
-    if (acc_char == my_char) {
-      result = true;
-      break;
-    }
-  }
-  return result;
-}
