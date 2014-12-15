@@ -131,11 +131,6 @@ FeatureNamesList Residue::get_features() const{
 }
 
 
-void Residue::add_feature(std::string new_feat) {
-  m_features.push_back(new_feat);
-}
-
-
 FeaturesList Residue::get_feat_indexes() {
   return m_feature_indexes;
 }

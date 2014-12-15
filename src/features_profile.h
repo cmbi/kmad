@@ -44,14 +44,7 @@ public:
   /// to the list of features
   ///
   void ExpandListOfFeatures(const SequenceList&);
-  ///
-  /// Sets rules for aligning user defined features
-  ///
-  void set_rules(RuleTuplesList& new_rules);
-  ///
-  /// Adds user defined features to the list of features
-  ///
-  void add_usr_features(RuleTuplesList& new_rules);
+
   /// Finds index of a certain feature in the profile
   int FindFeaturesIndex(std::string& feat_name);
 private:

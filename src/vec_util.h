@@ -11,10 +11,6 @@
 class Residue;
 namespace vec_util{
   ///
-  /// returns index of the feature in the list of features
-  ///
-  int FindIndex(std::string& val, FeatureNamesList& vec);
-  ///
   /// transposes a vector
   ///
   void TransposeVec(ProfileMatrix& vec);

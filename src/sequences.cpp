@@ -196,25 +196,6 @@ int Sequences::CountAlignments(double identity_cutoff,
 }
 
 
-void Sequences::add_usr_features(RuleTuplesList& feature_rules) {
-  for (auto &rule : feature_rules) {
-    std::string feat_name = std::string("USR_")
-                            + std::get<0>(rule)
-                            + std::string("_")
-                            + std::get<1>(rule);
-    int sequence_no = std::get<2>(rule);
-    int start = std::get<3>(rule);
-    int end = std::get<4>(rule) + 1;
-    signed int seq_length = m_sequences_aa[sequence_no].size();
-    if (sequence_no < (signed)m_sequences_aa.size()) {
-      for (int j = start; j < end && j < seq_length; j++) {
-        m_sequences_aa[sequence_no][j].add_feature(feat_name);
-      }
-    }
-  }
-}
-
-
 SeqNames Sequences::get_names() {
   return m_sequence_names;
 }

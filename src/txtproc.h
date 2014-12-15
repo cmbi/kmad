@@ -33,18 +33,6 @@ namespace txtproc{
   void WriteAlignmentWithoutCodeToFile(StringSequences& sequences,
                                        SeqNames& sequence_names,
                                        std::string filename, int codon_length);
-  ///
-  /// reades configuration file, adds user defined features and their alignment
-  /// rules
-  ///
-  void ProcessConfFile(std::string filename, FeaturesProfile& feat_profile,
-                       Sequences& sequences_aa);
-  ///
-  /// from a conf_file string creates a list of indexes of features to be
-  /// scored
-  ///
-  FeaturesList Unfold(std::string conf_string,
-                      FeatureNamesList& list_of_features);
 }
 
 #endif /* TXTPROC_H */

@@ -32,10 +32,6 @@ class Residue{
     ///
     void change_to_lowercase();
     ///
-    /// adds a new feature to the residue's list of features
-    ///
-    void add_feature(std::string new_feat);
-    ///
     /// returns list of features assigned to the residue
     ///
     FeatureNamesList get_features() const;

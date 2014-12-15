@@ -50,11 +50,7 @@ public:
                            double identityCutoff,
                            int codon_length, IdentitiesList& identities,
                            int& prev_alignments);
-  ///
-  /// adds features from the tuple 'feature_rules'(usr defined) to relevant
-  /// residues (also specified in 'feature_rules')
-  ///
-  void add_usr_features(RuleTuplesList& feature_rules);
+
 private:
   ///
   /// takes pairwise alignment, removes

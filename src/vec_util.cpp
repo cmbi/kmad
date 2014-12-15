@@ -93,15 +93,3 @@ ProfileMatrixRow vec_util::Average(const SbstMatrixColumns& vec) {
   }
   return result;
 }
-
-
-int vec_util::FindIndex(std::string& val, FeatureNamesList& vec) {
-  int res = -1;
-  for (unsigned int i = 0; i < vec.size(); i++) {
-    if (vec[i] == val) {
-      res = i;
-      break;
-    }
-  }
-  return res;
-}
