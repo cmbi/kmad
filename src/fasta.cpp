@@ -32,8 +32,9 @@ Sequences fasta::parse_fasta(std::string filename,
     CodonSeqWithName newEntry;
     bool sequences = true;
     int seqNo = -1;
+
     std::string line;
-    while(!txtproc::SafeGetline(fastafile, line).eof()) {
+    while (std::getline(fastafile, line)) {
         std::string firstChar = line.substr(0, 1);
         if (line != std::string("## PROBABILITIES")) {
           if (sequences && firstChar == fastaSymbol) {

@@ -12,11 +12,6 @@ class FeaturesProfile;
 class Sequences;
 namespace txtproc{
   ///
-  /// writes a line of text from the istream to string t
-  /// (removes newline characters)
-  ///
-  std::istream& SafeGetline(std::istream& is, std::string& t);
-  ///
   /// checks if character from the fasta file is on the list of accepetd
   /// characters
   ///
