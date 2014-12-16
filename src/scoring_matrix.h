@@ -1,12 +1,15 @@
 #ifndef SCORINGMATRIX_H
 #define SCORINGMATRIX_H
 
+
+#include "fasta.h"
 #include "types.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
 
-class Residue;
+
 class Profile;
 class FeaturesProfile;
 
@@ -14,7 +17,8 @@ typedef std::vector<double> ScoringMatrixRow;
 typedef std::vector<ScoringMatrixRow> SingleScoringMatrix;
 typedef std::vector<int> ValueCoords;
 
-class ScoringMatrix{
+
+class ScoringMatrix {
 public:
   ///
   /// Constructor; creates scoring matrices for the two sequences
@@ -30,14 +34,14 @@ public:
   ///
   /// Fills in the scoring matrices m_matrix_v, m_matrix_g, m_matrix_h
   ///
-  void CalculateScores(ResidueSequence s2, Profile& prf,
+  void CalculateScores(fasta::Sequence s2, Profile& prf,
                        FeaturesProfile& feat_prf, int codon_length);
   ///
   /// traces back the alignment path in the scoring matrices
   ///
-  void PerformNWAlignment(SequenceList& result, ResidueSequence s2,
-                          Profile& prf, FeaturesProfile& feat_prf,
-                          int codon_length);
+  void PerformNWAlignment(std::vector<fasta::Sequence>& result,
+                          fasta::Sequence s2, Profile& prf,
+                          FeaturesProfile& feat_prf, int codon_length);
 private:
   ///
   /// finds the best score either in the last column or in the last row of the

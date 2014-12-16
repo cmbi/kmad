@@ -3,9 +3,7 @@
 #include "features_profile.h"
 #include "msa.h"
 #include "profile.h"
-#include "residue.h"
 #include "scoring_matrix.h"
-#include "sequences.h"
 #include "txtproc.h"
 #include "vec_util.h"
 
@@ -106,27 +104,30 @@ int main(int argc, char *argv[]) {
       std::exit(EXIT_FAILURE);
     }
 
-    time_t start = clock();
-
-    IDsList motifs_ids;
-    ProbsList motifs_probs;
-    Sequences sequences;
-    try {
-      sequences = fasta::parse_fasta(filename, codon_length, &motifs_ids,
-                                       &motifs_probs);
-    } catch(const std::exception& e) {
-      std::cout << "Exception: " << e.what() << "\n";
-      std::exit(EXIT_FAILURE);
-    }
-
     // TODO: Load the config settings into a variable and do something with
     //       it.
     f_config::ConfParser::parse_conf_file(conf_file);
 
-    StringSequences seq_names = sequences.get_names();
-    StringSequences alignment = msa::run_msa(
-        sequences, gap_open_pen, gap_ext_pen, end_pen, domain_score,
-        motif_score, phosph_score, codon_length, motifs_ids, motifs_probs);
+    time_t start = clock();
+
+    fasta::FastaData fasta_data;
+    try {
+      fasta_data = fasta::parse_fasta(filename, codon_length);
+    } catch(const std::exception& e) {
+      std::cerr << "Error: " << e.what() << std::endl;
+      std::exit(EXIT_FAILURE);
+    }
+
+    auto alignment = msa::run_msa(fasta_data, gap_open_pen, gap_ext_pen,
+                                  end_pen, domain_score, motif_score,
+                                  phosph_score, codon_length);
+
+
+    // TODO: Use std::transform or store data in a better format.
+    std::vector<std::string> seq_names;
+    for (auto& s: fasta_data.sequences) {
+      seq_names.push_back(s.description);
+    }
 
     if (out_encoded) {
       txtproc::WriteAlignmentToFile(alignment, seq_names, output_prefix);

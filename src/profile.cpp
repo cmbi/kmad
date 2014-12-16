@@ -1,10 +1,9 @@
-//Profile class implementation
 #include "profile.h"
-#include "residue.h"
+
 #include "substitution_matrix.h"
 #include "vec_util.h"
 
-#include<boost/range/numeric.hpp>
+#include <boost/range/numeric.hpp>
 
 #include <fstream>
 #include <iostream>
@@ -27,7 +26,7 @@ ProfileMatrix Profile::get_matrix() const{
 }
 
 
-void Profile::ProcessProfile(SequenceList& alignment) {
+void Profile::ProcessProfile(std::vector<fasta::Sequence>& alignment) {
   CreateProfile(alignment);
   ProfileMatrix new_profile;
   for (unsigned int i = 0; i < m_prf_matrix[0].size(); i++) {
@@ -51,40 +50,43 @@ void Profile::ProcessProfile(SequenceList& alignment) {
 }
 
 
-void Profile::CreateProfile(SequenceList& alignment) {
-  ProfileMatrix tmp_result;
-  int no_of_sequences = alignment.size();
-  for (unsigned int i = 0; i < alignment[0].size(); i++) {
-    ProfileMatrixColumn profile_column(20,0);
-    int non_gaps = 0;
-    for (unsigned int j = 0; j < alignment.size(); j++) {
-      char seq_char(alignment[j][i].get_aa());
-      if (seq_char != '-') {
-        //either D or N, so add half a point to both
-        if (seq_char == 'B') {
-          profile_column[2] += 0.5;
-          profile_column[3] += 0.5;
-        } else if (seq_char == 'Z') {
-          //either D or N, so add half a point to both
-          profile_column[6] += 0.5;
-          profile_column[7] += 0.5;
-        } else if (seq_char == 'X') {
-          for (unsigned int k = 0; k < profile_column.size(); k++) {
-            profile_column[k] += 0.05;
-          }
-        } else {
-          int aacid_index = substitution_matrix::FindAminoAcidsIndex(seq_char);
-          profile_column[aacid_index] += 1;
-        }
-        non_gaps++;
-      }
-    }
-    vec_util::DivideVectorByAScalar(profile_column,no_of_sequences);
-    //vec_util::DivideVectorByAScalar(profileColumn,nonGaps);
-    tmp_result.push_back(profile_column);
-  }
-  m_prf_matrix = tmp_result;
-  vec_util::TransposeVec(m_prf_matrix);
+// TODO: Do this in the constructor or use factory method
+// TODO: Why is the parameter called 'alignment'?
+// TODO: Implement
+void Profile::CreateProfile(std::vector<fasta::Sequence>& alignment) {
+  //ProfileMatrix tmp_result;
+  //int no_of_sequences = alignment.size();
+  //for (unsigned int i = 0; i < alignment[0].size(); i++) {
+    //ProfileMatrixColumn profile_column(20,0);
+    //int non_gaps = 0;
+    //for (unsigned int j = 0; j < alignment.size(); j++) {
+      //char seq_char(alignment[j][i].get_aa());
+      //if (seq_char != '-') {
+        ////either D or N, so add half a point to both
+        //if (seq_char == 'B') {
+          //profile_column[2] += 0.5;
+          //profile_column[3] += 0.5;
+        //} else if (seq_char == 'Z') {
+          ////either D or N, so add half a point to both
+          //profile_column[6] += 0.5;
+          //profile_column[7] += 0.5;
+        //} else if (seq_char == 'X') {
+          //for (unsigned int k = 0; k < profile_column.size(); k++) {
+            //profile_column[k] += 0.05;
+          //}
+        //} else {
+          //int aacid_index = substitution_matrix::FindAminoAcidsIndex(seq_char);
+          //profile_column[aacid_index] += 1;
+        //}
+        //non_gaps++;
+      //}
+    //}
+    //vec_util::DivideVectorByAScalar(profile_column,no_of_sequences);
+    ////vec_util::DivideVectorByAScalar(profileColumn,nonGaps);
+    //tmp_result.push_back(profile_column);
+  //}
+  //m_prf_matrix = tmp_result;
+  //vec_util::TransposeVec(m_prf_matrix);
 }
 
 

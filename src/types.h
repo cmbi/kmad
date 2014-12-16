@@ -1,24 +1,11 @@
-#include "residue.h"
 #include <iostream>
-#include <vector>
-#include <tuple>
 #include <map>
+#include <tuple>
+#include <vector>
 
-class Residue;
 
-
-typedef std::vector<std::string> StringSequences;
-typedef std::vector<std::string> SeqNames;
-typedef std::vector<std::string> CodonSeq;
-typedef std::vector<CodonSeq> CodonSeqList;
-typedef std::vector<CodonSeq> CodonSeqWithName;
-typedef std::vector<CodonSeqList> CodonSeqWithNamesList;
-typedef std::vector<std::string> IDsList;
-typedef std::vector<double> ProbsList;
 typedef std::vector<int> FeaturesList;
 typedef std::vector<std::string> FeatureNamesList;
-typedef std::vector<Residue> ResidueSequence;
-typedef std::vector<ResidueSequence> SequenceList;
 typedef std::tuple<std::string, std::string, int, int, int, double, double,
                    double, double, std::string, std::string> RulesTuple;
 typedef std::vector<RulesTuple> RuleTuplesList;
@@ -40,10 +27,3 @@ typedef std::vector<DefaultRuleTuple> DefaultRulesList;
 typedef std::vector<char> AlphabetVec;
 typedef std::vector<std::string> FeatNameSplit;
 typedef std::vector<std::string> NameSplit;
-/*
-typedef std::tuple<std::string, int, int,
-                   FeatureNamesList, FeatureNamesList, FeatureNamesList,
-                   FeatureNamesList, FeatureNamesList, FeatureNamesList,
-                   FeaturePositions> FeatureTuple;
-                   */
-

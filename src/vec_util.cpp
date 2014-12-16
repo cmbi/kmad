@@ -1,9 +1,9 @@
 #include "vec_util.h"
-#include "residue.h"
-#include <iostream>
-#include <vector>
-#include <string>
+
 #include <algorithm>
+#include <iostream>
+#include <string>
+#include <vector>
 
 
 void vec_util::TransposeVec(ProfileMatrix& vec) {
@@ -69,12 +69,15 @@ ProfileMatrixColumn vec_util::ConvertIntVecToDoubleVec(SbstMatColumn& vec) {
 }
 
 
-StringSequences vec_util::Flatten(const SequenceList& vec) {
-  StringSequences result;
-  for (auto &row : vec) {
+std::vector<std::string> vec_util::Flatten(
+    const std::vector<fasta::Sequence>& sequences)
+{
+  // TODO: Use functional tools
+  std::vector<std::string> result;
+  for (auto& sequence: sequences) {
     std::string new_seq = "";
-    for (auto &item : row) {
-      new_seq += item.get_codon();
+    for (auto& residue: sequence.residues) {
+      new_seq += residue.codon;
     }
     result.push_back(new_seq);
   }

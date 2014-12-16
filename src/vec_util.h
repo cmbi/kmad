@@ -1,14 +1,15 @@
 #ifndef VECUTIL_H
 #define VECUTIL_H
 
+
+#include "fasta.h"
 #include "types.h"
 
-#include<iostream>
-#include<vector>
-#include<string>
+#include <iostream>
+#include <vector>
+#include <string>
 
 
-class Residue;
 namespace vec_util{
   ///
   /// transposes a vector
@@ -35,7 +36,7 @@ namespace vec_util{
   ///
   /// converts sequences of Residue object to string sequences
   ///
-  StringSequences Flatten(const SequenceList&);
+  std::vector<std::string> Flatten(const std::vector<fasta::Sequence>&);
   ///
   /// calcualtes an average for each column in the given vec
   ///

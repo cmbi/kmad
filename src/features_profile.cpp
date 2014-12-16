@@ -1,7 +1,6 @@
 #include "features_profile.h"
-#include "residue.h"
-#include "vec_util.h"
 #include "txtproc.h"
+#include "vec_util.h"
 
 #include <boost/range/numeric.hpp>
 #include <boost/algorithm/string.hpp>
@@ -37,18 +36,20 @@ namespace {
 
 
 FeaturesProfile::FeaturesProfile(int dom, int phosph, int motif,
-                                 IDsList m_ids,
-                                 ProbsList m_probs)
+                                 std::map<std::string, double> probs)
 : m_domain_score(dom),
   m_phosph_score(phosph),
-  m_motif_score(motif),
-  m_motifs_ids(m_ids),
-  m_motifs_probs(m_probs)
-  {
+  m_motif_score(motif)
+{
+  // TODO: Use probabilities directly
+  for (const auto& kv: probs) {
+    m_motifs_ids.push_back(kv.first);
+    m_motifs_probs.push_back(kv.second);
+  }
 }
 
 
-void FeaturesProfile::CreateProfile(const SequenceList& alignment,
+void FeaturesProfile::CreateProfile(const std::vector<fasta::Sequence>& alignment,
                                     int codon_length) {
   CountOccurences(alignment, codon_length);
   ProcessProfile();
@@ -76,33 +77,34 @@ void FeaturesProfile::ProcessProfile() {
 }
 
 
-void FeaturesProfile::CountOccurences(const SequenceList& alignment,
+// TODO: Implement
+void FeaturesProfile::CountOccurences(const std::vector<fasta::Sequence>& alignment,
                                       int codon_length) {
-  m_occurences_matrix.clear();
-  std::string nothing = "AA";
-  int no_of_sequences = alignment.size();
+  //m_occurences_matrix.clear();
+  //std::string nothing = "AA";
+  //int no_of_sequences = alignment.size();
 
-  for (unsigned int i = 0; i < alignment[0].size(); i++) {
-    ProfileMatrixColumn profile_column(list_of_features.size(),0);
-    int non_gaps = 0;
-    for (unsigned int j = 0; j < alignment.size(); j++) {
-      if (alignment[j][i].get_aa() != '-') {
-        FeatureNamesList features = alignment[j][i].get_features();
-        for (unsigned int k = 0; k < features.size(); k++) {
-          std::string feat_name = features[k];
-          if (feat_name != nothing) {
-            int feat_index = FindFeaturesIndex(feat_name);
-            profile_column[feat_index] += GetModifier(feat_name);
-          }
-        }
-      non_gaps++;
-      }
-    }
-    vec_util::DivideVectorByAScalar(profile_column, no_of_sequences);
-    //vec_util::DivideVectorByAScalar(profileColumn,nonGaps);
-    m_occurences_matrix.push_back(profile_column);
-  }
-  vec_util::TransposeVec(m_occurences_matrix);
+  //for (unsigned int i = 0; i < alignment[0].size(); i++) {
+    //ProfileMatrixColumn profile_column(list_of_features.size(),0);
+    //int non_gaps = 0;
+    //for (unsigned int j = 0; j < alignment.size(); j++) {
+      //if (alignment[j][i].get_aa() != '-') {
+        //FeatureNamesList features = alignment[j][i].get_features();
+        //for (unsigned int k = 0; k < features.size(); k++) {
+          //std::string feat_name = features[k];
+          //if (feat_name != nothing) {
+            //int feat_index = FindFeaturesIndex(feat_name);
+            //profile_column[feat_index] += GetModifier(feat_name);
+          //}
+        //}
+      //non_gaps++;
+      //}
+    //}
+    //vec_util::DivideVectorByAScalar(profile_column, no_of_sequences);
+    ////vec_util::DivideVectorByAScalar(profileColumn,nonGaps);
+    //m_occurences_matrix.push_back(profile_column);
+  //}
+  //vec_util::TransposeVec(m_occurences_matrix);
 }
 
 
@@ -157,28 +159,32 @@ int FeaturesProfile::FindFeaturesIndex(std::string& feat_name) {
 }
 
 
-void FeaturesProfile::ExpandListOfFeatures(const SequenceList& sequences) {
-  for (unsigned int i = 0; i < sequences.size(); i++) {
-    for (unsigned int j = 0; j < sequences[i].size(); j++) {
-      FeatureNamesList features = sequences[i][j].get_features();
-      for (unsigned int k = 0; k < features.size(); k++) {
-        std::string feature_k = features[k];
-        //check whether this domain is already in the list of features
-        if ((std::find(list_of_features.begin(), list_of_features.end(),
-                      feature_k) == list_of_features.end())
-            && feature_k != nothing) {
-          list_of_features.push_back(feature_k);
-          if (feature_k.substr(0, 6) == "domain") {
-            //to look later for domains only in these positions (saves time)
-            domain_indexes.push_back(list_of_features.size() - 1);
-          } else if (feature_k.substr(0, 5) == "motif") {
-            // same as with domain_indexes
-            motif_indexes.push_back(list_of_features.size()-1);
-          }
-        }
-      }
-    }
-  }
+void FeaturesProfile::ExpandListOfFeatures(const std::vector<fasta::Sequence> sequences)
+{
+  // TODO: Implement
+  // TODO: Don't mess with stuff in the anonymous namespace.
+
+  //for (unsigned int i = 0; i < sequences.size(); i++) {
+    //for (unsigned int j = 0; j < sequences[i].size(); j++) {
+      //FeatureNamesList features = sequences[i][j].get_features();
+      //for (unsigned int k = 0; k < features.size(); k++) {
+        //std::string feature_k = features[k];
+        ////check whether this domain is already in the list of features
+        //if ((std::find(list_of_features.begin(), list_of_features.end(),
+                      //feature_k) == list_of_features.end())
+            //&& feature_k != nothing) {
+          //list_of_features.push_back(feature_k);
+          //if (feature_k.substr(0, 6) == "domain") {
+            ////to look later for domains only in these positions (saves time)
+            //domain_indexes.push_back(list_of_features.size() - 1);
+          //} else if (feature_k.substr(0, 5) == "motif") {
+            //// same as with domain_indexes
+            //motif_indexes.push_back(list_of_features.size()-1);
+          //}
+        //}
+      //}
+    //}
+  //}
 }
 
 

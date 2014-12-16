@@ -1,12 +1,16 @@
 #include "substitution_matrix.h"
-#include "residue.h"
+
 #include "vec_util.h"
 
 #include<boost/range/numeric.hpp>
+
 #include <iostream>
 #include <vector>
+
+
 typedef std::vector<char> AlphaList;
 typedef std::vector<SbstMatColumn> SbstMatColumnsList;
+
 
 namespace {
   static const AlphabetVec Alphabet = {'A','R','N','D','C','Q','E','G',
@@ -72,26 +76,28 @@ int substitution_matrix::get_element(char char1, char char2) {
 
 
 ProfileMatrix substitution_matrix::ConvertToProfileFormat(
-    ResidueSequence& seq) {
+    std::vector<fasta::Residue>& seq)
+{
   ProfileMatrix result(seq.size());
   SbstMatColumnsList new_sbst_row;
   for (unsigned int i = 0; i < result.size(); i++) {
-    if (seq[i].get_aa() == 'B') {
+    if (seq[i].codon[0] == 'B') {
       new_sbst_row.clear();
       new_sbst_row.push_back(SimScores[2]);
       new_sbst_row.push_back(SimScores[3]);
       result[i] = vec_util::Average(new_sbst_row);
-    } else if (seq[i].get_aa() == 'Z') {
+    } else if (seq[i].codon[0] == 'Z') {
       new_sbst_row.clear();
       new_sbst_row.push_back(SimScores[6]);
       new_sbst_row.push_back(SimScores[7]);
       result[i] = vec_util::Average(new_sbst_row);
-    } else if (seq[i].get_aa() == 'X') {
+    } else if (seq[i].codon[0] == 'X') {
       result[i] = vec_util::Average(SimScores);
     } else {
-      int aAcidInt = FindAminoAcidsIndex(seq[i].get_aa());
+      int aAcidInt = FindAminoAcidsIndex(seq[i].codon[0]);
       SbstMatColumn sbst_column_int = SimScores[aAcidInt];
-      result[i] = vec_util::ConvertIntVecToDoubleVec(sbst_column_int);//adds a column to the result(converted from int to double)
+      //adds a column to the result(converted from int to double)
+      result[i] = vec_util::ConvertIntVecToDoubleVec(sbst_column_int);
     }
   }
   vec_util::TransposeVec(result);

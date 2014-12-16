@@ -1,11 +1,17 @@
 #ifndef PROFILE_H
 #define PROFILE_H
 
+#include "fasta.h"
 #include "types.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
+
+
 class Residue;
+
+
 class Profile{
 public:
   ///
@@ -20,7 +26,7 @@ public:
   /// builds a profile from the matrix of occurences and the substitution
   /// matrix with appropriate weights
   ///
-  void ProcessProfile(SequenceList& alignment);
+  void ProcessProfile(std::vector<fasta::Sequence>& alignment);
   ///
   /// returns the profile matrix
   ///
@@ -34,7 +40,7 @@ public:
   ///
   double get_element(int aacid_index, int position);
 private:
-  void CreateProfile(SequenceList& alignment);
+  void CreateProfile(std::vector<fasta::Sequence>& alignment);
   ProfileMatrix m_prf_matrix;
 };
 

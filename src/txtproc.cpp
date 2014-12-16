@@ -1,23 +1,25 @@
 #include "txtproc.h"
-#include "vec_util.h"
-#include "residue.h"
-#include "sequences.h"
+
 #include "features_profile.h"
+#include "vec_util.h"
 
 #include <boost/algorithm/string.hpp>
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <istream>
-#include <tuple>
 #include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <istream>
 #include <iterator>
+#include <sstream>
+#include <string>
+#include <tuple>
+#include <vector>
+
 
 typedef std::vector<std::string> FeatDescriptor;
 typedef std::vector<std::string> SplitLine;
+
+
 namespace {
   static const AlphabetVec AcceptedCharacters = { 'a', 'b', 'c', 'd', 'e', 'f',
                                                   'g', 'h', 'i', 'j', 'k', 'l',
@@ -33,8 +35,8 @@ namespace {
 }
 
 
-void txtproc::WriteAlignmentToFile(StringSequences& sequences,
-                                   SeqNames& sequence_names,
+void txtproc::WriteAlignmentToFile(std::vector<std::string>& sequences,
+                                   std::vector<std::string>& sequence_names,
                                    std::string filename) {
   std::stringstream sstr;
   sstr << filename << "_al";
@@ -45,10 +47,9 @@ void txtproc::WriteAlignmentToFile(StringSequences& sequences,
 }
 
 
-void txtproc::WriteAlignmentWithoutCodeToFile(StringSequences& sequences,
-                                              SeqNames& sequence_names,
-                                              std::string filename,
-                                              int codon_length) {
+void txtproc::WriteAlignmentWithoutCodeToFile(
+    std::vector<std::string>& sequences, std::vector<std::string>& sequence_names,
+    std::string filename, int codon_length) {
   std::stringstream sstr;
   sstr << filename << "_al";
   std::ofstream outputFile(sstr.str().c_str(), std::ios::out);

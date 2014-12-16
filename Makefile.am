@@ -7,35 +7,26 @@ shared_LDADD	=	$(BOOST_FILESYSTEM_LIB) \
 								$(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
 								-lconfig++
 
+shared_SOURCES	=	src/fasta.cpp \
+									src/features_profile.cpp \
+									src/f_config.cpp \
+									src/profile.cpp \
+									src/scoring_matrix.cpp \
+									src/txtproc.cpp \
+									src/vec_util.cpp \
+									src/substitution_matrix.cpp \
+									src/msa.cpp
 
-kman_SOURCES	=	src/kman.cpp \
-								src/fasta.cpp \
-								src/features_profile.cpp \
-								src/f_config.cpp \
-								src/profile.cpp \
-								src/residue.cpp \
-								src/scoring_matrix.cpp \
-								src/sequences.cpp \
-								src/txtproc.cpp \
-								src/vec_util.cpp \
-								src/substitution_matrix.cpp \
-								src/msa.cpp
+
+kman_SOURCES	=	$(shared_SOURCES) \
+								src/kman.cpp
 
 
 kman_LDADD = $(shared_LDADD)
 
-test_kman_SOURCES = tests/test_config.cpp \
-										src/fasta.cpp \
-										src/features_profile.cpp \
-										src/f_config.cpp \
-										src/profile.cpp \
-										src/residue.cpp \
-										src/scoring_matrix.cpp \
-										src/sequences.cpp \
-										src/txtproc.cpp \
-										src/vec_util.cpp \
-										src/substitution_matrix.cpp \
-										src/msa.cpp
+test_kman_SOURCES = $(shared_SOURCES) \
+										tests/test_config.cpp \
+										tests/test_fasta.cpp
 
 test_kman_LDADD	=	$(shared_LDADD)
 

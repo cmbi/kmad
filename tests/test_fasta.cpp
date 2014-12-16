@@ -1,34 +1,20 @@
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE Main
 
-
-#include "txtProc.h"
+#include "fasta.h"
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/auto_unit_test.hpp>
-#include <turtle/mock.hpp>
-
-#include <sstream>
 
 
 BOOST_AUTO_TEST_SUITE(test_kman_suite)
 
-BOOST_AUTO_TEST_CASE(test_read_fasta_single){
+BOOST_AUTO_TEST_CASE(test_parse_fasta)
+{
+  fasta::FastaData fd = fasta::parse_fasta("tests/TAU_SPECI.fasta.7c", 7);
 
+  BOOST_CHECK_EQUAL(fd.sequences.size(), 19);
+  BOOST_CHECK_EQUAL(fd.probabilities.size(), 97);
 }
-
-//BOOST_AUTO_TEST_CASE(test_read_fasta_multiple)
-//{
-//  std::stringstream ss;
-//  ss << ">test1" << std::endl;
-//  ss << "TTCCPSIVARSNFNVCRLPGTPEAICATYTGCIIIPGATCPGDYAN" << std::endl;
-//  ss << ">test2" << std::endl;
-//  ss << "TTCCPSIVARSNFNVCRLPGTPEAICATYTGCIIIPGATCPGDYAN" << std::endl;
-//  ss << ">test3" << std::endl;
-//  ss << "TTCCPSIVARSNFNVCRLPGTPEAICATYTGCIIIPGATCPGDYAN" << std::endl;
-//  auto proteins = read_fasta(ss);
-//
-//  BOOST_CHECK_EQUAL(proteins.size(), 3);
-//}
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -1,16 +1,24 @@
 #ifndef SBSTMATRIX_H
 #define SBSTMATRIX_H
 
+
+#include "fasta.h"
 #include "types.h"
+
 #include <iostream>
 #include <vector>
+
+
 class Residue;
-namespace substitution_matrix{
+
+
+namespace substitution_matrix
+{
   ///
   /// Creates a profile matrix (20 x sequence length)
   /// based on a single sequence
   ///
-  ProfileMatrix ConvertToProfileFormat(ResidueSequence& seq);
+  ProfileMatrix ConvertToProfileFormat(std::vector<fasta::Residue>& seq);
   ///
   /// gets score from the sbst matrix for the given amino acids
   /// @param char1 amino acid code
