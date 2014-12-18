@@ -36,6 +36,10 @@ namespace substitution_matrix
   ///
   void get_column(unsigned int& columnNo, SbstMatColumn& column_int);
   ///
+  /// returns a column from the sbst matrix for the aa amino acid
+  ///
+  std::vector<double> get_column(const char&);
+  ///
   /// returns index of the given amino acid
   ///
   int FindAminoAcidsIndex(char aa);

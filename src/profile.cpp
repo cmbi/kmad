@@ -5,6 +5,7 @@
 
 #include <boost/range/numeric.hpp>
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -30,6 +31,29 @@ ProfileMap create_score_profile(const fasta::SequenceList& sequences) {
     }
   }
 
+  for (unsigned i = 0; i < p[0].size(); i++) {
+  }
+
+  /*
+  for (unsigned i = 0; i < p[0].size(); i++) {
+  // std::vector<double> score_column(20, 0); 
+    for (auto &prob: p){
+      std::vector<double> sbst_column = substitution_matrix::get_column(
+          prob.first);
+      // std::for_each(sbst_column.begin(), sbst_column.end(), [&](double &val){
+      //       val *= prob.second[i];
+      //     });
+      for (size_t k = 0; k < sbst_column.size(); ++k) {
+        score_column[k] += sbst_column[k] * prob.second[i];
+      }
+    }
+    // replace the old column (with probs) with the new column (with scores)
+    for (size_t j = 0; j < p.size(); ++j) {
+      p[j][i] = score_column[j];
+      std::cout << score_column[j] << std::endl;
+    }
+  }
+  */
   // TODO: Calculate scores for each probability
 
   return p;

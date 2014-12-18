@@ -97,6 +97,16 @@ void substitution_matrix::get_column(unsigned int& column_no,
 }
 
 
+std::vector<double> substitution_matrix::get_column(const char& aa) {
+  int column_no = FindAminoAcidsIndex(aa);
+  std::vector<double> column;
+  for (auto& item : SimScores[column_no]) {
+    column.push_back(double(item));
+  }
+  return column;
+}
+
+
 int substitution_matrix::FindAminoAcidsIndex(char aa) {
   int aacid_index = -1;
   for (unsigned int i = 0; i < Alphabet.size(); i++) {
