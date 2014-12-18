@@ -9,6 +9,7 @@
 
 
 namespace fasta {
+
   struct Residue {
     Residue(std::string codon) : codon(codon) {}
 
@@ -20,8 +21,10 @@ namespace fasta {
     std::vector<Residue> residues;
   };
 
+  typedef std::vector<fasta::Sequence> SequenceList;
+
   struct FastaData {
-    std::vector<fasta::Sequence> sequences;
+    SequenceList sequences;
     std::map<std::string, double> probabilities;
   };
 
@@ -30,6 +33,9 @@ namespace fasta {
   /// writes motif ids and probabilities to ids and probs
   ///
   FastaData parse_fasta(std::string filename, int codonLength);
+
+  Sequence make_sequence(const std::string& description,
+                         const std::string& codons, int codon_length);
 
 }
 

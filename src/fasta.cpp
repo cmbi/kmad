@@ -36,22 +36,10 @@ fasta::FastaData fasta::parse_fasta(std::string filename, int codon_length) {
     if (in_sequence_section) {
       assert(line.substr(0, 1) == ">");
 
-      fasta::Sequence s;
-      s.description = line.substr(1, line.length());
+      std::string description = line.substr(1, line.length());
       std::getline(fastafile, line);
-
-      for (unsigned i = 0; i < line.size(); i += codon_length) {
-        // Use boost regular expression because compiler support for c++11
-        // regular expressions is incomplete.
-        boost::regex re("\\w{" + std::to_string(codon_length) + "}");
-        std::string codon = line.substr(i, codon_length);
-        if (!boost::regex_match(codon, re)) {
-          throw std::runtime_error("Invalid codon: " + codon);
-        }
-        fasta::Residue r(codon);
-        s.residues.push_back(r);
-      }
-      fd.sequences.push_back(s);
+      fd.sequences.push_back(fasta::make_sequence(description, line,
+                                                  codon_length));
     } else {
       std::vector<std::string> result;
       boost::split(result, line, boost::is_any_of("\t "));
@@ -66,4 +54,24 @@ fasta::FastaData fasta::parse_fasta(std::string filename, int codon_length) {
   fastafile.close();
 
   return fd;
+}
+
+
+fasta::Sequence fasta::make_sequence(const std::string& description,
+                                     const std::string& codons,
+                                     int codon_length)
+{
+  fasta::Sequence s;
+  for (unsigned i = 0; i < codons.size(); i += codon_length) {
+    // Use boost regular expression because compiler support for c++11
+    // regular expressions is incomplete.
+    boost::regex re("\\w{" + std::to_string(codon_length) + "}");
+    std::string codon = codons.substr(i, codon_length);
+    if (!boost::regex_match(codon, re)) {
+      throw std::runtime_error("Invalid codon: " + codon);
+    }
+    fasta::Residue r(codon);
+    s.residues.push_back(r);
+  }
+  return s;
 }

@@ -26,7 +26,8 @@ kman_LDADD = $(shared_LDADD)
 
 test_kman_SOURCES = $(shared_SOURCES) \
 										tests/test_config.cpp \
-										tests/test_fasta.cpp
+										tests/test_fasta.cpp \
+										tests/test_profile.cpp
 
 test_kman_LDADD	=	$(shared_LDADD)
 

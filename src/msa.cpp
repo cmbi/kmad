@@ -14,9 +14,11 @@
 std::vector<std::string> msa::run_msa(fasta::FastaData fasta_data,
                              double gap_open_pen, double gap_ext_pen,
                              double end_pen, int domain_score, int motif_score,
-                             int phosph_score, int codon_length) {
+                             int phosph_score, int codon_length)
+{
+  const ProfileMap profile = create_profile(fasta_data.sequences);
 
-      Profile prf;
+
       FeaturesProfile fprf(domain_score, phosph_score, motif_score,
                            fasta_data.probabilities);
 
@@ -25,7 +27,7 @@ std::vector<std::string> msa::run_msa(fasta::FastaData fasta_data,
       // TODO: first round is used to set identities. Return value is ignored.
       // Can this be improved?
       std::vector<double> identities;
-      msa::PerformMSAfirstRound(fasta_data, prf, fprf, gap_open_pen, end_pen,
+      msa::PerformMSAfirstRound(fasta_data, profile, fprf, gap_open_pen, end_pen,
           gap_ext_pen, codon_length, identities);
 
 
@@ -33,7 +35,7 @@ std::vector<std::string> msa::run_msa(fasta::FastaData fasta_data,
       //int prev_alignments = 0;
       //for (int i = 8; i >= 0; i--) {
         //double cutoff = double(i) / 10;
-        //sequences.PerformMSAnextRound(alignment, prf, fprf, gap_open_pen,
+        //sequences.PerformMSAnextRound(alignment, profile, fprf, gap_open_pen,
                                       //end_pen, gap_ext_pen,
                                       //cutoff, codon_length,
                                       //identities, prev_alignments);
@@ -42,7 +44,7 @@ std::vector<std::string> msa::run_msa(fasta::FastaData fasta_data,
         ////same as in the previous round
       //}
       //prev_alignments = 0;  // to align (again) all sequences to the profile
-      //sequences.PerformMSAnextRound(alignment, prf, fprf,
+      //sequences.PerformMSAnextRound(alignment, profile, fprf,
                                     //gap_open_pen, end_pen, gap_ext_pen, 0,
                                     //codon_length, identities,
                                     //prev_alignments);
@@ -51,14 +53,11 @@ std::vector<std::string> msa::run_msa(fasta::FastaData fasta_data,
 
 
 std::vector<std::string> msa::PerformMSAfirstRound(
-    fasta::FastaData fasta_data, Profile& output_profile,
+    fasta::FastaData fasta_data, const ProfileMap& profile,
     FeaturesProfile& output_features_profile, double gap_open_pen,
     double end_pen, double gap_ext_pen, int codon_length,
     IdentitiesList& identities)
 {
-  output_profile = Profile(substitution_matrix::ConvertToProfileFormat(
-        fasta_data.sequences[0].residues));
-
   std::vector<fasta::Sequence> alignment_without_lowercase; //working alignment - without lowercase around cut out residues
   std::vector<fasta::Sequence> alignment_with_lowercase; //lowercase before and after cut out residues -- final result
   alignment_without_lowercase.push_back(fasta_data.sequences[0]);
@@ -79,7 +78,7 @@ std::vector<std::string> msa::PerformMSAfirstRound(
   // TODO: Should this be a const loop?
   for (auto& sequence: fasta_data.sequences) {
     msa::AlignPairwise(
-        al_without_lower, al_with_lower, sequence, output_profile,
+        al_without_lower, al_with_lower, sequence, profile,
         output_features_profile, gap_open_pen, end_pen, gap_ext_pen,
         codon_length);
 
@@ -151,18 +150,18 @@ void msa::RemoveGaps(fasta::Sequence& alignment_with_lowercase,
 void msa::AlignPairwise(fasta::Sequence& al_without_lower,
                         fasta::Sequence& al_with_lower,
                         fasta::Sequence& seq2,
-                        Profile& prf,
+                        const ProfileMap& profile,
                         FeaturesProfile& feat_prf,
                         double gap_open_pen, double end_pen,
                         double gap_ext_pen,
                         int codon_length) {
-  //int profile_length = prf.get_matrix()[0].size();
+  //int profile_length = profile.get_matrix()[0].size();
   //std::vector<fasta::Sequence> alignment;
   //ScoringMatrix scores(profile_length, seq2.size(), gap_open_pen,
                        //end_pen, gap_ext_pen);
-  //scores.CalculateScores(seq2, prf, feat_prf,
+  //scores.CalculateScores(seq2, profile, feat_prf,
                          //codon_length);
-  //scores.PerformNWAlignment(alignment, seq2, prf, feat_prf,
+  //scores.PerformNWAlignment(alignment, seq2, profile, feat_prf,
                             //codon_length);
 
   //msa::RemoveGaps(al_with_lower, al_without_lower, alignment);
@@ -172,7 +171,7 @@ void msa::AlignPairwise(fasta::Sequence& al_without_lower,
 // TODO: Implement
 void msa::PerformMSAnextRound(
     std::vector<std::string>& prev_alignment,
-    Profile& output_profile,
+    const ProfileMap& profile,
     FeaturesProfile& output_features_profile,
     double gap_open_pen,
     double end_pen,
@@ -198,7 +197,7 @@ void msa::PerformMSAnextRound(
       //if (identities[i] > identity_cutoff) {
         //// NW alignment of the ith seq against the profile
         //msa::AlignPairwise(al_without_lower, al_with_lower, m_sequences_aa[i],
-                      //output_profile, output_features_profile, gap_open_pen,
+                      //profile, output_features_profile, gap_open_pen,
                       //end_pen, gap_ext_pen, codon_length);
         //alignment_without_lowercase.push_back(al_without_lower);
         //alignment_with_lowercase.push_back(al_with_lower);
@@ -207,7 +206,7 @@ void msa::PerformMSAnextRound(
     ////create features profile based on the 1st seq
     //output_features_profile.CreateProfile(alignment_without_lowercase,
                                           //codon_length);
-    //output_profile.ProcessProfile(alignment_without_lowercase);
+    //profile.ProcessProfile(alignment_without_lowercase);
     //prev_alignment = vec_util::Flatten(alignment_with_lowercase);
     ////update number of performed alignments
     //prev_alignments = next_alignments;

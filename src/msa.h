@@ -25,7 +25,7 @@ namespace msa {
   /// calculates profile / based only on the query seq, then / aligns all
   /// sequences and calculates / identity of each sequence to the query seq.)
   std::vector<std::string> PerformMSAfirstRound(fasta::FastaData fasta_data,
-      Profile& output_profile, FeaturesProfile& output_features_profile,
+      const ProfileMap& profile, FeaturesProfile& output_features_profile,
       double penalty, double endPenalty, double extensionPenalty,
       int codon_length, IdentitiesList& identities);
 
@@ -34,7 +34,7 @@ namespace msa {
   /// - you need a profile)
   ///
   void PerformMSAnextRound(std::vector<std::string>& prevAlignment,
-                           Profile& output_profile,
+                           const ProfileMap& profile,
                            FeaturesProfile& output_features_profile,
                            double penalty, double endPenalty,
                            double extensionPenalty,
@@ -59,7 +59,7 @@ namespace msa {
   ///
   void AlignPairwise(fasta::Sequence& al_without_lower,
                      fasta::Sequence& al_with_lower,
-                     fasta::Sequence& seq2, Profile& prf,
+                     fasta::Sequence& seq2, const ProfileMap& prf,
                      FeaturesProfile& featPrf,
                      double penalty, double endPenalty, double extensionPenalty,
                      int codon_length);
