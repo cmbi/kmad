@@ -53,8 +53,6 @@ private:
   double m_gap_opening;
   double m_gap_extension;
   double m_end_pen;
-  double m_gap_opening_horizontal;
-  double m_gap_extension_horizontal;
   SingleScoringMatrix m_matrix_v,m_matrix_g,m_matrix_h;
 };
 
