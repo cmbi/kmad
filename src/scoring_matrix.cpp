@@ -19,7 +19,7 @@ ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
   m_j_length(s2_size),
   m_gap_opening(pen),
   m_gap_extension(gap_ext_pen),
-  m_end_pen(end_pen),
+  m_end_pen(end_pen)
 {
   //creates a row for the scoring matrices of length m_j_length
   //(length of the jth sequence + 1)
