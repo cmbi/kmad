@@ -7,8 +7,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/auto_unit_test.hpp>
 
-#include <map>
-#include <vector>
+#include <cmath>
 
 
 BOOST_AUTO_TEST_SUITE(test_profile)
@@ -100,10 +99,8 @@ BOOST_AUTO_TEST_CASE(test_create_score_profile)
 
   BOOST_CHECK_EQUAL(p.size(), expected_score_profile.size());
   for (auto& aa: ALPHABET){
-    for (size_t i = 0; i < p.size(); ++i) {
-      std::cout << p[aa][i] << " " << expected_score_profile[aa][i]
-                << std::endl;
-      BOOST_CHECK_CLOSE(p[aa][i], expected_score_profile[aa][i], 0.1);
+    for (size_t i = 0; i < p['A'].size(); ++i) {
+      BOOST_CHECK(std::abs(p[aa][i] - expected_score_profile[aa][i]) < 0.1);
     }
   }
 }

@@ -35,11 +35,6 @@ ProfileMap create_score_profile(const fasta::SequenceList& sequences) {
     for (auto &prob: p){
       std::vector<double> sbst_column = substitution_matrix::get_column(
           prob.first);
-      /*
-      std::for_each(sbst_column.begin(), sbst_column.end(), [&](double &val){
-            val *= prob.second[i];
-          });
-      */
       for (size_t k = 0; k < sbst_column.size(); ++k) {
         score_column[k] += sbst_column[k] * prob.second[i];
       }
@@ -49,7 +44,6 @@ ProfileMap create_score_profile(const fasta::SequenceList& sequences) {
       p[ALPHABET[j]][i] = score_column[j];
     }
   }
-  // TODO: Calculate scores for each probability
 
   return p;
 }
