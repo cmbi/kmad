@@ -10,8 +10,11 @@
 #include <vector>
 
 
-class Residue;
-
+typedef std::map<std::string, std::vector<double>> FeaturesProfileMap;
+FeaturesProfileMap create_features_profile(
+    const fasta::SequenceList& sequences);
+FeaturesProfileMap create_score_features_profile(
+    const fasta::SequenceList& sequences);
 
 class FeaturesProfile {
 public:

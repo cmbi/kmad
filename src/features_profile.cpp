@@ -10,6 +10,18 @@
 #include <vector>
 #include <tuple>
 
+
+
+ProfileFeaturesMap create_score_features_profile(
+    const fasta::SequenceList& sequences) {
+  ProfileFeaturesMap p = create_features_profile(sequences);
+  return p;
+}
+
+ProfileFeaturesMap create_features_profile(
+    const fasta::SequenceList& sequences) {
+  ProfileFeaturesMap p; 
+}
 namespace {
   // 0 - highest level of annotation, 3 - lowest, P - predicted
   FeatureNamesList list_of_features = {"ptm_phosph0", "ptm_phosph1",
