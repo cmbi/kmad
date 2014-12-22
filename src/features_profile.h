@@ -12,9 +12,11 @@
 
 typedef std::map<std::string, std::vector<double>> FeaturesProfileMap;
 FeaturesProfileMap create_features_profile(
-    const fasta::SequenceList& sequences);
+    const fasta::SequenceList& sequences, 
+    const std::vector<std::string>& features);
 FeaturesProfileMap create_score_features_profile(
-    const fasta::SequenceList& sequences);
+    const fasta::SequenceList& sequences,
+    const std::vector<std::string>& features);
 
 class FeaturesProfile {
 public:

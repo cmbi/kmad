@@ -12,16 +12,33 @@
 
 
 
-ProfileFeaturesMap create_score_features_profile(
-    const fasta::SequenceList& sequences) {
-  ProfileFeaturesMap p = create_features_profile(sequences);
+FeaturesProfileMap create_score_features_profile(
+    const fasta::SequenceList& sequences, 
+    const std::vector<std::string>& features) {
+  FeaturesProfileMap p = create_features_profile(sequences, features);
   return p;
 }
 
-ProfileFeaturesMap create_features_profile(
-    const fasta::SequenceList& sequences) {
-  ProfileFeaturesMap p; 
+
+FeaturesProfileMap create_features_profile(
+    const fasta::SequenceList& sequences,
+    const std::vector<std::string>& features) {
+  FeaturesProfileMap p;
+  for (auto& f: features) {
+    p[f] = std::vector<double>(sequences[0].residues.size(), 0);
+  }
+  for (size_t i = 0; i < sequences[0].residues.size(); i++) {
+    for (size_t j = 0; j < sequences.size(); j++) {
+      for (auto& f : sequences[j].residues[i].features) {
+        assert(p.find(f) != p.end());
+        p[f][i] += 1.0;
+      }
+    }
+  }
+  return p;
 }
+
+
 namespace {
   // 0 - highest level of annotation, 3 - lowest, P - predicted
   FeatureNamesList list_of_features = {"ptm_phosph0", "ptm_phosph1",
