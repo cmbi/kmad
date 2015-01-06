@@ -24,25 +24,25 @@ BOOST_AUTO_TEST_CASE(test_create_features_profile)
   //     "d", "MAAAZabMAAAZAAKAaaZAALAAAAaa", 7);
   // fasta::Sequence s5 = fasta::make_sequence(
   //     "d", "AAAAAacMAAAZAAAAAAAAALAAAAAA", 7);
-  FeatureNamesList list_of_features = {"ptm_phosph0", "ptm_phosph1",
-                                       "ptm_phosph2", "ptm_phosph3",
-                                       "ptm_phosphP", "ptm_acet0",
-                                       "ptm_acet1", "ptm_acet2",
-                                       "ptm_acet3", "ptm_Nglyc0",
-                                       "ptm_Nglyc1", "ptm_Nglyc2",
-                                       "ptm_Nglyc3", "ptm_amid0",
-                                       "ptm_amid1", "ptm_amid2",
-                                       "ptm_amid3", "ptm_hydroxy0",
-                                       "ptm_hydroxy1", "ptm_hydroxy2",
-                                       "ptm_hydroxy3", "ptm_methyl0",
-                                       "ptm_methyl1", "ptm_methyl2",
-                                       "ptm_methyl3", "ptm_Oglyc0",
-                                       "ptm_Oglyc1", "ptm_Oglyc2",
-                                       "ptm_Oglyc3", "domain_0",
-                                       "motif_0", "lcr", 
-                                       "motif_aa", "motif_ab",
-                                       "motif_ac",
-                                       "domain_aa", "domain_ac"};
+  FeatureNamesList feature_list = {"ptm_phosph0", "ptm_phosph1",
+                                   "ptm_phosph2", "ptm_phosph3",
+                                   "ptm_phosphP", "ptm_acet0",
+                                   "ptm_acet1", "ptm_acet2",
+                                   "ptm_acet3", "ptm_Nglyc0",
+                                   "ptm_Nglyc1", "ptm_Nglyc2",
+                                   "ptm_Nglyc3", "ptm_amid0",
+                                   "ptm_amid1", "ptm_amid2",
+                                   "ptm_amid3", "ptm_hydroxy0",
+                                   "ptm_hydroxy1", "ptm_hydroxy2",
+                                   "ptm_hydroxy3", "ptm_methyl0",
+                                   "ptm_methyl1", "ptm_methyl2",
+                                   "ptm_methyl3", "ptm_Oglyc0",
+                                   "ptm_Oglyc1", "ptm_Oglyc2",
+                                   "ptm_Oglyc3", "domain_0",
+                                   "motif_0", "lcr", 
+                                   "motif_aa", "motif_ab",
+                                   "motif_ac",
+                                   "domain_aa", "domain_ac"};
    
   
   // SEQUENCE S1
@@ -89,48 +89,52 @@ BOOST_AUTO_TEST_CASE(test_create_features_profile)
 
   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
 
-  FeaturesProfileMap p = create_features_profile(sequences, 
-                                                 list_of_features);
-  BOOST_CHECK_EQUAL(p.size(), list_of_features.size());
+  FeaturesProfileMap p = create_features_profile(sequences, feature_list);
+  BOOST_CHECK_EQUAL(p.size(), feature_list.size());
 
-  FeaturesProfileMap expected_score_profile = {{"ptm_phosph0", {2, 4, 3, 2}},
-                                               {"ptm_phosph1", {0, 0, 0, 0}},
-                                               {"ptm_phosph2", {0, 0, 0, 0}},
-                                               {"ptm_phosph3", {0, 0, 0, 0}},
-                                               {"ptm_phosphP", {2, 0, 0, 0}},
-                                               {"ptm_acet0", {0, 0, 0, 0}},
-                                               {"ptm_acet1", {0, 0, 0, 0}},
-                                               {"ptm_acet2", {0, 0, 0, 0}},
-                                               {"ptm_acet3", {0, 0, 0, 0}},
-                                               {"ptm_Nglyc0", {0, 0, 0, 0}},
-                                               {"ptm_Nglyc1", {0, 0, 0, 0}},
-                                               {"ptm_Nglyc2", {0, 0, 0, 0}},
-                                               {"ptm_Nglyc3", {0, 0, 0, 0}},
-                                               {"ptm_amid0", {0, 0, 0, 0}},
-                                               {"ptm_amid1", {0, 0, 0, 0}},
-                                               {"ptm_amid2", {0, 0, 0, 0}},
-                                               {"ptm_amid3", {0, 0, 0, 0}},
-                                               {"ptm_hydroxy0", {0, 0, 0, 0}},
-                                               {"ptm_hydroxy1", {0, 0, 0, 0}},
-                                               {"ptm_hydroxy2", {0, 0, 0, 0}},
-                                               {"ptm_hydroxy3", {0, 0, 0, 0}},
-                                               {"ptm_methyl0", {0, 0, 0, 0}},
-                                               {"ptm_methyl1", {0, 0, 0, 0}},
-                                               {"ptm_methyl2", {0, 0, 0, 0}},
-                                               {"ptm_methyl3", {0, 0, 0, 0}},
-                                               {"ptm_Oglyc0", {0, 0, 0, 0}},
-                                               {"ptm_Oglyc1", {0, 0, 0, 0}},
-                                               {"ptm_Oglyc2", {0, 0, 0, 0}},
-                                               {"ptm_Oglyc3", {0, 0, 0, 0}},
-                                               {"domain_0", {0, 0, 0, 0}},
-                                               {"motif_0", {0, 0, 0, 0}},
-                                               {"lcr", {0, 0, 0, 0}},
-                                               {"motif_aa", {3, 0, 0, 2}},
-                                               {"motif_ab", {1, 0, 0, 0}},
-                                               {"motif_ac", {1, 0, 0, 0}},
-                                               {"domain_aa", {0, 0, 3, 1}},
-                                               {"domain_ac", {0, 0, 1, 0}};
-   
+  FeaturesProfileMap expected_profile = {{"ptm_phosph0", {2, 4, 3, 2}},
+                                         {"ptm_phosph1", {0, 0, 0, 0}},
+                                         {"ptm_phosph2", {0, 0, 0, 0}},
+                                         {"ptm_phosph3", {0, 0, 0, 0}},
+                                         {"ptm_phosphP", {2, 0, 0, 0}},
+                                         {"ptm_acet0", {0, 0, 0, 0}},
+                                         {"ptm_acet1", {0, 0, 0, 0}},
+                                         {"ptm_acet2", {0, 0, 0, 0}},
+                                         {"ptm_acet3", {0, 0, 0, 0}},
+                                         {"ptm_Nglyc0", {0, 0, 0, 0}},
+                                         {"ptm_Nglyc1", {0, 0, 0, 0}},
+                                         {"ptm_Nglyc2", {0, 0, 0, 0}},
+                                         {"ptm_Nglyc3", {0, 0, 0, 0}},
+                                         {"ptm_amid0", {0, 0, 0, 0}},
+                                         {"ptm_amid1", {0, 0, 0, 0}},
+                                         {"ptm_amid2", {0, 0, 0, 0}},
+                                         {"ptm_amid3", {0, 0, 0, 0}},
+                                         {"ptm_hydroxy0", {0, 0, 0, 0}},
+                                         {"ptm_hydroxy1", {0, 0, 0, 0}},
+                                         {"ptm_hydroxy2", {0, 0, 0, 0}},
+                                         {"ptm_hydroxy3", {0, 0, 0, 0}},
+                                         {"ptm_methyl0", {0, 0, 0, 0}},
+                                         {"ptm_methyl1", {0, 0, 0, 0}},
+                                         {"ptm_methyl2", {0, 0, 0, 0}},
+                                         {"ptm_methyl3", {0, 0, 0, 0}},
+                                         {"ptm_Oglyc0", {0, 0, 0, 0}},
+                                         {"ptm_Oglyc1", {0, 0, 0, 0}},
+                                         {"ptm_Oglyc2", {0, 0, 0, 0}},
+                                         {"ptm_Oglyc3", {0, 0, 0, 0}},
+                                         {"domain_0", {0, 0, 0, 0}},
+                                         {"motif_0", {0, 0, 0, 0}},
+                                         {"lcr", {0, 0, 0, 0}},
+                                         {"motif_aa", {3, 0, 0, 2}},
+                                         {"motif_ab", {1, 0, 0, 0}},
+                                         {"motif_ac", {1, 0, 0, 0}},
+                                         {"domain_aa", {0, 0, 3, 1}},
+                                         {"domain_ac", {0, 0, 1, 0}}};
+  
+  for (auto &feat: feature_list) {
+    BOOST_CHECK_EQUAL_COLLECTIONS(expected_profile[feat].begin(), 
+                                  expected_profile[feat].end(),
+                                  p[feat].begin(), p[feat].end());
+  }
 }
 
 
