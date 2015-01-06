@@ -40,6 +40,7 @@ namespace fasta {
 
   Sequence make_sequence(const std::string& description,
                          const std::string& codons, int codon_length);
+  Sequence make_sequence(const std::vector<Residue>&);
 
 }
 
