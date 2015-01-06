@@ -135,6 +135,8 @@ BOOST_AUTO_TEST_CASE(test_create_features_profile)
                                   expected_profile[feat].end(),
                                   p[feat].begin(), p[feat].end());
   }
+  p = create_score_features_profile(sequences, feature_list);
+
 }
 
 

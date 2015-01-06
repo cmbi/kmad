@@ -17,6 +17,14 @@ FeaturesProfileMap create_features_profile(
 FeaturesProfileMap create_score_features_profile(
     const fasta::SequenceList& sequences,
     const std::vector<std::string>& features);
+double score_ptm(FeaturesProfileMap& p, unsigned int position,
+                 std::string feat_name, int ptm_modifier);
+double score_domain(FeaturesProfileMap& p, unsigned int position,
+                    std::string feat_name);
+double score_motif(FeaturesProfileMap& p, unsigned int position,
+                   std::string feat_name);
+double score_usr_feature(FeaturesProfileMap& p, unsigned int position,
+                         std::string feat_name);
 
 class FeaturesProfile {
 public:

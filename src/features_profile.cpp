@@ -14,8 +14,35 @@
 
 FeaturesProfileMap create_score_features_profile(
     const fasta::SequenceList& sequences, 
-    const std::vector<std::string>& features) {
+    const std::vector<std::string>& features, int ptm_modifier, 
+    int domain_modifier, int motif_modifier) {
   FeaturesProfileMap p = create_features_profile(sequences, features);
+  // convert occurences to probabilities
+  for (auto& occ: p) {
+    size_t i = 0;
+    for (auto& v: occ.second) {
+      occ.second[i] = v / sequences.size();
+      i++;
+    }
+  }
+  // create an empty score map 
+  FeaturesProfileMap score_p;
+  for (auto& f: features) {
+    score_p[f] = std::vector<double>(sequences[0].residues.size(), 0);
+  }
+  for (size_t i = 0; i < sequences[0].residues.size(); i++) {
+    for (auto &feat : features){
+      if (feat.substr(0,3) == "ptm") {
+        score_p[feat][i] = score_ptm(p, i, feat, ptm_modifier);
+      } else if (feat.substr(0,6) == "domain") {
+        score_p[feat][i] = score_domain(p, i, feat);
+      } else if (feat.substr(0,5) == "motif") {
+        score_p[feat][i] = score_motif(p, i, feat);
+      } else if (feat.substr(0,3) == "USR") {
+        score_p[feat][i] = score_usr_feature(p, i, feat);
+      }
+    }
+  }
   return p;
 }
 
@@ -229,6 +256,58 @@ double FeaturesProfile::ScoreDomains(unsigned int& position,
       result -= m_occurences_matrix[dom_index][position];
     }
   }
+  return result;
+}
+
+
+double score_ptm(FeaturesProfileMap p, unsigned int& position,
+                 std::string ptm_name, int ptm_modifier) {
+  double result  = 0;
+  std::string ptm_type = ptm_name;
+  //pop back last character to get just the ptm type
+  ptm_type.pop_back();
+  // level of annotation - last character of feature's name
+  char ptm_level = ptm_name.back();
+  double ptm_score = 0.;
+  // first set ptm_score based on annotation level of the query ptm
+  if (ptm_level == '0') {
+    ptm_score = 1.0;
+  } else if (ptm_level == '1') {
+    ptm_score = 0.9;
+  } else if (ptm_level == '2') {
+    ptm_score = 0.8;
+  } else if (ptm_level == '3') {
+    ptm_score = 0.7;
+  } else if (ptm_level == 'P') {
+    ptm_score = 0.3;
+  } else {
+    std::string msg = "wrong annotation level on position "
+                    + std::to_string(position)
+                    + " ptmname: " + ptm_name;
+    throw std::invalid_argument(msg);
+  }
+  for (auto feat_it = p.begin(); feat_it != p.end(); feat_it++) {
+    std::string i_name = feat_it->first;
+    std::string i_type = i_name;
+    // popping back last character, to get just the ptm type
+    // (without its level of annotation)
+    i_type.pop_back();
+    if (i_type == ptm_type) {
+      char i_level = i_name.back();
+      if (i_level == '0') {
+        result += feat_it->second[position];
+      } else if (i_level == '1') {
+        result += feat_it->second[position] * 0.9;
+      } else if (i_level == '2') {
+        result += feat_it->second[position] * 0.8;
+      } else if (i_level == '3') {
+        result += feat_it->second[position] * 0.7;
+      } else if (i_level == 'P') {
+        result += feat_it->second[position] * 0.3;
+      }
+    }
+  }
+  result = result * ptm_score * ptm_modifier;
   return result;
 }
 
