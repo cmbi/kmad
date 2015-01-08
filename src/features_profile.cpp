@@ -45,7 +45,7 @@ FeaturesProfileMap create_score_features_profile(
       // }
     }
   }
-  return p;
+  return score_p;
 }
 
 
@@ -268,7 +268,7 @@ double score_domain(FeaturesProfileMap& p, unsigned long position,
   for (auto feat_it = p.begin(); feat_it != p.end(); feat_it++) {
     if (feat_it->first == dom_name) {
       result += feat_it->second[position];
-    } else {
+    } else if (feat_it->first.substr(0,6) == "domain") {
       result -= feat_it->second[position];
     }
   }

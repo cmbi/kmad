@@ -141,54 +141,48 @@ BOOST_AUTO_TEST_CASE(test_create_features_profile)
                                          {"motif_ac", 0.8}};
   p = create_score_features_profile(sequences, feature_list, 10, 4, 3, 
                                     probs);
+  expected_profile = {{"ptm_phosph0", {5.2, 8, 6, 4}},
+                      {"ptm_phosph1", {4.68, 7.2, 5.4, 3.6}},
+                      {"ptm_phosph2", {4.16, 6.4, 4.8, 3.2}},
+                      {"ptm_phosph3", {3.64, 5.6, 4.2, 2.8}},
+                      {"ptm_phosphP", {1.56, 2.4, 1.8, 1.2}},
+                      {"ptm_acet0", {0, 0, 0, 0}},
+                      {"ptm_acet1", {0, 0, 0, 0}},
+                      {"ptm_acet2", {0, 0, 0, 0}},
+                      {"ptm_acet3", {0, 0, 0, 0}},
+                      {"ptm_Nglyc0", {0, 0, 0, 0}},
+                      {"ptm_Nglyc1", {0, 0, 0, 0}},
+                      {"ptm_Nglyc2", {0, 0, 0, 0}},
+                      {"ptm_Nglyc3", {0, 0, 0, 0}},
+                      {"ptm_amid0", {0, 0, 0, 0}},
+                      {"ptm_amid1", {0, 0, 0, 0}},
+                      {"ptm_amid2", {0, 0, 0, 0}},
+                      {"ptm_amid3", {0, 0, 0, 0}},
+                      {"ptm_hydroxy0", {0, 0, 0, 0}},
+                      {"ptm_hydroxy1", {0, 0, 0, 0}},
+                      {"ptm_hydroxy2", {0, 0, 0, 0}},
+                      {"ptm_hydroxy3", {0, 0, 0, 0}},
+                      {"ptm_methyl0", {0, 0, 0, 0}},
+                      {"ptm_methyl1", {0, 0, 0, 0}},
+                      {"ptm_methyl2", {0, 0, 0, 0}},
+                      {"ptm_methyl3", {0, 0, 0, 0}},
+                      {"ptm_Oglyc0", {0, 0, 0, 0}},
+                      {"ptm_Oglyc1", {0, 0, 0, 0}},
+                      {"ptm_Oglyc2", {0, 0, 0, 0}},
+                      {"ptm_Oglyc3", {0, 0, 0, 0}},
+                      {"domain_0", {0, 0, -3.2, -0.8}},
+                      {"motif_0", {0, 0, 0, 0}},
+                      {"lcr", {0, 0, 0, 0}},
+                      {"motif_aa", {1.8, 0, 0, 1.2}},
+                      {"motif_ab", {0.3, 0, 0, 0}},
+                      {"motif_ac", {0.48, 0, 0, 0}},
+                      {"domain_aa", {0, 0, 1.6, 0.8}},
+                      {"domain_ac", {0, 0, -1.6, -0.8}}};
+  for (auto& feat: feature_list){
+    for (size_t i = 0; i < p[feat].size(); ++i) {
+      BOOST_CHECK(std::abs(p[feat][i] - expected_profile[feat][i]) < 0.001);
+    }
+  }
 }
-
-
-// BOOST_AUTO_TEST_CASE(test_create_score_profile)
-// {
-//   fasta::Sequence s1 = fasta::make_sequence(
-//       "d", "AzzzzzzMzzzzzzEzzzzzzLzzzzzz", 7);
-//   fasta::Sequence s2 = fasta::make_sequence(
-//       "d", "AzzzzzzEzzzzzzEzzzzzzKzzzzzz", 7);
-//   fasta::Sequence s3 = fasta::make_sequence(
-//       "d", "AzzzzzzMzzzzzzEzzzzzzLzzzzzz", 7);
-//   fasta::Sequence s4 = fasta::make_sequence(
-//       "d", "MzzzzzzMzzzzzzKzzzzzzLzzzzzz", 7);
-//   fasta::Sequence s5 = fasta::make_sequence(
-//       "d", "AzzzzzzMzzzzzzAzzzzzzLzzzzzz", 7);
-// 
-//   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
-// 
-//   ProfileMap p = create_score_profile(sequences);
-// 
-//    
-//   ProfileMap expected_score_profile = {{'A', {3.0, -1.0, 0.0, -1.0}}, 
-//                                        {'R', {-1.0, -0.8, 0.2, -1.2}},
-//                                        {'N', {-2.0, -1.6, -0.4, -2.4}},
-//                                        {'D', {-2.2, -2.0, 0.6, -3.4}},
-//                                        {'C', {-0.2, -1.6, -3.0, -1.4}},
-//                                        {'Q', {-0.8, 0.4, 1.2, -1.4}},
-//                                        {'E', {-1.2, -0.6, 3.0, -2.2}},
-//                                        {'G', {-0.6, -2.8, -1.6, -3.6}},
-//                                        {'H', {-2.0, -1.6, -0.6, -2.6}},
-//                                        {'I', {-0.6, 0.2, -2.6, 1.0}},
-//                                        {'L', {-0.4, 1.0, -2.4, 2.8}},
-//                                        {'K', {-1.0, -0.6, 1.4, -0.6}},
-//                                        {'M', {0.2, 3.6, -1.6, 1.4}},
-//                                        {'F', {-1.6, -0.6, -2.8, -0.6}},
-//                                        {'P', {-1.2, -1.8, -1.0, -2.6}},
-//                                        {'S', {0.6, -0.8, 0.2, -1.6}},
-//                                        {'T', {-0.2, -1.0, -0.8, -1.0}},
-//                                        {'W', {-2.6, -1.4, -3.0, -2.2}},
-//                                        {'Y', {-1.8, -1.2, -2.0, -1.2}}, 
-//                                        {'V', {0.2, 0.4, -1.6, 0.4}}};
-// 
-//   BOOST_CHECK_EQUAL(p.size(), expected_score_profile.size());
-//   for (auto& aa: ALPHABET){
-//     for (size_t i = 0; i < p['A'].size(); ++i) {
-//       BOOST_CHECK(std::abs(p[aa][i] - expected_score_profile[aa][i]) < 0.1);
-//     }
-//   }
-// }
 
 BOOST_AUTO_TEST_SUITE_END()
