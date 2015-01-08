@@ -135,8 +135,12 @@ BOOST_AUTO_TEST_CASE(test_create_features_profile)
                                   expected_profile[feat].end(),
                                   p[feat].begin(), p[feat].end());
   }
-  p = create_score_features_profile(sequences, feature_list);
 
+  std::map<std::string, double> probs = {{"motif_aa", 1.0},
+                                         {"motif_ab", 0.5},
+                                         {"motif_ac", 0.8}};
+  p = create_score_features_profile(sequences, feature_list, 10, 4, 3, 
+                                    probs);
 }
 
 

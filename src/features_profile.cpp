@@ -11,11 +11,11 @@
 #include <tuple>
 
 
-
 FeaturesProfileMap create_score_features_profile(
     const fasta::SequenceList& sequences, 
     const std::vector<std::string>& features, int ptm_modifier, 
-    int domain_modifier, int motif_modifier) {
+    int domain_modifier, int motif_modifier, 
+    std::map<std::string, double> probabilities) {
   FeaturesProfileMap p = create_features_profile(sequences, features);
   // convert occurences to probabilities
   for (auto& occ: p) {
@@ -35,12 +35,14 @@ FeaturesProfileMap create_score_features_profile(
       if (feat.substr(0,3) == "ptm") {
         score_p[feat][i] = score_ptm(p, i, feat, ptm_modifier);
       } else if (feat.substr(0,6) == "domain") {
-        score_p[feat][i] = score_domain(p, i, feat);
+        score_p[feat][i] = score_domain(p, i, feat, domain_modifier);
       } else if (feat.substr(0,5) == "motif") {
-        score_p[feat][i] = score_motif(p, i, feat);
-      } else if (feat.substr(0,3) == "USR") {
-        score_p[feat][i] = score_usr_feature(p, i, feat);
-      }
+        score_p[feat][i] = score_motif(p, i, feat, motif_modifier, 
+                                       probabilities);
+      } 
+      // else if (feat.substr(0,3) == "USR") {
+      //   score_p[feat][i] = score_usr_feature(p, i, feat);
+      // }
     }
   }
   return p;
@@ -260,7 +262,43 @@ double FeaturesProfile::ScoreDomains(unsigned int& position,
 }
 
 
-double score_ptm(FeaturesProfileMap p, unsigned int& position,
+double score_domain(FeaturesProfileMap& p, unsigned long position,
+                    std::string dom_name, int domain_modifier) {
+  double result = 0;
+  for (auto feat_it = p.begin(); feat_it != p.end(); feat_it++) {
+    if (feat_it->first == dom_name) {
+      result += feat_it->second[position];
+    } else {
+      result -= feat_it->second[position];
+    }
+  }
+  return result * domain_modifier;
+}
+
+
+
+double score_motif(FeaturesProfileMap& p, unsigned long position,
+                   std::string feat_name, int motif_modifier,
+                    std::map<std::string, double> probs) {
+  double result = 0;
+  bool not_found = true;
+  for (auto feat_it = p.begin(); feat_it != p.end() && not_found; feat_it++) {
+    if (feat_it->first == feat_name) {
+      result = feat_it->second[position] * motif_modifier * probs[feat_name];
+      not_found = false;     
+    }
+  }
+  // int features_index = FindFeaturesIndex(feat_name);
+  // if (features_index == -1) {
+  //   result = 0;
+  // } else {
+  //   result = m_occurences_matrix[features_index][position];
+  // }
+  return result;
+}
+
+
+double score_ptm(FeaturesProfileMap& p, unsigned long position,
                  std::string ptm_name, int ptm_modifier) {
   double result  = 0;
   std::string ptm_type = ptm_name;

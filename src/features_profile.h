@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 
 
 typedef std::map<std::string, std::vector<double>> FeaturesProfileMap;
@@ -16,14 +17,17 @@ FeaturesProfileMap create_features_profile(
     const std::vector<std::string>& features);
 FeaturesProfileMap create_score_features_profile(
     const fasta::SequenceList& sequences,
-    const std::vector<std::string>& features);
-double score_ptm(FeaturesProfileMap& p, unsigned int position,
+    const std::vector<std::string>& features, int ptm_modifier,
+    int domain_modifier, int motif_modifier,
+    std::map<std::string, double> probabilities);
+double score_ptm(FeaturesProfileMap& p, unsigned long position,
                  std::string feat_name, int ptm_modifier);
-double score_domain(FeaturesProfileMap& p, unsigned int position,
-                    std::string feat_name);
-double score_motif(FeaturesProfileMap& p, unsigned int position,
-                   std::string feat_name);
-double score_usr_feature(FeaturesProfileMap& p, unsigned int position,
+double score_domain(FeaturesProfileMap& p, unsigned long position,
+                    std::string feat_name, int domain_modifier);
+double score_motif(FeaturesProfileMap& p, unsigned long position,
+                   std::string feat_name, int motif_modifier,
+                   std::map<std::string, double> probabilities);
+double score_usr_feature(FeaturesProfileMap& p, size_t position,
                          std::string feat_name);
 
 class FeaturesProfile {
