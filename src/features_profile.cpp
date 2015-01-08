@@ -84,8 +84,7 @@ namespace {
                                        "ptm_methyl1", "ptm_methyl2",
                                        "ptm_methyl3", "ptm_Oglyc0",
                                        "ptm_Oglyc1", "ptm_Oglyc2",
-                                       "ptm_Oglyc3", "domain_0",
-                                       "motif_0", "lcr"};
+                                       "ptm_Oglyc3"};
   IndexList domain_indexes = {29};
   IndexList motif_indexes = {30};
   std::string nothing = "AA";

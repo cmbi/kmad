@@ -38,12 +38,9 @@ BOOST_AUTO_TEST_CASE(test_create_features_profile)
                                    "ptm_methyl1", "ptm_methyl2",
                                    "ptm_methyl3", "ptm_Oglyc0",
                                    "ptm_Oglyc1", "ptm_Oglyc2",
-                                   "ptm_Oglyc3", "domain_0",
-                                   "motif_0", "lcr", 
-                                   "motif_aa", "motif_ab",
-                                   "motif_ac",
+                                   "ptm_Oglyc3", "motif_aa", 
+                                   "motif_ab", "motif_ac",
                                    "domain_aa", "domain_ac"};
-   
   
   // SEQUENCE S1
   fasta::Residue r1_1("AAAAdaa", std::vector<std::string>({"ptm_phosphP",
@@ -121,9 +118,6 @@ BOOST_AUTO_TEST_CASE(test_create_features_profile)
                                          {"ptm_Oglyc1", {0, 0, 0, 0}},
                                          {"ptm_Oglyc2", {0, 0, 0, 0}},
                                          {"ptm_Oglyc3", {0, 0, 0, 0}},
-                                         {"domain_0", {0, 0, 0, 0}},
-                                         {"motif_0", {0, 0, 0, 0}},
-                                         {"lcr", {0, 0, 0, 0}},
                                          {"motif_aa", {3, 0, 0, 2}},
                                          {"motif_ab", {1, 0, 0, 0}},
                                          {"motif_ac", {1, 0, 0, 0}},
@@ -170,9 +164,6 @@ BOOST_AUTO_TEST_CASE(test_create_features_profile)
                       {"ptm_Oglyc1", {0, 0, 0, 0}},
                       {"ptm_Oglyc2", {0, 0, 0, 0}},
                       {"ptm_Oglyc3", {0, 0, 0, 0}},
-                      {"domain_0", {0, 0, -3.2, -0.8}},
-                      {"motif_0", {0, 0, 0, 0}},
-                      {"lcr", {0, 0, 0, 0}},
                       {"motif_aa", {1.8, 0, 0, 1.2}},
                       {"motif_ab", {0.3, 0, 0, 0}},
                       {"motif_ac", {0.48, 0, 0, 0}},
