@@ -2,6 +2,7 @@
 
 #include "fasta.h"
 #include "features_profile.h"
+#include "f_config.h"
 #include "types.h"
 
 #include <boost/test/unit_test.hpp>
@@ -86,7 +87,12 @@ BOOST_AUTO_TEST_CASE(test_create_features_profile)
 
   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
 
-  FeaturesProfileMap p = create_features_profile(sequences, feature_list);
+  std::map<std::string, double> probs = {{"motif_aa", 1.0},
+                                         {"motif_ab", 0.5},
+                                         {"motif_ac", 0.8}};
+
+  FeaturesProfile f_profile(feature_list, 4, 10, 3, probs);
+  FeaturesProfileMap p = f_profile.create_features_profile(sequences);
   BOOST_CHECK_EQUAL(p.size(), feature_list.size());
 
   FeaturesProfileMap expected_profile = {{"ptm_phosph0", {2, 4, 3, 2}},
@@ -129,12 +135,9 @@ BOOST_AUTO_TEST_CASE(test_create_features_profile)
                                   expected_profile[feat].end(),
                                   p[feat].begin(), p[feat].end());
   }
-
-  std::map<std::string, double> probs = {{"motif_aa", 1.0},
-                                         {"motif_ab", 0.5},
-                                         {"motif_ac", 0.8}};
-  p = create_score_features_profile(sequences, feature_list, 10, 4, 3, 
-                                    probs);
+  f_config::FeatureSettingsMap s;
+  f_profile.create_score_features_profile(sequences, s);
+  p = f_profile.m_scores;
   expected_profile = {{"ptm_phosph0", {5.2, 8, 6, 4}},
                       {"ptm_phosph1", {4.68, 7.2, 5.4, 3.6}},
                       {"ptm_phosph2", {4.16, 6.4, 4.8, 3.2}},

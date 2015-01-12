@@ -9,7 +9,7 @@
 
 namespace lcg = libconfig;
 
-f_config::UsrFeatureMap f_config::ConfParser::parse_conf_file(
+f_config::FeatureSettingsMap f_config::ConfParser::parse_conf_file(
     const std::string& filename) {
   lcg::Config cnfg;
   try
@@ -30,9 +30,9 @@ f_config::UsrFeatureMap f_config::ConfParser::parse_conf_file(
 }
 
 
-f_config::UsrFeatureMap f_config::ConfParser::process_config(
+f_config::FeatureSettingsMap f_config::ConfParser::process_config(
     const lcg::Config& cnfg) {
-  f_config::UsrFeatureMap feat_config;
+  f_config::FeatureSettingsMap feat_config;
   try
   {
     const lcg::Setting& root  = cnfg.getRoot();
