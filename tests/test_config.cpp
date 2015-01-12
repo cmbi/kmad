@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_CASE(test_config)
 {
   const char* filename = "tests/test_conf_file.cfg";
 
-  f_config::UsrFeatureMap test_result;
+  f_config::FeatureSettingsMap test_result;
   test_result = f_config::ConfParser::parse_conf_file(filename);
 
   std::string feat_name = "feature1";

@@ -2,10 +2,10 @@
 
 #include <boost/algorithm/string.hpp>
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <vector>
-#include <tuple>
 
 
 FeaturesProfile::FeaturesProfile(std::vector<std::string> features,
@@ -20,7 +20,8 @@ FeaturesProfile::FeaturesProfile(std::vector<std::string> features,
 
 
 void FeaturesProfile::create_score_features_profile(
-    const fasta::SequenceList& sequences) {
+    const fasta::SequenceList& sequences,
+    f_config::FeatureSettingsMap usr_feature_settings) {
   m_occurences = create_features_profile(sequences);
   // convert occurences to probabilities
   for (auto& occ: m_occurences) {
@@ -44,9 +45,10 @@ void FeaturesProfile::create_score_features_profile(
       } else if (feat.substr(0,5) == "motif") {
         scores[feat][i] = score_motif(i, feat);
       } 
-      // else if (feat.substr(0,3) == "USR") {
-      //   score_p[feat][i] = score_usr_feature(p, i, feat);
-      // }
+      else if (feat.substr(0,3) == "USR") {
+        scores[feat][i] = score_usr_feature(i, feat,
+                                            usr_feature_settings[feat]);
+      }
     }
   }
   m_scores = scores;
@@ -150,6 +152,26 @@ double FeaturesProfile::score_motif(unsigned long position,
                * m_motif_probabilities[feat_name];
       not_found = false;     
     }
+  }
+  return result;
+}
+
+
+double FeaturesProfile::score_usr_feature(unsigned long position,
+                                          std::string feat_name,
+                                          f_config::FeatureSettings settings) {
+  double result = 0;
+  // features that add scores
+  for (auto& feature : settings.add_features) {
+    result += m_occurences[feat_name][position] \
+              * m_occurences[feature][position] \
+              * settings.add_score;
+  }
+  // features that subtract scores
+  for (auto& feature : settings.subtract_features) {
+    result -= m_occurences[feat_name][position] \
+              * m_occurences[feature][position] \
+              * settings.subtract_score;
   }
   return result;
 }

@@ -2,6 +2,7 @@
 
 #include "fasta.h"
 #include "features_profile.h"
+#include "f_config.h"
 #include "types.h"
 
 #include <boost/test/unit_test.hpp>
@@ -134,7 +135,8 @@ BOOST_AUTO_TEST_CASE(test_create_features_profile)
                                   expected_profile[feat].end(),
                                   p[feat].begin(), p[feat].end());
   }
-  f_profile.create_score_features_profile(sequences);
+  f_config::FeatureSettingsMap s;
+  f_profile.create_score_features_profile(sequences, s);
   p = f_profile.m_scores;
   expected_profile = {{"ptm_phosph0", {5.2, 8, 6, 4}},
                       {"ptm_phosph1", {4.68, 7.2, 5.4, 3.6}},

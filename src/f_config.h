@@ -1,3 +1,5 @@
+#ifndef F_CONFIG_H
+#define F_CONFIG_H
 #include "types.h"
 
 #include <iostream>
@@ -26,13 +28,15 @@ namespace f_config
     std::vector<FeaturePositions> positions;
   };
 
-  typedef std::map<std::string, FeatureSettings> UsrFeatureMap;
+  typedef std::map<std::string, FeatureSettings> FeatureSettingsMap;
 
   class ConfParser
   {
     public:
-      static UsrFeatureMap parse_conf_file(const std::string& filename);
+      static FeatureSettingsMap parse_conf_file(const std::string& filename);
     private:
-      static UsrFeatureMap process_config(const libconfig::Config& cnfg);
+      static FeatureSettingsMap process_config(const libconfig::Config& cnfg);
   };
 }
+
+#endif /* F_CONFIG_H */
