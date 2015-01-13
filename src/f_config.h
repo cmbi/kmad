@@ -28,7 +28,6 @@ namespace f_config
   };
 
   struct FeatureSettings {
-    std::string tag;
     int add_score;
     int subtract_score;
     FeatureNamesList add_features;
