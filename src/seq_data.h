@@ -3,6 +3,7 @@
 
 #include "fasta.h"
 #include "f_config.h"
+#include "types.h"
 
 #include <iostream>
 
@@ -16,8 +17,7 @@ namespace seq_data {
 
   SequenceData process_fasta_data(const fasta::FastaData& fasta_data,
                                   const f_config::FeatureSettingsMap& f_set);
-  std::vector<std::string> make_feature_list(
-      const fasta::SequenceList& sequences);
+  FeatureNamesList make_feature_list(const fasta::SequenceList& sequences);
 }
 
 #endif /* SEQDATA_H */

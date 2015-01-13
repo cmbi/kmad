@@ -20,14 +20,28 @@ seq_data::SequenceData seq_data::process_fasta_data(
     }
   }
 
-  s.feature_list = make_feature_list(fasta_data.sequences);
+  s.feature_list = make_feature_list(s.sequences);
   return s;
 }
 
 
-std::vector<std::string> seq_data::make_feature_list(
+FeatureNamesList seq_data::make_feature_list(
     const fasta::SequenceList& sequences) {
-  std::vector<std::string> feature_list;
+  FeatureNamesList feature_list = {"ptm_phosph0", "ptm_phosph1",
+                                   "ptm_phosph2", "ptm_phosph3",
+                                   "ptm_phosphP", "ptm_acet0",
+                                   "ptm_acet1", "ptm_acet2",
+                                   "ptm_acet3", "ptm_Nglyc0",
+                                   "ptm_Nglyc1", "ptm_Nglyc2",
+                                   "ptm_Nglyc3", "ptm_amid0",
+                                   "ptm_amid1", "ptm_amid2",
+                                   "ptm_amid3", "ptm_hydroxy0",
+                                   "ptm_hydroxy1", "ptm_hydroxy2",
+                                   "ptm_hydroxy3", "ptm_methyl0",
+                                   "ptm_methyl1", "ptm_methyl2",
+                                   "ptm_methyl3", "ptm_Oglyc0",
+                                   "ptm_Oglyc1", "ptm_Oglyc2",
+                                   "ptm_Oglyc3"}; 
   for (auto& seq : sequences) {
     for (auto& res : seq.residues) {
       for (auto& feat_name : res.features) {

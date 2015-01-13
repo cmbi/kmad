@@ -15,18 +15,19 @@
 
 BOOST_AUTO_TEST_SUITE(test_kman_suite)
 
-BOOST_AUTO_TEST_CASE(test_config)
+BOOST_AUTO_TEST_CASE(test_seq_data)
 {
 
   f_config::FeatureSettingsMap test_map;
   f_config::FeatureSettings test_settings;
   f_config::FeaturePositions positions1;
-  positions1.seq_no = 1;
+  positions1.seq_no = 0;
   positions1.positions = {1, 2};
   f_config::FeaturePositions positions2;
-  positions2.seq_no = 2;
-  positions2.seq_no = {0};
+  positions2.seq_no = 1;
+  positions2.positions = {0};
   test_settings.positions = {positions1, positions2};
+  test_map["USR_feature1"] = test_settings;
 
 
   // SEQUENCE S1
@@ -43,35 +44,64 @@ BOOST_AUTO_TEST_CASE(test_config)
                                                            "domain_aa"}));
   fasta::Residue r2_4("KAAAZAA", std::vector<std::string>({"ptm_phosph0"}));
 
+  fasta::Sequence s1 = fasta::make_sequence({r1_1, r1_2, r1_3, r1_4});
+  fasta::Sequence s2 = fasta::make_sequence({r2_1, r2_2, r2_3, r2_4});
 
+  fasta::SequenceList sequences = {s1, s2};
+  fasta::FastaData test_data;
+  test_data.sequences = sequences;
 
+  // SEQUENCE S1
+  fasta::Residue e1_1("AAAAdaa", std::vector<std::string>({"ptm_phosphP",
+                                                          "motif_aa"}));
+  fasta::Residue e1_2("MAAAAAA", std::vector<std::string>({"USR_feature1"}));
+  fasta::Residue e1_3("EAaadaa", std::vector<std::string>({"domain_aa",
+                                                           "USR_feature1"}));
+  fasta::Residue e1_4("LAAAAAA", std::vector<std::string>({}));
+  // SEQUENCE S2
+  fasta::Residue e2_1("AAAAdaa", std::vector<std::string>({"ptm_phosphP",
+                                                          "motif_aa",
+                                                          "USR_feature1"}));
+  fasta::Residue e2_2("EAAAZAA", std::vector<std::string>({"ptm_phosph0"}));
+  fasta::Residue e2_3("EAaaZAA", std::vector<std::string>({"ptm_phosph0",
+                                                           "domain_aa"}));
+  fasta::Residue e2_4("KAAAZAA", std::vector<std::string>({"ptm_phosph0"}));
+  fasta::Sequence exp_s1 = fasta::make_sequence({e1_1, e1_2, e1_3, e1_4});
+  fasta::Sequence exp_s2 = fasta::make_sequence({e2_1, e2_2, e2_3, e2_4});
+  fasta::SequenceList expected_sequences = {exp_s1, exp_s2};
+  FeatureNamesList expected_feature_list = {"ptm_phosph0", "ptm_phosph1",
+                                            "ptm_phosph2", "ptm_phosph3",
+                                            "ptm_phosphP", "ptm_acet0",
+                                            "ptm_acet1", "ptm_acet2",
+                                            "ptm_acet3", "ptm_Nglyc0",
+                                            "ptm_Nglyc1", "ptm_Nglyc2",
+                                            "ptm_Nglyc3", "ptm_amid0",
+                                            "ptm_amid1", "ptm_amid2",
+                                            "ptm_amid3", "ptm_hydroxy0",
+                                            "ptm_hydroxy1", "ptm_hydroxy2",
+                                            "ptm_hydroxy3", "ptm_methyl0",
+                                            "ptm_methyl1", "ptm_methyl2",
+                                            "ptm_methyl3", "ptm_Oglyc0",
+                                            "ptm_Oglyc1", "ptm_Oglyc2",
+                                            "ptm_Oglyc3", "motif_aa",
+                                            "USR_feature1", "domain_aa"}; 
+  seq_data::SequenceData test_result = seq_data::process_fasta_data(test_data,
+                                                                    test_map);
 
-
-
-
-  // std::string feat_name = "USR_feature1";
-  // BOOST_CHECK(test_result.find(feat_name) != test_result.end());
-  // BOOST_CHECK_EQUAL(test_result[feat_name].add_score, 5);
-  // BOOST_CHECK_EQUAL(test_result[feat_name].subtract_score, 4);
-
-  // std::vector<std::string> expected_list = {"USR_feature1", "USR_feature2",
-  //                                           "USR_feature4"};
-  // std::vector<std::string> result_list = test_result[feat_name].add_features;
-  // BOOST_CHECK_EQUAL_COLLECTIONS(expected_list.begin(), expected_list.end(),
-  //                               result_list.begin(), result_list.end());
-
-  // expected_list = {"USR_feature3", "USR_feature6"};
-  // result_list = test_result[feat_name].subtract_features;
-  // BOOST_CHECK_EQUAL_COLLECTIONS(expected_list.begin(), expected_list.end(),
-  //                               result_list.begin(), result_list.end());
-
-  // std::vector<int> expected_int_list = {2, 3};
-  // std::vector<int> result_int_list;
-  // result_int_list = test_result[feat_name].positions[0].positions;
-  // BOOST_CHECK_EQUAL_COLLECTIONS(expected_int_list.begin(),
-  //                               expected_int_list.end(),
-  //                               result_int_list.begin(),
-  //                               result_int_list.end());
+  BOOST_CHECK_EQUAL_COLLECTIONS(expected_feature_list.begin(), 
+                                expected_feature_list.end(),
+                                test_result.feature_list.begin(),
+                                test_result.feature_list.end());
+  
+  for (size_t i = 0; i < test_result.sequences.size(); ++i) {
+    for (size_t j = 0; j < test_result.sequences[i].residues.size(); ++j) {
+      BOOST_CHECK_EQUAL_COLLECTIONS(
+          expected_sequences[i].residues[j].features.begin(),
+          expected_sequences[i].residues[j].features.end(),
+          test_result.sequences[i].residues[j].features.begin(),
+          test_result.sequences[i].residues[j].features.end());
+    }
+  }
 }
 
 
