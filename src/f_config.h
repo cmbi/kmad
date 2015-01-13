@@ -10,7 +10,7 @@ namespace f_config
 {
   struct FeaturePositions
   {
-    int seq;
+    int seq_no;
     std::vector<int> positions;
   };
 
