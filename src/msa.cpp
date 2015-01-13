@@ -6,6 +6,8 @@
 #include "substitution_matrix.h"
 #include "vec_util.h"
 
+#include <boost/filesystem.hpp>
+
 #include <iostream>
 #include <vector>
 #include <tuple>
@@ -73,31 +75,34 @@ std::vector<double> msa::set_identities(
   fasta::Sequence aligned_seq_with_lower; 
 
   // TODO: Should this be a const loop?
-  for (auto& sequence: sequence_data.sequences) {
+  for (size_t i = 1; i < sequence_data.sequences.size(); ++i) {
     // msa::AlignPairwise(
     //     aligned_seq_uppercase, aligned_seq_with_lower, 
-    //     sequence, profile,
+    //     sequence_data.sequences[i], profile,
     //     output_features_profile, gap_open_pen, end_pen, gap_ext_pen,
     //     codon_length);
 
-    double identity = msa::calc_identity(aligned_seq_uppercase);
+    double identity = msa::calc_identity(aligned_seq_uppercase,
+                                         sequence_data.sequences[0]);
     identities.push_back(identity);
   }
   return identities;
 }
 
 
-// // TODO: Implement
-// double msa::CalcIdentity(const fasta::Sequence& aligned_sequence) {
-//   //double identical_residues = 0;
-//   //for (unsigned i = 0; i < aligned_sequence.size(); i++) {
-//     //if (aligned_sequence[i].get_aa() == m_sequences_aa[0][i].get_aa()) {
-//       //identical_residues++;
-//     //}
-//   //}
-//   //return identical_residues / double(m_first_sequence_size);
-//   return 0.0;
-// }
+double msa::calc_identity(const fasta::Sequence& aligned_sequence,
+                          const fasta::Sequence& query_sequence) {
+  double identical_residues = 0;
+  assert(aligned_sequence.residues.size() == query_sequence.residues.size());
+  for (unsigned i = 0; i < aligned_sequence.residues.size(); i++) {
+    if (aligned_sequence.residues[i].codon[0] 
+        == query_sequence.residues[i].codon[0]) {
+      identical_residues++;
+    }
+  }
+  return identical_residues / double(query_sequence.residues.size());
+}
+
 // 
 // 
 // // TODO: Implement

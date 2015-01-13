@@ -83,7 +83,8 @@ namespace msa {
   /// out (its length is equal to the profile's length)
   ///
   //    ###########
-  double calc_identity(const fasta::Sequence& aligned_sequence);
+  double calc_identity(const fasta::Sequence& aligned_sequence, 
+                       const fasta::Sequence& query_sequence);
   //    ###########
 
   //    ###########
