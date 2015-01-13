@@ -26,7 +26,7 @@ struct FeaturesProfile {
     FeaturesProfileMap create_features_profile(
         const fasta::SequenceList& sequences);
     void create_score_features_profile(const fasta::SequenceList& sequences,
-                                       f_config::FeatureSettingsMap
+                                       const f_config::FeatureSettingsMap&
                                         usr_feature_settings);
     double score_ptm(unsigned long position, std::string feat_name);
     double score_domain(unsigned long position, std::string feat_name);

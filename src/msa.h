@@ -2,7 +2,7 @@
 #define MSA_H
 
 #include "types.h"
-#include "fasta.h"
+#include "seq_data.h"
 #include "features_profile.h"
 #include "profile.h"
 
@@ -15,7 +15,9 @@ class Sequences;
 
 namespace msa {
   /// performs the full multiple sequence alignment, returns aligned sequences
-  std::vector<std::string> run_msa(fasta::FastaData fasta_data, double gap_open_pen,
+  std::vector<std::string> run_msa(const seq_data::SequenceData& sequence_data,
+                                   const f_config::FeatureSettingsMap& f_set,
+                                   double gap_open_pen,
                                    double gap_ext_pen, double end_pen,
                                    int domain_score, int motif_score,
                                    int phosph_score, int codon_length);
@@ -26,12 +28,11 @@ namespace msa {
   /// sequences and calculates / identity of each sequence to the query seq.)
   
   
-  /* UNCOMMENT WHEN FeaturesProfile struct is finished */
-  // std::vector<std::string> PerformMSAfirstRound(fasta::FastaData fasta_data,
-  //     const ProfileMap& profile, FeaturesProfile& output_features_profile,
-  //     double penalty, double endPenalty, double extensionPenalty,
-  //     int codon_length, IdentitiesList& identities);
-  //    ###########
+  std::vector<double> set_identities(
+      const seq_data::SequenceData& sequence_data,
+      const ProfileMap& profile, FeaturesProfile& output_features_profile,
+      double penalty, double endPenalty, double extensionPenalty,
+      int codon_length, IdentitiesList& identities);
 
   ///
   /// performs next round of MSA (good for all rounds except for the first one

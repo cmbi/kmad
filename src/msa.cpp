@@ -11,49 +11,52 @@
 #include <tuple>
 
 
-// std::vector<std::string> msa::run_msa(fasta::FastaData fasta_data,
-//                              double gap_open_pen, double gap_ext_pen,
-//                              double end_pen, int domain_score, int motif_score,
-//                              int phosph_score, int codon_length)
-// {
-//   const ProfileMap profile = create_profile(fasta_data.sequences);
+std::vector<std::string> msa::run_msa(
+    const seq_data::SequenceData& sequence_data,
+    const f_config::FeatureSettingsMap& f_set,
+    double gap_open_pen, double gap_ext_pen,
+    double end_pen, int domain_modifier,
+    int motif_modifier, int ptm_modifier,
+    int codon_length)
+{
+      ProfileMap profile = create_profile(sequence_data.sequences);
+      FeaturesProfile f_prof(sequence_data.feature_list, domain_modifier,
+                             ptm_modifier, motif_modifier,
+                             sequence_data.probabilities);
+      f_prof.create_score_features_profile(sequence_data.sequences, f_set);
+
+      // first round of the alignment - all vs 1st
+      // TODO: first round is used to set identities. Return value is ignored.
+      // Can this be improved?
+      std::vector<double> identities;
+      identities = msa::set_identities(sequence_data, profile, fprf,
+                                       gap_open_pen, end_pen, 
+                                       gap_ext_pen, codon_length);
+
+
+      std::vector<std::string> alignment;
+      //int prev_alignments = 0;
+      //for (int i = 8; i >= 0; i--) {
+        //double cutoff = double(i) / 10;
+        //sequences.PerformMSAnextRound(alignment, profile, fprf, gap_open_pen,
+                                      //end_pen, gap_ext_pen,
+                                      //cutoff, codon_length,
+                                      //identities, prev_alignments);
+        ////prev_alignments - number of alignments performed in the previous
+        ////rounds - to omit this round if the number of aligned sequences is the
+        ////same as in the previous round
+      //}
+      //prev_alignments = 0;  // to align (again) all sequences to the profile
+      //sequences.PerformMSAnextRound(alignment, profile, fprf,
+                                    //gap_open_pen, end_pen, gap_ext_pen, 0,
+                                    //codon_length, identities,
+                                    //prev_alignments);
+      return alignment;
+}
 // 
 // 
-//       FeaturesProfile fprf(domain_score, phosph_score, motif_score,
-//                            fasta_data.probabilities);
-// 
-// 
-//       // first round of the alignment - all vs 1st
-//       // TODO: first round is used to set identities. Return value is ignored.
-//       // Can this be improved?
-//       std::vector<double> identities;
-//       msa::PerformMSAfirstRound(fasta_data, profile, fprf, gap_open_pen, end_pen,
-//           gap_ext_pen, codon_length, identities);
-// 
-// 
-//       std::vector<std::string> alignment;
-//       //int prev_alignments = 0;
-//       //for (int i = 8; i >= 0; i--) {
-//         //double cutoff = double(i) / 10;
-//         //sequences.PerformMSAnextRound(alignment, profile, fprf, gap_open_pen,
-//                                       //end_pen, gap_ext_pen,
-//                                       //cutoff, codon_length,
-//                                       //identities, prev_alignments);
-//         ////prev_alignments - number of alignments performed in the previous
-//         ////rounds - to omit this round if the number of aligned sequences is the
-//         ////same as in the previous round
-//       //}
-//       //prev_alignments = 0;  // to align (again) all sequences to the profile
-//       //sequences.PerformMSAnextRound(alignment, profile, fprf,
-//                                     //gap_open_pen, end_pen, gap_ext_pen, 0,
-//                                     //codon_length, identities,
-//                                     //prev_alignments);
-//       return alignment;
-// }
-// 
-// 
-// std::vector<std::string> msa::PerformMSAfirstRound(
-//     fasta::FastaData fasta_data, const ProfileMap& profile,
+// std::vector<double> msa::set_identities(
+//     seq_data::SequenceData sequence_data, const ProfileMap& profile,
 //     FeaturesProfile& output_features_profile, double gap_open_pen,
 //     double end_pen, double gap_ext_pen, int codon_length,
 //     IdentitiesList& identities)
