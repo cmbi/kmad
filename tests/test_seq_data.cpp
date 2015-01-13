@@ -69,6 +69,7 @@ BOOST_AUTO_TEST_CASE(test_seq_data)
   fasta::Sequence exp_s1 = fasta::make_sequence({e1_1, e1_2, e1_3, e1_4});
   fasta::Sequence exp_s2 = fasta::make_sequence({e2_1, e2_2, e2_3, e2_4});
   fasta::SequenceList expected_sequences = {exp_s1, exp_s2};
+
   FeatureNamesList expected_feature_list = {"ptm_phosph0", "ptm_phosph1",
                                             "ptm_phosph2", "ptm_phosph3",
                                             "ptm_phosphP", "ptm_acet0",
@@ -85,6 +86,7 @@ BOOST_AUTO_TEST_CASE(test_seq_data)
                                             "ptm_Oglyc1", "ptm_Oglyc2",
                                             "ptm_Oglyc3", "motif_aa",
                                             "USR_feature1", "domain_aa"}; 
+
   seq_data::SequenceData test_result = seq_data::process_fasta_data(test_data,
                                                                     test_map);
 

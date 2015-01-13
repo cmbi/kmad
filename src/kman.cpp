@@ -126,13 +126,6 @@ int main(int argc, char *argv[]) {
     //                               end_pen, domain_score, motif_score,
     //                               phosph_score, codon_length);
 
-
-    // TODO: Use std::transform or store data in a better format.
-    std::vector<std::string> seq_names;
-    for (auto& s: fasta_data.sequences) {
-      seq_names.push_back(s.description);
-    }
-
     // if (out_encoded) {
     //   txtproc::WriteAlignmentToFile(alignment, seq_names, output_prefix);
     // } else {
