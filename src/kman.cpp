@@ -106,7 +106,8 @@ int main(int argc, char *argv[]) {
 
     // TODO: Load the config settings into a variable and do something with
     //       it.
-    f_config::ConfParser::parse_conf_file(conf_file);
+    f_config::FeatureSettingsMap f_set = f_config::ConfParser::parse_conf_file(
+        conf_file);
 
     time_t start = clock();
 
