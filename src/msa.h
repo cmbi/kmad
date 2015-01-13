@@ -60,22 +60,17 @@ namespace msa {
   /// before and after that
   ///
   //    ###########
-  // void RemoveGaps(fasta::Sequence& alignment_with_lowercase,
-  //                 fasta::Sequence& alignment_without_lowercase,
-  //                 std::vector<fasta::Sequence>& alignment);
+  fasta::SequenceList remove_gaps(const fasta::SequenceList& alignment);
   //    ###########
   ///
   /// takes a sequence and profiles, returns an
   /// alignment of the two, with gaps cut out
   ///
-  //    ###########
-  // void AlignPairwise(fasta::Sequence& al_without_lower,
-  //                    fasta::Sequence& al_with_lower,
-  //                    fasta::Sequence& seq2, const ProfileMap& prf,
-  //                    FeaturesProfile& featPrf,
-  //                    double penalty, double endPenalty, double extensionPenalty,
-  //                    int codon_length);
-  //    ###########
+  fasta::SequenceList align_pairwise(const fasta::Sequence& input_sequence, 
+                                     const ProfileMap& profile, 
+                                     const FeaturesProfile& f_profile,
+                                     double gap_open_pen, double end_pen,
+                                     double gap_ext_pen, int codon_length);
 
   ///
   /// calculates identity with the query sequence
