@@ -15,12 +15,12 @@ class Sequences;
 
 namespace msa {
   /// performs the full multiple sequence alignment, returns aligned sequences
-  std::vector<std::string> run_msa(const seq_data::SequenceData& sequence_data,
-                                   const f_config::FeatureSettingsMap& f_set,
-                                   double gap_open_pen,
-                                   double gap_ext_pen, double end_pen,
-                                   int domain_score, int motif_score,
-                                   int phosph_score, int codon_length);
+  fasta::SequenceList run_msa(const seq_data::SequenceData& sequence_data,
+                              const f_config::FeatureSettingsMap& f_set,
+                              double gap_open_pen,
+                              double gap_ext_pen, double end_pen,
+                              int domain_modifier, int motif_modifier,
+                              int phosph_modifier, int codon_modifier);
 
 
   /// performs the first round of alignments, / all vs query seq (first
@@ -40,16 +40,14 @@ namespace msa {
   ///
   
   
-  /* UNCOMMENT WHEN FeaturesProfile struct is finished */
-  // void PerformMSAnextRound(std::vector<std::string>& prevAlignment,
-  //                          const ProfileMap& profile,
-  //                          FeaturesProfile& output_features_profile,
-  //                          double penalty, double endPenalty,
-  //                          double extensionPenalty,
-  //                          double identityCutoff,
-  //                          int codon_length, IdentitiesList& identities,
-  //                          int& prev_alignments);
-  //    ###########
+  fasta::SequenceList perform_msa_round(const ProfileMap& profile,
+                                        const FeaturesProfile& f_profile,
+                                        double gap_open_pen, double end_pen,
+                                        double gap_ext_pen, 
+                                        double identity_cutoff,
+                                        int codon_length, 
+                                        IdentitiesList& identities,
+                                        int& prev_alignments);
 
   ///
   /// takes pairwise alignment, removes
@@ -77,14 +75,9 @@ namespace msa {
   /// @param alignedSequence sequence aligned to the profile with the gaps cut
   /// out (its length is equal to the profile's length)
   ///
-  //    ###########
   double calc_identity(const fasta::Sequence& aligned_sequence, 
                        const fasta::Sequence& query_sequence);
-  //    ###########
 
-  //    ###########
-  // void add_feature_indexes(FeaturesProfile& fprf);
-  //    ###########
   ///
   /// count alignments that will be performed in this round
   ///
