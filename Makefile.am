@@ -14,6 +14,7 @@ shared_SOURCES	=	src/fasta.cpp \
 									src/scoring_matrix.cpp \
 									src/txtproc.cpp \
 									src/vec_util.cpp \
+									src/seq_data.cpp \
 									src/substitution_matrix.cpp \
 									src/msa.cpp
 
