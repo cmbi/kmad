@@ -4,6 +4,7 @@
 #include "msa.h"
 #include "profile.h"
 #include "scoring_matrix.h"
+#include "seq_data.h"
 #include "txtproc.h"
 #include "vec_util.h"
 
@@ -104,9 +105,8 @@ int main(int argc, char *argv[]) {
       std::exit(EXIT_FAILURE);
     }
 
-    // TODO: Load the config settings into a variable and do something with
-    //       it.
-    f_config::ConfParser::parse_conf_file(conf_file);
+    f_config::FeatureSettingsMap f_set = f_config::ConfParser::parse_conf_file(
+        conf_file);
 
     time_t start = clock();
 
@@ -118,23 +118,20 @@ int main(int argc, char *argv[]) {
       std::exit(EXIT_FAILURE);
     }
 
-    auto alignment = msa::run_msa(fasta_data, gap_open_pen, gap_ext_pen,
-                                  end_pen, domain_score, motif_score,
-                                  phosph_score, codon_length);
+    seq_data::SequenceData sequence_data = seq_data::process_fasta_data(
+        fasta_data, f_set);
 
 
-    // TODO: Use std::transform or store data in a better format.
-    std::vector<std::string> seq_names;
-    for (auto& s: fasta_data.sequences) {
-      seq_names.push_back(s.description);
-    }
+    // auto alignment = msa::run_msa(fasta_data, gap_open_pen, gap_ext_pen,
+    //                               end_pen, domain_score, motif_score,
+    //                               phosph_score, codon_length);
 
-    if (out_encoded) {
-      txtproc::WriteAlignmentToFile(alignment, seq_names, output_prefix);
-    } else {
-      txtproc::WriteAlignmentWithoutCodeToFile(alignment, seq_names,
-                                               output_prefix, codon_length);
-    }
+    // if (out_encoded) {
+    //   txtproc::WriteAlignmentToFile(alignment, seq_names, output_prefix);
+    // } else {
+    //   txtproc::WriteAlignmentWithoutCodeToFile(alignment, seq_names,
+    //                                            output_prefix, codon_length);
+    // }
 
     time_t end = clock();
 

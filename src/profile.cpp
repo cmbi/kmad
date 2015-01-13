@@ -84,7 +84,6 @@ ProfileMap create_profile(const fasta::SequenceList& sequences) {
       }
     }
   }
-
   return p;
 }
 

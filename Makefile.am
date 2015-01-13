@@ -14,6 +14,7 @@ shared_SOURCES	=	src/fasta.cpp \
 									src/scoring_matrix.cpp \
 									src/txtproc.cpp \
 									src/vec_util.cpp \
+									src/seq_data.cpp \
 									src/substitution_matrix.cpp \
 									src/msa.cpp
 
@@ -27,7 +28,9 @@ kman_LDADD = $(shared_LDADD)
 test_kman_SOURCES = $(shared_SOURCES) \
 										tests/test_config.cpp \
 										tests/test_fasta.cpp \
-										tests/test_profile.cpp
+										tests/test_features_profile.cpp \
+										tests/test_profile.cpp \
+										tests/test_seq_data.cpp
 
 test_kman_LDADD	=	$(shared_LDADD)
 

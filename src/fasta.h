@@ -11,9 +11,13 @@
 namespace fasta {
 
   struct Residue {
+    Residue(std::string codon, std::vector<std::string> features) 
+      : codon(codon),
+        features(features) {}
     Residue(std::string codon) : codon(codon) {}
 
     std::string codon;
+    std::vector<std::string> features;
   };
 
   struct Sequence {
@@ -36,6 +40,7 @@ namespace fasta {
 
   Sequence make_sequence(const std::string& description,
                          const std::string& codons, int codon_length);
+  Sequence make_sequence(const std::vector<Residue>&);
 
 }
 

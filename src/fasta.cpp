@@ -75,3 +75,10 @@ fasta::Sequence fasta::make_sequence(const std::string& description,
   }
   return s;
 }
+
+fasta::Sequence fasta::make_sequence(const std::vector<Residue>& residue_list)
+{
+  fasta::Sequence s;
+  s.residues = residue_list;
+  return s;
+}
