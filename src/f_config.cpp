@@ -107,6 +107,7 @@ f_config::FeatureSettingsMap f_config::ConfParser::process_settings(
      FeatureSettings processed_settings; 
      processed_settings.add_score = feat_it->second.add_score;
      processed_settings.subtract_score = feat_it->second.subtract_score;
+     processed_settings.positions = feat_it->second.positions;
 
      for (auto& feat_name : feat_it->second.add_features) {
        if (raw_map.find(feat_name) != raw_map.end()) {
@@ -116,7 +117,7 @@ f_config::FeatureSettingsMap f_config::ConfParser::process_settings(
 
      for (auto& feat_name : feat_it->second.subtract_features) {
        if (raw_map.find(feat_name) != raw_map.end()) {
-         processed_settings.add_features.push_back("USR_"+ feat_name);
+         processed_settings.subtract_features.push_back("USR_"+ feat_name);
        }
      }
 
