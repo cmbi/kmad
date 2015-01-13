@@ -30,9 +30,9 @@ namespace msa {
   
   std::vector<double> set_identities(
       const seq_data::SequenceData& sequence_data,
-      const ProfileMap& profile, FeaturesProfile& output_features_profile,
+      const ProfileMap& profile, FeaturesProfile& f_profile,
       double penalty, double endPenalty, double extensionPenalty,
-      int codon_length, IdentitiesList& identities);
+      int codon_length);
 
   ///
   /// performs next round of MSA (good for all rounds except for the first one
@@ -83,7 +83,7 @@ namespace msa {
   /// out (its length is equal to the profile's length)
   ///
   //    ###########
-  // double CalcIdentity(const fasta::Sequence& alignedSequence);
+  double calc_identity(const fasta::Sequence& aligned_sequence);
   //    ###########
 
   //    ###########

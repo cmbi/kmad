@@ -19,17 +19,20 @@ std::vector<std::string> msa::run_msa(
     int motif_modifier, int ptm_modifier,
     int codon_length)
 {
-      ProfileMap profile = create_profile(sequence_data.sequences);
-      FeaturesProfile f_prof(sequence_data.feature_list, domain_modifier,
-                             ptm_modifier, motif_modifier,
-                             sequence_data.probabilities);
-      f_prof.create_score_features_profile(sequence_data.sequences, f_set);
+      FeaturesProfile f_profile(sequence_data.feature_list, domain_modifier,
+                                ptm_modifier, motif_modifier,
+                                sequence_data.probabilities);
+      // query_seq_list - the profile are built only based on the first
+      // sequence
+      fasta::SequenceList query_seq_list = {sequence_data.sequences[0]};
+      ProfileMap profile = create_profile(query_seq_list);
+      f_profile.create_score_features_profile(query_seq_list, f_set);
 
       // first round of the alignment - all vs 1st
       // TODO: first round is used to set identities. Return value is ignored.
       // Can this be improved?
       std::vector<double> identities;
-      identities = msa::set_identities(sequence_data, profile, fprf,
+      identities = msa::set_identities(sequence_data, profile, f_profile,
                                        gap_open_pen, end_pen, 
                                        gap_ext_pen, codon_length);
 
@@ -53,45 +56,37 @@ std::vector<std::string> msa::run_msa(
                                     //prev_alignments);
       return alignment;
 }
-// 
-// 
-// std::vector<double> msa::set_identities(
-//     seq_data::SequenceData sequence_data, const ProfileMap& profile,
-//     FeaturesProfile& output_features_profile, double gap_open_pen,
-//     double end_pen, double gap_ext_pen, int codon_length,
-//     IdentitiesList& identities)
-// {
-//   std::vector<fasta::Sequence> alignment_without_lowercase; //working alignment - without lowercase around cut out residues
-//   std::vector<fasta::Sequence> alignment_with_lowercase; //lowercase before and after cut out residues -- final result
-//   alignment_without_lowercase.push_back(fasta_data.sequences[0]);
-//   alignment_with_lowercase.push_back(fasta_data.sequences[0]);
-// 
-//   // identity of the 1st one to itself
-//   // to build the first profile based only on the first seqeunce
-//   identities.push_back(1);
-//   output_features_profile.ExpandListOfFeatures(fasta_data.sequences);
-// 
-//   //create features profile based on the 1st seq
-//   output_features_profile.CreateProfile(alignment_without_lowercase,
-//       codon_length);
-//   add_feature_indexes(output_features_profile);
-//   fasta::Sequence al_without_lower; //pairwise alignment without lowercase characters
-//   fasta::Sequence al_with_lower; //pairwise alignment with lowercase characters where chars were removed
-// 
-//   // TODO: Should this be a const loop?
-//   for (auto& sequence: fasta_data.sequences) {
-//     msa::AlignPairwise(
-//         al_without_lower, al_with_lower, sequence, profile,
-//         output_features_profile, gap_open_pen, end_pen, gap_ext_pen,
-//         codon_length);
-// 
-//     double identity = msa::CalcIdentity(al_without_lower);
-//     identities.push_back(identity);
-//   }
-//   return vec_util::Flatten(alignment_with_lowercase);
-// }
-// 
-// 
+
+
+std::vector<double> msa::set_identities(
+    const seq_data::SequenceData& sequence_data, const ProfileMap& profile,
+    FeaturesProfile& f_profile, double gap_open_pen,
+    double end_pen, double gap_ext_pen, int codon_length)
+{
+  // identity of the 1st one to itself
+  // to build the first profile based only on the first seqeunce
+  std::vector<double> identities = {1.};
+
+  //pairwise alignment without lowercase characters
+  fasta::Sequence aligned_seq_uppercase; 
+  //pairwise alignment with lowercase characters where chars were removed
+  fasta::Sequence aligned_seq_with_lower; 
+
+  // TODO: Should this be a const loop?
+  for (auto& sequence: sequence_data.sequences) {
+    // msa::AlignPairwise(
+    //     aligned_seq_uppercase, aligned_seq_with_lower, 
+    //     sequence, profile,
+    //     output_features_profile, gap_open_pen, end_pen, gap_ext_pen,
+    //     codon_length);
+
+    double identity = msa::calc_identity(aligned_seq_uppercase);
+    identities.push_back(identity);
+  }
+  return identities;
+}
+
+
 // // TODO: Implement
 // double msa::CalcIdentity(const fasta::Sequence& aligned_sequence) {
 //   //double identical_residues = 0;
