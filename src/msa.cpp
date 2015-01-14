@@ -166,7 +166,6 @@ fasta::SequenceList msa::align_pairwise(const fasta::Sequence& input_sequence,
 }
 
 
-// TODO: Implement
 std::vector<fasta::SequenceList> msa::perform_msa_round(
     const seq_data::SequenceData& sequence_data,
     const ProfileMap& profile,
