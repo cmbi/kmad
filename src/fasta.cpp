@@ -82,3 +82,10 @@ fasta::Sequence fasta::make_sequence(const std::vector<Residue>& residue_list)
   s.residues = residue_list;
   return s;
 }
+
+fasta::Sequence fasta::make_sequence(unsigned long sequence_length,
+                                     const fasta::Residue residue) {
+  fasta::Sequence s;
+  s.residues = std::vector<fasta::Residue>(sequence_length, residue);
+  return s;
+}
