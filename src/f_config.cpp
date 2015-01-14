@@ -1,11 +1,7 @@
 #include "f_config.h"
-#include "types.h"
 
 #include <algorithm>
 #include <iostream>
-#include <iomanip>
-#include <cstdlib>
-#include <stdexcept>
 
 
 namespace lcg = libconfig;

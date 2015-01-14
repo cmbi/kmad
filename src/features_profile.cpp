@@ -4,8 +4,6 @@
 
 #include <algorithm>
 #include <iostream>
-#include <string>
-#include <vector>
 
 
 FeaturesProfile::FeaturesProfile(std::vector<std::string> features,

@@ -1,18 +1,13 @@
 #include "f_config.h"
 #include "fasta.h"
-#include "features_profile.h"
 #include "msa.h"
 #include "outfile.h"
-#include "profile.h"
-#include "scoring_matrix.h"
 #include "seq_data.h"
-#include "vec_util.h"
 
 #include <boost/program_options.hpp>
 #include <ctime>
 #include <iostream>
 #include <stdexcept>
-#include <string>
 
 
 namespace po = boost::program_options;

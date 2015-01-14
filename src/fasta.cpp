@@ -5,12 +5,8 @@
 #include <boost/regex.hpp>
 
 #include <iostream>
-#include <iterator>
-#include <regex>
+#include <fstream>
 #include <sstream>
-#include <stdexcept>
-#include <string>
-#include <vector>
 
 
 namespace fs = boost::filesystem;

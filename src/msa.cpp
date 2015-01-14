@@ -3,15 +3,10 @@
 #include "features_profile.h"
 #include "profile.h"
 #include "scoring_matrix.h"
-#include "substitution_matrix.h"
-#include "vec_util.h"
 
-#include <boost/algorithm/string.hpp>    
 #include <boost/filesystem.hpp>
 
 #include <iostream>
-#include <vector>
-#include <tuple>
 
 
 std::vector<fasta::SequenceList> msa::run_msa(
@@ -175,7 +170,7 @@ std::vector<fasta::SequenceList> msa::perform_msa_round(
     double gap_ext_pen,
     double identity_cutoff,
     int codon_length,
-    const IdentitiesList& identities,
+    const std::vector<double>& identities,
     int& prev_alignments,
     const f_config::FeatureSettingsMap& f_set)
 {
@@ -202,7 +197,7 @@ std::vector<fasta::SequenceList> msa::perform_msa_round(
 
 
 int msa::count_alignments(double identity_cutoff,
-                          const IdentitiesList& identities) {
+                          const std::vector<double>& identities) {
   int count = 0;
   for (auto& item: identities) {
     if (item > identity_cutoff) {

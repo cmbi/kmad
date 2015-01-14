@@ -1,15 +1,10 @@
 #include "features_profile.h"
 #include "profile.h"
 #include "scoring_matrix.h"
-#include "substitution_matrix.h"
-#include "vec_util.h"
 
-#include <algorithm>
-#include <cassert>
+#include <boost/filesystem.hpp>
+
 #include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
 
 
 ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,

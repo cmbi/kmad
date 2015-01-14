@@ -4,26 +4,9 @@
 #include <vector>
 
 
-typedef std::vector<int> FeaturesList;
-typedef std::vector<std::string> FeatureNamesList;
-typedef std::tuple<std::string, std::string, int, int, int, double, double,
-                   double, double, std::string, std::string> RulesTuple;
-typedef std::vector<RulesTuple> RuleTuplesList;
-typedef  std::tuple<std::string, int, double, double, double,
-                   double, std::vector<int>,
-                   std::vector<int> > ProcessedRules;
-typedef std::vector<ProcessedRules> PrcRulesList;
-typedef std::vector<double> IdentitiesList;
 typedef std::vector<double> ProfileMatrixRow;
 typedef std::vector<double> ProfileMatrixColumn;
 typedef std::vector<ProfileMatrixRow> ProfileMatrix;
 typedef std::vector<std::vector<double>> Matrix2D;
-typedef std::vector<std::vector<int>> SbstMatrix;
 typedef std::vector<int> SbstMatColumn;
 typedef std::vector<SbstMatColumn> SbstMatrixColumns;
-typedef std::vector<int> IndexList;
-typedef std::tuple<std::string, std::string, int, int, int> DefaultRuleTuple;
-typedef std::vector<DefaultRuleTuple> DefaultRulesList;
-typedef std::vector<char> AlphabetVec;
-typedef std::vector<std::string> FeatNameSplit;
-typedef std::vector<std::string> NameSplit;
