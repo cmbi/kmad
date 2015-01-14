@@ -13,25 +13,25 @@
 #include <vector>
 
 
-// ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
-//                              double end_pen, double gap_ext_pen)
-// : m_i_length(s1_size),
-//   m_j_length(s2_size),
-//   m_gap_opening(pen),
-//   m_gap_extension(gap_ext_pen),
-//   m_end_pen(end_pen)
-// {
-//   //creates a row for the scoring matrices of length m_j_length
-//   //(length of the jth sequence + 1)
-//   ScoringMatrixRow row(m_j_length + 1,0);
-//   //creates a vector of vectors 'row', of length m_i_length+1
-//   //(length of the ith sequence +1)
-//   m_matrix_v.assign(m_i_length + 1, row);
-//   m_matrix_g.assign(m_i_length + 1, row);
-//   m_matrix_h.assign(m_i_length + 1, row);
-// }
-// 
-// 
+ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
+                             double end_pen, double gap_ext_pen)
+: m_i_length(s1_size),
+  m_j_length(s2_size),
+  m_gap_opening(pen),
+  m_gap_extension(gap_ext_pen),
+  m_end_pen(end_pen)
+{
+  //creates a row for the scoring matrices of length m_j_length
+  //(length of the jth sequence + 1)
+  ScoringMatrixRow row(m_j_length + 1,0);
+  //creates a vector of vectors 'row', of length m_i_length+1
+  //(length of the ith sequence +1)
+  m_matrix_v.assign(m_i_length + 1, row);
+  m_matrix_g.assign(m_i_length + 1, row);
+  m_matrix_h.assign(m_i_length + 1, row);
+}
+
+
 // // TODO: Implement
 // void ScoringMatrix::CalculateScores(fasta::Sequence s2, Profile& prf,
 //                                     FeaturesProfile& feat_prf,

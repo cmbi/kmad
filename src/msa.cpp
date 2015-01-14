@@ -153,10 +153,10 @@ fasta::SequenceList msa::align_pairwise(const fasta::Sequence& input_sequence,
                                         double gap_open_pen, double end_pen,
                                         double gap_ext_pen,
                                         int codon_length) {
-  // int profile_length = profile.begin()->second.size();
+  int profile_length = profile.begin()->second.size();
   fasta::SequenceList alignment;
-  //ScoringMatrix scores(profile_length, seq2.size(), gap_open_pen,
-                       //end_pen, gap_ext_pen);
+  ScoringMatrix scores(profile_length, input_sequence.residues.size(),
+                       gap_open_pen, end_pen, gap_ext_pen);
   //scores.CalculateScores(seq2, profile, feat_prf,
                          //codon_length);
   //scores.PerformNWAlignment(alignment, seq2, profile, feat_prf,
