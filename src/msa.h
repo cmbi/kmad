@@ -43,8 +43,8 @@ namespace msa {
   
   std::vector<fasta::SequenceList> perform_msa_round(
       const seq_data::SequenceData& sequence_data,
-      ProfileMap& profile,
-      FeaturesProfile& f_profile,
+      const ProfileMap& profile,
+      const FeaturesProfile& f_profile,
       double gap_open_pen, double end_pen,
       double gap_ext_pen, 
       double identity_cutoff,
