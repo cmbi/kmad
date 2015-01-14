@@ -63,9 +63,7 @@ fasta::Sequence fasta::make_sequence(const std::string& description,
 {
   fasta::Sequence s;
   for (unsigned i = 0; i < codons.size(); i += codon_length) {
-    // Use boost regular expression because compiler support for c++11
-    // regular expressions is incomplete.
-    boost::regex re("\\w{" + std::to_string(codon_length) + "}");
+    boost::regex re("[a-zA-Z0-9-]{" + std::to_string(codon_length) + "}");
     std::string codon = codons.substr(i, codon_length);
     if (!boost::regex_match(codon, re)) {
       throw std::runtime_error("Invalid codon: " + codon);

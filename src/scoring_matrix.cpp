@@ -127,8 +127,8 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
     int codon_length) {
   //creating polyA pseudoSequence representing the profile,
   //to know later where are the gaps in the profile
-  fasta::Residue ala('A' + std::string(codon_length, 'A'), {});
-  fasta::Residue gap_residue('-' + std::string(codon_length, 'A'), {});
+  fasta::Residue ala('A' + std::string(codon_length - 1, 'A'), {});
+  fasta::Residue gap_residue('-' + std::string(codon_length - 1, 'A'), {});
   fasta::Sequence profile_sequence;
   profile_sequence = fasta::make_sequence(profile.begin()->second.size(),
                                           ala);
@@ -204,5 +204,7 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
   //from the end to the beginning
   std::reverse(new_s1.residues.begin(), new_s1.residues.end());
   std::reverse(new_s2.residues.begin(),new_s2.residues.end());
+  std::cout << "size1: " << new_s2.residues.size() << " size2: " 
+            << new_s1.residues.size() << std::endl;
   return {new_s1, new_s2};
 }
