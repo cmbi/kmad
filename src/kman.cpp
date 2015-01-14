@@ -124,16 +124,16 @@ int main(int argc, char *argv[]) {
         fasta_data, f_set);
 
 
-    // auto alignment = msa::run_msa(fasta_data, f_set, gap_open_pen,
-    //                               gap_ext_pen,
-    //                               end_pen, domain_score, motif_score,
-    //                               phosph_score, codon_length);
+    auto alignment = msa::run_msa(sequence_data, f_set, gap_open_pen,
+                                  gap_ext_pen, end_pen, domain_score, 
+                                  motif_score, phosph_score, codon_length);
 
     // if (out_encoded) {
-    //   txtproc::WriteAlignmentToFile(alignment, seq_names, output_prefix);
+    //   txtproc::write_encoded_alignment(alignment[1], sequence_data,
+    //                                    output_prefix);
     // } else {
-    //   txtproc::WriteAlignmentWithoutCodeToFile(alignment, seq_names,
-    //                                            output_prefix, codon_length);
+    //   txtproc::write_decoded_alignment(alignment[1], sequence_data,
+    //                                    output_prefix);
     // }
 
     time_t end = clock();

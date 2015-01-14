@@ -120,7 +120,6 @@ ValueCoords ScoringMatrix::FindBestScore() {
   return res_arr; //coords of the max score
 }
 
-// TODO: Uncomment. This is required.
 fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
     const fasta::Sequence& sequence, const ProfileMap& profile,
     const FeaturesProfile& f_profile,
@@ -204,7 +203,5 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
   //from the end to the beginning
   std::reverse(new_s1.residues.begin(), new_s1.residues.end());
   std::reverse(new_s2.residues.begin(),new_s2.residues.end());
-  std::cout << "size1: " << new_s2.residues.size() << " size2: " 
-            << new_s1.residues.size() << std::endl;
   return {new_s1, new_s2};
 }
