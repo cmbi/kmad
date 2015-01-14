@@ -10,9 +10,9 @@ shared_LDADD	=	$(BOOST_FILESYSTEM_LIB) \
 shared_SOURCES	=	src/fasta.cpp \
 									src/features_profile.cpp \
 									src/f_config.cpp \
+									src/outfile.cpp \
 									src/profile.cpp \
 									src/scoring_matrix.cpp \
-									src/txtproc.cpp \
 									src/vec_util.cpp \
 									src/seq_data.cpp \
 									src/substitution_matrix.cpp \

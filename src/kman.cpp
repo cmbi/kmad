@@ -2,10 +2,10 @@
 #include "fasta.h"
 #include "features_profile.h"
 #include "msa.h"
+#include "outfile.h"
 #include "profile.h"
 #include "scoring_matrix.h"
 #include "seq_data.h"
-#include "txtproc.h"
 #include "vec_util.h"
 
 #include <boost/program_options.hpp>
@@ -124,17 +124,18 @@ int main(int argc, char *argv[]) {
         fasta_data, f_set);
 
 
-    auto alignment = msa::run_msa(sequence_data, f_set, gap_open_pen,
+    std::vector<fasta::SequenceList> alignment = msa::run_msa(sequence_data, 
+                                  f_set, gap_open_pen,
                                   gap_ext_pen, end_pen, domain_score, 
                                   motif_score, phosph_score, codon_length);
 
-    // if (out_encoded) {
-    //   txtproc::write_encoded_alignment(alignment[1], sequence_data,
-    //                                    output_prefix);
-    // } else {
-    //   txtproc::write_decoded_alignment(alignment[1], sequence_data,
-    //                                    output_prefix);
-    // }
+    if (out_encoded) {
+      outfile::write_encoded_alignment(alignment[1], sequence_data,
+                                       output_prefix);
+    } else {
+      outfile::write_decoded_alignment(alignment[1], sequence_data,
+                                       output_prefix);
+    }
 
     time_t end = clock();
 

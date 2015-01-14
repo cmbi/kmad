@@ -2,7 +2,6 @@
 #include "profile.h"
 #include "scoring_matrix.h"
 #include "substitution_matrix.h"
-#include "txtproc.h"
 #include "vec_util.h"
 
 #include <algorithm>
