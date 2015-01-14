@@ -33,8 +33,9 @@ public:
   ///
   /// Fills in the scoring matrices m_matrix_v, m_matrix_g, m_matrix_h
   ///
-  // void CalculateScores(fasta::Sequence s2, Profile& prf,
-  //                     FeaturesProfile& feat_prf, int codon_length);
+  void calculate_scores(const fasta::Sequence& sequence,
+                        const ProfileMap& profile,
+                        const FeaturesProfile& f_profile, int codon_length);
   ///
   /// traces back the alignment path in the scoring matrices
   ///

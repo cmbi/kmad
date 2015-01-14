@@ -92,7 +92,7 @@ BOOST_AUTO_TEST_CASE(test_create_features_profile)
                                          {"motif_ac", 0.8}};
 
   FeaturesProfile f_profile(feature_list, 4, 10, 3, probs);
-  FeaturesProfileMap p = f_profile.create_features_profile(sequences);
+  FeaturesProfileMap p = f_profile.update_occurences(sequences);
   BOOST_CHECK_EQUAL(p.size(), feature_list.size());
 
   FeaturesProfileMap expected_profile = {{"ptm_phosph0", {2, 4, 3, 2}},

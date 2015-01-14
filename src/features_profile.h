@@ -10,6 +10,8 @@
 #include <map>
 
 typedef std::map<std::string, std::vector<double>> FeaturesProfileMap;
+typedef std::vector<double> Occurences; 
+typedef std::vector<double> Scores;
 
 struct FeaturesProfile {
     int m_domain_modifier;
@@ -17,14 +19,17 @@ struct FeaturesProfile {
     int m_motif_modifier;
     std::vector<std::string> m_features;
     std::map<std::string, double> m_motif_probabilities;
-    FeaturesProfileMap m_scores;
-    FeaturesProfileMap m_occurences;
+    std::map<std::string, Scores> m_scores;
+    std::map<std::string, Occurences> m_occurences;
 
     FeaturesProfile(const std::vector<std::string> features,
                     int domain_modifier, int ptm_modifier, int motif_modifier,
                     std::map<std::string, double> motif_probabilities);
-    FeaturesProfileMap create_features_profile(
+    // TODO: change to update occurences
+    // TODO typedef only the value map(string, occurences) 
+    std::map<std::string, Occurences> update_occurences(
         const fasta::SequenceList& sequences);
+    // TODO: change create.. to update...
     void create_score_features_profile(const fasta::SequenceList& sequences,
                                        const f_config::FeatureSettingsMap&
                                         usr_feature_settings);
