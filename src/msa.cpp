@@ -50,7 +50,8 @@ std::vector<fasta::SequenceList> msa::run_msa(
                                            end_pen, gap_ext_pen, cutoff, 
                                            codon_length, identities, 
                                            prev_alignments, f_set);
-        // TODO: update profiles here
+        f_profile.create_score_features_profile(alignment[0], f_set);
+        profile = create_score_profile(alignment[0]);
         //prev_alignments - number of alignments performed in the previous
         //rounds - to omit this round if the number of aligned sequences is the
         //same as in the previous round
@@ -196,9 +197,6 @@ std::vector<fasta::SequenceList> msa::perform_msa_round(
         alignment[1].push_back(aligned_seq[1]);
       }
     }
-    //create features profile based on the 1st seq
-    f_profile.create_score_features_profile(alignment[0], f_set);
-    profile = create_score_profile(alignment[0]);
     //update number of performed alignments
     prev_alignments = next_alignments;
   }
