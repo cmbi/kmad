@@ -29,7 +29,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
       // sequence
       fasta::SequenceList query_seq_list = {sequence_data.sequences[0]};
       ProfileMap profile = create_score_profile(query_seq_list);
-      f_profile.create_score_features_profile(query_seq_list, f_set);
+      f_profile.update_scores(query_seq_list, f_set);
 
       // first round of the alignment - all vs 1st
       // TODO: first round is used to set identities. Return value is ignored.
@@ -50,7 +50,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
                                            end_pen, gap_ext_pen, cutoff, 
                                            codon_length, identities, 
                                            prev_alignments, f_set);
-        f_profile.create_score_features_profile(alignment[0], f_set);
+        f_profile.update_scores(alignment[0], f_set);
         profile = create_score_profile(alignment[0]);
         //prev_alignments - number of alignments performed in the previous
         //rounds - to omit this round if the number of aligned sequences is the
@@ -171,8 +171,8 @@ fasta::SequenceList msa::align_pairwise(const fasta::Sequence& input_sequence,
 // TODO: Implement
 std::vector<fasta::SequenceList> msa::perform_msa_round(
     const seq_data::SequenceData& sequence_data,
-    ProfileMap& profile,
-    FeaturesProfile& f_profile,
+    const ProfileMap& profile,
+    const FeaturesProfile& f_profile,
     double gap_open_pen,
     double end_pen,
     double gap_ext_pen,

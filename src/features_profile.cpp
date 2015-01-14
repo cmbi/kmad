@@ -19,9 +19,8 @@ FeaturesProfile::FeaturesProfile(std::vector<std::string> features,
 {}
 
 
-void FeaturesProfile::create_score_features_profile(
-    const fasta::SequenceList& sequences,
-    const f_config::FeatureSettingsMap& usr_feature_settings) {
+void FeaturesProfile::update_scores(const fasta::SequenceList& sequences, 
+    const f_config::FeatureSettingsMap& f_set) {
   m_occurences = update_occurences(sequences);
   // convert occurences to probabilities
   for (auto& occ: m_occurences) {
@@ -46,8 +45,7 @@ void FeaturesProfile::create_score_features_profile(
         scores[feat][i] = score_motif(i, feat);
       } 
       else if (feat.substr(0,3) == "USR") {
-        scores[feat][i] = score_usr_feature(i, feat,
-                                            usr_feature_settings.at(feat));
+        scores[feat][i] = score_usr_feature(i, feat, f_set.at(feat));
       }
     }
   }

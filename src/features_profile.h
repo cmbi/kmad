@@ -25,14 +25,12 @@ struct FeaturesProfile {
     FeaturesProfile(const std::vector<std::string> features,
                     int domain_modifier, int ptm_modifier, int motif_modifier,
                     std::map<std::string, double> motif_probabilities);
-    // TODO: change to update occurences
-    // TODO typedef only the value map(string, occurences) 
     std::map<std::string, Occurences> update_occurences(
         const fasta::SequenceList& sequences);
     // TODO: change create.. to update...
-    void create_score_features_profile(const fasta::SequenceList& sequences,
-                                       const f_config::FeatureSettingsMap&
-                                        usr_feature_settings);
+    void update_scores(const fasta::SequenceList& sequences,
+                       const f_config::FeatureSettingsMap&
+                       usr_feature_settings);
     double score_ptm(unsigned long position, std::string feat_name);
     double score_domain(unsigned long position, std::string feat_name);
     double score_motif(unsigned long position, std::string feat_name);

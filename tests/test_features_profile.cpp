@@ -13,7 +13,7 @@
 
 BOOST_AUTO_TEST_SUITE(test_features_profile)
 
-BOOST_AUTO_TEST_CASE(test_create_features_profile)
+BOOST_AUTO_TEST_CASE(test_update_scores)
 {
   // fasta::Sequence s1 = fasta::make_sequence(
   //     "d", "AAAAdaaMAAAAAAEAaaAAALAAAAAA", 7);
@@ -136,7 +136,7 @@ BOOST_AUTO_TEST_CASE(test_create_features_profile)
                                   p[feat].begin(), p[feat].end());
   }
   f_config::FeatureSettingsMap s;
-  f_profile.create_score_features_profile(sequences, s);
+  f_profile.update_scores(sequences, s);
   p = f_profile.m_scores;
   expected_profile = {{"ptm_phosph0", {5.2, 8, 6, 4}},
                       {"ptm_phosph1", {4.68, 7.2, 5.4, 3.6}},
