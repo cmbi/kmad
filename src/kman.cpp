@@ -20,9 +20,9 @@ namespace po = boost::program_options;
 
 int main(int argc, char *argv[]) {
     int codon_length = 0;
-    int phosph_score = 0;
-    int domain_score = 0;
-    int motif_score = 0;
+    int ptm_modifier = 0;
+    int domain_modifier = 0;
+    int motif_modifier = 0;
     double gap_ext_pen = 0;
     double gap_open_pen;
     double end_pen = 0;
@@ -50,13 +50,13 @@ int main(int argc, char *argv[]) {
        po::value<int>(&codon_length)->implicit_value(7)
                                     ->default_value(1),"codon length")
       ("phosph,p",
-       po::value<int>(&phosph_score)->default_value(0),
+       po::value<int>(&ptm_modifier)->default_value(0),
        "score for aligning phosphorylated residues")
       ("domain,d",
-       po::value<int>(&domain_score)->default_value(0),
+       po::value<int>(&domain_modifier)->default_value(0),
        "score for aligning domains")
       ("motif,m",
-       po::value<int>(&motif_score)->default_value(0),
+       po::value<int>(&motif_modifier)->default_value(0),
                                  "probability multiplier for motifs")
       ("out-encoded",
        po::value<bool>(&out_encoded)->implicit_value(true)
@@ -99,7 +99,7 @@ int main(int argc, char *argv[]) {
       std::cout << "End gap penalty value (-n) cannot be a positive number"
                 << std::endl;
       std::exit(EXIT_FAILURE);
-    } else if (phosph_score < 0 || domain_score < 0 || motif_score < 0) {
+    } else if (ptm_modifier < 0 || domain_modifier < 0 || motif_modifier < 0) {
       std::cout << "Scores for aligning features cannot be negative"
                 << std::endl;
       std::exit(EXIT_FAILURE);
@@ -124,10 +124,10 @@ int main(int argc, char *argv[]) {
         fasta_data, f_set);
 
 
-    std::vector<fasta::SequenceList> alignment = msa::run_msa(sequence_data, 
+    auto alignment = msa::run_msa(sequence_data, 
                                   f_set, gap_open_pen,
-                                  gap_ext_pen, end_pen, domain_score, 
-                                  motif_score, phosph_score, codon_length);
+                                  gap_ext_pen, end_pen, domain_modifier, 
+                                  motif_modifier, ptm_modifier, codon_length);
 
     if (out_encoded) {
       outfile::write_encoded_alignment(alignment[1], sequence_data,
