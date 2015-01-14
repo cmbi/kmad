@@ -60,7 +60,7 @@ void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
         profile.at(sequence.residues[j-1].codon[0])[i - 1];
       double feature_score = 0;
       for (auto& feat_name : sequence.residues[j - 1].features) {
-        feature_score += f_profile.m_scores.at(feat_name)[i - 1]; 
+        feature_score += f_profile.get_score(feat_name, i - 1); 
       }
       // double add_score = 0;
       // FeaturesList features = s2[j].get_feat_indexes();

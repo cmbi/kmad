@@ -31,7 +31,7 @@ void FeaturesProfile::update_scores(const fasta::SequenceList& sequences,
     }
   }
   // create an empty score map 
-  FeaturesProfileMap scores;
+  std::map<std::string, Scores> scores;
   for (auto& f: m_features) {
     scores[f] = std::vector<double>(sequences[0].residues.size(), 0);
   }
@@ -55,7 +55,7 @@ void FeaturesProfile::update_scores(const fasta::SequenceList& sequences,
 
 std::map<std::string, Occurences> FeaturesProfile::update_occurences(
     const fasta::SequenceList& sequences) {
-  FeaturesProfileMap p;
+  std::map<std::string, Occurences> p;
   for (auto& f: m_features) {
     p[f] = std::vector<double>(sequences[0].residues.size(), 0);
   }
@@ -172,4 +172,14 @@ double FeaturesProfile::score_usr_feature(unsigned long position,
               * settings.subtract_score;
   }
   return result;
+}
+
+
+std::map<std::string, Scores> FeaturesProfile::get_scores() {
+  return m_scores;
+}
+
+double FeaturesProfile::get_score(const std::string& feat_name,
+                                        unsigned long position) const {
+  return m_scores.at(feat_name)[position];
 }

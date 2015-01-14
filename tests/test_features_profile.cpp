@@ -92,52 +92,53 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
                                          {"motif_ac", 0.8}};
 
   FeaturesProfile f_profile(feature_list, 4, 10, 3, probs);
-  FeaturesProfileMap p = f_profile.update_occurences(sequences);
-  BOOST_CHECK_EQUAL(p.size(), feature_list.size());
+  // FeaturesProfileMap p = f_profile.update_occurences(sequences);
+  // BOOST_CHECK_EQUAL(p.size(), feature_list.size());
 
-  FeaturesProfileMap expected_profile = {{"ptm_phosph0", {2, 4, 3, 2}},
-                                         {"ptm_phosph1", {0, 0, 0, 0}},
-                                         {"ptm_phosph2", {0, 0, 0, 0}},
-                                         {"ptm_phosph3", {0, 0, 0, 0}},
-                                         {"ptm_phosphP", {2, 0, 0, 0}},
-                                         {"ptm_acet0", {0, 0, 0, 0}},
-                                         {"ptm_acet1", {0, 0, 0, 0}},
-                                         {"ptm_acet2", {0, 0, 0, 0}},
-                                         {"ptm_acet3", {0, 0, 0, 0}},
-                                         {"ptm_Nglyc0", {0, 0, 0, 0}},
-                                         {"ptm_Nglyc1", {0, 0, 0, 0}},
-                                         {"ptm_Nglyc2", {0, 0, 0, 0}},
-                                         {"ptm_Nglyc3", {0, 0, 0, 0}},
-                                         {"ptm_amid0", {0, 0, 0, 0}},
-                                         {"ptm_amid1", {0, 0, 0, 0}},
-                                         {"ptm_amid2", {0, 0, 0, 0}},
-                                         {"ptm_amid3", {0, 0, 0, 0}},
-                                         {"ptm_hydroxy0", {0, 0, 0, 0}},
-                                         {"ptm_hydroxy1", {0, 0, 0, 0}},
-                                         {"ptm_hydroxy2", {0, 0, 0, 0}},
-                                         {"ptm_hydroxy3", {0, 0, 0, 0}},
-                                         {"ptm_methyl0", {0, 0, 0, 0}},
-                                         {"ptm_methyl1", {0, 0, 0, 0}},
-                                         {"ptm_methyl2", {0, 0, 0, 0}},
-                                         {"ptm_methyl3", {0, 0, 0, 0}},
-                                         {"ptm_Oglyc0", {0, 0, 0, 0}},
-                                         {"ptm_Oglyc1", {0, 0, 0, 0}},
-                                         {"ptm_Oglyc2", {0, 0, 0, 0}},
-                                         {"ptm_Oglyc3", {0, 0, 0, 0}},
-                                         {"motif_aa", {3, 0, 0, 2}},
-                                         {"motif_ab", {1, 0, 0, 0}},
-                                         {"motif_ac", {1, 0, 0, 0}},
-                                         {"domain_aa", {0, 0, 3, 1}},
-                                         {"domain_ac", {0, 0, 1, 0}}};
-  
-  for (auto &feat: feature_list) {
-    BOOST_CHECK_EQUAL_COLLECTIONS(expected_profile[feat].begin(), 
-                                  expected_profile[feat].end(),
-                                  p[feat].begin(), p[feat].end());
-  }
+  // FeaturesProfileMap expected_profile = {{"ptm_phosph0", {2, 4, 3, 2}},
+  //                                        {"ptm_phosph1", {0, 0, 0, 0}},
+  //                                        {"ptm_phosph2", {0, 0, 0, 0}},
+  //                                        {"ptm_phosph3", {0, 0, 0, 0}},
+  //                                        {"ptm_phosphP", {2, 0, 0, 0}},
+  //                                        {"ptm_acet0", {0, 0, 0, 0}},
+  //                                        {"ptm_acet1", {0, 0, 0, 0}},
+  //                                        {"ptm_acet2", {0, 0, 0, 0}},
+  //                                        {"ptm_acet3", {0, 0, 0, 0}},
+  //                                        {"ptm_Nglyc0", {0, 0, 0, 0}},
+  //                                        {"ptm_Nglyc1", {0, 0, 0, 0}},
+  //                                        {"ptm_Nglyc2", {0, 0, 0, 0}},
+  //                                        {"ptm_Nglyc3", {0, 0, 0, 0}},
+  //                                        {"ptm_amid0", {0, 0, 0, 0}},
+  //                                        {"ptm_amid1", {0, 0, 0, 0}},
+  //                                        {"ptm_amid2", {0, 0, 0, 0}},
+  //                                        {"ptm_amid3", {0, 0, 0, 0}},
+  //                                        {"ptm_hydroxy0", {0, 0, 0, 0}},
+  //                                        {"ptm_hydroxy1", {0, 0, 0, 0}},
+  //                                        {"ptm_hydroxy2", {0, 0, 0, 0}},
+  //                                        {"ptm_hydroxy3", {0, 0, 0, 0}},
+  //                                        {"ptm_methyl0", {0, 0, 0, 0}},
+  //                                        {"ptm_methyl1", {0, 0, 0, 0}},
+  //                                        {"ptm_methyl2", {0, 0, 0, 0}},
+  //                                        {"ptm_methyl3", {0, 0, 0, 0}},
+  //                                        {"ptm_Oglyc0", {0, 0, 0, 0}},
+  //                                        {"ptm_Oglyc1", {0, 0, 0, 0}},
+  //                                        {"ptm_Oglyc2", {0, 0, 0, 0}},
+  //                                        {"ptm_Oglyc3", {0, 0, 0, 0}},
+  //                                        {"motif_aa", {3, 0, 0, 2}},
+  //                                        {"motif_ab", {1, 0, 0, 0}},
+  //                                        {"motif_ac", {1, 0, 0, 0}},
+  //                                        {"domain_aa", {0, 0, 3, 1}},
+  //                                        {"domain_ac", {0, 0, 1, 0}}};
+  // 
+  // for (auto &feat: feature_list) {
+  //   BOOST_CHECK_EQUAL_COLLECTIONS(expected_profile[feat].begin(), 
+  //                                 expected_profile[feat].end(),
+  //                                 p[feat].begin(), p[feat].end());
+  // }
   f_config::FeatureSettingsMap s;
   f_profile.update_scores(sequences, s);
-  p = f_profile.m_scores;
+  std::map<std::string, Scores> p = f_profile.get_scores();
+  std::map<std::string, Scores> expected_profile;
   expected_profile = {{"ptm_phosph0", {5.2, 8, 6, 4}},
                       {"ptm_phosph1", {4.68, 7.2, 5.4, 3.6}},
                       {"ptm_phosph2", {4.16, 6.4, 4.8, 3.2}},

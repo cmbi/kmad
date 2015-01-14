@@ -32,8 +32,6 @@ std::vector<fasta::SequenceList> msa::run_msa(
       f_profile.update_scores(query_seq_list, f_set);
 
       // first round of the alignment - all vs 1st
-      // TODO: first round is used to set identities. Return value is ignored.
-      // Can this be improved?
       std::vector<double> identities;
       identities = msa::set_identities(sequence_data, profile, f_profile,
                                        gap_open_pen, end_pen, 
