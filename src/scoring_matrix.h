@@ -39,9 +39,10 @@ public:
   ///
   /// traces back the alignment path in the scoring matrices
   ///
-  // void PerformNWAlignment(std::vector<fasta::Sequence>& result,
-  //                        fasta::Sequence s2, Profile& prf,
-  //                        FeaturesProfile& feat_prf, int codon_length);
+  fasta::SequenceList backtrace_alignment_path(const fasta::Sequence& sequence, 
+                                               const ProfileMap& profile,
+                                               const FeaturesProfile& f_profile,
+                                               int codon_length);
 private:
   ///
   /// finds the best score either in the last column or in the last row of the

@@ -154,19 +154,18 @@ fasta::SequenceList msa::align_pairwise(const fasta::Sequence& input_sequence,
                                         double gap_ext_pen,
                                         int codon_length) {
   int profile_length = profile.begin()->second.size();
-  fasta::SequenceList alignment;
   ScoringMatrix scores(profile_length, input_sequence.residues.size(),
                        gap_open_pen, end_pen, gap_ext_pen);
   scores.calculate_scores(input_sequence, profile, f_profile, codon_length);
-  //scores.PerformNWAlignment(alignment, seq2, profile, feat_prf,
-                            //codon_length);
-  fasta::SequenceList aligned_sequence;
-  aligned_sequence = remove_gaps(alignment);
+  fasta::SequenceList alignment;
+  alignment = scores.backtrace_alignment_path(input_sequence, 
+                                              profile, f_profile,
+                                              codon_length);
+  fasta::SequenceList aligned_sequence = remove_gaps(alignment);
   return aligned_sequence;
 }
 
 
-// TODO: Implement
 std::vector<fasta::SequenceList> msa::perform_msa_round(
     const seq_data::SequenceData& sequence_data,
     const ProfileMap& profile,

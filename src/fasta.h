@@ -15,6 +15,7 @@ namespace fasta {
       : codon(codon),
         features(features) {}
     Residue(std::string codon) : codon(codon) {}
+    Residue(){};
 
     std::string codon;
     std::vector<std::string> features;
@@ -41,6 +42,8 @@ namespace fasta {
   Sequence make_sequence(const std::string& description,
                          const std::string& codons, int codon_length);
   Sequence make_sequence(const std::vector<Residue>&);
+  Sequence make_sequence(unsigned long sequence_length,
+                         const fasta::Residue residue);
 
 }
 
