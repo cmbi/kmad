@@ -32,55 +32,60 @@ ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
 }
 
 
-// // TODO: Implement
-// void ScoringMatrix::CalculateScores(fasta::Sequence s2, Profile& prf,
-//                                     FeaturesProfile& feat_prf,
-//                                     int codon_length) {
-//   //Residue gap_residue = Residue('-', codon_length);
-//   //s2.insert(s2.begin(), gap_residue);
-// 
-//   //assert(m_matrix_v.size() == m_matrix_g.size());
-//   //assert(m_matrix_v.size() == m_matrix_h.size());
-// 
-//   //for (unsigned int i = 1; i < m_matrix_v.size(); i++) {
-//     //m_matrix_v[i][0] = -10000000; //=== infinity
-//     //m_matrix_h[i][0] = -10000000;
-//     //m_matrix_g[i][0] = i * m_end_pen;
-//   //}
-//   //for (unsigned int i = 1; i < m_matrix_v[0].size(); i++) {
-//     //m_matrix_v[0][i] = -10000000;
-//     //m_matrix_h[0][i] = i * m_end_pen;
-//     //m_matrix_g[0][i] = -10000000;
-//   //}
-//   //double score1, score2, score3 = 0;
-//   //for (unsigned int i = 1; i < m_matrix_v.size(); i++) {
-//     //for (unsigned int j = 1; j < m_matrix_v[i].size(); j++) {
-//       /////V
-//       //double prf_score = prf.get_element(i-1, s2[j].get_aa());
-//       //double add_score = 0;
-//       //FeaturesList features = s2[j].get_feat_indexes();
-//       //feat_prf.get_score(i-1, features, add_score);
-// 
-//       //double final_score = prf_score + add_score;
-//       //score1 = m_matrix_v[i-1][j-1];
-//       //score2 = m_matrix_g[i-1][j-1];
-//       //score3 = m_matrix_h[i-1][j-1];
-// 
-//       //m_matrix_v[i][j] = std::max<double>(score1,
-//           //std::max<double>(score2, score3)) + final_score;
-//       /////G
-//       //score1 = m_matrix_v[i-1][j] + m_gap_opening;
-//       //score2 = m_matrix_g[i-1][j] + m_gap_extension;
-//       //m_matrix_g[i][j] = (score1 > score2) ? score1 : score2;
-//       /////H
-//       //score1 = m_matrix_v[i][j-1] + m_gap_opening_horizontal;
-//       //score2 = m_matrix_h[i][j-1] + m_gap_extension_horizontal;
-//       //m_matrix_h[i][j] = (score1 > score2) ? score1 : score2;
-//     //}
-//   //}
-// }
-// 
-// 
+// TODO: Implement
+void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
+                                     const ProfileMap& profile,
+                                     const FeaturesProfile& f_profile,
+                                     int codon_length) {
+  assert(m_matrix_v.size() == m_matrix_g.size());
+  assert(m_matrix_v.size() == m_matrix_h.size());
+
+  for (unsigned int i = 1; i < m_matrix_v.size(); i++) {
+    m_matrix_v[i][0] = -10000000; //=== infinity
+    m_matrix_h[i][0] = -10000000;
+    m_matrix_g[i][0] = i * m_end_pen;
+  }
+  for (unsigned int i = 1; i < m_matrix_v[0].size(); i++) {
+    m_matrix_v[0][i] = -10000000;
+    m_matrix_h[0][i] = i * m_end_pen;
+    m_matrix_g[0][i] = -10000000;
+  }
+  double score1, score2, score3 = 0;
+  for (size_t i = 1; i < m_matrix_v.size(); i++) {
+    for (size_t j = 1; j < m_matrix_v[i].size(); j++) {
+      ///V
+      //double prf_score = prf.get_element(i - 1,
+      //                                   sequence.residues[j - 1].codon[0]);
+      double profile_score = 
+        profile.at(sequence.residues[j-1].codon[0])[i - 1];
+      double feature_score = 0;
+      for (auto& feat_name : sequence.residues[j - 1].features) {
+        feature_score += f_profile.m_scores.at(feat_name)[i - 1]; 
+      }
+      // double add_score = 0;
+      // FeaturesList features = s2[j].get_feat_indexes();
+      // feat_prf.get_score(i-1, features, add_score);
+
+      double final_score = profile_score + feature_score;
+      score1 = m_matrix_v[i-1][j-1];
+      score2 = m_matrix_g[i-1][j-1];
+      score3 = m_matrix_h[i-1][j-1];
+
+      m_matrix_v[i][j] = std::max<double>(score1,
+        std::max<double>(score2, score3)) + final_score;
+      ///G
+      score1 = m_matrix_v[i-1][j] + m_gap_opening;
+      score2 = m_matrix_g[i-1][j] + m_gap_extension;
+      m_matrix_g[i][j] = (score1 > score2) ? score1 : score2;
+      ///H
+      score1 = m_matrix_v[i][j-1] + m_gap_opening;
+      score2 = m_matrix_h[i][j-1] + m_gap_extension;
+      m_matrix_h[i][j] = (score1 > score2) ? score1 : score2;
+    }
+  }
+}
+
+
 // ValueCoords ScoringMatrix::FindBestScore() {
 //   int max_i = m_matrix_v.size()-1;
 //   int max_j = m_matrix_v[0].size()-1;
@@ -131,6 +136,7 @@ ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
 //   //to know later where are the gaps in the profile
 //   Sequence s1(prf.get_matrix()[0].size()+1, Residue('A', codon_length));
 //   Residue gap_residue = Residue('-', codon_length);
+//   fasta::Residue gap_residue('-' + std::string(codon_length, 'A'), {});
 //   s2.insert(s2.begin(), gap_residue);
 //   Sequence new_s1;
 //   Sequence new_s2;

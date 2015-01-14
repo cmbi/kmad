@@ -22,7 +22,7 @@ FeaturesProfile::FeaturesProfile(std::vector<std::string> features,
 void FeaturesProfile::create_score_features_profile(
     const fasta::SequenceList& sequences,
     const f_config::FeatureSettingsMap& usr_feature_settings) {
-  m_occurences = create_features_profile(sequences);
+  m_occurences = update_occurences(sequences);
   // convert occurences to probabilities
   for (auto& occ: m_occurences) {
     size_t i = 0;
@@ -55,7 +55,7 @@ void FeaturesProfile::create_score_features_profile(
 }
 
 
-FeaturesProfileMap FeaturesProfile::create_features_profile(
+std::map<std::string, Occurences> FeaturesProfile::update_occurences(
     const fasta::SequenceList& sequences) {
   FeaturesProfileMap p;
   for (auto& f: m_features) {

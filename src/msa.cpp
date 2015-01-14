@@ -50,6 +50,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
                                            end_pen, gap_ext_pen, cutoff, 
                                            codon_length, identities, 
                                            prev_alignments, f_set);
+        // TODO: update profiles here
         //prev_alignments - number of alignments performed in the previous
         //rounds - to omit this round if the number of aligned sequences is the
         //same as in the previous round
@@ -157,8 +158,7 @@ fasta::SequenceList msa::align_pairwise(const fasta::Sequence& input_sequence,
   fasta::SequenceList alignment;
   ScoringMatrix scores(profile_length, input_sequence.residues.size(),
                        gap_open_pen, end_pen, gap_ext_pen);
-  //scores.CalculateScores(seq2, profile, feat_prf,
-                         //codon_length);
+  scores.calculate_scores(input_sequence, profile, f_profile, codon_length);
   //scores.PerformNWAlignment(alignment, seq2, profile, feat_prf,
                             //codon_length);
   fasta::SequenceList aligned_sequence;
