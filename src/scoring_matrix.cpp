@@ -135,7 +135,6 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
   // s2.insert(s2.begin(), gap_residue);
   fasta::Sequence new_s1;
   fasta::Sequence new_s2;
-  fasta::SequenceList ali; //alignment
   int i = profile_sequence.residues.size();
   int j = sequence.residues.size();
   //if bestScore isn't in the lower right corner, then add gaps
@@ -158,50 +157,52 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
 
   assert(m_matrix_v.size() == m_matrix_g.size());
   assert(m_matrix_v.size() == m_matrix_h.size());
+  fasta::Residue new_res1;
+  fasta::Residue new_res2;
 
   //trace back the matrix
   while (i > 0 || j > 0) {
     if (i > 0 && j > 0 && current_matrix == "V") {  //match/mismatch
-      // new_char1 = s1[i];
-      // new_char2 = s2[j];
-      // double prf_score = prf.get_element(i-1,s2[j].get_aa());
-      // double add_score = 0;
-      // FeaturesList features = s2[j].get_feat_indexes();
-      // feat_prf.get_score(i-1, features, add_score);
-      // double final_score = prf_score + add_score;
-      // if (m_matrix_v[i][j] != m_matrix_v[i-1][j-1] + final_score) {
-      //   if (i > 0 && j > 0
-      //       && m_matrix_v[i][j] == m_matrix_g[i-1][j-1]+final_score) {
-      //     current_matrix = "G";
-      //   } else if (i > 0 && j > 0
-      //              && m_matrix_v[i][j] == m_matrix_h[i-1][j-1]+final_score) {
-      //     current_matrix = "H";
-      //   }
-      // }
-      // i--;
-      // j--;
+      new_res1 = profile_sequence.residues[i - 1];
+      new_res2 = sequence.residues[j - 1];
+      double profile_score = profile.at(
+          sequence.residues[j - 1].codon[0])[i - 1];
+      double feature_score = 0;
+      for (auto& feat_name : sequence.residues[j - 1].features) {
+        feature_score += f_profile.get_score(feat_name, i - 1); 
+      }
+      double final_score = profile_score + feature_score;
+      if (m_matrix_v[i][j] != m_matrix_v[i-1][j-1] + final_score) {
+        if (i > 0 && j > 0
+            && m_matrix_v[i][j] == m_matrix_g[i-1][j-1]+final_score) {
+          current_matrix = "G";
+        } else if (i > 0 && j > 0
+                   && m_matrix_v[i][j] == m_matrix_h[i-1][j-1]+final_score) {
+          current_matrix = "H";
+        }
+      }
+      --i;
+      --j;
     } else if (i > 0 && current_matrix == "G") {  //gap in seq2
-      // new_char1 = s1[i];
-      // new_char2 = gap_residue;
-      // if (m_matrix_g[i][j] == m_matrix_v[i-1][j] + m_gap_opening)
-      //   current_matrix = "V";
-      // i--;
+      new_res1 = profile_sequence.residues[i - 1];
+      new_res2 = gap_residue;
+      if (m_matrix_g[i][j] == m_matrix_v[i-1][j] + m_gap_opening)
+        current_matrix = "V";
+      --i;
     } else if (j > 0 && current_matrix == "H") {  //gap in profile
-      // new_char1 = gap_residue;
-      // new_char2 = s2[j];
-      // if (m_matrix_h[i][j] == m_matrix_v[i][j-1] + m_gap_opening_horizontal) {
-      //   current_matrix = "V";
-      // }
-      // j--;
+      new_res1 = gap_residue;
+      new_res2 = sequence.residues[j - 1];
+      if (m_matrix_h[i][j] == m_matrix_v[i][j - 1] + m_gap_opening) {
+        current_matrix = "V";
+      }
+      --j;
     }
-    // new_s1.push_back(new_char1);
-    // new_s2.push_back(new_char2);
+    new_s1.residues.push_back(new_res1);
+    new_s2.residues.push_back(new_res2);
   }
   //need to reverse the sequences, because tracing back the alignment goes
   //from the end to the beginning
   std::reverse(new_s1.residues.begin(), new_s1.residues.end());
   std::reverse(new_s2.residues.begin(),new_s2.residues.end());
-  ali.push_back(new_s1);
-  ali.push_back(new_s2);
   return {new_s1, new_s2};
 }

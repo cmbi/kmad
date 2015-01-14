@@ -15,6 +15,7 @@ namespace fasta {
       : codon(codon),
         features(features) {}
     Residue(std::string codon) : codon(codon) {}
+    Residue(){};
 
     std::string codon;
     std::vector<std::string> features;
