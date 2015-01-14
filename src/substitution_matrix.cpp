@@ -1,12 +1,11 @@
 #include "substitution_matrix.h"
 
-#include <boost/range/numeric.hpp>
-
 #include <algorithm>
 #include <iostream>
 
 
 typedef std::vector<std::vector<int>> SbstMatrix;
+typedef std::map<char, std::vector<double>> SimilarityScoresMap;
 
 namespace {
   static const std::vector<char> Alphabet = {'A','R','N','D','C','Q','E','G',
