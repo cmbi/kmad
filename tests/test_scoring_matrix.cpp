@@ -88,8 +88,6 @@ BOOST_AUTO_TEST_CASE(test_backtrace_algorithm_path)
     BOOST_CHECK_EQUAL(alignment[1].residues[i].codon,
                       expected_alignment[1].residues[i].codon);
   }
-
-
 }
 
 BOOST_AUTO_TEST_SUITE_END()
