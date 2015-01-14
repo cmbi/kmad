@@ -104,9 +104,11 @@ int main(int argc, char *argv[]) {
                 << std::endl;
       std::exit(EXIT_FAILURE);
     }
-
-    f_config::FeatureSettingsMap f_set = f_config::ConfParser::parse_conf_file(
-        conf_file);
+    
+    f_config::FeatureSettingsMap f_set;
+    if (vm.count("conf") == 1) {
+      f_set = f_config::ConfParser::parse_conf_file(conf_file);
+    }
 
     time_t start = clock();
 
@@ -122,7 +124,8 @@ int main(int argc, char *argv[]) {
         fasta_data, f_set);
 
 
-    // auto alignment = msa::run_msa(fasta_data, gap_open_pen, gap_ext_pen,
+    // auto alignment = msa::run_msa(fasta_data, f_set, gap_open_pen,
+    //                               gap_ext_pen,
     //                               end_pen, domain_score, motif_score,
     //                               phosph_score, codon_length);
 
