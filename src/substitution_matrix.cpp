@@ -1,5 +1,4 @@
 #include "substitution_matrix.h"
-#include "vec_util.h"
 
 #include <boost/range/numeric.hpp>
 
