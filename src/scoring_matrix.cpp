@@ -71,7 +71,7 @@ void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
 }
 
 
-ValueCoords ScoringMatrix::FindBestScore() {
+ValueCoords ScoringMatrix::find_best_score() {
   int max_i = m_matrix_v.size()-1;
   int max_j = m_matrix_v[0].size()-1;
   int n = max_i; // last row of m_matrix_v
@@ -129,7 +129,7 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
   int j = sequence.residues.size();
   //if bestScore isn't in the lower right corner, then add gaps
   //to new_s1 or new_s2
-  ValueCoords best_score = FindBestScore();
+  ValueCoords best_score = find_best_score();
   if (best_score[0] != (signed)m_matrix_v.size()-1
       || best_score[1] != (signed)m_matrix_v[0].size()-1) {
     i = best_score[0];

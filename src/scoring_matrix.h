@@ -9,7 +9,6 @@ typedef std::vector<double> ScoringMatrixRow;
 typedef std::vector<ScoringMatrixRow> SingleScoringMatrix;
 typedef std::vector<int> ValueCoords;
 
-
 class ScoringMatrix {
 public:
   ///
@@ -43,7 +42,7 @@ private:
   /// finds the best score either in the last column or in the last row of the
   /// V matrix (takes the end gap penaltie into account)
   ///
-  ValueCoords FindBestScore();
+  ValueCoords find_best_score();
   int m_i_length;
   int m_j_length;
   double m_gap_opening;
