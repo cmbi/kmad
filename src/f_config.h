@@ -1,11 +1,12 @@
 #ifndef F_CONFIG_H
 #define F_CONFIG_H
-#include "types.h"
 
 #include <iostream>
 #include <libconfig.h++>
+#include <map>
+#include <vector>
 
-
+typedef std::vector<std::string> FeatureNamesList;
 namespace f_config
 {
   struct FeaturePositions

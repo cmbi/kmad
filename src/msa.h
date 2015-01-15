@@ -1,7 +1,6 @@
 #ifndef MSA_H
 #define MSA_H
 
-#include "types.h"
 #include "seq_data.h"
 #include "features_profile.h"
 #include "f_config.h"
@@ -49,7 +48,7 @@ namespace msa {
       double gap_ext_pen, 
       double identity_cutoff,
       int codon_length, 
-      const IdentitiesList& identities,
+      const std::vector<double>& identities,
       int& prev_alignments,
       const f_config::FeatureSettingsMap& f_set);
 
@@ -83,7 +82,8 @@ namespace msa {
   ///
   /// count alignments that will be performed in this round
   ///
-  int count_alignments(double identity_cutoff, const IdentitiesList& identities);
+  int count_alignments(double identity_cutoff,
+                       const std::vector<double>& identities);
 }
 
 #endif /* MSA_H */

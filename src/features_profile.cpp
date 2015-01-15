@@ -4,8 +4,6 @@
 
 #include <algorithm>
 #include <iostream>
-#include <string>
-#include <vector>
 
 
 FeaturesProfile::FeaturesProfile(std::vector<std::string> features,
@@ -27,7 +25,7 @@ void FeaturesProfile::update_scores(const fasta::SequenceList& sequences,
     size_t i = 0;
     for (auto& v: occ.second) {
       occ.second[i] = v / sequences.size();
-      i++;
+      ++i;
     }
   }
   // create an empty score map 
@@ -35,7 +33,7 @@ void FeaturesProfile::update_scores(const fasta::SequenceList& sequences,
   for (auto& f: m_features) {
     scores[f] = std::vector<double>(sequences[0].residues.size(), 0);
   }
-  for (size_t i = 0; i < sequences[0].residues.size(); i++) {
+  for (size_t i = 0; i < sequences[0].residues.size(); ++i) {
     for (auto &feat : m_features){
       if (feat.substr(0,3) == "ptm") {
         scores[feat][i] = score_ptm(i, feat);
@@ -59,8 +57,8 @@ std::map<std::string, Occurences> FeaturesProfile::update_occurences(
   for (auto& f: m_features) {
     p[f] = std::vector<double>(sequences[0].residues.size(), 0);
   }
-  for (size_t i = 0; i < sequences[0].residues.size(); i++) {
-    for (size_t j = 0; j < sequences.size(); j++) {
+  for (size_t i = 0; i < sequences[0].residues.size(); ++i) {
+    for (size_t j = 0; j < sequences.size(); ++j) {
       for (auto& f : sequences[j].residues[i].features) {
         assert(p.find(f) != p.end());
         p[f][i] += 1.0;
@@ -98,7 +96,7 @@ double FeaturesProfile::score_ptm(unsigned long position,
     throw std::invalid_argument(msg);
   }
   for (auto feat_it = m_occurences.begin();
-       feat_it != m_occurences.end(); feat_it++) {
+       feat_it != m_occurences.end(); ++feat_it) {
     std::string i_name = feat_it->first;
     std::string i_type = i_name;
     // popping back last character, to get just the ptm type
@@ -128,7 +126,7 @@ double FeaturesProfile::score_domain(unsigned long position,
                                      std::string dom_name) {
   double result = 0;
   for (auto feat_it = m_occurences.begin(); 
-       feat_it != m_occurences.end(); feat_it++) {
+       feat_it != m_occurences.end(); ++feat_it) {
     if (feat_it->first == dom_name) {
       result += feat_it->second[position];
     } else if (feat_it->first.substr(0,6) == "domain") {
@@ -142,15 +140,8 @@ double FeaturesProfile::score_domain(unsigned long position,
 double FeaturesProfile::score_motif(unsigned long position,
                                     std::string feat_name) {
   double result = 0;
-  bool not_found = true;
-  for (auto feat_it = m_occurences.begin();
-       feat_it != m_occurences.end() && not_found; feat_it++) {
-    if (feat_it->first == feat_name) {
-      result = feat_it->second[position] * m_motif_modifier \
-               * m_motif_probabilities[feat_name];
-      not_found = false;     
-    }
-  }
+  result = m_occurences[feat_name][position] * m_motif_modifier \
+           * m_motif_probabilities[feat_name];
   return result;
 }
 

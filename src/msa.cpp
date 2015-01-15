@@ -3,15 +3,10 @@
 #include "features_profile.h"
 #include "profile.h"
 #include "scoring_matrix.h"
-#include "substitution_matrix.h"
-#include "vec_util.h"
 
-#include <boost/algorithm/string.hpp>    
 #include <boost/filesystem.hpp>
 
 #include <iostream>
-#include <vector>
-#include <tuple>
 
 
 std::vector<fasta::SequenceList> msa::run_msa(
@@ -39,28 +34,31 @@ std::vector<fasta::SequenceList> msa::run_msa(
 
 
       std::vector<fasta::SequenceList> alignment;
-      int prev_alignments = 0;
+      int alignments_number = 0;
       double cutoff = 0;
-      for (int i = 8; i >= 0; i--) {
+      for (int i = 8; i >= 0; --i) {
         cutoff = double(i) / 10;
+        int prev_alignments = alignments_number;
         alignment = msa::perform_msa_round(sequence_data, profile,
                                            f_profile, gap_open_pen,
                                            end_pen, gap_ext_pen, cutoff, 
                                            codon_length, identities, 
-                                           prev_alignments, f_set);
-        f_profile.update_scores(alignment[0], f_set);
-        profile = create_score_profile(alignment[0]);
+                                           alignments_number, f_set);
+        if (prev_alignments < alignments_number) {
+          f_profile.update_scores(alignment[0], f_set);
+          profile = create_score_profile(alignment[0]);
+        }
         //prev_alignments - number of alignments performed in the previous
         //rounds - to omit this round if the number of aligned sequences is the
         //same as in the previous round
       }
-      prev_alignments = 0;  // to align (again) all sequences to the profile
+      alignments_number = 0;  // to align (again) all sequences to the profile
       cutoff = 0;
       alignment = msa::perform_msa_round(sequence_data, profile,
                                          f_profile, gap_open_pen, 
                                          end_pen, gap_ext_pen, cutoff,
                                          codon_length, identities,
-                                         prev_alignments, f_set);
+                                         alignments_number, f_set);
       return alignment;
 }
 
@@ -100,10 +98,10 @@ double msa::calc_identity(const fasta::Sequence& aligned_sequence,
                           const fasta::Sequence& query_sequence) {
   double identical_residues = 0;
   assert(aligned_sequence.residues.size() == query_sequence.residues.size());
-  for (unsigned i = 0; i < aligned_sequence.residues.size(); i++) {
+  for (unsigned i = 0; i < aligned_sequence.residues.size(); ++i) {
     if (aligned_sequence.residues[i].codon[0] 
         == query_sequence.residues[i].codon[0]) {
-      identical_residues++;
+      ++identical_residues;
     }
   }
   return identical_residues / double(query_sequence.residues.size());
@@ -115,7 +113,7 @@ fasta::SequenceList msa::remove_gaps(const fasta::SequenceList& alignment) {
   fasta::SequenceList aligned_seq = {new_seq, new_seq};
   char gap = '-';
   bool lower_flag = false;
-  for (size_t i = 0; i < alignment[0].residues.size(); i++) {
+  for (size_t i = 0; i < alignment[0].residues.size(); ++i) {
     if (alignment[0].residues[i].codon[0] == gap) {
       if (aligned_seq[1].residues.size() > 0) {
         //change previous character to lowercase
@@ -175,7 +173,7 @@ std::vector<fasta::SequenceList> msa::perform_msa_round(
     double gap_ext_pen,
     double identity_cutoff,
     int codon_length,
-    const IdentitiesList& identities,
+    const std::vector<double>& identities,
     int& prev_alignments,
     const f_config::FeatureSettingsMap& f_set)
 {
@@ -202,11 +200,11 @@ std::vector<fasta::SequenceList> msa::perform_msa_round(
 
 
 int msa::count_alignments(double identity_cutoff,
-                          const IdentitiesList& identities) {
+                          const std::vector<double>& identities) {
   int count = 0;
   for (auto& item: identities) {
     if (item > identity_cutoff) {
-      count++;
+      ++count;
     }
   }
   return count;

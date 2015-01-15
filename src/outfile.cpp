@@ -12,7 +12,7 @@ void outfile::write_encoded_alignment(
   std::stringstream sstr;
   sstr << filename_prefix << "_al";
   std::ofstream output_file(sstr.str().c_str(), std::ios::out);
-  for (size_t i = 0; i < sequences.size(); i++) {
+  for (size_t i = 0; i < sequences.size(); ++i) {
     output_file << sequence_data.sequences[i].description << "\n";
     for (auto& res : sequences[i].residues) {
       output_file << res.codon;
@@ -29,7 +29,7 @@ void outfile::write_decoded_alignment(
   std::stringstream sstr;
   sstr << filename_prefix << "_al";
   std::ofstream output_file(sstr.str().c_str(), std::ios::out);
-  for (size_t i = 0; i < sequences.size(); i++) {
+  for (size_t i = 0; i < sequences.size(); ++i) {
     output_file << sequence_data.sequences[i].description << "\n";
     for (auto& res : sequences[i].residues) {
       output_file << res.codon[0];

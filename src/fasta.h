@@ -1,10 +1,8 @@
 #ifndef FASTA_H
 #define FASTA_H
 
-#include "types.h"
-
 #include <iostream>
-#include <fstream>
+#include <map>
 #include <vector>
 
 
@@ -44,7 +42,7 @@ namespace fasta {
   Sequence make_sequence(const std::vector<Residue>&);
   Sequence make_sequence(unsigned long sequence_length,
                          const fasta::Residue residue);
-
+  Residue make_residue(const std::string& codon);
 }
 
 

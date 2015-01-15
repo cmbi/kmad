@@ -3,7 +3,6 @@
 
 #include "fasta.h"
 #include "f_config.h"
-#include "types.h"
 
 #include <iostream>
 

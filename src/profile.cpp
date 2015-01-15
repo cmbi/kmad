@@ -1,22 +1,36 @@
 #include "profile.h"
 
-#include "substitution_matrix.h"
-#include "vec_util.h"
-
 #include <boost/range/numeric.hpp>
 
 #include <algorithm>
-#include <fstream>
 #include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
 
-
+typedef std::map<char, std::vector<double>> SimilarityScoresMap;
 namespace {
   static const std::vector<char> ALPHABET = {'A','R','N','D','C','Q','E','G',
                                              'H','I','L','K','M','F','P','S',
                                              'T','W','Y','V'};
+  static const SimilarityScoresMap SIM_SCORES = {
+    {'A', { 4, -1, -2, -2,  0, -1, -1,  0, -2, -1, -1, -1, -1, -2, -1, 1, 0, -3, -2, 0}},
+    {'R', {-1,  5,  0, -2, -3,  1,  0, -2, 0, -3, -2, 2, -1, -3, -2, -1, -1, -3, -2, -3}},
+    {'N', {-2,  0,  6,  1, -3,  0,  0,  0, 1, -3, -3, 0, -2, -3, -2, 1, 0, -4, -2, -3}},
+    {'D', {-2, -2,  1,  6, -3,  0,  2, -1, -1, -3, -4, -1, -3, -3, -1, 0, -1, -4, -3, -3}},
+    {'C', { 0, -3, -3, -3,  9, -3, -4, -3, -3, -1, -1, -3, -1, -2, -3, -1, -1, -2, -2, -1}},
+    {'Q', {-1,  1,  0,  0, -3,  5,  2, -2, 0, -3, -2, 1, 0, -3, -1, 0, -1, -2, -1, -2}},
+    {'E', {-1,  0,  0,  2, -4,  2,  5, -2, 0, -3, -3, 1, -2, -3, -1, 0, -1, -3, -2, -2}},
+    {'G', { 0, -2,  0, -1, -3, -2, -2,  6, -2, -4, -4, -2, -3, -3, -2, 0, -2, -2, -3, -3}},
+    {'H', {-2,  0,  1, -1, -3,  0,  0, -2, 8, -3, -3, -1, -2, -1, -2, -1, -2, -2, 2, -3}},
+    {'I', {-1, -3, -3, -3, -1, -3, -3, -4, -3, 4, 2, -3, 1, 0, -3, -2, -1, -3, -1, 3}},
+    {'L', {-1, -2, -3, -4, -1, -2, -3, -4, -3, 2, 4, -2, 2, 0, -3, -2, -1, -2, -1, 1}},
+    {'K', {-1,  2,  0, -1, -3,  1,  1, -2, -1, -3, -2, 5, -1, -3, -1, 0, -1, -3, -2, -2}},
+    {'M', {-1, -1, -2, -3, -1,  0, -2, -3, -2, 1, 2, -1, 5, 0, -2, -1, -1, -1, -1, 1}},
+    {'F', {-2, -3, -3, -3, -2, -3, -3, -3, -1, 0, 0, -3, 0, 6, -4, -2, -2, 1, 3, -1}},
+    {'P', {-1, -2, -2, -1, -3, -1, -1, -2, -2, -3, -3, -1, -2, -4, 7, -1, -1, -4, -3, -2}},
+    {'S', { 1, -1,  1,  0, -1,  0,  0,  0, -1, -2, -2, 0, -1, -2, -1, 4, 1, -3, -2, -2}},
+    {'T', { 0, -1,  0, -1, -1, -1, -1, -2, -2, -1, -1, -1, -1, -2, -1, 1, 5, -2, -2, 0}},
+    {'W', {-3, -3, -4, -4, -2, -2, -3, -2, -2, -3, -2, -3, -1, 1, -4, -3, -2, 11, 2, -3}},
+    {'Y', {-2, -2, -2, -3, -2, -1, -2, -3, 2, -1, -1, -2, -1, 3, -3, -2, -2, 2, 7, -1}},
+    {'V', { 0, -3, -3, -3, -1, -2, -2, -3, -3, 3, 1, -2, 1, -1, -2, -2, 0, -3, -1, 4}}};
 }
 
 ProfileMap create_score_profile(const fasta::SequenceList& sequences) {
@@ -27,14 +41,13 @@ ProfileMap create_score_profile(const fasta::SequenceList& sequences) {
     size_t i = 0;
     for (auto& v: occ.second) {
       occ.second[i] = v / sequences.size();
-      i++;
+      ++i;
     }
   }
-  for (unsigned i = 0; i < p['A'].size(); i++) {
+  for (unsigned i = 0; i < p['A'].size(); ++i) {
     std::vector<double> score_column(20, 0); 
     for (auto &prob: p){
-      std::vector<double> sbst_column = substitution_matrix::get_column(
-          prob.first);
+      std::vector<double> sbst_column = SIM_SCORES.at(prob.first);
       for (size_t k = 0; k < sbst_column.size(); ++k) {
         score_column[k] += sbst_column[k] * prob.second[i];
       }
@@ -44,7 +57,6 @@ ProfileMap create_score_profile(const fasta::SequenceList& sequences) {
       p[ALPHABET[j]][i] = score_column[j];
     }
   }
-
   return p;
 }
 
@@ -58,8 +70,8 @@ ProfileMap create_profile(const fasta::SequenceList& sequences) {
     p[c] = std::vector<double>(sequences[0].residues.size(), 0);
   }
 
-  for (size_t i = 0; i < sequences[0].residues.size(); i++) {
-    for (size_t j = 0; j < sequences.size(); j++) {
+  for (size_t i = 0; i < sequences[0].residues.size(); ++i) {
+    for (size_t j = 0; j < sequences.size(); ++j) {
       char amino_acid = sequences[j].residues[i].codon[0];
 
       if (amino_acid == '-') {
@@ -85,110 +97,4 @@ ProfileMap create_profile(const fasta::SequenceList& sequences) {
     }
   }
   return p;
-}
-
-
-Profile::Profile(ProfileMatrix mat)
-:  m_prf_matrix(mat) {
-}
-
-
-Profile::Profile() {
-}
-
-
-ProfileMatrix Profile::get_matrix() const{
-  return m_prf_matrix;
-}
-
-
-void Profile::ProcessProfile(std::vector<fasta::Sequence>& alignment) {
-  CreateProfile(alignment);
-  ProfileMatrix new_profile;
-  for (unsigned int i = 0; i < m_prf_matrix[0].size(); i++) {
-    Matrix2D columns_to_add;
-    for (unsigned int j = 0; j < m_prf_matrix.size(); j++) {
-      if (m_prf_matrix[j][i] != 0) {
-        SbstMatColumn column_int;
-        substitution_matrix::get_column(j, column_int);
-        ProfileMatrixColumn column_j = vec_util::ConvertIntVecToDoubleVec(
-            column_int);
-        vec_util::MultiplyVectorByAScalar(column_j, m_prf_matrix[j][i]);
-        columns_to_add.push_back(column_j);
-      }
-    }
-    //add up columns from substitution matrix for amino acids seen on ith
-    //position(times occurence/totalNrOfSeq))
-    new_profile.push_back(vec_util::AddUp(columns_to_add));
-  }
-  vec_util::TransposeVec(new_profile);
-  m_prf_matrix = new_profile;
-}
-
-
-// TODO: Do this in the constructor or use factory method
-// TODO: Why is the parameter called 'alignment'?
-// TODO: Implement
-void Profile::CreateProfile(std::vector<fasta::Sequence>& alignment) {
-  //ProfileMatrix tmp_result;
-  //int no_of_sequences = alignment.size();
-  //for (unsigned int i = 0; i < alignment[0].size(); i++) {
-    //ProfileMatrixColumn profile_column(20,0);
-    //int non_gaps = 0;
-    //for (unsigned int j = 0; j < alignment.size(); j++) {
-      //char seq_char(alignment[j][i].get_aa());
-      //if (seq_char != '-') {
-        ////either D or N, so add half a point to both
-        //if (seq_char == 'B') {
-          //profile_column[2] += 0.5;
-          //profile_column[3] += 0.5;
-        //} else if (seq_char == 'Z') {
-          ////either D or N, so add half a point to both
-          //profile_column[6] += 0.5;
-          //profile_column[7] += 0.5;
-        //} else if (seq_char == 'X') {
-          //for (unsigned int k = 0; k < profile_column.size(); k++) {
-            //profile_column[k] += 0.05;
-          //}
-        //} else {
-          //int aacid_index = substitution_matrix::FindAminoAcidsIndex(seq_char);
-          //profile_column[aacid_index] += 1;
-        //}
-        //non_gaps++;
-      //}
-    //}
-    //vec_util::DivideVectorByAScalar(profile_column,no_of_sequences);
-    ////vec_util::DivideVectorByAScalar(profileColumn,nonGaps);
-    //tmp_result.push_back(profile_column);
-  //}
-  //m_prf_matrix = tmp_result;
-  //vec_util::TransposeVec(m_prf_matrix);
-}
-
-
-double Profile::get_element(int position, char aacid) {
-  double result;
-  if (aacid == 'B') {
-    // take half the score for asparagine and half the score for aspartate
-    result = 0.5 * m_prf_matrix[2][position] + 0.5 * m_prf_matrix[3][position];
-  } else if (aacid == 'Z') {
-    // take half the score for glutamine and half the score for glutamate
-    result = 0.5 * m_prf_matrix[6][position] + 0.5 * m_prf_matrix[7][position];
-  } else if (aacid == 'X') {
-    // take average score from scores for all residues
-    result = 0;
-    for (unsigned int i = 0; i < m_prf_matrix.size(); i++) {
-      result += 0.05 * m_prf_matrix[i][position];
-    }
-  } else {
-    // it's not any of the {B,Z,X} -> single amino acid
-    int aacid_index = substitution_matrix::FindAminoAcidsIndex(aacid);
-    result = m_prf_matrix[aacid_index][position];
-  }
-  return result;
-}
-
-
-double Profile::get_element(int aacid_index, int position) {
-  return m_prf_matrix[aacid_index][position];
 }

@@ -11,7 +11,7 @@ seq_data::SequenceData seq_data::process_fasta_data(
   s.probabilities = fasta_data.probabilities;
   s.sequences = fasta_data.sequences;
 
-  for (auto feat_it = f_set.begin(); feat_it != f_set.end(); feat_it++) {
+  for (auto feat_it = f_set.begin(); feat_it != f_set.end(); ++feat_it) {
     for (auto& seq : feat_it->second.positions) {
       for (auto& pos : seq.positions) {
         s.sequences[seq.seq_no].residues[pos].features.push_back(

@@ -1,15 +1,10 @@
 #include "features_profile.h"
 #include "profile.h"
 #include "scoring_matrix.h"
-#include "substitution_matrix.h"
-#include "vec_util.h"
 
-#include <algorithm>
-#include <cassert>
+#include <boost/filesystem.hpp>
+
 #include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
 
 
 ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
@@ -31,7 +26,6 @@ ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
 }
 
 
-// TODO: Implement
 void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
                                      const ProfileMap& profile,
                                      const FeaturesProfile& f_profile,
@@ -39,19 +33,19 @@ void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
   assert(m_matrix_v.size() == m_matrix_g.size());
   assert(m_matrix_v.size() == m_matrix_h.size());
 
-  for (unsigned int i = 1; i < m_matrix_v.size(); i++) {
+  for (unsigned int i = 1; i < m_matrix_v.size(); ++i) {
     m_matrix_v[i][0] = -10000000; //=== infinity
     m_matrix_h[i][0] = -10000000;
     m_matrix_g[i][0] = i * m_end_pen;
   }
-  for (unsigned int i = 1; i < m_matrix_v[0].size(); i++) {
+  for (unsigned int i = 1; i < m_matrix_v[0].size(); ++i) {
     m_matrix_v[0][i] = -10000000;
     m_matrix_h[0][i] = i * m_end_pen;
     m_matrix_g[0][i] = -10000000;
   }
   double score1, score2, score3 = 0;
-  for (size_t i = 1; i < m_matrix_v.size(); i++) {
-    for (size_t j = 1; j < m_matrix_v[i].size(); j++) {
+  for (size_t i = 1; i < m_matrix_v.size(); ++i) {
+    for (size_t j = 1; j < m_matrix_v[i].size(); ++j) {
       ///V
       double profile_score = 
         profile.at(sequence.residues[j-1].codon[0])[i - 1];
@@ -88,7 +82,7 @@ ValueCoords ScoringMatrix::FindBestScore() {
   double max_j_val = m_matrix_v[max_i][max_j];
   double real_val;
   double max = m_matrix_v[max_i][max_j];
-  for (int i = 0; i < n ; i++) {    //finds max score in the last row
+  for (int i = 0; i < n ; ++i) {    //finds max score in the last row
     // add end gap penalties to the score to calc the 'real' score
     // of the alignment
     real_val = m_matrix_v[i][m] + m_end_pen * (m_matrix_v.size() - i);
@@ -98,7 +92,7 @@ ValueCoords ScoringMatrix::FindBestScore() {
       max_i = i;
     }
   }
-  for (int i = 0; i < m; i++) {    //finds max score in the last column
+  for (int i = 0; i < m; ++i) {    //finds max score in the last column
     real_val = m_matrix_v[n][i] + m_end_pen * (m_matrix_v[0].size() - i);
     // add end gap penalties to the score, to calc the 'real' score
     // of the alignment
@@ -142,11 +136,11 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
       || best_score[1] != (signed)m_matrix_v[0].size()-1) {
     i = best_score[0];
     j = best_score[1];
-    for (int k = profile_sequence.residues.size(); k > i; k--) {
+    for (int k = profile_sequence.residues.size(); k > i; --k) {
       new_s1.residues.push_back(profile_sequence.residues[k - 1]);
       new_s2.residues.push_back(gap_residue);
     }
-    for (int k = sequence.residues.size(); k > j; k--) {
+    for (int k = sequence.residues.size(); k > j; --k) {
       new_s2.residues.push_back(sequence.residues[k - 1]);
       new_s1.residues.push_back(gap_residue);
     }

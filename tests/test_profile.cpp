@@ -2,7 +2,6 @@
 
 #include "fasta.h"
 #include "profile.h"
-#include "types.h"
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/auto_unit_test.hpp>
@@ -21,15 +20,15 @@ namespace {
 BOOST_AUTO_TEST_CASE(test_create_profile)
 {
   fasta::Sequence s1 = fasta::make_sequence(
-      "d", "AzzzzzzMzzzzzzEzzzzzzLzzzzzz", 7);
+      "d", "AAAAAAAMAAAAAAEAAAAAALAAAAAA", 7);
   fasta::Sequence s2 = fasta::make_sequence(
-      "d", "AzzzzzzEzzzzzzEzzzzzzKzzzzzz", 7);
+      "d", "AAAAAAAEAAAAAAEAAAAAAKAAAAAA", 7);
   fasta::Sequence s3 = fasta::make_sequence(
-      "d", "AzzzzzzMzzzzzzEzzzzzzLzzzzzz", 7);
+      "d", "AAAAAAAMAAAAAAEAAAAAALAAAAAA", 7);
   fasta::Sequence s4 = fasta::make_sequence(
-      "d", "MzzzzzzMzzzzzzKzzzzzzLzzzzzz", 7);
+      "d", "MAAAAAAMAAAAAAKAAAAAALAAAAAA", 7);
   fasta::Sequence s5 = fasta::make_sequence(
-      "d", "AzzzzzzMzzzzzzAzzzzzzLzzzzzz", 7);
+      "d", "AAAAAAAMAAAAAAAAAAAAALAAAAAA", 7);
 
   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
 
@@ -61,15 +60,15 @@ BOOST_AUTO_TEST_CASE(test_create_profile)
 BOOST_AUTO_TEST_CASE(test_create_score_profile)
 {
   fasta::Sequence s1 = fasta::make_sequence(
-      "d", "AzzzzzzMzzzzzzEzzzzzzLzzzzzz", 7);
+      "d", "AAAAAAAMAAAAAAEAAAAAALAAAAAA", 7);
   fasta::Sequence s2 = fasta::make_sequence(
-      "d", "AzzzzzzEzzzzzzEzzzzzzKzzzzzz", 7);
+      "d", "AAAAAAAEAAAAAAEAAAAAAKAAAAAA", 7);
   fasta::Sequence s3 = fasta::make_sequence(
-      "d", "AzzzzzzMzzzzzzEzzzzzzLzzzzzz", 7);
+      "d", "AAAAAAAMAAAAAAEAAAAAALAAAAAA", 7);
   fasta::Sequence s4 = fasta::make_sequence(
-      "d", "MzzzzzzMzzzzzzKzzzzzzLzzzzzz", 7);
+      "d", "MAAAAAAMAAAAAAKAAAAAALAAAAAA", 7);
   fasta::Sequence s5 = fasta::make_sequence(
-      "d", "AzzzzzzMzzzzzzAzzzzzzLzzzzzz", 7);
+      "d", "AAAAAAAMAAAAAAAAAAAAALAAAAAA", 7);
 
   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
 

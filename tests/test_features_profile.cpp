@@ -3,7 +3,6 @@
 #include "fasta.h"
 #include "features_profile.h"
 #include "f_config.h"
-#include "types.h"
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/auto_unit_test.hpp>

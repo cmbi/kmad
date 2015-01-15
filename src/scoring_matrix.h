@@ -3,10 +3,8 @@
 
 
 #include "fasta.h"
-#include "types.h"
 
 #include <iostream>
-#include <string>
 #include <vector>
 
 
