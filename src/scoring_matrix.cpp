@@ -4,8 +4,6 @@
 
 #include <boost/filesystem.hpp>
 
-#include <iostream>
-
 
 ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
                              double end_pen, double gap_ext_pen)
@@ -27,7 +25,7 @@ ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
 
 
 void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
-                                     const ProfileMap& profile,
+                                     const profile::ProfileMap& profile,
                                      const FeatureScores& f_profile,
                                      int codon_length) {
   assert(m_matrix_v.size() == m_matrix_g.size());
@@ -114,7 +112,7 @@ ValueCoords ScoringMatrix::FindBestScore() {
 }
 
 fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
-    const fasta::Sequence& sequence, const ProfileMap& profile,
+    const fasta::Sequence& sequence, const profile::ProfileMap& profile,
     const FeatureScores& f_profile,
     int codon_length) {
   //creating polyA pseudoSequence representing the profile,

@@ -3,15 +3,12 @@
 
 #include "fasta.h"
 
-#include <iostream>
-#include <vector>
 
+namespace profile {
+  typedef std::map<char, std::vector<double>> ProfileMap;
 
-// TODO: namespace
-
-typedef std::map<char, std::vector<double>> ProfileMap;
-
-ProfileMap create_profile(const fasta::SequenceList& sequences);
-ProfileMap create_score_profile(const fasta::SequenceList& sequences);
+  ProfileMap create_profile(const fasta::SequenceList& sequences);
+  ProfileMap create_score_profile(const fasta::SequenceList& sequences);
+}
 
 #endif /* PROFILE_H */

@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <iostream>
 
-
 namespace lcg = libconfig;
 
 f_config::FeatureSettingsMap f_config::ConfParser::parse_conf_file(

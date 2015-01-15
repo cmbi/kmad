@@ -4,10 +4,6 @@
 #include "fasta.h"
 #include "f_config.h"
 
-#include <iostream>
-#include <map>
-#include <string>
-#include <vector>
 
 typedef std::vector<double> Occurences; 
 typedef std::vector<double> Scores;

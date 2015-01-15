@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_algorithm_path)
   f_config::FeatureSettingsMap f_set;
   fasta::SequenceList query_seq_list = {s1};
   fasta::SequenceList sequences = {s1, s2};
-  ProfileMap profile = create_score_profile(query_seq_list);
+  profile::ProfileMap profile = profile::create_score_profile(query_seq_list);
   int domain_modifier = 4;
   int motif_modifier = 3;
   int ptm_modifier = 10;

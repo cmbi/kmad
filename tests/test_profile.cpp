@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(test_create_profile)
 
   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
 
-  ProfileMap p = create_profile(sequences);
+  profile::ProfileMap p = profile::create_profile(sequences);
   BOOST_CHECK_EQUAL(p.size(), 20);
   BOOST_CHECK_EQUAL(p['A'][0], 4);
   BOOST_CHECK_EQUAL(p['A'][1], 0);
@@ -72,10 +72,10 @@ BOOST_AUTO_TEST_CASE(test_create_score_profile)
 
   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
 
-  ProfileMap p = create_score_profile(sequences);
+  profile::ProfileMap p = profile::create_score_profile(sequences);
 
    
-  ProfileMap expected_score_profile = {{'A', {3.0, -1.0, 0.0, -1.0}}, 
+  profile::ProfileMap expected_score_profile = {{'A', {3.0, -1.0, 0.0, -1.0}}, 
                                        {'R', {-1.0, -0.8, 0.2, -1.2}},
                                        {'N', {-2.0, -1.6, -0.4, -2.4}},
                                        {'D', {-2.2, -2.0, 0.6, -3.4}},

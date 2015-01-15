@@ -4,10 +4,6 @@
 
 #include "fasta.h"
 
-#include <iostream>
-#include <vector>
-
-
 
 typedef std::vector<double> ScoringMatrixRow;
 typedef std::vector<ScoringMatrixRow> SingleScoringMatrix;
@@ -32,15 +28,16 @@ public:
   /// Fills in the scoring matrices m_matrix_v, m_matrix_g, m_matrix_h
   ///
   void calculate_scores(const fasta::Sequence& sequence,
-                        const ProfileMap& profile,
+                        const profile::ProfileMap& profile,
                         const FeatureScores& f_profile, int codon_length);
   ///
   /// traces back the alignment path in the scoring matrices
   ///
-  fasta::SequenceList backtrace_alignment_path(const fasta::Sequence& sequence, 
-                                               const ProfileMap& profile,
-                                               const FeatureScores& f_profile,
-                                               int codon_length);
+  fasta::SequenceList backtrace_alignment_path(
+      const fasta::Sequence& sequence, 
+      const profile::ProfileMap& profile,
+      const FeatureScores& f_profile,
+      int codon_length);
 private:
   ///
   /// finds the best score either in the last column or in the last row of the

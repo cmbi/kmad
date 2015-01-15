@@ -1,7 +1,6 @@
 #ifndef F_CONFIG_H
 #define F_CONFIG_H
 
-#include <iostream>
 #include <libconfig.h++>
 #include <map>
 #include <vector>

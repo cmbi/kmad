@@ -1,7 +1,6 @@
 #include "seq_data.h"
 
 #include <algorithm>
-#include <iostream>
 
 
 seq_data::SequenceData seq_data::process_fasta_data(

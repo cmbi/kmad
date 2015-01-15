@@ -1,6 +1,5 @@
 #include "outfile.h"
 
-#include <iostream>
 #include <fstream>
 #include <sstream>
 

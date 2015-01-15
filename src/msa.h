@@ -6,9 +6,6 @@
 #include "f_config.h"
 #include "profile.h"
 
-#include <iostream>
-#include <vector>
-
 
 class Sequences;
 
@@ -31,7 +28,7 @@ namespace msa {
   
   std::vector<double> set_identities(
       const seq_data::SequenceData& sequence_data,
-      const ProfileMap& profile, FeatureScores& f_profile,
+      const profile::ProfileMap& profile, FeatureScores& f_profile,
       double penalty, double endPenalty, double extensionPenalty,
       int codon_length);
 
@@ -42,7 +39,7 @@ namespace msa {
   
   std::vector<fasta::SequenceList> perform_msa_round(
       const seq_data::SequenceData& sequence_data,
-      const ProfileMap& profile,
+      const profile::ProfileMap& profile,
       const FeatureScores& f_profile,
       double gap_open_pen, double end_pen,
       double gap_ext_pen, 
@@ -66,7 +63,7 @@ namespace msa {
   /// alignment of the two, with gaps cut out
   ///
   fasta::SequenceList align_pairwise(const fasta::Sequence& input_sequence, 
-                                     const ProfileMap& profile, 
+                                     const profile::ProfileMap& profile, 
                                      const FeatureScores& f_profile,
                                      double gap_open_pen, double end_pen,
                                      double gap_ext_pen, int codon_length);

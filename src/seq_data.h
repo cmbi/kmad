@@ -4,8 +4,6 @@
 #include "fasta.h"
 #include "f_config.h"
 
-#include <iostream>
-
 
 namespace seq_data {
   struct SequenceData {

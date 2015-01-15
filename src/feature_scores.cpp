@@ -3,7 +3,6 @@
 #include <boost/algorithm/string.hpp>
 
 #include <algorithm>
-#include <iostream>
 
 
 FeatureScores::FeatureScores(std::vector<std::string> features,

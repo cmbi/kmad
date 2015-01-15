@@ -4,9 +4,6 @@
 #include "fasta.h"
 #include "seq_data.h"
 
-#include <iostream>
-#include <vector>
-
 
 namespace outfile{
   void write_encoded_alignment(const fasta::SequenceList& sequences,

@@ -3,7 +3,6 @@
 #include <boost/range/numeric.hpp>
 
 #include <algorithm>
-#include <iostream>
 
 typedef std::map<char, std::vector<double>> SimilarityScoresMap;
 namespace {
@@ -33,8 +32,9 @@ namespace {
     {'V', { 0, -3, -3, -3, -1, -2, -2, -3, -3, 3, 1, -2, 1, -1, -2, -2, 0, -3, -1, 4}}};
 }
 
-ProfileMap create_score_profile(const fasta::SequenceList& sequences) {
-  ProfileMap p = create_profile(sequences);
+profile::ProfileMap profile::create_score_profile(
+    const fasta::SequenceList& sequences) {
+  profile::ProfileMap p = create_profile(sequences);
 
   // Convert the profile occurrences to probabilities.
   for (auto& occ: p) {
@@ -61,8 +61,9 @@ ProfileMap create_score_profile(const fasta::SequenceList& sequences) {
 }
 
 
-ProfileMap create_profile(const fasta::SequenceList& sequences) {
-  ProfileMap p;
+profile::ProfileMap profile::create_profile(
+    const fasta::SequenceList& sequences) {
+  profile::ProfileMap p;
 
   // Initialise profile map with all valid letters to a vector of the correct
   // size, with all values set to 0.
