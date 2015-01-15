@@ -1,7 +1,5 @@
 #include "profile.h"
 
-#include "substitution_matrix.h"
-
 #include <boost/range/numeric.hpp>
 
 #include <algorithm>
@@ -49,8 +47,6 @@ ProfileMap create_score_profile(const fasta::SequenceList& sequences) {
   for (unsigned i = 0; i < p['A'].size(); i++) {
     std::vector<double> score_column(20, 0); 
     for (auto &prob: p){
-      // std::vector<double> sbst_column = substitution_matrix::get_column(
-      //     prob.first);
       std::vector<double> sbst_column = SIM_SCORES.at(prob.first);
       for (size_t k = 0; k < sbst_column.size(); ++k) {
         score_column[k] += sbst_column[k] * prob.second[i];
