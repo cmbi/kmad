@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 
 #include "fasta.h"
-#include "features_profile.h"
+#include "feature_scores.h"
 #include "f_config.h"
 
 #include <boost/test/unit_test.hpp>
@@ -10,7 +10,7 @@
 #include <cmath>
 
 
-BOOST_AUTO_TEST_SUITE(test_features_profile)
+BOOST_AUTO_TEST_SUITE(test_feature_scores)
 
 BOOST_AUTO_TEST_CASE(test_update_scores)
 {
@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
                                          {"motif_ab", 0.5},
                                          {"motif_ac", 0.8}};
 
-  FeaturesProfile f_profile(feature_list, 4, 10, 3, probs);
+  FeatureScores f_profile(feature_list, 4, 10, 3, probs);
   f_config::FeatureSettingsMap s;
   f_profile.update_scores(sequences, s);
   std::map<std::string, Scores> p = f_profile.get_scores();

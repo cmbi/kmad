@@ -12,9 +12,9 @@
 typedef std::vector<double> Occurences; 
 typedef std::vector<double> Scores;
 
-class FeaturesProfile {
+class FeatureScores {
   public:
-    FeaturesProfile(const std::vector<std::string> features,
+    FeatureScores(const std::vector<std::string> features,
                     int domain_modifier, int ptm_modifier, int motif_modifier,
                     std::map<std::string, double> motif_probabilities);
     void update_scores(const fasta::SequenceList& sequences,

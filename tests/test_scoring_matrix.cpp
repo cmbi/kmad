@@ -1,7 +1,7 @@
 #define BOOST_TEST_DYN_LINK
 
 #include "fasta.h"
-#include "features_profile.h"
+#include "feature_scores.h"
 #include "f_config.h"
 #include "profile.h"
 #include "scoring_matrix.h"
@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_algorithm_path)
   int domain_modifier = 4;
   int motif_modifier = 3;
   int ptm_modifier = 10;
-  FeaturesProfile f_profile(feature_list, domain_modifier,
+  FeatureScores f_profile(feature_list, domain_modifier,
                             ptm_modifier, motif_modifier,
                             probabilities);
   f_profile.update_scores(query_seq_list, f_set);

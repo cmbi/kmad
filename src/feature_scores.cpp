@@ -1,4 +1,4 @@
-#include "features_profile.h"
+#include "feature_scores.h"
 
 #include <boost/algorithm/string.hpp>
 
@@ -6,7 +6,7 @@
 #include <iostream>
 
 
-FeaturesProfile::FeaturesProfile(std::vector<std::string> features,
+FeatureScores::FeatureScores(std::vector<std::string> features,
     int domain_modifier, int ptm_modifier, int motif_modifier,
     std::map<std::string, double> motif_probabilities)
 : m_domain_modifier(domain_modifier),
@@ -17,7 +17,7 @@ FeaturesProfile::FeaturesProfile(std::vector<std::string> features,
 {}
 
 
-void FeaturesProfile::update_scores(const fasta::SequenceList& sequences, 
+void FeatureScores::update_scores(const fasta::SequenceList& sequences, 
     const f_config::FeatureSettingsMap& f_set) {
   m_occurences = update_occurences(sequences);
   // convert occurences to probabilities
@@ -51,7 +51,7 @@ void FeaturesProfile::update_scores(const fasta::SequenceList& sequences,
 }
 
 
-std::map<std::string, Occurences> FeaturesProfile::update_occurences(
+std::map<std::string, Occurences> FeatureScores::update_occurences(
     const fasta::SequenceList& sequences) {
   std::map<std::string, Occurences> p;
   for (auto& f: m_features) {
@@ -69,7 +69,7 @@ std::map<std::string, Occurences> FeaturesProfile::update_occurences(
 }
 
 
-double FeaturesProfile::score_ptm(unsigned long position, 
+double FeatureScores::score_ptm(unsigned long position, 
                                   std::string ptm_name) {
   double result  = 0;
   std::string ptm_type = ptm_name;
@@ -122,7 +122,7 @@ double FeaturesProfile::score_ptm(unsigned long position,
 }
 
 
-double FeaturesProfile::score_domain(unsigned long position, 
+double FeatureScores::score_domain(unsigned long position, 
                                      std::string dom_name) {
   double result = 0;
   for (auto feat_it = m_occurences.begin(); 
@@ -137,7 +137,7 @@ double FeaturesProfile::score_domain(unsigned long position,
 }
 
 
-double FeaturesProfile::score_motif(unsigned long position,
+double FeatureScores::score_motif(unsigned long position,
                                     std::string feat_name) {
   double result = 0;
   result = m_occurences[feat_name][position] * m_motif_modifier \
@@ -146,7 +146,7 @@ double FeaturesProfile::score_motif(unsigned long position,
 }
 
 
-double FeaturesProfile::score_usr_feature(unsigned long position,
+double FeatureScores::score_usr_feature(unsigned long position,
                                           std::string feat_name,
                                           f_config::FeatureSettings settings) {
   double result = 0;
@@ -166,11 +166,11 @@ double FeaturesProfile::score_usr_feature(unsigned long position,
 }
 
 
-std::map<std::string, Scores> FeaturesProfile::get_scores() {
+std::map<std::string, Scores> FeatureScores::get_scores() {
   return m_scores;
 }
 
-double FeaturesProfile::get_score(const std::string& feat_name,
+double FeatureScores::get_score(const std::string& feat_name,
                                         unsigned long position) const {
   return m_scores.at(feat_name)[position];
 }
