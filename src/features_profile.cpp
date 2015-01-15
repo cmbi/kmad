@@ -140,15 +140,8 @@ double FeaturesProfile::score_domain(unsigned long position,
 double FeaturesProfile::score_motif(unsigned long position,
                                     std::string feat_name) {
   double result = 0;
-  bool not_found = true;
-  for (auto feat_it = m_occurences.begin();
-       feat_it != m_occurences.end() && not_found; feat_it++) {
-    if (feat_it->first == feat_name) {
-      result = feat_it->second[position] * m_motif_modifier \
-               * m_motif_probabilities[feat_name];
-      not_found = false;     
-    }
-  }
+  result = m_occurences[feat_name][position] * m_motif_modifier \
+           * m_motif_probabilities[feat_name];
   return result;
 }
 
