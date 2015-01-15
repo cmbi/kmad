@@ -193,6 +193,6 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
   //need to reverse the sequences, because tracing back the alignment goes
   //from the end to the beginning
   std::reverse(new_s1.residues.begin(), new_s1.residues.end());
-  std::reverse(new_s2.residues.begin(),new_s2.residues.end());
+  std::reverse(new_s2.residues.begin(), new_s2.residues.end());
   return {new_s1, new_s2};
 }
