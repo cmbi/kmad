@@ -31,7 +31,7 @@ fasta::FastaData fasta::parse_fasta(std::string filename, int codon_length) {
     if (in_sequence_section) {
       assert(line.substr(0, 1) == ">");
 
-      std::string description = line.substr(1, line.length());
+      std::string description = line;
       std::getline(fastafile, line);
       fd.sequences.push_back(fasta::make_sequence(description, line,
                                                   codon_length));
@@ -42,7 +42,6 @@ fasta::FastaData fasta::parse_fasta(std::string filename, int codon_length) {
       if (result.size() != 2) {
         throw std::runtime_error("Invalid probability format: " + line);
       }
-
       fd.probabilities[result[0]] = std::stod(result[1]);
     }
   }
@@ -57,6 +56,7 @@ fasta::Sequence fasta::make_sequence(const std::string& description,
                                      int codon_length)
 {
   fasta::Sequence s;
+  s.description = description;
   for (unsigned i = 0; i < codons.size(); i += codon_length) {
     boost::regex re("[a-zA-Z0-9-]{" + std::to_string(codon_length) + "}");
     std::string codon = codons.substr(i, codon_length);

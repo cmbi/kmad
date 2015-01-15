@@ -34,28 +34,31 @@ std::vector<fasta::SequenceList> msa::run_msa(
 
 
       std::vector<fasta::SequenceList> alignment;
-      int prev_alignments = 0;
+      int alignments_number = 0;
       double cutoff = 0;
       for (int i = 8; i >= 0; i--) {
         cutoff = double(i) / 10;
+        int prev_alignments = alignments_number;
         alignment = msa::perform_msa_round(sequence_data, profile,
                                            f_profile, gap_open_pen,
                                            end_pen, gap_ext_pen, cutoff, 
                                            codon_length, identities, 
-                                           prev_alignments, f_set);
-        f_profile.update_scores(alignment[0], f_set);
-        profile = create_score_profile(alignment[0]);
+                                           alignments_number, f_set);
+        if (prev_alignments < alignments_number) {
+          f_profile.update_scores(alignment[0], f_set);
+          profile = create_score_profile(alignment[0]);
+        }
         //prev_alignments - number of alignments performed in the previous
         //rounds - to omit this round if the number of aligned sequences is the
         //same as in the previous round
       }
-      prev_alignments = 0;  // to align (again) all sequences to the profile
+      alignments_number = 0;  // to align (again) all sequences to the profile
       cutoff = 0;
       alignment = msa::perform_msa_round(sequence_data, profile,
                                          f_profile, gap_open_pen, 
                                          end_pen, gap_ext_pen, cutoff,
                                          codon_length, identities,
-                                         prev_alignments, f_set);
+                                         alignments_number, f_set);
       return alignment;
 }
 

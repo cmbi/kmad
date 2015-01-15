@@ -39,7 +39,6 @@ ProfileMap create_score_profile(const fasta::SequenceList& sequences) {
       p[ALPHABET[j]][i] = score_column[j];
     }
   }
-
   return p;
 }
 

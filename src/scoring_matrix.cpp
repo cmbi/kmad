@@ -26,7 +26,6 @@ ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
 }
 
 
-// TODO: Implement
 void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
                                      const ProfileMap& profile,
                                      const FeaturesProfile& f_profile,
