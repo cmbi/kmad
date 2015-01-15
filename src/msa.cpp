@@ -36,7 +36,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
       std::vector<fasta::SequenceList> alignment;
       int alignments_number = 0;
       double cutoff = 0;
-      for (int i = 8; i >= 0; i--) {
+      for (int i = 8; i >= 0; --i) {
         cutoff = double(i) / 10;
         int prev_alignments = alignments_number;
         alignment = msa::perform_msa_round(sequence_data, profile,
@@ -98,10 +98,10 @@ double msa::calc_identity(const fasta::Sequence& aligned_sequence,
                           const fasta::Sequence& query_sequence) {
   double identical_residues = 0;
   assert(aligned_sequence.residues.size() == query_sequence.residues.size());
-  for (unsigned i = 0; i < aligned_sequence.residues.size(); i++) {
+  for (unsigned i = 0; i < aligned_sequence.residues.size(); ++i) {
     if (aligned_sequence.residues[i].codon[0] 
         == query_sequence.residues[i].codon[0]) {
-      identical_residues++;
+      ++identical_residues;
     }
   }
   return identical_residues / double(query_sequence.residues.size());
@@ -113,7 +113,7 @@ fasta::SequenceList msa::remove_gaps(const fasta::SequenceList& alignment) {
   fasta::SequenceList aligned_seq = {new_seq, new_seq};
   char gap = '-';
   bool lower_flag = false;
-  for (size_t i = 0; i < alignment[0].residues.size(); i++) {
+  for (size_t i = 0; i < alignment[0].residues.size(); ++i) {
     if (alignment[0].residues[i].codon[0] == gap) {
       if (aligned_seq[1].residues.size() > 0) {
         //change previous character to lowercase
@@ -204,7 +204,7 @@ int msa::count_alignments(double identity_cutoff,
   int count = 0;
   for (auto& item: identities) {
     if (item > identity_cutoff) {
-      count++;
+      ++count;
     }
   }
   return count;

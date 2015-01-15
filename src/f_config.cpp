@@ -99,7 +99,7 @@ f_config::RawFeatureSettingsMap f_config::ConfParser::process_config(
 f_config::FeatureSettingsMap f_config::ConfParser::process_settings(
     const f_config::RawFeatureSettingsMap raw_map) {
   f_config::FeatureSettingsMap processed_map;
-  for (auto feat_it = raw_map.begin(); feat_it != raw_map.end(); feat_it++) {
+  for (auto feat_it = raw_map.begin(); feat_it != raw_map.end(); ++feat_it) {
      FeatureSettings processed_settings; 
      processed_settings.add_score = feat_it->second.add_score;
      processed_settings.subtract_score = feat_it->second.subtract_score;
@@ -119,7 +119,7 @@ f_config::FeatureSettingsMap f_config::ConfParser::process_settings(
 
      for (auto& feat_tag : feat_it->second.add_tags) {
        for (auto feat_it_j = raw_map.begin(); feat_it_j != raw_map.end();
-            feat_it_j++) {
+            ++feat_it_j) {
          if (feat_it_j->second.tag == feat_tag
              && std::find(feat_it->second.add_exceptions.begin(),
                           feat_it->second.add_exceptions.end(), 
@@ -137,7 +137,7 @@ f_config::FeatureSettingsMap f_config::ConfParser::process_settings(
 
      for (auto& feat_tag : feat_it->second.subtract_tags) {
        for (auto feat_it_j = raw_map.begin(); feat_it_j != raw_map.end();
-            feat_it_j++) {
+            ++feat_it_j) {
          if (feat_it_j->second.tag == feat_tag
              && std::find(feat_it->second.subtract_exceptions.begin(),
                           feat_it->second.subtract_exceptions.end(),

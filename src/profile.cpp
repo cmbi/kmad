@@ -41,10 +41,10 @@ ProfileMap create_score_profile(const fasta::SequenceList& sequences) {
     size_t i = 0;
     for (auto& v: occ.second) {
       occ.second[i] = v / sequences.size();
-      i++;
+      ++i;
     }
   }
-  for (unsigned i = 0; i < p['A'].size(); i++) {
+  for (unsigned i = 0; i < p['A'].size(); ++i) {
     std::vector<double> score_column(20, 0); 
     for (auto &prob: p){
       std::vector<double> sbst_column = SIM_SCORES.at(prob.first);
@@ -70,8 +70,8 @@ ProfileMap create_profile(const fasta::SequenceList& sequences) {
     p[c] = std::vector<double>(sequences[0].residues.size(), 0);
   }
 
-  for (size_t i = 0; i < sequences[0].residues.size(); i++) {
-    for (size_t j = 0; j < sequences.size(); j++) {
+  for (size_t i = 0; i < sequences[0].residues.size(); ++i) {
+    for (size_t j = 0; j < sequences.size(); ++j) {
       char amino_acid = sequences[j].residues[i].codon[0];
 
       if (amino_acid == '-') {
