@@ -33,13 +33,13 @@ public:
   ///
   void calculate_scores(const fasta::Sequence& sequence,
                         const ProfileMap& profile,
-                        const FeaturesProfile& f_profile, int codon_length);
+                        const FeatureScores& f_profile, int codon_length);
   ///
   /// traces back the alignment path in the scoring matrices
   ///
   fasta::SequenceList backtrace_alignment_path(const fasta::Sequence& sequence, 
                                                const ProfileMap& profile,
-                                               const FeaturesProfile& f_profile,
+                                               const FeatureScores& f_profile,
                                                int codon_length);
 private:
   ///

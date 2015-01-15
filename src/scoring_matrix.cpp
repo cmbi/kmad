@@ -1,4 +1,4 @@
-#include "features_profile.h"
+#include "feature_scores.h"
 #include "profile.h"
 #include "scoring_matrix.h"
 
@@ -28,7 +28,7 @@ ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
 
 void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
                                      const ProfileMap& profile,
-                                     const FeaturesProfile& f_profile,
+                                     const FeatureScores& f_profile,
                                      int codon_length) {
   assert(m_matrix_v.size() == m_matrix_g.size());
   assert(m_matrix_v.size() == m_matrix_h.size());
@@ -115,7 +115,7 @@ ValueCoords ScoringMatrix::FindBestScore() {
 
 fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
     const fasta::Sequence& sequence, const ProfileMap& profile,
-    const FeaturesProfile& f_profile,
+    const FeatureScores& f_profile,
     int codon_length) {
   //creating polyA pseudoSequence representing the profile,
   //to know later where are the gaps in the profile

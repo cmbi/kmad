@@ -1,6 +1,6 @@
 #include "msa.h"
 
-#include "features_profile.h"
+#include "feature_scores.h"
 #include "profile.h"
 #include "scoring_matrix.h"
 
@@ -17,7 +17,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
     int motif_modifier, int ptm_modifier,
     int codon_length)
 {
-      FeaturesProfile f_profile(sequence_data.feature_list, domain_modifier,
+      FeatureScores f_profile(sequence_data.feature_list, domain_modifier,
                                 ptm_modifier, motif_modifier,
                                 sequence_data.probabilities);
       // query_seq_list - the profile are built only based on the first
@@ -65,7 +65,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
 
 std::vector<double> msa::set_identities(
     const seq_data::SequenceData& sequence_data, const ProfileMap& profile,
-    FeaturesProfile& f_profile, double gap_open_pen,
+    FeatureScores& f_profile, double gap_open_pen,
     double end_pen, double gap_ext_pen, int codon_length)
 {
   // identity of the 1st one to itself
@@ -147,7 +147,7 @@ fasta::SequenceList msa::remove_gaps(const fasta::SequenceList& alignment) {
 
 fasta::SequenceList msa::align_pairwise(const fasta::Sequence& input_sequence,
                                         const ProfileMap& profile,
-                                        const FeaturesProfile& f_profile,
+                                        const FeatureScores& f_profile,
                                         double gap_open_pen, double end_pen,
                                         double gap_ext_pen,
                                         int codon_length) {
@@ -167,7 +167,7 @@ fasta::SequenceList msa::align_pairwise(const fasta::Sequence& input_sequence,
 std::vector<fasta::SequenceList> msa::perform_msa_round(
     const seq_data::SequenceData& sequence_data,
     const ProfileMap& profile,
-    const FeaturesProfile& f_profile,
+    const FeatureScores& f_profile,
     double gap_open_pen,
     double end_pen,
     double gap_ext_pen,
