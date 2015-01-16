@@ -122,8 +122,6 @@ int main(int argc, char *argv[]) {
     seq_data::SequenceData sequence_data = seq_data::process_fasta_data(
         fasta_data, f_set);
 
-    std::cout << "runMsa" << std::endl;
-
     auto alignment = msa::run_msa(sequence_data, 
                                   f_set, gap_open_pen,
                                   gap_ext_pen, end_pen, domain_modifier, 
