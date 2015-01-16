@@ -115,13 +115,13 @@ fasta::Sequence fasta::make_sequence(unsigned long sequence_length,
 
 fasta::Residue fasta::make_residue(const std::string& codon) {
   std::vector<std::string> features;
-  if (codon[4] != 'A') {
+  if (codon.size() >= 5 && codon[4] != 'A') {
     features.push_back(ptm_code_map.at(codon[4]));
   }
-  if (codon.substr(5, 2) != "AA") {
+  if (codon.size() >= 7 && codon.substr(5, 2) != "AA") {
     features.push_back("motif_" + codon.substr(5, 2));
   }
-  if (codon.substr(2, 2) != "AA") {
+  if (codon.size() >= 4 && codon.substr(2, 2) != "AA") {
     features.push_back("domain_" + codon.substr(2, 2));
   }
   return Residue(codon, features);
