@@ -13,7 +13,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
     double gap_open_pen, double gap_ext_pen,
     double end_pen, int domain_modifier,
     int motif_modifier, int ptm_modifier,
-    int codon_length)
+    int codon_length, bool one_round)
 {
       FeatureScores f_profile(sequence_data.feature_list, domain_modifier,
                                 ptm_modifier, motif_modifier,
@@ -35,21 +35,23 @@ std::vector<fasta::SequenceList> msa::run_msa(
       std::vector<fasta::SequenceList> alignment;
       int alignments_number = 0;
       double cutoff = 0;
-      for (int i = 8; i >= 0; --i) {
-        cutoff = double(i) / 10;
-        int prev_alignments = alignments_number;
-        alignment = msa::perform_msa_round(sequence_data, profile,
-                                           f_profile, gap_open_pen,
-                                           end_pen, gap_ext_pen, cutoff, 
-                                           codon_length, identities, 
-                                           alignments_number, f_set);
-        if (prev_alignments < alignments_number) {
-          f_profile.update_scores(alignment[0], f_set);
-          profile = profile::create_score_profile(alignment[0]);
+      if (!one_round) {
+        for (int i = 8; i >= 0; --i) {
+          cutoff = double(i) / 10;
+          int prev_alignments = alignments_number;
+          alignment = msa::perform_msa_round(sequence_data, profile,
+                                             f_profile, gap_open_pen,
+                                             end_pen, gap_ext_pen, cutoff, 
+                                             codon_length, identities, 
+                                             alignments_number, f_set);
+          if (prev_alignments < alignments_number) {
+            f_profile.update_scores(alignment[0], f_set);
+            profile = profile::create_score_profile(alignment[0]);
+          }
+          //prev_alignments - number of alignments performed in the previous
+          //rounds - to omit this round if the number of aligned sequences is the
+          //same as in the previous round
         }
-        //prev_alignments - number of alignments performed in the previous
-        //rounds - to omit this round if the number of aligned sequences is the
-        //same as in the previous round
       }
       alignments_number = 0;  // to align (again) all sequences to the profile
       cutoff = 0;

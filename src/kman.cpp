@@ -22,6 +22,7 @@ int main(int argc, char *argv[]) {
     double gap_open_pen;
     double end_pen = 0;
     bool out_encoded = false;
+    bool one_round = false;
     std::string filename;
     std::string output_prefix;
     std::string conf_file;
@@ -60,6 +61,9 @@ int main(int argc, char *argv[]) {
       ("end,n",
        po::value<double>(&end_pen)->default_value(-0.1),
        "penalty for gaps at the end (and beginning)")
+      ("one-round, r", po::value<bool>(&one_round)->implicit_value(true)
+                                                  ->default_value(false),
+       "perform only one round of alignments (all against first)")
       ("conf",
        po::value<std::string>(&conf_file),
        "configure file");
@@ -118,11 +122,13 @@ int main(int argc, char *argv[]) {
     seq_data::SequenceData sequence_data = seq_data::process_fasta_data(
         fasta_data, f_set);
 
+    std::cout << "runMsa" << std::endl;
 
     auto alignment = msa::run_msa(sequence_data, 
                                   f_set, gap_open_pen,
                                   gap_ext_pen, end_pen, domain_modifier, 
-                                  motif_modifier, ptm_modifier, codon_length);
+                                  motif_modifier, ptm_modifier, codon_length,
+                                  one_round);
 
     if (out_encoded) {
       outfile::write_encoded_alignment(alignment[1], sequence_data,

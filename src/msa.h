@@ -18,7 +18,7 @@ namespace msa {
       double gap_open_pen,
       double gap_ext_pen, double end_pen,
       int domain_modifier, int motif_modifier,
-      int phosph_modifier, int codon_modifier);
+      int phosph_modifier, int codon_length, bool one_round);
 
 
   /// performs the first round of alignments, / all vs query seq (first

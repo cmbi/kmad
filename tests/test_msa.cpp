@@ -50,12 +50,13 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
   double gap_open_pen = 5;
   double gap_ext_pen = 1;
   double end_pen = 1;
+  bool one_round = false;
   seq_data::SequenceData sequence_data;
   sequence_data.sequences = sequences;
   std::vector<fasta::SequenceList> alignment;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
-                           ptm_modifier, codon_length);
+                           ptm_modifier, codon_length, one_round);
   fasta::Sequence e_s1;
   // AKLCAKL
   e_s1 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
