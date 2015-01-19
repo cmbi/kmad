@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_SUITE(test_profile)
 namespace {
   static const std::vector<char> ALPHABET = {'A','R','N','D','C','Q','E','G',
                                              'H','I','L','K','M','F','P','S',
-                                             'T','W','Y','V'};
+                                             'T','W','Y','V', 'B', 'Z', 'X'};
 }
 
 BOOST_AUTO_TEST_CASE(test_create_profile)
@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(test_create_profile)
   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
 
   profile::ProfileMap p = profile::create_profile(sequences);
-  BOOST_CHECK_EQUAL(p.size(), 23);
+  BOOST_CHECK_EQUAL(p.size(), 20);
   BOOST_CHECK_EQUAL(p['A'][0], 4);
   BOOST_CHECK_EQUAL(p['A'][1], 0);
   BOOST_CHECK_EQUAL(p['A'][2], 1);
@@ -73,13 +73,6 @@ BOOST_AUTO_TEST_CASE(test_create_score_profile)
   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
 
   profile::ProfileMap p = profile::create_score_profile(sequences);
-  for (auto feat_it = p.begin(); feat_it != p.end(); ++feat_it) {
-    std::cout << feat_it->first << ": ";
-    for (auto& item : feat_it->second) {
-      std::cout << item << " ";
-    }
-    std::cout << std::endl;
-  }
 
   profile::ProfileMap expected_score_profile; 
   expected_score_profile = {{'A', { 3.0, -1.0,  0.0, -1.0}}, 
@@ -103,7 +96,7 @@ BOOST_AUTO_TEST_CASE(test_create_score_profile)
                             {'Y', {-1.8, -1.2, -2.0, -1.2}}, 
                             {'V', { 0.2,  0.4, -1.6,  0.4}},
                             {'B', {-2.1, -1.8,  0.1, -2.9}},
-                            {'Z', {-1.0, -0.1,  2.1, -1.7}},
+                            {'Z', {-1.0, -0.1,  2.1, -1.8}},
                             {'X', {-0.77, -0.69, -0.84, -1.17}}};
 
   BOOST_CHECK_EQUAL(p.size(), expected_score_profile.size());
