@@ -180,4 +180,84 @@ BOOST_AUTO_TEST_CASE(test_set_identities)
   }
 }
 
+BOOST_AUTO_TEST_CASE(test_calc_identity) {
+  int codon_length = 7;
+  fasta::Sequence s1;
+  // AKLDDDDAKL
+  s1 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
+                                 "DAAAAAADAAAAAADAAAAAA"
+                                 "DAAAAAAAAAAAAAKAAAAAA"
+                                 "LAAAAAA", codon_length);
+  fasta::Sequence s2;
+  // AKLN---AKL
+  s2 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
+                                 "NAAAAAA-AAAAAA-AAAAAA"
+                                 "-AAAAAAAAAAAAAKAAAAAA"
+                                 "LAAAAAA", codon_length);
+  double result_identity = msa::calc_identity(s1, s2);
+  double expected_identity = 0.6;
+  BOOST_CHECK_EQUAL(result_identity, expected_identity);
+
+}
+
+BOOST_AUTO_TEST_CASE(test_remove_gaps) {
+  int codon_length = 7;
+  fasta::Sequence s1;
+  // AKLDDDDA-KL-
+  s1 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
+                                 "DAAAAAADAAAAAADAAAAAA"
+                                 "DAAAAAAAAAAAAA-AAAAAA"
+                                 "KAAAAAALAAAAaa-AAAAAA", codon_length);
+  fasta::Sequence s2;
+  // AKLN---ADKLD
+  s2 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
+                                 "NAAAAAA-AAAAAA-AAAAAA"
+                                 "-AAAAAAAAAAAAADAAAAAA"
+                                 "KAAAAaaLAAAAAADAAAAAA", codon_length);
+  fasta::SequenceList sequences = {s1, s2};
+  fasta::SequenceList result_sequences = msa::remove_gaps(sequences);
+  fasta::Sequence e_s2;
+  fasta::Sequence e_s2_lower;
+  // AKLN---akl
+  e_s2 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
+                                   "NAAAAAA-AAAAAA-AAAAAA"
+                                   "-AAAAAAAAAAAAAKAAAAaa"
+                                   "LAAAAAA", codon_length);
+  e_s2_lower = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
+                                         "NAAAAAA-AAAAAA-AAAAAA"
+                                         "-AAAAAAaAAAAAAkAAAAaa"
+                                         "lAAAAAA", codon_length);
+  fasta::SequenceList expected_sequences = {e_s2, e_s2_lower};
+
+  BOOST_CHECK_EQUAL(result_sequences[0].residues.size(),
+                    expected_sequences[0].residues.size());
+  BOOST_CHECK_EQUAL(result_sequences[1].residues.size(),
+                    expected_sequences[1].residues.size());
+  BOOST_CHECK_EQUAL(result_sequences[0].residues.size(),
+                    result_sequences[1].residues.size());
+  for (size_t i = 0; i < result_sequences[0].residues.size(); ++i) {
+    BOOST_CHECK_EQUAL(result_sequences[0].residues[i].codon,
+                      expected_sequences[0].residues[i].codon);
+    BOOST_CHECK_EQUAL(result_sequences[1].residues[i].codon,
+                      expected_sequences[1].residues[i].codon);
+    BOOST_CHECK_EQUAL_COLLECTIONS(
+        result_sequences[0].residues[i].features.begin(),
+        result_sequences[0].residues[i].features.end(),
+        expected_sequences[0].residues[i].features.begin(),
+        expected_sequences[0].residues[i].features.end());
+    BOOST_CHECK_EQUAL_COLLECTIONS(
+        result_sequences[1].residues[i].features.begin(),
+        result_sequences[1].residues[i].features.end(),
+        expected_sequences[1].residues[i].features.begin(),
+        expected_sequences[1].residues[i].features.end());
+  }
+}
+
+BOOST_AUTO_TEST_CASE(test_count_alignments) {
+ std::vector<double> identities = {0.1, 0.2, 0.3, 0.9, 0.6, 0.7, 0.3, 1.};
+ double cutoff = 0.5;
+ int result = msa::count_alignments(cutoff, identities);
+  BOOST_CHECK_EQUAL(result, 4);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

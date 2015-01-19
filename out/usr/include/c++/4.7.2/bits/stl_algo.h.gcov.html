@@ -1499,17 +1499,17 @@
 <span class="lineNum">    1437 </span>            :   */
 <a name="1438"><span class="lineNum">    1438 </span>            :   template&lt;typename _RandomAccessIterator&gt;</a>
 <span class="lineNum">    1439 </span>            :     void
-<span class="lineNum">    1440 </span><span class="lineCov">          8 :     __reverse(_RandomAccessIterator __first, _RandomAccessIterator __last,</span>
+<span class="lineNum">    1440 </span><span class="lineCov">         10 :     __reverse(_RandomAccessIterator __first, _RandomAccessIterator __last,</span>
 <span class="lineNum">    1441 </span>            :               random_access_iterator_tag)
 <span class="lineNum">    1442 </span>            :     {
-<span class="lineNum">    1443 </span><span class="lineCov">          8 :       if (__first == __last)</span>
-<span class="lineNum">    1444 </span><span class="lineCov">          8 :         return;</span>
-<span class="lineNum">    1445 </span><span class="lineCov">          8 :       --__last;</span>
-<span class="lineNum">    1446 </span><span class="lineCov">         48 :       while (__first &lt; __last)</span>
+<span class="lineNum">    1443 </span><span class="lineCov">         10 :       if (__first == __last)</span>
+<span class="lineNum">    1444 </span><span class="lineCov">         10 :         return;</span>
+<span class="lineNum">    1445 </span><span class="lineCov">         10 :       --__last;</span>
+<span class="lineNum">    1446 </span><span class="lineCov">         60 :       while (__first &lt; __last)</span>
 <span class="lineNum">    1447 </span>            :         {
-<span class="lineNum">    1448 </span><span class="lineCov">         32 :           std::iter_swap(__first, __last);</span>
-<span class="lineNum">    1449 </span><span class="lineCov">         32 :           ++__first;</span>
-<span class="lineNum">    1450 </span><span class="lineCov">         32 :           --__last;</span>
+<span class="lineNum">    1448 </span><span class="lineCov">         40 :           std::iter_swap(__first, __last);</span>
+<span class="lineNum">    1449 </span><span class="lineCov">         40 :           ++__first;</span>
+<span class="lineNum">    1450 </span><span class="lineCov">         40 :           --__last;</span>
 <span class="lineNum">    1451 </span>            :         }
 <span class="lineNum">    1452 </span>            :     }
 <span class="lineNum">    1453 </span>            : 
@@ -1527,14 +1527,14 @@
 <span class="lineNum">    1465 </span>            :   */
 <a name="1466"><span class="lineNum">    1466 </span>            :   template&lt;typename _BidirectionalIterator&gt;</a>
 <span class="lineNum">    1467 </span>            :     inline void
-<span class="lineNum">    1468 </span><span class="lineCov">          8 :     reverse(_BidirectionalIterator __first, _BidirectionalIterator __last)</span>
+<span class="lineNum">    1468 </span><span class="lineCov">         10 :     reverse(_BidirectionalIterator __first, _BidirectionalIterator __last)</span>
 <span class="lineNum">    1469 </span>            :     {
 <span class="lineNum">    1470 </span>            :       // concept requirements
 <span class="lineNum">    1471 </span>            :       __glibcxx_function_requires(_Mutable_BidirectionalIteratorConcept&lt;
 <span class="lineNum">    1472 </span>            :                                   _BidirectionalIterator&gt;)
 <span class="lineNum">    1473 </span>            :       __glibcxx_requires_valid_range(__first, __last);
-<span class="lineNum">    1474 </span><span class="lineCov">          8 :       std::__reverse(__first, __last, std::__iterator_category(__first));</span>
-<span class="lineNum">    1475 </span><span class="lineCov">          8 :     }</span>
+<span class="lineNum">    1474 </span><span class="lineCov">         10 :       std::__reverse(__first, __last, std::__iterator_category(__first));</span>
+<span class="lineNum">    1475 </span><span class="lineCov">         10 :     }</span>
 <span class="lineNum">    1476 </span>            : 
 <span class="lineNum">    1477 </span>            :   /**
 <span class="lineNum">    1478 </span>            :    *  @brief Copy a sequence, reversing its elements.

@@ -212,17 +212,17 @@
 <span class="lineNum">     150 </span>            :       destroy(_Alloc&amp; __a, _Ptr __p)
 <a name="151"><span class="lineNum">     151 </span>            :       { _Base_type::destroy(__a, std::addressof(*__p)); }</a>
 <span class="lineNum">     152 </span>            : 
-<span class="lineNum">     153 </span><span class="lineCov">      55306 :     static _Alloc _S_select_on_copy(const _Alloc&amp; __a)</span>
-<a name="154"><span class="lineNum">     154 </span><span class="lineCov">      55306 :     { return _Base_type::select_on_container_copy_construction(__a); }</span></a>
+<span class="lineNum">     153 </span><span class="lineCov">      56046 :     static _Alloc _S_select_on_copy(const _Alloc&amp; __a)</span>
+<a name="154"><span class="lineNum">     154 </span><span class="lineCov">      56046 :     { return _Base_type::select_on_container_copy_construction(__a); }</span></a>
 <span class="lineNum">     155 </span>            : 
-<span class="lineNum">     156 </span><span class="lineCov">        109 :     static void _S_on_swap(_Alloc&amp; __a, _Alloc&amp; __b)</span>
-<a name="157"><span class="lineNum">     157 </span><span class="lineCov">        109 :     { std::__alloc_on_swap(__a, __b); }</span></a>
+<span class="lineNum">     156 </span><span class="lineCov">        112 :     static void _S_on_swap(_Alloc&amp; __a, _Alloc&amp; __b)</span>
+<a name="157"><span class="lineNum">     157 </span><span class="lineCov">        112 :     { std::__alloc_on_swap(__a, __b); }</span></a>
 <span class="lineNum">     158 </span>            : 
-<span class="lineNum">     159 </span><span class="lineCov">        146 :     static constexpr bool _S_propagate_on_copy_assign()</span>
-<a name="160"><span class="lineNum">     160 </span><span class="lineCov">        146 :     { return _Base_type::propagate_on_container_copy_assignment::value; }</span></a>
+<span class="lineNum">     159 </span><span class="lineCov">        164 :     static constexpr bool _S_propagate_on_copy_assign()</span>
+<a name="160"><span class="lineNum">     160 </span><span class="lineCov">        164 :     { return _Base_type::propagate_on_container_copy_assignment::value; }</span></a>
 <span class="lineNum">     161 </span>            : 
-<span class="lineNum">     162 </span><span class="lineCov">        536 :     static constexpr bool _S_propagate_on_move_assign()</span>
-<span class="lineNum">     163 </span><span class="lineCov">        536 :     { return _Base_type::propagate_on_container_move_assignment::value; }</span>
+<span class="lineNum">     162 </span><span class="lineCov">        644 :     static constexpr bool _S_propagate_on_move_assign()</span>
+<span class="lineNum">     163 </span><span class="lineCov">        644 :     { return _Base_type::propagate_on_container_move_assignment::value; }</span>
 <span class="lineNum">     164 </span>            : 
 <span class="lineNum">     165 </span>            :     static constexpr bool _S_propagate_on_swap()
 <a name="166"><span class="lineNum">     166 </span>            :     { return _Base_type::propagate_on_container_swap::value; }</a>
