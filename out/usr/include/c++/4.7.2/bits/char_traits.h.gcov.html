@@ -315,12 +315,12 @@
 <span class="lineNum">     253 </span>            :       { return __c1 &lt; __c2; }
 <a name="254"><span class="lineNum">     254 </span>            : </a>
 <span class="lineNum">     255 </span>            :       static int
-<span class="lineNum">     256 </span><span class="lineCov">      40564 :       compare(const char_type* __s1, const char_type* __s2, size_t __n)</span>
-<span class="lineNum">     257 </span><span class="lineCov">      40564 :       { return __builtin_memcmp(__s1, __s2, __n); }</span>
+<span class="lineNum">     256 </span><span class="lineCov">      10173 :       compare(const char_type* __s1, const char_type* __s2, size_t __n)</span>
+<span class="lineNum">     257 </span><span class="lineCov">      10173 :       { return __builtin_memcmp(__s1, __s2, __n); }</span>
 <a name="258"><span class="lineNum">     258 </span>            : </a>
 <span class="lineNum">     259 </span>            :       static size_t
-<span class="lineNum">     260 </span><span class="lineCov">        668 :       length(const char_type* __s)</span>
-<span class="lineNum">     261 </span><span class="lineCov">        668 :       { return __builtin_strlen(__s); }</span>
+<span class="lineNum">     260 </span><span class="lineCov">        167 :       length(const char_type* __s)</span>
+<span class="lineNum">     261 </span><span class="lineCov">        167 :       { return __builtin_strlen(__s); }</span>
 <span class="lineNum">     262 </span>            : 
 <span class="lineNum">     263 </span>            :       static const char_type*
 <span class="lineNum">     264 </span>            :       find(const char_type* __s, size_t __n, const char_type&amp; __a)

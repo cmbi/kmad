@@ -103,13 +103,13 @@
 <span class="lineNum">      41 </span>            : // the whole of the input.  Fills in what matched in m.
 <a name="42"><span class="lineNum">      42 </span>            : //</a>
 <span class="lineNum">      43 </span>            : template &lt;class BidiIterator, class Allocator, class charT, class traits&gt;
-<span class="lineNum">      44 </span><span class="lineCov">      70360 : bool regex_match(BidiIterator first, BidiIterator last, </span>
+<span class="lineNum">      44 </span><span class="lineCov">      17590 : bool regex_match(BidiIterator first, BidiIterator last, </span>
 <span class="lineNum">      45 </span>            :                  match_results&lt;BidiIterator, Allocator&gt;&amp; m, 
 <span class="lineNum">      46 </span>            :                  const basic_regex&lt;charT, traits&gt;&amp; e, 
 <span class="lineNum">      47 </span>            :                  match_flag_type flags = match_default)
 <span class="lineNum">      48 </span>            : {
-<span class="lineNum">      49 </span><span class="lineCov">      70360 :    re_detail::perl_matcher&lt;BidiIterator, Allocator, traits&gt; matcher(first, last, m, e, flags, first);</span>
-<span class="lineNum">      50 </span><span class="lineCov">      70360 :    return matcher.match();</span>
+<span class="lineNum">      49 </span><span class="lineCov">      17590 :    re_detail::perl_matcher&lt;BidiIterator, Allocator, traits&gt; matcher(first, last, m, e, flags, first);</span>
+<span class="lineNum">      50 </span><span class="lineCov">      17590 :    return matcher.match();</span>
 <span class="lineNum">      51 </span>            : }
 <span class="lineNum">      52 </span>            : template &lt;class iterator, class charT, class traits&gt;
 <span class="lineNum">      53 </span>            : bool regex_match(iterator first, iterator last, 
@@ -153,13 +153,13 @@
 <span class="lineNum">      91 </span>            : }
 <a name="92"><span class="lineNum">      92 </span>            : </a>
 <span class="lineNum">      93 </span>            : template &lt;class ST, class SA, class charT, class traits&gt;
-<span class="lineNum">      94 </span><span class="lineCov">      70360 : inline bool regex_match(const std::basic_string&lt;charT, ST, SA&gt;&amp; s, </span>
+<span class="lineNum">      94 </span><span class="lineCov">      17590 : inline bool regex_match(const std::basic_string&lt;charT, ST, SA&gt;&amp; s, </span>
 <span class="lineNum">      95 </span>            :                  const basic_regex&lt;charT, traits&gt;&amp; e, 
 <span class="lineNum">      96 </span>            :                  match_flag_type flags = match_default)
 <span class="lineNum">      97 </span>            : {
 <span class="lineNum">      98 </span>            :    typedef typename std::basic_string&lt;charT, ST, SA&gt;::const_iterator iterator;
-<span class="lineNum">      99 </span><span class="lineCov">      70360 :    match_results&lt;iterator&gt; m;</span>
-<span class="lineNum">     100 </span><span class="lineCov">      70360 :    return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);</span>
+<span class="lineNum">      99 </span><span class="lineCov">      17590 :    match_results&lt;iterator&gt; m;</span>
+<span class="lineNum">     100 </span><span class="lineCov">      17590 :    return regex_match(s.begin(), s.end(), m, e, flags | regex_constants::match_any);</span>
 <span class="lineNum">     101 </span>            : }
 <span class="lineNum">     102 </span>            : #else  // partial ordering
 <span class="lineNum">     103 </span>            : inline bool regex_match(const char* str, 

@@ -95,9 +95,9 @@
 <span class="lineNum">      33 </span>            : {
 <a name="34"><span class="lineNum">      34 </span>            :     namespace range_detail</a>
 <span class="lineNum">      35 </span>            :     {
-<span class="lineNum">      36 </span><span class="lineCov">        388 :         inline std::size_t length( const char* s )</span>
+<span class="lineNum">      36 </span><span class="lineCov">         97 :         inline std::size_t length( const char* s )</span>
 <span class="lineNum">      37 </span>            :         {
-<span class="lineNum">      38 </span><span class="lineCov">        388 :             return strlen( s );</span>
+<span class="lineNum">      38 </span><span class="lineCov">         97 :             return strlen( s );</span>
 <span class="lineNum">      39 </span>            :         }
 <span class="lineNum">      40 </span>            : 
 <span class="lineNum">      41 </span>            : #ifndef BOOST_NO_CWCHAR
@@ -118,9 +118,9 @@
 <span class="lineNum">      56 </span>            :             return true;
 <a name="57"><span class="lineNum">      57 </span>            :         }</a>
 <span class="lineNum">      58 </span>            : 
-<span class="lineNum">      59 </span><span class="lineCov">        388 :         inline bool is_char_ptr( const char* )</span>
+<span class="lineNum">      59 </span><span class="lineCov">         97 :         inline bool is_char_ptr( const char* )</span>
 <span class="lineNum">      60 </span>            :         {
-<span class="lineNum">      61 </span><span class="lineCov">        388 :             return true;</span>
+<span class="lineNum">      61 </span><span class="lineCov">         97 :             return true;</span>
 <span class="lineNum">      62 </span>            :         }
 <span class="lineNum">      63 </span>            : 
 <span class="lineNum">      64 </span>            : #ifndef BOOST_NO_CWCHAR
@@ -136,32 +136,32 @@
 <span class="lineNum">      74 </span>            : #endif
 <a name="75"><span class="lineNum">      75 </span>            : </a>
 <span class="lineNum">      76 </span>            :         template&lt; class T &gt;
-<span class="lineNum">      77 </span><span class="lineCov">        388 :         inline long is_char_ptr( const T&amp; /* r */ )</span>
+<span class="lineNum">      77 </span><span class="lineCov">         97 :         inline long is_char_ptr( const T&amp; /* r */ )</span>
 <span class="lineNum">      78 </span>            :         {
-<span class="lineNum">      79 </span><span class="lineCov">        388 :             return 0L;</span>
+<span class="lineNum">      79 </span><span class="lineCov">         97 :             return 0L;</span>
 <span class="lineNum">      80 </span>            :         }
 <span class="lineNum">      81 </span>            : 
 <a name="82"><span class="lineNum">      82 </span>            :         template&lt; class T &gt;</a>
 <span class="lineNum">      83 </span>            :         inline iterator_range&lt;T*&gt;
-<span class="lineNum">      84 </span><span class="lineCov">        388 :         make_range( T* const r, bool )</span>
+<span class="lineNum">      84 </span><span class="lineCov">         97 :         make_range( T* const r, bool )</span>
 <span class="lineNum">      85 </span>            :         {
-<span class="lineNum">      86 </span><span class="lineCov">        388 :             return iterator_range&lt;T*&gt;( r, r + length(r) );</span>
+<span class="lineNum">      86 </span><span class="lineCov">         97 :             return iterator_range&lt;T*&gt;( r, r + length(r) );</span>
 <span class="lineNum">      87 </span>            :         }
 <span class="lineNum">      88 </span>            : 
 <a name="89"><span class="lineNum">      89 </span>            :         template&lt; class T &gt;</a>
 <span class="lineNum">      90 </span>            :         inline iterator_range&lt;BOOST_DEDUCED_TYPENAME range_iterator&lt;T&gt;::type&gt;
-<span class="lineNum">      91 </span><span class="lineCov">        388 :         make_range( T&amp; r, long )</span>
+<span class="lineNum">      91 </span><span class="lineCov">         97 :         make_range( T&amp; r, long )</span>
 <span class="lineNum">      92 </span>            :         {
-<span class="lineNum">      93 </span><span class="lineCov">        388 :             return boost::make_iterator_range( r );</span>
+<span class="lineNum">      93 </span><span class="lineCov">         97 :             return boost::make_iterator_range( r );</span>
 <span class="lineNum">      94 </span>            :         }
 <span class="lineNum">      95 </span>            : 
 <span class="lineNum">      96 </span>            :     }
 <span class="lineNum">      97 </span>            : 
 <a name="98"><span class="lineNum">      98 </span>            :     template&lt; class Range &gt;</a>
 <span class="lineNum">      99 </span>            :     inline iterator_range&lt;BOOST_DEDUCED_TYPENAME range_iterator&lt;Range&gt;::type&gt;
-<span class="lineNum">     100 </span><span class="lineCov">        388 :     as_literal( Range&amp; r )</span>
+<span class="lineNum">     100 </span><span class="lineCov">         97 :     as_literal( Range&amp; r )</span>
 <span class="lineNum">     101 </span>            :     {
-<span class="lineNum">     102 </span><span class="lineCov">        388 :         return range_detail::make_range( r, range_detail::is_char_ptr(r) );</span>
+<span class="lineNum">     102 </span><span class="lineCov">         97 :         return range_detail::make_range( r, range_detail::is_char_ptr(r) );</span>
 <span class="lineNum">     103 </span>            :     }
 <span class="lineNum">     104 </span>            : 
 <span class="lineNum">     105 </span>            :     template&lt; class Range &gt;
@@ -178,9 +178,9 @@
 <span class="lineNum">     116 </span>            :     }
 <a name="117"><span class="lineNum">     117 </span>            : </a>
 <span class="lineNum">     118 </span>            :     template&lt; class Char, std::size_t sz &gt;
-<span class="lineNum">     119 </span><span class="lineCov">        388 :     inline iterator_range&lt;const Char*&gt; as_literal( const Char (&amp;arr)[sz] )</span>
+<span class="lineNum">     119 </span><span class="lineCov">         97 :     inline iterator_range&lt;const Char*&gt; as_literal( const Char (&amp;arr)[sz] )</span>
 <span class="lineNum">     120 </span>            :     {
-<span class="lineNum">     121 </span><span class="lineCov">        388 :         return range_detail::make_range( arr, range_detail::is_char_ptr(arr) );</span>
+<span class="lineNum">     121 </span><span class="lineCov">         97 :         return range_detail::make_range( arr, range_detail::is_char_ptr(arr) );</span>
 <span class="lineNum">     122 </span>            :     }
 <span class="lineNum">     123 </span>            : }
 <span class="lineNum">     124 </span>            : 

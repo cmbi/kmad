@@ -130,15 +130,15 @@
 <span class="lineNum">      68 </span>            : 
 <a name="69"><span class="lineNum">      69 </span>            :       // Number of elements.</a>
 <span class="lineNum">      70 </span>            :       constexpr size_type
-<span class="lineNum">      71 </span><span class="lineCov">        836 :       size() const noexcept { return _M_len; }</span>
+<span class="lineNum">      71 </span><span class="lineCov">        214 :       size() const noexcept { return _M_len; }</span>
 <span class="lineNum">      72 </span>            : 
 <a name="73"><span class="lineNum">      73 </span>            :       // First element.</a>
 <span class="lineNum">      74 </span>            :       constexpr const_iterator
-<span class="lineNum">      75 </span><span class="lineCov">       1672 :       begin() const noexcept { return _M_array; }</span>
+<span class="lineNum">      75 </span><span class="lineCov">        428 :       begin() const noexcept { return _M_array; }</span>
 <span class="lineNum">      76 </span>            : 
 <a name="77"><span class="lineNum">      77 </span>            :       // One past the last element.</a>
 <span class="lineNum">      78 </span>            :       constexpr const_iterator
-<span class="lineNum">      79 </span><span class="lineCov">        836 :       end() const noexcept { return begin() + size(); }</span>
+<span class="lineNum">      79 </span><span class="lineCov">        214 :       end() const noexcept { return begin() + size(); }</span>
 <span class="lineNum">      80 </span>            :   };
 <span class="lineNum">      81 </span>            : 
 <span class="lineNum">      82 </span>            :   /**

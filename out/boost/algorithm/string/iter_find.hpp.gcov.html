@@ -202,7 +202,7 @@
 <span class="lineNum">     140 </span>            :             typename RangeT,
 <a name="141"><span class="lineNum">     141 </span>            :             typename FinderT &gt;</a>
 <span class="lineNum">     142 </span>            :         inline SequenceSequenceT&amp;
-<span class="lineNum">     143 </span><span class="lineCov">        388 :         iter_split(</span>
+<span class="lineNum">     143 </span><span class="lineCov">         97 :         iter_split(</span>
 <span class="lineNum">     144 </span>            :             SequenceSequenceT&amp; Result,
 <span class="lineNum">     145 </span>            :             RangeT&amp; Input,
 <span class="lineNum">     146 </span>            :             FinderT Finder )
@@ -212,7 +212,7 @@
 <span class="lineNum">     150 </span>            :                 BOOST_STRING_TYPENAME range_iterator&lt;RangeT&gt;::type&gt;
 <span class="lineNum">     151 </span>            :                 ));
 <span class="lineNum">     152 </span>            : 
-<span class="lineNum">     153 </span><span class="lineCov">        388 :             iterator_range&lt;BOOST_STRING_TYPENAME range_iterator&lt;RangeT&gt;::type&gt; lit_input(::boost::as_literal(Input));</span>
+<span class="lineNum">     153 </span><span class="lineCov">         97 :             iterator_range&lt;BOOST_STRING_TYPENAME range_iterator&lt;RangeT&gt;::type&gt; lit_input(::boost::as_literal(Input));</span>
 <span class="lineNum">     154 </span>            : 
 <span class="lineNum">     155 </span>            :             typedef BOOST_STRING_TYPENAME 
 <span class="lineNum">     156 </span>            :                 range_iterator&lt;RangeT&gt;::type input_iterator_type;
@@ -222,7 +222,7 @@
 <span class="lineNum">     160 </span>            :                     range_value&lt;SequenceSequenceT&gt;::type,
 <span class="lineNum">     161 </span>            :                 input_iterator_type&gt; copy_range_type;
 <span class="lineNum">     162 </span>            :             
-<span class="lineNum">     163 </span><span class="lineCov">        388 :             input_iterator_type InputEnd=::boost::end(lit_input);</span>
+<span class="lineNum">     163 </span><span class="lineCov">         97 :             input_iterator_type InputEnd=::boost::end(lit_input);</span>
 <span class="lineNum">     164 </span>            : 
 <span class="lineNum">     165 </span>            :             typedef transform_iterator&lt;copy_range_type, find_iterator_type&gt;
 <span class="lineNum">     166 </span>            :                 transform_iter_type;
@@ -230,17 +230,17 @@
 <span class="lineNum">     168 </span>            :             transform_iter_type itBegin=
 <span class="lineNum">     169 </span>            :                 ::boost::make_transform_iterator( 
 <span class="lineNum">     170 </span>            :                     find_iterator_type( ::boost::begin(lit_input), InputEnd, Finder ),
-<span class="lineNum">     171 </span><span class="lineCov">        388 :                     copy_range_type() );</span>
+<span class="lineNum">     171 </span><span class="lineCov">         97 :                     copy_range_type() );</span>
 <span class="lineNum">     172 </span>            : 
 <span class="lineNum">     173 </span>            :             transform_iter_type itEnd=
 <span class="lineNum">     174 </span>            :                 ::boost::make_transform_iterator( 
 <span class="lineNum">     175 </span>            :                     find_iterator_type(),
-<span class="lineNum">     176 </span><span class="lineCov">        388 :                     copy_range_type() );</span>
+<span class="lineNum">     176 </span><span class="lineCov">         97 :                     copy_range_type() );</span>
 <span class="lineNum">     177 </span>            :             
-<span class="lineNum">     178 </span><span class="lineCov">        388 :             SequenceSequenceT Tmp(itBegin, itEnd);</span>
+<span class="lineNum">     178 </span><span class="lineCov">         97 :             SequenceSequenceT Tmp(itBegin, itEnd);</span>
 <span class="lineNum">     179 </span>            : 
-<span class="lineNum">     180 </span><span class="lineCov">        388 :             Result.swap(Tmp);</span>
-<span class="lineNum">     181 </span><span class="lineCov">        388 :             return Result;</span>
+<span class="lineNum">     180 </span><span class="lineCov">         97 :             Result.swap(Tmp);</span>
+<span class="lineNum">     181 </span><span class="lineCov">         97 :             return Result;</span>
 <span class="lineNum">     182 </span>            :         }
 <span class="lineNum">     183 </span>            : 
 <span class="lineNum">     184 </span>            :     } // namespace algorithm

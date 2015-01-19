@@ -106,10 +106,10 @@
 <span class="lineNum">      44 </span>            :    */
 <a name="45"><span class="lineNum">      45 </span>            :   template&lt;typename _Tp&gt;</a>
 <span class="lineNum">      46 </span>            :     inline _Tp*
-<span class="lineNum">      47 </span><span class="lineCov">    1068344 :     __addressof(_Tp&amp; __r) _GLIBCXX_NOEXCEPT</span>
+<span class="lineNum">      47 </span><span class="lineCov">     267432 :     __addressof(_Tp&amp; __r) _GLIBCXX_NOEXCEPT</span>
 <span class="lineNum">      48 </span>            :     {
 <span class="lineNum">      49 </span>            :       return reinterpret_cast&lt;_Tp*&gt;
-<span class="lineNum">      50 </span><span class="lineCov">    1068344 :         (&amp;const_cast&lt;char&amp;&gt;(reinterpret_cast&lt;const volatile char&amp;&gt;(__r)));</span>
+<span class="lineNum">      50 </span><span class="lineCov">     267432 :         (&amp;const_cast&lt;char&amp;&gt;(reinterpret_cast&lt;const volatile char&amp;&gt;(__r)));</span>
 <span class="lineNum">      51 </span>            :     }
 <span class="lineNum">      52 </span>            : 
 <span class="lineNum">      53 </span>            : _GLIBCXX_END_NAMESPACE_VERSION
@@ -136,8 +136,8 @@
 <span class="lineNum">      74 </span>            :    */
 <a name="75"><span class="lineNum">      75 </span>            :   template&lt;typename _Tp&gt;</a>
 <span class="lineNum">      76 </span>            :     constexpr _Tp&amp;&amp;
-<span class="lineNum">      77 </span><span class="lineCov">    1005576 :     forward(typename std::remove_reference&lt;_Tp&gt;::type&amp; __t) noexcept</span>
-<span class="lineNum">      78 </span><span class="lineCov">    1005576 :     { return static_cast&lt;_Tp&amp;&amp;&gt;(__t); }</span>
+<span class="lineNum">      77 </span><span class="lineCov">     251497 :     forward(typename std::remove_reference&lt;_Tp&gt;::type&amp; __t) noexcept</span>
+<span class="lineNum">      78 </span><span class="lineCov">     251497 :     { return static_cast&lt;_Tp&amp;&amp;&gt;(__t); }</span>
 <span class="lineNum">      79 </span>            : 
 <span class="lineNum">      80 </span>            :   /**
 <span class="lineNum">      81 </span>            :    *  @brief  Forward an rvalue.
@@ -161,8 +161,8 @@
 <span class="lineNum">      99 </span>            :   */
 <a name="100"><span class="lineNum">     100 </span>            :   template&lt;typename _Tp&gt;</a>
 <span class="lineNum">     101 </span>            :     constexpr typename std::remove_reference&lt;_Tp&gt;::type&amp;&amp;
-<span class="lineNum">     102 </span><span class="lineCov">    1704592 :     move(_Tp&amp;&amp; __t) noexcept</span>
-<span class="lineNum">     103 </span><span class="lineCov">    1704592 :     { return static_cast&lt;typename std::remove_reference&lt;_Tp&gt;::type&amp;&amp;&gt;(__t); }</span>
+<span class="lineNum">     102 </span><span class="lineCov">     426336 :     move(_Tp&amp;&amp; __t) noexcept</span>
+<span class="lineNum">     103 </span><span class="lineCov">     426336 :     { return static_cast&lt;typename std::remove_reference&lt;_Tp&gt;::type&amp;&amp;&gt;(__t); }</span>
 <span class="lineNum">     104 </span>            : 
 <span class="lineNum">     105 </span>            : 
 <span class="lineNum">     106 </span>            :   template&lt;typename _Tp&gt;
@@ -226,7 +226,7 @@
 <span class="lineNum">     164 </span>            :   */
 <a name="165"><span class="lineNum">     165 </span>            :   template&lt;typename _Tp&gt;</a>
 <span class="lineNum">     166 </span>            :     inline void
-<span class="lineNum">     167 </span><span class="lineCov">     326032 :     swap(_Tp&amp; __a, _Tp&amp; __b)</span>
+<span class="lineNum">     167 </span><span class="lineCov">      81556 :     swap(_Tp&amp; __a, _Tp&amp; __b)</span>
 <span class="lineNum">     168 </span>            : #ifdef __GXX_EXPERIMENTAL_CXX0X__
 <span class="lineNum">     169 </span>            :     noexcept(__and_&lt;is_nothrow_move_constructible&lt;_Tp&gt;,
 <span class="lineNum">     170 </span>            :                     is_nothrow_move_assignable&lt;_Tp&gt;&gt;::value)
@@ -235,10 +235,10 @@
 <span class="lineNum">     173 </span>            :       // concept requirements
 <span class="lineNum">     174 </span>            :       __glibcxx_function_requires(_SGIAssignableConcept&lt;_Tp&gt;)
 <span class="lineNum">     175 </span>            : 
-<span class="lineNum">     176 </span><span class="lineCov">     326032 :       _Tp __tmp = _GLIBCXX_MOVE(__a);</span>
-<span class="lineNum">     177 </span><span class="lineCov">     326032 :       __a = _GLIBCXX_MOVE(__b);</span>
-<span class="lineNum">     178 </span><span class="lineCov">     326032 :       __b = _GLIBCXX_MOVE(__tmp);</span>
-<span class="lineNum">     179 </span><span class="lineCov">     326032 :     }</span>
+<span class="lineNum">     176 </span><span class="lineCov">      81556 :       _Tp __tmp = _GLIBCXX_MOVE(__a);</span>
+<span class="lineNum">     177 </span><span class="lineCov">      81556 :       __a = _GLIBCXX_MOVE(__b);</span>
+<span class="lineNum">     178 </span><span class="lineCov">      81556 :       __b = _GLIBCXX_MOVE(__tmp);</span>
+<span class="lineNum">     179 </span><span class="lineCov">      81556 :     }</span>
 <span class="lineNum">     180 </span>            : 
 <span class="lineNum">     181 </span>            :   // _GLIBCXX_RESOLVE_LIB_DEFECTS
 <span class="lineNum">     182 </span>            :   // DR 809. std::swap should be overloaded for array types.

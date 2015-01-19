@@ -149,13 +149,13 @@
 <span class="lineNum">      87 </span>            : 
 <a name="88"><span class="lineNum">      88 </span>            :   template&lt;typename _RandomAccessIterator&gt;</a>
 <span class="lineNum">      89 </span>            :     inline typename iterator_traits&lt;_RandomAccessIterator&gt;::difference_type
-<span class="lineNum">      90 </span><span class="lineCov">     364568 :     __distance(_RandomAccessIterator __first, _RandomAccessIterator __last,</span>
+<span class="lineNum">      90 </span><span class="lineCov">      91195 :     __distance(_RandomAccessIterator __first, _RandomAccessIterator __last,</span>
 <span class="lineNum">      91 </span>            :                random_access_iterator_tag)
 <span class="lineNum">      92 </span>            :     {
 <span class="lineNum">      93 </span>            :       // concept requirements
 <span class="lineNum">      94 </span>            :       __glibcxx_function_requires(_RandomAccessIteratorConcept&lt;
 <span class="lineNum">      95 </span>            :                                   _RandomAccessIterator&gt;)
-<span class="lineNum">      96 </span><span class="lineCov">     364568 :       return __last - __first;</span>
+<span class="lineNum">      96 </span><span class="lineCov">      91195 :       return __last - __first;</span>
 <span class="lineNum">      97 </span>            :     }
 <span class="lineNum">      98 </span>            : 
 <span class="lineNum">      99 </span>            :   /**
@@ -173,11 +173,11 @@
 <span class="lineNum">     111 </span>            :   */
 <a name="112"><span class="lineNum">     112 </span>            :   template&lt;typename _InputIterator&gt;</a>
 <span class="lineNum">     113 </span>            :     inline typename iterator_traits&lt;_InputIterator&gt;::difference_type
-<span class="lineNum">     114 </span><span class="lineCov">     364568 :     distance(_InputIterator __first, _InputIterator __last)</span>
+<span class="lineNum">     114 </span><span class="lineCov">      91195 :     distance(_InputIterator __first, _InputIterator __last)</span>
 <span class="lineNum">     115 </span>            :     {
 <span class="lineNum">     116 </span>            :       // concept requirements -- taken care of in __distance
 <span class="lineNum">     117 </span>            :       return std::__distance(__first, __last,
-<span class="lineNum">     118 </span><span class="lineCov">     364568 :                              std::__iterator_category(__first));</span>
+<span class="lineNum">     118 </span><span class="lineCov">      91195 :                              std::__iterator_category(__first));</span>
 <span class="lineNum">     119 </span>            :     }
 <span class="lineNum">     120 </span>            : 
 <span class="lineNum">     121 </span>            :   template&lt;typename _InputIterator, typename _Distance&gt;
@@ -208,14 +208,14 @@
 <span class="lineNum">     146 </span>            : 
 <a name="147"><span class="lineNum">     147 </span>            :   template&lt;typename _RandomAccessIterator, typename _Distance&gt;</a>
 <span class="lineNum">     148 </span>            :     inline void
-<span class="lineNum">     149 </span><span class="lineCov">       6972 :     __advance(_RandomAccessIterator&amp; __i, _Distance __n,</span>
+<span class="lineNum">     149 </span><span class="lineCov">       1743 :     __advance(_RandomAccessIterator&amp; __i, _Distance __n,</span>
 <span class="lineNum">     150 </span>            :               random_access_iterator_tag)
 <span class="lineNum">     151 </span>            :     {
 <span class="lineNum">     152 </span>            :       // concept requirements
 <span class="lineNum">     153 </span>            :       __glibcxx_function_requires(_RandomAccessIteratorConcept&lt;
 <span class="lineNum">     154 </span>            :                                   _RandomAccessIterator&gt;)
-<span class="lineNum">     155 </span><span class="lineCov">       6972 :       __i += __n;</span>
-<span class="lineNum">     156 </span><span class="lineCov">       6972 :     }</span>
+<span class="lineNum">     155 </span><span class="lineCov">       1743 :       __i += __n;</span>
+<span class="lineNum">     156 </span><span class="lineCov">       1743 :     }</span>
 <span class="lineNum">     157 </span>            : 
 <span class="lineNum">     158 </span>            :   /**
 <span class="lineNum">     159 </span>            :    *  @brief A generalization of pointer arithmetic.
@@ -231,12 +231,12 @@
 <span class="lineNum">     169 </span>            :   */
 <a name="170"><span class="lineNum">     170 </span>            :   template&lt;typename _InputIterator, typename _Distance&gt;</a>
 <span class="lineNum">     171 </span>            :     inline void
-<span class="lineNum">     172 </span><span class="lineCov">       6972 :     advance(_InputIterator&amp; __i, _Distance __n)</span>
+<span class="lineNum">     172 </span><span class="lineCov">       1743 :     advance(_InputIterator&amp; __i, _Distance __n)</span>
 <span class="lineNum">     173 </span>            :     {
 <span class="lineNum">     174 </span>            :       // concept requirements -- taken care of in __advance
-<span class="lineNum">     175 </span><span class="lineCov">       6972 :       typename iterator_traits&lt;_InputIterator&gt;::difference_type __d = __n;</span>
-<span class="lineNum">     176 </span><span class="lineCov">       6972 :       std::__advance(__i, __d, std::__iterator_category(__i));</span>
-<span class="lineNum">     177 </span><span class="lineCov">       6972 :     }</span>
+<span class="lineNum">     175 </span><span class="lineCov">       1743 :       typename iterator_traits&lt;_InputIterator&gt;::difference_type __d = __n;</span>
+<span class="lineNum">     176 </span><span class="lineCov">       1743 :       std::__advance(__i, __d, std::__iterator_category(__i));</span>
+<span class="lineNum">     177 </span><span class="lineCov">       1743 :     }</span>
 <span class="lineNum">     178 </span>            : 
 <span class="lineNum">     179 </span>            : #ifdef __GXX_EXPERIMENTAL_CXX0X__
 <span class="lineNum">     180 </span>            : 

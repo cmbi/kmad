@@ -173,12 +173,12 @@
 <span class="lineNum">     111 </span>            : 
 <a name="112"><span class="lineNum">     112 </span>            : public:</a>
 <span class="lineNum">     113 </span>            : 
-<span class="lineNum">     114 </span><span class="lineCov">     142795 :     shared_count(): pi_(0) // nothrow</span>
+<span class="lineNum">     114 </span><span class="lineCov">      35691 :     shared_count(): pi_(0) // nothrow</span>
 <span class="lineNum">     115 </span>            : #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
 <span class="lineNum">     116 </span>            :         , id_(shared_count_id)
 <span class="lineNum">     117 </span>            : #endif
 <span class="lineNum">     118 </span>            :     {
-<span class="lineNum">     119 </span><span class="lineCov">     142795 :     }</span>
+<span class="lineNum">     119 </span><span class="lineCov">      35691 :     }</span>
 <span class="lineNum">     120 </span>            : 
 <span class="lineNum">     121 </span>            :     template&lt;class Y&gt; explicit shared_count( Y * p ): pi_( 0 )
 <span class="lineNum">     122 </span>            : #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
@@ -500,13 +500,13 @@
 <span class="lineNum">     438 </span>            : 
 <a name="439"><span class="lineNum">     439 </span>            : #endif</a>
 <span class="lineNum">     440 </span>            : 
-<span class="lineNum">     441 </span><span class="lineCov">     213211 :     ~shared_count() // nothrow</span>
+<span class="lineNum">     441 </span><span class="lineCov">      53295 :     ~shared_count() // nothrow</span>
 <span class="lineNum">     442 </span>            :     {
-<span class="lineNum">     443 </span><span class="lineCov">     213211 :         if( pi_ != 0 ) pi_-&gt;release();</span>
+<span class="lineNum">     443 </span><span class="lineCov">      53295 :         if( pi_ != 0 ) pi_-&gt;release();</span>
 <span class="lineNum">     444 </span>            : #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
 <span class="lineNum">     445 </span>            :         id_ = 0;
 <span class="lineNum">     446 </span>            : #endif
-<a name="447"><span class="lineNum">     447 </span><span class="lineCov">     213211 :     }</span></a>
+<a name="447"><span class="lineNum">     447 </span><span class="lineCov">      53295 :     }</span></a>
 <span class="lineNum">     448 </span>            : 
 <span class="lineNum">     449 </span><span class="lineNoCov">          0 :     shared_count(shared_count const &amp; r): pi_(r.pi_) // nothrow</span>
 <span class="lineNum">     450 </span>            : #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)

@@ -151,14 +151,12 @@ double FeatureScores::score_usr_feature(unsigned long position,
   double result = 0;
   // features that add scores
   for (auto& feature : settings.add_features) {
-    result += m_occurences[feat_name][position] \
-              * m_occurences[feature][position] \
+    result += m_occurences[feature][position] \
               * settings.add_score;
   }
   // features that subtract scores
   for (auto& feature : settings.subtract_features) {
-    result -= m_occurences[feat_name][position] \
-              * m_occurences[feature][position] \
+    result -= m_occurences[feature][position] \
               * settings.subtract_score;
   }
   return result;

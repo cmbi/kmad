@@ -136,9 +136,9 @@
 <span class="lineNum">      74 </span>            :    typedef          re_detail::named_subexpressions                         named_sub_type;
 <a name="75"><span class="lineNum">      75 </span>            : </a>
 <span class="lineNum">      76 </span>            :    // construct/copy/destroy:
-<span class="lineNum">      77 </span><span class="lineCov">      70360 :    explicit match_results(const Allocator&amp; a = Allocator())</span>
+<span class="lineNum">      77 </span><span class="lineCov">      17590 :    explicit match_results(const Allocator&amp; a = Allocator())</span>
 <span class="lineNum">      78 </span>            : #ifndef BOOST_NO_STD_ALLOCATOR
-<span class="lineNum">      79 </span><span class="lineCov">      70360 :       : m_subs(a), m_base(), m_last_closed_paren(0), m_is_singular(true) {}</span>
+<span class="lineNum">      79 </span><span class="lineCov">      17590 :       : m_subs(a), m_base(), m_last_closed_paren(0), m_is_singular(true) {}</span>
 <span class="lineNum">      80 </span>            : #else
 <a name="81"><span class="lineNum">      81 </span>            :       : m_subs(), m_base(), m_last_closed_paren(0), m_is_singular(true) { (void)a; }</a>
 <span class="lineNum">      82 </span>            : #endif
@@ -164,7 +164,7 @@
 <span class="lineNum">     102 </span>            :       }
 <a name="103"><span class="lineNum">     103 </span><span class="lineNoCov">          0 :       return *this;</span></a>
 <span class="lineNum">     104 </span>            :    }
-<span class="lineNum">     105 </span><span class="lineCov">      70360 :    ~match_results(){}</span>
+<span class="lineNum">     105 </span><span class="lineCov">      17590 :    ~match_results(){}</span>
 <span class="lineNum">     106 </span>            : 
 <span class="lineNum">     107 </span>            :    // size:
 <span class="lineNum">     108 </span>            :    size_type size() const

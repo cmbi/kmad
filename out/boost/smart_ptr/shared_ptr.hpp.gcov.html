@@ -382,7 +382,7 @@
 <span class="lineNum">     320 </span>            : //  is destroyed or reset.
 <a name="321"><span class="lineNum">     321 </span>            : //</a>
 <span class="lineNum">     322 </span>            : 
-<span class="lineNum">     323 </span><span class="lineCov">     211080 : template&lt;class T&gt; class shared_ptr</span>
+<span class="lineNum">     323 </span><span class="lineCov">      52770 : template&lt;class T&gt; class shared_ptr</span>
 <span class="lineNum">     324 </span>            : {
 <span class="lineNum">     325 </span>            : private:
 <span class="lineNum">     326 </span>            : 
@@ -393,9 +393,9 @@
 <span class="lineNum">     331 </span>            : 
 <a name="332"><span class="lineNum">     332 </span>            :     typedef typename boost::detail::sp_element&lt; T &gt;::type element_type;</a>
 <span class="lineNum">     333 </span>            : 
-<span class="lineNum">     334 </span><span class="lineCov">     140720 :     shared_ptr() BOOST_NOEXCEPT : px( 0 ), pn() // never throws in 1.30+</span>
+<span class="lineNum">     334 </span><span class="lineCov">      35180 :     shared_ptr() BOOST_NOEXCEPT : px( 0 ), pn() // never throws in 1.30+</span>
 <span class="lineNum">     335 </span>            :     {
-<span class="lineNum">     336 </span><span class="lineCov">     140720 :     }</span>
+<span class="lineNum">     336 </span><span class="lineCov">      35180 :     }</span>
 <span class="lineNum">     337 </span>            : 
 <span class="lineNum">     338 </span>            : #if !defined( BOOST_NO_CXX11_NULLPTR )
 <span class="lineNum">     339 </span>            : 
@@ -698,17 +698,17 @@
 <span class="lineNum">     636 </span>            :     }
 <a name="637"><span class="lineNum">     637 </span>            :     </a>
 <span class="lineNum">     638 </span>            :     // never throws (but has a BOOST_ASSERT in it, so not marked with BOOST_NOEXCEPT)
-<span class="lineNum">     639 </span><span class="lineCov">      70360 :     typename boost::detail::sp_dereference&lt; T &gt;::type operator* () const</span>
+<span class="lineNum">     639 </span><span class="lineCov">      17590 :     typename boost::detail::sp_dereference&lt; T &gt;::type operator* () const</span>
 <span class="lineNum">     640 </span>            :     {
-<span class="lineNum">     641 </span><span class="lineCov">      70360 :         BOOST_ASSERT( px != 0 );</span>
-<span class="lineNum">     642 </span><span class="lineCov">      70360 :         return *px;</span>
+<span class="lineNum">     641 </span><span class="lineCov">      17590 :         BOOST_ASSERT( px != 0 );</span>
+<span class="lineNum">     642 </span><span class="lineCov">      17590 :         return *px;</span>
 <span class="lineNum">     643 </span>            :     }
 <a name="644"><span class="lineNum">     644 </span>            :     </a>
 <span class="lineNum">     645 </span>            :     // never throws (but has a BOOST_ASSERT in it, so not marked with BOOST_NOEXCEPT)
-<span class="lineNum">     646 </span><span class="lineCov">      70360 :     typename boost::detail::sp_member_access&lt; T &gt;::type operator-&gt; () const </span>
+<span class="lineNum">     646 </span><span class="lineCov">      17590 :     typename boost::detail::sp_member_access&lt; T &gt;::type operator-&gt; () const </span>
 <span class="lineNum">     647 </span>            :     {
-<span class="lineNum">     648 </span><span class="lineCov">      70360 :         BOOST_ASSERT( px != 0 );</span>
-<span class="lineNum">     649 </span><span class="lineCov">      70360 :         return px;</span>
+<span class="lineNum">     648 </span><span class="lineCov">      17590 :         BOOST_ASSERT( px != 0 );</span>
+<span class="lineNum">     649 </span><span class="lineCov">      17590 :         return px;</span>
 <span class="lineNum">     650 </span>            :     }
 <span class="lineNum">     651 </span>            :     
 <span class="lineNum">     652 </span>            :     // never throws (but has a BOOST_ASSERT in it, so not marked with BOOST_NOEXCEPT)
@@ -720,9 +720,9 @@
 <span class="lineNum">     658 </span>            :         return px[ i ];
 <a name="659"><span class="lineNum">     659 </span>            :     }</a>
 <span class="lineNum">     660 </span>            : 
-<span class="lineNum">     661 </span><span class="lineCov">      70360 :     element_type * get() const BOOST_NOEXCEPT</span>
+<span class="lineNum">     661 </span><span class="lineCov">      17590 :     element_type * get() const BOOST_NOEXCEPT</span>
 <span class="lineNum">     662 </span>            :     {
-<span class="lineNum">     663 </span><span class="lineCov">      70360 :         return px;</span>
+<span class="lineNum">     663 </span><span class="lineCov">      17590 :         return px;</span>
 <span class="lineNum">     664 </span>            :     }
 <span class="lineNum">     665 </span>            : 
 <span class="lineNum">     666 </span>            : // implicit conversion to &quot;bool&quot;

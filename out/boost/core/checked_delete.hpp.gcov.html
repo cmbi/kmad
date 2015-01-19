@@ -88,13 +88,13 @@
 <span class="lineNum">      26 </span>            : 
 <a name="27"><span class="lineNum">      27 </span>            : // verify that types are complete for increased safety</a>
 <span class="lineNum">      28 </span>            : 
-<span class="lineNum">      29 </span><span class="lineCov">      70360 : template&lt;class T&gt; inline void checked_delete(T * x)</span>
+<span class="lineNum">      29 </span><span class="lineCov">      17590 : template&lt;class T&gt; inline void checked_delete(T * x)</span>
 <span class="lineNum">      30 </span>            : {
 <span class="lineNum">      31 </span>            :     // intentionally complex - simplification causes regressions
 <span class="lineNum">      32 </span>            :     typedef char type_must_be_complete[ sizeof(T)? 1: -1 ];
 <span class="lineNum">      33 </span>            :     (void) sizeof(type_must_be_complete);
-<span class="lineNum">      34 </span><span class="lineCov">      70360 :     delete x;</span>
-<span class="lineNum">      35 </span><span class="lineCov">      70360 : }</span>
+<span class="lineNum">      34 </span><span class="lineCov">      17590 :     delete x;</span>
+<span class="lineNum">      35 </span><span class="lineCov">      17590 : }</span>
 <span class="lineNum">      36 </span>            : 
 <span class="lineNum">      37 </span>            : template&lt;class T&gt; inline void checked_array_delete(T * x)
 <span class="lineNum">      38 </span>            : {

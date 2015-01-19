@@ -99,14 +99,14 @@
 <span class="lineNum">      37 </span>            : 
 <a name="38"><span class="lineNum">      38 </span>            :     template&lt; typename C &gt;</a>
 <span class="lineNum">      39 </span>            :     inline BOOST_DEDUCED_TYPENAME range_iterator&lt;C&gt;::type
-<span class="lineNum">      40 </span><span class="lineCov">       2328 :     range_begin( C&amp; c )</span>
+<span class="lineNum">      40 </span><span class="lineCov">        582 :     range_begin( C&amp; c )</span>
 <span class="lineNum">      41 </span>            :     {
 <span class="lineNum">      42 </span>            :         //
 <span class="lineNum">      43 </span>            :         // If you get a compile-error here, it is most likely because
 <span class="lineNum">      44 </span>            :         // you have not implemented range_begin() properly in
 <span class="lineNum">      45 </span>            :         // the namespace of C
 <span class="lineNum">      46 </span>            :         //
-<span class="lineNum">      47 </span><span class="lineCov">       2328 :         return c.begin();</span>
+<span class="lineNum">      47 </span><span class="lineCov">        582 :         return c.begin();</span>
 <span class="lineNum">      48 </span>            :     }
 <span class="lineNum">      49 </span>            : 
 <span class="lineNum">      50 </span>            :     //////////////////////////////////////////////////////////////////////
@@ -156,21 +156,21 @@
 <span class="lineNum">      94 </span>            : {
 <a name="95"><span class="lineNum">      95 </span>            : </a>
 <span class="lineNum">      96 </span>            : template&lt; class T &gt;
-<span class="lineNum">      97 </span><span class="lineCov">        776 : inline BOOST_DEDUCED_TYPENAME range_iterator&lt;T&gt;::type begin( T&amp; r )</span>
+<span class="lineNum">      97 </span><span class="lineCov">        194 : inline BOOST_DEDUCED_TYPENAME range_iterator&lt;T&gt;::type begin( T&amp; r )</span>
 <span class="lineNum">      98 </span>            : {
 <span class="lineNum">      99 </span>            : #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 <span class="lineNum">     100 </span>            :     using namespace range_detail;
 <span class="lineNum">     101 </span>            : #endif
-<span class="lineNum">     102 </span><span class="lineCov">        776 :     return range_begin( r );</span>
+<span class="lineNum">     102 </span><span class="lineCov">        194 :     return range_begin( r );</span>
 <span class="lineNum">     103 </span>            : }
 <a name="104"><span class="lineNum">     104 </span>            : </a>
 <span class="lineNum">     105 </span>            : template&lt; class T &gt;
-<span class="lineNum">     106 </span><span class="lineCov">       1552 : inline BOOST_DEDUCED_TYPENAME range_iterator&lt;const T&gt;::type begin( const T&amp; r )</span>
+<span class="lineNum">     106 </span><span class="lineCov">        388 : inline BOOST_DEDUCED_TYPENAME range_iterator&lt;const T&gt;::type begin( const T&amp; r )</span>
 <span class="lineNum">     107 </span>            : {
 <span class="lineNum">     108 </span>            : #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 <span class="lineNum">     109 </span>            :     using namespace range_detail;
 <span class="lineNum">     110 </span>            : #endif
-<span class="lineNum">     111 </span><span class="lineCov">       1552 :     return range_begin( r );</span>
+<span class="lineNum">     111 </span><span class="lineCov">        388 :     return range_begin( r );</span>
 <span class="lineNum">     112 </span>            : }
 <span class="lineNum">     113 </span>            : 
 <span class="lineNum">     114 </span>            :     } // namespace range_adl_barrier

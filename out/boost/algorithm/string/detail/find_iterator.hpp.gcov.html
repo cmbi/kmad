@@ -102,27 +102,27 @@
 <span class="lineNum">      40 </span>            :             // Protected construction/destruction
 <a name="41"><span class="lineNum">      41 </span>            : </a>
 <span class="lineNum">      42 </span>            :                 // Default constructor
-<a name="43"><span class="lineNum">      43 </span><span class="lineCov">        388 :                 find_iterator_base() {};</span></a>
+<a name="43"><span class="lineNum">      43 </span><span class="lineCov">         97 :                 find_iterator_base() {};</span></a>
 <span class="lineNum">      44 </span>            :                 // Copy construction
-<span class="lineNum">      45 </span><span class="lineCov">       3104 :                 find_iterator_base( const find_iterator_base&amp; Other ) :</span>
-<span class="lineNum">      46 </span><span class="lineCov">       3104 :                     m_Finder(Other.m_Finder) {}</span>
+<span class="lineNum">      45 </span><span class="lineCov">        776 :                 find_iterator_base( const find_iterator_base&amp; Other ) :</span>
+<span class="lineNum">      46 </span><span class="lineCov">        776 :                     m_Finder(Other.m_Finder) {}</span>
 <span class="lineNum">      47 </span>            :                 
 <a name="48"><span class="lineNum">      48 </span>            :                 // Constructor</a>
 <span class="lineNum">      49 </span>            :                 template&lt;typename FinderT&gt;
-<span class="lineNum">      50 </span><span class="lineCov">        388 :                 find_iterator_base( FinderT Finder, int ) :</span>
-<span class="lineNum">      51 </span><span class="lineCov">        388 :                     m_Finder(Finder) {}</span>
+<span class="lineNum">      50 </span><span class="lineCov">         97 :                 find_iterator_base( FinderT Finder, int ) :</span>
+<span class="lineNum">      51 </span><span class="lineCov">         97 :                     m_Finder(Finder) {}</span>
 <a name="52"><span class="lineNum">      52 </span>            : </a>
 <span class="lineNum">      53 </span>            :                 // Destructor
-<span class="lineNum">      54 </span><span class="lineCov">       3880 :                 ~find_iterator_base() {}</span>
+<span class="lineNum">      54 </span><span class="lineCov">        970 :                 ~find_iterator_base() {}</span>
 <a name="55"><span class="lineNum">      55 </span>            : </a>
 <span class="lineNum">      56 </span>            :                 // Find operation
-<span class="lineNum">      57 </span><span class="lineCov">       1164 :                 match_type do_find( </span>
+<span class="lineNum">      57 </span><span class="lineCov">        291 :                 match_type do_find( </span>
 <span class="lineNum">      58 </span>            :                     input_iterator_type Begin,
 <span class="lineNum">      59 </span>            :                     input_iterator_type End ) const
 <span class="lineNum">      60 </span>            :                 {
-<span class="lineNum">      61 </span><span class="lineCov">       1164 :                     if (!m_Finder.empty())</span>
+<span class="lineNum">      61 </span><span class="lineCov">        291 :                     if (!m_Finder.empty())</span>
 <span class="lineNum">      62 </span>            :                     {
-<span class="lineNum">      63 </span><span class="lineCov">       1164 :                         return m_Finder(Begin,End);</span>
+<span class="lineNum">      63 </span><span class="lineCov">        291 :                         return m_Finder(Begin,End);</span>
 <span class="lineNum">      64 </span>            :                     }
 <span class="lineNum">      65 </span>            :                     else
 <span class="lineNum">      66 </span>            :                     {
@@ -131,9 +131,9 @@
 <span class="lineNum">      69 </span>            :                 }
 <a name="70"><span class="lineNum">      70 </span>            : </a>
 <span class="lineNum">      71 </span>            :                 // Check
-<span class="lineNum">      72 </span><span class="lineCov">       2328 :                 bool is_null() const</span>
+<span class="lineNum">      72 </span><span class="lineCov">        582 :                 bool is_null() const</span>
 <span class="lineNum">      73 </span>            :                 {
-<span class="lineNum">      74 </span><span class="lineCov">       2328 :                     return m_Finder.empty();</span>
+<span class="lineNum">      74 </span><span class="lineCov">        582 :                     return m_Finder.empty();</span>
 <span class="lineNum">      75 </span>            :                 }
 <span class="lineNum">      76 </span>            : 
 <span class="lineNum">      77 </span>            :             private:

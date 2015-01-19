@@ -56,4 +56,7 @@ Session.vim
 
 # gcov
 *gcov
+*gcno
+*gcda
+coverage.info
 out/
