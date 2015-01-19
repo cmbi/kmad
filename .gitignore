@@ -53,3 +53,7 @@ README
 Session.vim
 .netrwhist
 *~
+
+# gcov
+*gcov
+out/
