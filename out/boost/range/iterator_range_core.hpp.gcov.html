@@ -126,15 +126,15 @@
 <span class="lineNum">      64 </span>            :         template&lt;class IteratorT&gt;
 <a name="65"><span class="lineNum">      65 </span>            :         struct iterator_range_impl {</a>
 <span class="lineNum">      66 </span>            :             template&lt; class ForwardRange &gt;
-<span class="lineNum">      67 </span><span class="lineCov">         97 :             static IteratorT adl_begin( ForwardRange&amp; r )</span>
+<span class="lineNum">      67 </span><span class="lineCov">        388 :             static IteratorT adl_begin( ForwardRange&amp; r )</span>
 <span class="lineNum">      68 </span>            :             {
-<span class="lineNum">      69 </span><span class="lineCov">         97 :                 return static_cast&lt;IteratorT&gt;( boost::begin( r ) );</span>
+<span class="lineNum">      69 </span><span class="lineCov">        388 :                 return static_cast&lt;IteratorT&gt;( boost::begin( r ) );</span>
 <span class="lineNum">      70 </span>            :             }
 <a name="71"><span class="lineNum">      71 </span>            : </a>
 <span class="lineNum">      72 </span>            :             template&lt; class ForwardRange &gt;
-<span class="lineNum">      73 </span><span class="lineCov">         97 :             static IteratorT adl_end( ForwardRange&amp; r )</span>
+<span class="lineNum">      73 </span><span class="lineCov">        388 :             static IteratorT adl_end( ForwardRange&amp; r )</span>
 <span class="lineNum">      74 </span>            :             {
-<span class="lineNum">      75 </span><span class="lineCov">         97 :                 return static_cast&lt;IteratorT&gt;( boost::end( r ) );</span>
+<span class="lineNum">      75 </span><span class="lineCov">        388 :                 return static_cast&lt;IteratorT&gt;( boost::end( r ) );</span>
 <span class="lineNum">      76 </span>            :             }
 <span class="lineNum">      77 </span>            :         };
 <span class="lineNum">      78 </span>            : 
@@ -181,7 +181,7 @@
 <span class="lineNum">     119 </span>            : {
 <a name="120"><span class="lineNum">     120 </span>            : };</a>
 <span class="lineNum">     121 </span>            : 
-<span class="lineNum">     122 </span><span class="lineCov">        970 : struct iterator_range_tag</span>
+<span class="lineNum">     122 </span><span class="lineCov">       3880 : struct iterator_range_tag</span>
 <span class="lineNum">     123 </span>            : {
 <span class="lineNum">     124 </span>            : };
 <span class="lineNum">     125 </span>            : 
@@ -266,28 +266,28 @@
 <span class="lineNum">     204 </span>            :     typedef IteratorT iterator;
 <a name="205"><span class="lineNum">     205 </span>            : </a>
 <span class="lineNum">     206 </span>            : protected:
-<span class="lineNum">     207 </span><span class="lineCov">         97 :     iterator_range_base()</span>
+<span class="lineNum">     207 </span><span class="lineCov">        388 :     iterator_range_base()</span>
 <span class="lineNum">     208 </span>            :         : m_Begin()
-<span class="lineNum">     209 </span><span class="lineCov">         97 :         , m_End()</span>
+<span class="lineNum">     209 </span><span class="lineCov">        388 :         , m_End()</span>
 <span class="lineNum">     210 </span>            :     {
-<span class="lineNum">     211 </span><span class="lineCov">         97 :     }</span>
+<span class="lineNum">     211 </span><span class="lineCov">        388 :     }</span>
 <a name="212"><span class="lineNum">     212 </span>            : </a>
 <span class="lineNum">     213 </span>            :     template&lt;class Iterator&gt;
-<span class="lineNum">     214 </span><span class="lineCov">        873 :     iterator_range_base(Iterator Begin, Iterator End)</span>
+<span class="lineNum">     214 </span><span class="lineCov">       3492 :     iterator_range_base(Iterator Begin, Iterator End)</span>
 <span class="lineNum">     215 </span>            :         : m_Begin(Begin)
-<span class="lineNum">     216 </span><span class="lineCov">        873 :         , m_End(End)</span>
+<span class="lineNum">     216 </span><span class="lineCov">       3492 :         , m_End(End)</span>
 <span class="lineNum">     217 </span>            :     {
-<span class="lineNum">     218 </span><span class="lineCov">        873 :     }</span>
+<span class="lineNum">     218 </span><span class="lineCov">       3492 :     }</span>
 <a name="219"><span class="lineNum">     219 </span>            : </a>
 <span class="lineNum">     220 </span>            : public:
-<span class="lineNum">     221 </span><span class="lineCov">       1067 :     IteratorT begin() const</span>
+<span class="lineNum">     221 </span><span class="lineCov">       4268 :     IteratorT begin() const</span>
 <span class="lineNum">     222 </span>            :     {
-<span class="lineNum">     223 </span><span class="lineCov">       1067 :         return m_Begin;</span>
+<span class="lineNum">     223 </span><span class="lineCov">       4268 :         return m_Begin;</span>
 <a name="224"><span class="lineNum">     224 </span>            :     }</a>
 <span class="lineNum">     225 </span>            : 
-<span class="lineNum">     226 </span><span class="lineCov">       1164 :     IteratorT end() const</span>
+<span class="lineNum">     226 </span><span class="lineCov">       4656 :     IteratorT end() const</span>
 <span class="lineNum">     227 </span>            :     {
-<span class="lineNum">     228 </span><span class="lineCov">       1164 :         return m_End;</span>
+<span class="lineNum">     228 </span><span class="lineCov">       4656 :         return m_End;</span>
 <span class="lineNum">     229 </span>            :     }
 <span class="lineNum">     230 </span>            : 
 <span class="lineNum">     231 </span>            :     bool empty() const
@@ -365,15 +365,15 @@
 <span class="lineNum">     303 </span>            :     typedef iterator_range_base&lt;IteratorT, incrementable_traversal_tag&gt; base_type;
 <a name="304"><span class="lineNum">     304 </span>            : </a>
 <span class="lineNum">     305 </span>            : protected:
-<span class="lineNum">     306 </span><span class="lineCov">         97 :     iterator_range_base()</span>
-<span class="lineNum">     307 </span><span class="lineCov">         97 :     {</span>
-<span class="lineNum">     308 </span><span class="lineCov">         97 :     }</span>
+<span class="lineNum">     306 </span><span class="lineCov">        388 :     iterator_range_base()</span>
+<span class="lineNum">     307 </span><span class="lineCov">        388 :     {</span>
+<span class="lineNum">     308 </span><span class="lineCov">        388 :     }</span>
 <a name="309"><span class="lineNum">     309 </span>            : </a>
 <span class="lineNum">     310 </span>            :     template&lt;class Iterator&gt;
-<span class="lineNum">     311 </span><span class="lineCov">        873 :     iterator_range_base(Iterator first, Iterator last)</span>
-<span class="lineNum">     312 </span><span class="lineCov">        873 :         : base_type(first, last)</span>
+<span class="lineNum">     311 </span><span class="lineCov">       3492 :     iterator_range_base(Iterator first, Iterator last)</span>
+<span class="lineNum">     312 </span><span class="lineCov">       3492 :         : base_type(first, last)</span>
 <span class="lineNum">     313 </span>            :     {
-<span class="lineNum">     314 </span><span class="lineCov">        873 :     }</span>
+<span class="lineNum">     314 </span><span class="lineCov">       3492 :     }</span>
 <span class="lineNum">     315 </span>            : 
 <span class="lineNum">     316 </span>            : public:
 <span class="lineNum">     317 </span>            :     typedef BOOST_DEDUCED_TYPENAME base_type::difference_type difference_type;
@@ -434,15 +434,15 @@
 <span class="lineNum">     372 </span>            :     typedef BOOST_DEDUCED_TYPENAME base_type::reference reference;
 <a name="373"><span class="lineNum">     373 </span>            : </a>
 <span class="lineNum">     374 </span>            : protected:
-<span class="lineNum">     375 </span><span class="lineCov">         97 :     iterator_range_base()</span>
-<span class="lineNum">     376 </span><span class="lineCov">         97 :     {</span>
-<span class="lineNum">     377 </span><span class="lineCov">         97 :     }</span>
+<span class="lineNum">     375 </span><span class="lineCov">        388 :     iterator_range_base()</span>
+<span class="lineNum">     376 </span><span class="lineCov">        388 :     {</span>
+<span class="lineNum">     377 </span><span class="lineCov">        388 :     }</span>
 <a name="378"><span class="lineNum">     378 </span>            : </a>
 <span class="lineNum">     379 </span>            :     template&lt;class Iterator&gt;
-<span class="lineNum">     380 </span><span class="lineCov">        873 :     iterator_range_base(Iterator first, Iterator last)</span>
-<span class="lineNum">     381 </span><span class="lineCov">        873 :         : base_type(first, last)</span>
+<span class="lineNum">     380 </span><span class="lineCov">       3492 :     iterator_range_base(Iterator first, Iterator last)</span>
+<span class="lineNum">     381 </span><span class="lineCov">       3492 :         : base_type(first, last)</span>
 <span class="lineNum">     382 </span>            :     {
-<span class="lineNum">     383 </span><span class="lineCov">        873 :     }</span>
+<span class="lineNum">     383 </span><span class="lineCov">       3492 :     }</span>
 <span class="lineNum">     384 </span>            : 
 <span class="lineNum">     385 </span>            : public:
 <span class="lineNum">     386 </span>            :     reference operator[](difference_type at) const
@@ -522,15 +522,15 @@
 <span class="lineNum">     460 </span>            :         public:
 <a name="461"><span class="lineNum">     461 </span>            :             typedef iterator_range&lt;IteratorT&gt; type;</a>
 <span class="lineNum">     462 </span>            : 
-<span class="lineNum">     463 </span><span class="lineCov">         97 :             iterator_range()</span>
-<span class="lineNum">     464 </span><span class="lineCov">         97 :             {</span>
-<span class="lineNum">     465 </span><span class="lineCov">         97 :             }</span>
+<span class="lineNum">     463 </span><span class="lineCov">        388 :             iterator_range()</span>
+<span class="lineNum">     464 </span><span class="lineCov">        388 :             {</span>
+<span class="lineNum">     465 </span><span class="lineCov">        388 :             }</span>
 <a name="466"><span class="lineNum">     466 </span>            : </a>
 <span class="lineNum">     467 </span>            :             template&lt;class Iterator&gt;
-<span class="lineNum">     468 </span><span class="lineCov">        776 :             iterator_range(Iterator first, Iterator last)</span>
-<span class="lineNum">     469 </span><span class="lineCov">        776 :                 : base_type(first, last)</span>
+<span class="lineNum">     468 </span><span class="lineCov">       3104 :             iterator_range(Iterator first, Iterator last)</span>
+<span class="lineNum">     469 </span><span class="lineCov">       3104 :                 : base_type(first, last)</span>
 <span class="lineNum">     470 </span>            :             {
-<span class="lineNum">     471 </span><span class="lineCov">        776 :             }</span>
+<span class="lineNum">     471 </span><span class="lineCov">       3104 :             }</span>
 <span class="lineNum">     472 </span>            : 
 <span class="lineNum">     473 </span>            :             template&lt;class SinglePassRange&gt;
 <span class="lineNum">     474 </span>            :             iterator_range(
@@ -562,11 +562,11 @@
 <span class="lineNum">     500 </span>            :             }
 <a name="501"><span class="lineNum">     501 </span>            : </a>
 <span class="lineNum">     502 </span>            :             template&lt;class SinglePassRange&gt;
-<span class="lineNum">     503 </span><span class="lineCov">         97 :             iterator_range(SinglePassRange&amp; r,</span>
+<span class="lineNum">     503 </span><span class="lineCov">        388 :             iterator_range(SinglePassRange&amp; r,</span>
 <span class="lineNum">     504 </span>            :                            iterator_range_detail::range_tag)
-<span class="lineNum">     505 </span><span class="lineCov">         97 :                 : base_type(impl::adl_begin(r), impl::adl_end(r))</span>
+<span class="lineNum">     505 </span><span class="lineCov">        388 :                 : base_type(impl::adl_begin(r), impl::adl_end(r))</span>
 <span class="lineNum">     506 </span>            :             {
-<span class="lineNum">     507 </span><span class="lineCov">         97 :             }</span>
+<span class="lineNum">     507 </span><span class="lineCov">        388 :             }</span>
 <span class="lineNum">     508 </span>            : 
 <span class="lineNum">     509 </span>            :             template&lt;class Iterator&gt;
 <span class="lineNum">     510 </span>            :             iterator_range&amp; operator=(const iterator_range&lt;Iterator&gt;&amp; other)
@@ -834,10 +834,10 @@
 <span class="lineNum">     772 </span>            :         */
 <a name="773"><span class="lineNum">     773 </span>            :         template&lt; class ForwardRange &gt;</a>
 <span class="lineNum">     774 </span>            :         inline iterator_range&lt; BOOST_DEDUCED_TYPENAME range_iterator&lt;ForwardRange&gt;::type &gt;
-<span class="lineNum">     775 </span><span class="lineCov">         97 :         make_iterator_range( ForwardRange&amp; r )</span>
+<span class="lineNum">     775 </span><span class="lineCov">        388 :         make_iterator_range( ForwardRange&amp; r )</span>
 <span class="lineNum">     776 </span>            :         {
 <span class="lineNum">     777 </span>            :            return iterator_range&lt; BOOST_DEDUCED_TYPENAME range_iterator&lt;ForwardRange&gt;::type &gt;
-<span class="lineNum">     778 </span><span class="lineCov">         97 :                 ( r, iterator_range_detail::range_tag() );</span>
+<span class="lineNum">     778 </span><span class="lineCov">        388 :                 ( r, iterator_range_detail::range_tag() );</span>
 <span class="lineNum">     779 </span>            :         }
 <span class="lineNum">     780 </span>            : 
 <span class="lineNum">     781 </span>            :         template&lt; class ForwardRange &gt;
@@ -916,9 +916,9 @@
 <span class="lineNum">     854 </span>            :             \return New sequence
 <a name="855"><span class="lineNum">     855 </span>            :         */</a>
 <span class="lineNum">     856 </span>            :         template&lt; typename SeqT, typename Range &gt;
-<span class="lineNum">     857 </span><span class="lineCov">        194 :         inline SeqT copy_range( const Range&amp; r )</span>
+<span class="lineNum">     857 </span><span class="lineCov">        776 :         inline SeqT copy_range( const Range&amp; r )</span>
 <span class="lineNum">     858 </span>            :         {
-<span class="lineNum">     859 </span><span class="lineCov">        194 :             return SeqT( boost::begin( r ), boost::end( r ) );</span>
+<span class="lineNum">     859 </span><span class="lineCov">        776 :             return SeqT( boost::begin( r ), boost::end( r ) );</span>
 <span class="lineNum">     860 </span>            :         }
 <span class="lineNum">     861 </span>            : 
 <span class="lineNum">     862 </span>            : } // namespace 'boost'

@@ -316,13 +316,13 @@
 <span class="lineNum">     254 </span>            :    std::size_t count;        // the number of iterations so far
 <a name="255"><span class="lineNum">     255 </span>            :    BidiIterator start_pos;   // where the last repeat started</a>
 <span class="lineNum">     256 </span>            : public:
-<span class="lineNum">     257 </span><span class="lineCov">      17575 :    repeater_count(repeater_count** s)</span>
-<span class="lineNum">     258 </span><span class="lineCov">      17575 :    {</span>
-<span class="lineNum">     259 </span><span class="lineCov">      17575 :       stack = s;</span>
-<span class="lineNum">     260 </span><span class="lineCov">      17575 :       next = 0;</span>
-<span class="lineNum">     261 </span><span class="lineCov">      17575 :       state_id = -1;</span>
-<a name="262"><span class="lineNum">     262 </span><span class="lineCov">      17575 :       count = 0;</span></a>
-<span class="lineNum">     263 </span><span class="lineCov">      17575 :    }</span>
+<span class="lineNum">     257 </span><span class="lineCov">      70360 :    repeater_count(repeater_count** s)</span>
+<span class="lineNum">     258 </span><span class="lineCov">      70360 :    {</span>
+<span class="lineNum">     259 </span><span class="lineCov">      70360 :       stack = s;</span>
+<span class="lineNum">     260 </span><span class="lineCov">      70360 :       next = 0;</span>
+<span class="lineNum">     261 </span><span class="lineCov">      70360 :       state_id = -1;</span>
+<a name="262"><span class="lineNum">     262 </span><span class="lineCov">      70360 :       count = 0;</span></a>
+<span class="lineNum">     263 </span><span class="lineCov">      70360 :    }</span>
 <span class="lineNum">     264 </span><span class="lineNoCov">          0 :    repeater_count(int i, repeater_count** s, BidiIterator start)</span>
 <span class="lineNum">     265 </span><span class="lineNoCov">          0 :       : start_pos(start)</span>
 <span class="lineNum">     266 </span>            :    {
@@ -346,11 +346,11 @@
 <span class="lineNum">     284 </span><span class="lineNoCov">          0 :             count = 0;</span>
 <a name="285"><span class="lineNum">     285 </span>            :       }</a>
 <span class="lineNum">     286 </span><span class="lineNoCov">          0 :    }</span>
-<span class="lineNum">     287 </span><span class="lineCov">      17575 :    ~repeater_count()</span>
+<span class="lineNum">     287 </span><span class="lineCov">      70360 :    ~repeater_count()</span>
 <span class="lineNum">     288 </span>            :    {
-<span class="lineNum">     289 </span><span class="lineCov">      17575 :       if(next)</span>
+<span class="lineNum">     289 </span><span class="lineCov">      70360 :       if(next)</span>
 <a name="290"><span class="lineNum">     290 </span><span class="lineNoCov">          0 :          *stack = next;</span></a>
-<a name="291"><span class="lineNum">     291 </span><span class="lineCov">      17575 :    }</span></a>
+<a name="291"><span class="lineNum">     291 </span><span class="lineCov">      70360 :    }</span></a>
 <a name="292"><span class="lineNum">     292 </span><span class="lineNoCov">          0 :    std::size_t get_count() { return count; }</span></a>
 <a name="293"><span class="lineNum">     293 </span><span class="lineNoCov">          0 :    int get_id() { return state_id; }</span></a>
 <span class="lineNum">     294 </span><span class="lineNoCov">          0 :    std::size_t operator++() { return ++count; }</span>
@@ -409,7 +409,7 @@
 <span class="lineNum">     347 </span>            : #endif
 <a name="348"><span class="lineNum">     348 </span>            : </a>
 <span class="lineNum">     349 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
-<span class="lineNum">     350 </span><span class="lineCov">      17575 : class perl_matcher</span>
+<span class="lineNum">     350 </span><span class="lineCov">      70360 : class perl_matcher</span>
 <span class="lineNum">     351 </span>            : {
 <span class="lineNum">     352 </span>            : public:
 <span class="lineNum">     353 </span>            :    typedef typename traits::char_type char_type;
@@ -420,17 +420,17 @@
 <span class="lineNum">     358 </span>            :    typedef typename regex_iterator_traits&lt;BidiIterator&gt;::difference_type difference_type;
 <a name="359"><span class="lineNum">     359 </span>            :    typedef match_results&lt;BidiIterator, Allocator&gt; results_type;</a>
 <span class="lineNum">     360 </span>            : 
-<span class="lineNum">     361 </span><span class="lineCov">      17575 :    perl_matcher(BidiIterator first, BidiIterator end, </span>
+<span class="lineNum">     361 </span><span class="lineCov">      70360 :    perl_matcher(BidiIterator first, BidiIterator end, </span>
 <span class="lineNum">     362 </span>            :       match_results&lt;BidiIterator, Allocator&gt;&amp; what, 
 <span class="lineNum">     363 </span>            :       const basic_regex&lt;char_type, traits&gt;&amp; e,
 <span class="lineNum">     364 </span>            :       match_flag_type f,
 <span class="lineNum">     365 </span>            :       BidiIterator l_base)
 <span class="lineNum">     366 </span>            :       :  m_result(what), base(first), last(end), 
 <span class="lineNum">     367 </span>            :          position(first), backstop(l_base), re(e), traits_inst(e.get_traits()), 
-<span class="lineNum">     368 </span><span class="lineCov">      17575 :          m_independent(false), next_count(&amp;rep_obj), rep_obj(&amp;next_count)</span>
+<span class="lineNum">     368 </span><span class="lineCov">      70360 :          m_independent(false), next_count(&amp;rep_obj), rep_obj(&amp;next_count)</span>
 <span class="lineNum">     369 </span>            :    {
-<span class="lineNum">     370 </span><span class="lineCov">      17575 :       construct_init(e, f);</span>
-<span class="lineNum">     371 </span><span class="lineCov">      17575 :    }</span>
+<span class="lineNum">     370 </span><span class="lineCov">      70360 :       construct_init(e, f);</span>
+<span class="lineNum">     371 </span><span class="lineCov">      70360 :    }</span>
 <span class="lineNum">     372 </span>            : 
 <span class="lineNum">     373 </span>            :    bool match();
 <span class="lineNum">     374 </span>            :    bool find();

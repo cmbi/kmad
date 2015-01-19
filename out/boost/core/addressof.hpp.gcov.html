@@ -88,8 +88,8 @@
 <span class="lineNum">      26 </span>            : {
 <span class="lineNum">      27 </span>            :     T &amp; v_;
 <span class="lineNum">      28 </span>            : 
-<span class="lineNum">      29 </span><span class="lineCov">         97 :     BOOST_FORCEINLINE addr_impl_ref( T &amp; v ): v_( v ) {}</span>
-<span class="lineNum">      30 </span><span class="lineCov">         97 :     BOOST_FORCEINLINE operator T&amp; () const { return v_; }</span>
+<span class="lineNum">      29 </span><span class="lineCov">        388 :     BOOST_FORCEINLINE addr_impl_ref( T &amp; v ): v_( v ) {}</span>
+<span class="lineNum">      30 </span><span class="lineCov">        388 :     BOOST_FORCEINLINE operator T&amp; () const { return v_; }</span>
 <span class="lineNum">      31 </span>            : 
 <span class="lineNum">      32 </span>            : private:
 <span class="lineNum">      33 </span>            :     addr_impl_ref &amp; operator=(const addr_impl_ref &amp;);
@@ -100,7 +100,7 @@
 <span class="lineNum">      38 </span>            :     static BOOST_FORCEINLINE T * f( T &amp; v, long )
 <span class="lineNum">      39 </span>            :     {
 <span class="lineNum">      40 </span>            :         return reinterpret_cast&lt;T*&gt;(
-<span class="lineNum">      41 </span><span class="lineCov">         97 :             &amp;const_cast&lt;char&amp;&gt;(reinterpret_cast&lt;const volatile char &amp;&gt;(v)));</span>
+<span class="lineNum">      41 </span><span class="lineCov">        388 :             &amp;const_cast&lt;char&amp;&gt;(reinterpret_cast&lt;const volatile char &amp;&gt;(v)));</span>
 <span class="lineNum">      42 </span>            :     }
 <span class="lineNum">      43 </span>            : 
 <span class="lineNum">      44 </span>            :     static BOOST_FORCEINLINE T * f( T * v, int )
@@ -175,7 +175,7 @@
 <span class="lineNum">     113 </span>            : 
 <span class="lineNum">     114 </span>            : #else
 <span class="lineNum">     115 </span>            : 
-<span class="lineNum">     116 </span><span class="lineCov">        194 :     return boost::detail::addressof_impl&lt;T&gt;::f( boost::detail::addr_impl_ref&lt;T&gt;( v ), 0 );</span>
+<span class="lineNum">     116 </span><span class="lineCov">        776 :     return boost::detail::addressof_impl&lt;T&gt;::f( boost::detail::addr_impl_ref&lt;T&gt;( v ), 0 );</span>
 <span class="lineNum">     117 </span>            : 
 <span class="lineNum">     118 </span>            : #endif
 <span class="lineNum">     119 </span>            : }

@@ -128,14 +128,14 @@
 <span class="lineNum">      66 </span>            :         struct rebind
 <a name="67"><span class="lineNum">      67 </span>            :         { typedef new_allocator&lt;_Tp1&gt; other; };</a>
 <span class="lineNum">      68 </span>            : 
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">      54549 :       new_allocator() _GLIBCXX_USE_NOEXCEPT { }</span></a>
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">     218464 :       new_allocator() _GLIBCXX_USE_NOEXCEPT { }</span></a>
 <span class="lineNum">      70 </span>            : 
-<span class="lineNum">      71 </span><span class="lineCov">     156929 :       new_allocator(const new_allocator&amp;) _GLIBCXX_USE_NOEXCEPT { }</span>
+<span class="lineNum">      71 </span><span class="lineCov">     628864 :       new_allocator(const new_allocator&amp;) _GLIBCXX_USE_NOEXCEPT { }</span>
 <span class="lineNum">      72 </span>            : 
 <span class="lineNum">      73 </span>            :       template&lt;typename _Tp1&gt;
 <a name="74"><span class="lineNum">      74 </span>            :         new_allocator(const new_allocator&lt;_Tp1&gt;&amp;) _GLIBCXX_USE_NOEXCEPT { }</a>
 <span class="lineNum">      75 </span>            : 
-<span class="lineNum">      76 </span><span class="lineCov">     211477 :       ~new_allocator() _GLIBCXX_USE_NOEXCEPT { }</span>
+<span class="lineNum">      76 </span><span class="lineCov">     847324 :       ~new_allocator() _GLIBCXX_USE_NOEXCEPT { }</span>
 <span class="lineNum">      77 </span>            : 
 <span class="lineNum">      78 </span>            :       pointer
 <span class="lineNum">      79 </span>            :       address(reference __x) const _GLIBCXX_NOEXCEPT
@@ -148,32 +148,32 @@
 <span class="lineNum">      86 </span>            :       // NB: __n is permitted to be 0.  The C++ standard says nothing
 <a name="87"><span class="lineNum">      87 </span>            :       // about what the return value is when __n == 0.</a>
 <span class="lineNum">      88 </span>            :       pointer
-<span class="lineNum">      89 </span><span class="lineCov">      65750 :       allocate(size_type __n, const void* = 0)</span>
+<span class="lineNum">      89 </span><span class="lineCov">     263340 :       allocate(size_type __n, const void* = 0)</span>
 <span class="lineNum">      90 </span>            :       { 
-<span class="lineNum">      91 </span><span class="lineCov">      65750 :         if (__n &gt; this-&gt;max_size())</span>
+<span class="lineNum">      91 </span><span class="lineCov">     263340 :         if (__n &gt; this-&gt;max_size())</span>
 <span class="lineNum">      92 </span><span class="lineNoCov">          0 :           std::__throw_bad_alloc();</span>
 <span class="lineNum">      93 </span>            : 
-<span class="lineNum">      94 </span><span class="lineCov">      65750 :         return static_cast&lt;_Tp*&gt;(::operator new(__n * sizeof(_Tp)));</span>
+<span class="lineNum">      94 </span><span class="lineCov">     263340 :         return static_cast&lt;_Tp*&gt;(::operator new(__n * sizeof(_Tp)));</span>
 <span class="lineNum">      95 </span>            :       }
 <span class="lineNum">      96 </span>            : 
 <a name="97"><span class="lineNum">      97 </span>            :       // __p is not permitted to be a null pointer.</a>
 <span class="lineNum">      98 </span>            :       void
-<span class="lineNum">      99 </span><span class="lineCov">      83296 :       deallocate(pointer __p, size_type)</span>
-<span class="lineNum">     100 </span><span class="lineCov">      83296 :       { ::operator delete(__p); }</span>
+<span class="lineNum">      99 </span><span class="lineCov">     333584 :       deallocate(pointer __p, size_type)</span>
+<span class="lineNum">     100 </span><span class="lineCov">     333584 :       { ::operator delete(__p); }</span>
 <a name="101"><span class="lineNum">     101 </span>            : </a>
 <span class="lineNum">     102 </span>            :       size_type
-<span class="lineNum">     103 </span><span class="lineCov">     106698 :       max_size() const _GLIBCXX_USE_NOEXCEPT</span>
-<span class="lineNum">     104 </span><span class="lineCov">     106698 :       { return size_t(-1) / sizeof(_Tp); }</span>
+<span class="lineNum">     103 </span><span class="lineCov">     427172 :       max_size() const _GLIBCXX_USE_NOEXCEPT</span>
+<span class="lineNum">     104 </span><span class="lineCov">     427172 :       { return size_t(-1) / sizeof(_Tp); }</span>
 <span class="lineNum">     105 </span>            : 
 <span class="lineNum">     106 </span>            : #ifdef __GXX_EXPERIMENTAL_CXX0X__
 <a name="107"><span class="lineNum">     107 </span>            :       template&lt;typename _Up, typename... _Args&gt;</a>
 <span class="lineNum">     108 </span>            :         void
-<span class="lineNum">     109 </span><span class="lineCov">      38784 :         construct(_Up* __p, _Args&amp;&amp;... __args)</span>
-<span class="lineNum">     110 </span><span class="lineCov">      38784 :         { ::new((void *)__p) _Up(std::forward&lt;_Args&gt;(__args)...); }</span>
+<span class="lineNum">     109 </span><span class="lineCov">     155276 :         construct(_Up* __p, _Args&amp;&amp;... __args)</span>
+<span class="lineNum">     110 </span><span class="lineCov">     155276 :         { ::new((void *)__p) _Up(std::forward&lt;_Args&gt;(__args)...); }</span>
 <span class="lineNum">     111 </span>            : 
 <a name="112"><span class="lineNum">     112 </span>            :       template&lt;typename _Up&gt;</a>
 <span class="lineNum">     113 </span>            :         void 
-<span class="lineNum">     114 </span><span class="lineCov">        931 :         destroy(_Up* __p) { __p-&gt;~_Up(); }</span>
+<span class="lineNum">     114 </span><span class="lineCov">       3804 :         destroy(_Up* __p) { __p-&gt;~_Up(); }</span>
 <span class="lineNum">     115 </span>            : #else
 <span class="lineNum">     116 </span>            :       // _GLIBCXX_RESOLVE_LIB_DEFECTS
 <span class="lineNum">     117 </span>            :       // 402. wrong new expression in [some_] allocator::construct

@@ -154,9 +154,9 @@
 <span class="lineNum">      92 </span>            :             struct copy_iterator_rangeF : 
 <a name="93"><span class="lineNum">      93 </span>            :                 public std::unary_function&lt; iterator_range&lt;IteratorT&gt;, SeqT &gt;</a>
 <span class="lineNum">      94 </span>            :             {
-<span class="lineNum">      95 </span><span class="lineCov">        194 :                 SeqT operator()( const iterator_range&lt;IteratorT&gt;&amp; Range ) const</span>
+<span class="lineNum">      95 </span><span class="lineCov">        776 :                 SeqT operator()( const iterator_range&lt;IteratorT&gt;&amp; Range ) const</span>
 <span class="lineNum">      96 </span>            :                 {
-<span class="lineNum">      97 </span><span class="lineCov">        194 :                     return copy_range&lt;SeqT&gt;(Range);</span>
+<span class="lineNum">      97 </span><span class="lineCov">        776 :                     return copy_range&lt;SeqT&gt;(Range);</span>
 <span class="lineNum">      98 </span>            :                 }
 <span class="lineNum">      99 </span>            :             };
 <span class="lineNum">     100 </span>            : 

@@ -20,40 +20,46 @@ namespace {
 BOOST_AUTO_TEST_CASE(test_create_profile)
 {
   fasta::Sequence s1 = fasta::make_sequence(
-      "d", "AAAAAAAMAAAAAAEAAAAAALAAAAAA", 7);
+      "d", "AAAAAAAMAAAAAAEAAAAAALAAAAAABAAAAAAZAAAAAAXAAAAAA", 7);
   fasta::Sequence s2 = fasta::make_sequence(
-      "d", "AAAAAAAEAAAAAAEAAAAAAKAAAAAA", 7);
+      "d", "AAAAAAAEAAAAAAEAAAAAAKAAAAAABAAAAAAZAAAAAALAAAAAA", 7);
   fasta::Sequence s3 = fasta::make_sequence(
-      "d", "AAAAAAAMAAAAAAEAAAAAALAAAAAA", 7);
+      "d", "AAAAAAAMAAAAAAEAAAAAALAAAAAABAAAAAAZAAAAAALAAAAAA", 7);
   fasta::Sequence s4 = fasta::make_sequence(
-      "d", "MAAAAAAMAAAAAAKAAAAAALAAAAAA", 7);
+      "d", "MAAAAAAMAAAAAAKAAAAAALAAAAAANAAAAAAQAAAAAALAAAAAA", 7);
   fasta::Sequence s5 = fasta::make_sequence(
-      "d", "AAAAAAAMAAAAAAAAAAAAALAAAAAA", 7);
+      "d", "AAAAAAAMAAAAAAAAAAAAALAAAAAALAAAAAALAAAAAALAAAAAA", 7);
 
   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
 
   profile::ProfileMap p = profile::create_profile(sequences);
-  BOOST_CHECK_EQUAL(p.size(), 20);
-  BOOST_CHECK_EQUAL(p['A'][0], 4);
-  BOOST_CHECK_EQUAL(p['A'][1], 0);
-  BOOST_CHECK_EQUAL(p['A'][2], 1);
-  BOOST_CHECK_EQUAL(p['A'][3], 0);
-  BOOST_CHECK_EQUAL(p['M'][0], 1);
-  BOOST_CHECK_EQUAL(p['M'][1], 4);
-  BOOST_CHECK_EQUAL(p['M'][2], 0);
-  BOOST_CHECK_EQUAL(p['M'][3], 0);
-  BOOST_CHECK_EQUAL(p['K'][0], 0);
-  BOOST_CHECK_EQUAL(p['K'][1], 0);
-  BOOST_CHECK_EQUAL(p['K'][2], 1);
-  BOOST_CHECK_EQUAL(p['K'][3], 1);
-  BOOST_CHECK_EQUAL(p['E'][0], 0);
-  BOOST_CHECK_EQUAL(p['E'][1], 1);
-  BOOST_CHECK_EQUAL(p['E'][2], 3);
-  BOOST_CHECK_EQUAL(p['E'][3], 0);
-  BOOST_CHECK_EQUAL(p['L'][0], 0);
-  BOOST_CHECK_EQUAL(p['L'][1], 0);
-  BOOST_CHECK_EQUAL(p['L'][2], 0);
-  BOOST_CHECK_EQUAL(p['L'][3], 4);
+  profile::ProfileMap expected_profile = {{'A', {4, 0, 1, 0,   0,   0, 0.05}}, 
+                                          {'R', {0, 0, 0, 0,   0,   0, 0.05}},
+                                          {'N', {0, 0, 0, 0, 2.5,   0, 0.05}},
+                                          {'D', {0, 0, 0, 0, 1.5,   0, 0.05}},
+                                          {'C', {0, 0, 0, 0,   0,   0, 0.05}},
+                                          {'Q', {0, 0, 0, 0,   0, 2.5, 0.05}},
+                                          {'E', {0, 1, 3, 0,   0, 1.5, 0.05}},
+                                          {'G', {0, 0, 0, 0,   0,   0, 0.05}},
+                                          {'H', {0, 0, 0, 0,   0,   0, 0.05}},
+                                          {'I', {0, 0, 0, 0,   0,   0, 0.05}},
+                                          {'L', {0, 0, 0, 4,   1,   1, 4.05}},
+                                          {'K', {0, 0, 1, 1,   0,   0, 0.05}},
+                                          {'M', {1, 4, 0, 0,   0,   0, 0.05}},
+                                          {'F', {0, 0, 0, 0,   0,   0, 0.05}},
+                                          {'P', {0, 0, 0, 0,   0,   0, 0.05}},
+                                          {'S', {0, 0, 0, 0,   0,   0, 0.05}},
+                                          {'T', {0, 0, 0, 0,   0,   0, 0.05}},
+                                          {'W', {0, 0, 0, 0,   0,   0, 0.05}},
+                                          {'Y', {0, 0, 0, 0,   0,   0, 0.05}}, 
+                                          {'V', {0, 0, 0, 0,   0,   0, 0.05}}};
+  BOOST_CHECK_EQUAL(p.size(), expected_profile.size());
+  for (auto aa_it  = p.begin(); aa_it != p.end(); ++aa_it) {
+    for (size_t i = 0; i < aa_it->second.size(); ++i) {
+      BOOST_CHECK(std::abs(aa_it->second[i]
+            - expected_profile[aa_it->first][i]) < 0.001);
+    }
+  }
 }
 
 

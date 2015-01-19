@@ -142,8 +142,8 @@
 <span class="lineNum">      80 </span>            : #ifdef __cplusplus
 <a name="81"><span class="lineNum">      81 </span><span class="lineNoCov">          0 : inline match_flags operator&amp;(match_flags m1, match_flags m2)</span></a>
 <span class="lineNum">      82 </span><span class="lineNoCov">          0 : { return static_cast&lt;match_flags&gt;(static_cast&lt;boost::int32_t&gt;(m1) &amp; static_cast&lt;boost::int32_t&gt;(m2)); }</span>
-<span class="lineNum">      83 </span><span class="lineCov">      17575 : inline match_flags operator|(match_flags m1, match_flags m2)</span>
-<span class="lineNum">      84 </span><span class="lineCov">      17575 : { return static_cast&lt;match_flags&gt;(static_cast&lt;boost::int32_t&gt;(m1) | static_cast&lt;boost::int32_t&gt;(m2)); }</span>
+<span class="lineNum">      83 </span><span class="lineCov">      70360 : inline match_flags operator|(match_flags m1, match_flags m2)</span>
+<span class="lineNum">      84 </span><span class="lineCov">      70360 : { return static_cast&lt;match_flags&gt;(static_cast&lt;boost::int32_t&gt;(m1) | static_cast&lt;boost::int32_t&gt;(m2)); }</span>
 <span class="lineNum">      85 </span>            : inline match_flags operator^(match_flags m1, match_flags m2)
 <span class="lineNum">      86 </span>            : { return static_cast&lt;match_flags&gt;(static_cast&lt;boost::int32_t&gt;(m1) ^ static_cast&lt;boost::int32_t&gt;(m2)); }
 <span class="lineNum">      87 </span>            : inline match_flags operator~(match_flags m1)

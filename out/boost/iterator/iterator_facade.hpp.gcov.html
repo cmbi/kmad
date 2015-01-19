@@ -597,16 +597,16 @@
 <span class="lineNum">     535 </span>            : # endif
 <a name="536"><span class="lineNum">     536 </span>            : </a>
 <span class="lineNum">     537 </span>            :       template &lt;class Facade&gt;
-<span class="lineNum">     538 </span><span class="lineCov">        388 :       static typename Facade::reference dereference(Facade const&amp; f)</span>
+<span class="lineNum">     538 </span><span class="lineCov">       1552 :       static typename Facade::reference dereference(Facade const&amp; f)</span>
 <span class="lineNum">     539 </span>            :       {
-<span class="lineNum">     540 </span><span class="lineCov">        388 :           return f.dereference();</span>
+<span class="lineNum">     540 </span><span class="lineCov">       1552 :           return f.dereference();</span>
 <span class="lineNum">     541 </span>            :       }
 <a name="542"><span class="lineNum">     542 </span>            : </a>
 <span class="lineNum">     543 </span>            :       template &lt;class Facade&gt;
-<span class="lineNum">     544 </span><span class="lineCov">        388 :       static void increment(Facade&amp; f)</span>
+<span class="lineNum">     544 </span><span class="lineCov">       1552 :       static void increment(Facade&amp; f)</span>
 <span class="lineNum">     545 </span>            :       {
-<span class="lineNum">     546 </span><span class="lineCov">        388 :           f.increment();</span>
-<span class="lineNum">     547 </span><span class="lineCov">        388 :       }</span>
+<span class="lineNum">     546 </span><span class="lineCov">       1552 :           f.increment();</span>
+<span class="lineNum">     547 </span><span class="lineCov">       1552 :       }</span>
 <span class="lineNum">     548 </span>            : 
 <span class="lineNum">     549 </span>            :       template &lt;class Facade&gt;
 <span class="lineNum">     550 </span>            :       static void decrement(Facade&amp; f)
@@ -615,9 +615,9 @@
 <span class="lineNum">     553 </span>            :       }
 <a name="554"><span class="lineNum">     554 </span>            : </a>
 <span class="lineNum">     555 </span>            :       template &lt;class Facade1, class Facade2&gt;
-<span class="lineNum">     556 </span><span class="lineCov">        582 :       static bool equal(Facade1 const&amp; f1, Facade2 const&amp; f2, mpl::true_)</span>
+<span class="lineNum">     556 </span><span class="lineCov">       2328 :       static bool equal(Facade1 const&amp; f1, Facade2 const&amp; f2, mpl::true_)</span>
 <span class="lineNum">     557 </span>            :       {
-<span class="lineNum">     558 </span><span class="lineCov">        582 :           return f1.equal(f2);</span>
+<span class="lineNum">     558 </span><span class="lineCov">       2328 :           return f1.equal(f2);</span>
 <span class="lineNum">     559 </span>            :       }
 <span class="lineNum">     560 </span>            : 
 <span class="lineNum">     561 </span>            :       template &lt;class Facade1, class Facade2&gt;
@@ -675,7 +675,7 @@
 <span class="lineNum">     613 </span>            :       , class Reference
 <a name="614"><span class="lineNum">     614 </span>            :       , class Difference</a>
 <span class="lineNum">     615 </span>            :     &gt;
-<span class="lineNum">     616 </span><span class="lineCov">       1164 :     class iterator_facade_base&lt; Derived, Value, CategoryOrTraversal, Reference, Difference, false, false &gt;</span>
+<span class="lineNum">     616 </span><span class="lineCov">       4656 :     class iterator_facade_base&lt; Derived, Value, CategoryOrTraversal, Reference, Difference, false, false &gt;</span>
 <span class="lineNum">     617 </span>            : # ifdef BOOST_ITERATOR_FACADE_NEEDS_ITERATOR_BASE
 <span class="lineNum">     618 </span>            :         : public boost::iterators::detail::iterator_facade_types&lt;
 <span class="lineNum">     619 </span>            :              Value, CategoryOrTraversal, Reference, Difference
@@ -703,9 +703,9 @@
 <span class="lineNum">     641 </span>            :         typedef typename associated_types::iterator_category iterator_category;
 <a name="642"><span class="lineNum">     642 </span>            : </a>
 <span class="lineNum">     643 </span>            :     public:
-<span class="lineNum">     644 </span><span class="lineCov">        388 :         reference operator*() const</span>
+<span class="lineNum">     644 </span><span class="lineCov">       1552 :         reference operator*() const</span>
 <span class="lineNum">     645 </span>            :         {
-<span class="lineNum">     646 </span><span class="lineCov">        388 :             return iterator_core_access::dereference(this-&gt;derived());</span>
+<span class="lineNum">     646 </span><span class="lineCov">       1552 :             return iterator_core_access::dereference(this-&gt;derived());</span>
 <span class="lineNum">     647 </span>            :         }
 <span class="lineNum">     648 </span>            : 
 <span class="lineNum">     649 </span>            :         pointer operator-&gt;() const
@@ -713,24 +713,24 @@
 <span class="lineNum">     651 </span>            :             return operator_arrow_dispatch_::apply(*this-&gt;derived());
 <a name="652"><span class="lineNum">     652 </span>            :         }</a>
 <span class="lineNum">     653 </span>            : 
-<span class="lineNum">     654 </span><span class="lineCov">        388 :         Derived&amp; operator++()</span>
+<span class="lineNum">     654 </span><span class="lineCov">       1552 :         Derived&amp; operator++()</span>
 <span class="lineNum">     655 </span>            :         {
-<span class="lineNum">     656 </span><span class="lineCov">        388 :             iterator_core_access::increment(this-&gt;derived());</span>
-<span class="lineNum">     657 </span><span class="lineCov">        388 :             return this-&gt;derived();</span>
+<span class="lineNum">     656 </span><span class="lineCov">       1552 :             iterator_core_access::increment(this-&gt;derived());</span>
+<span class="lineNum">     657 </span><span class="lineCov">       1552 :             return this-&gt;derived();</span>
 <span class="lineNum">     658 </span>            :         }
 <span class="lineNum">     659 </span>            : 
 <span class="lineNum">     660 </span>            :     protected:
 <span class="lineNum">     661 </span>            :         //
 <a name="662"><span class="lineNum">     662 </span>            :         // Curiously Recurring Template interface.</a>
 <span class="lineNum">     663 </span>            :         //
-<span class="lineNum">     664 </span><span class="lineCov">        776 :         Derived&amp; derived()</span>
+<span class="lineNum">     664 </span><span class="lineCov">       3104 :         Derived&amp; derived()</span>
 <span class="lineNum">     665 </span>            :         {
-<span class="lineNum">     666 </span><span class="lineCov">        776 :             return *static_cast&lt;Derived*&gt;(this);</span>
+<span class="lineNum">     666 </span><span class="lineCov">       3104 :             return *static_cast&lt;Derived*&gt;(this);</span>
 <a name="667"><span class="lineNum">     667 </span>            :         }</a>
 <span class="lineNum">     668 </span>            : 
-<span class="lineNum">     669 </span><span class="lineCov">        388 :         Derived const&amp; derived() const</span>
+<span class="lineNum">     669 </span><span class="lineCov">       1552 :         Derived const&amp; derived() const</span>
 <span class="lineNum">     670 </span>            :         {
-<span class="lineNum">     671 </span><span class="lineCov">        388 :             return *static_cast&lt;Derived const*&gt;(this);</span>
+<span class="lineNum">     671 </span><span class="lineCov">       1552 :             return *static_cast&lt;Derived const*&gt;(this);</span>
 <span class="lineNum">     672 </span>            :         }
 <span class="lineNum">     673 </span>            :     };
 <span class="lineNum">     674 </span>            : 
@@ -822,7 +822,7 @@
 <span class="lineNum">     760 </span>            :     , class Reference   = Value&amp;
 <a name="761"><span class="lineNum">     761 </span>            :     , class Difference  = std::ptrdiff_t</a>
 <span class="lineNum">     762 </span>            :   &gt;
-<span class="lineNum">     763 </span><span class="lineCov">       1164 :   class iterator_facade :</span>
+<span class="lineNum">     763 </span><span class="lineCov">       4656 :   class iterator_facade :</span>
 <span class="lineNum">     764 </span>            :       public detail::iterator_facade_base&lt;
 <span class="lineNum">     765 </span>            :           Derived,
 <span class="lineNum">     766 </span>            :           Value,
@@ -949,8 +949,8 @@
 <span class="lineNum">     887 </span>            :     , base_op                                                       \
 <a name="888"><span class="lineNum">     888 </span>            :   )</a>
 <a name="889"><span class="lineNum">     889 </span>            : </a>
-<span class="lineNum">     890 </span><span class="lineCov">        291 :   BOOST_ITERATOR_FACADE_RELATION(==, return, equal)</span>
-<span class="lineNum">     891 </span><span class="lineCov">        291 :   BOOST_ITERATOR_FACADE_RELATION(!=, return !, equal)</span>
+<span class="lineNum">     890 </span><span class="lineCov">       1164 :   BOOST_ITERATOR_FACADE_RELATION(==, return, equal)</span>
+<span class="lineNum">     891 </span><span class="lineCov">       1164 :   BOOST_ITERATOR_FACADE_RELATION(!=, return !, equal)</span>
 <span class="lineNum">     892 </span>            : 
 <span class="lineNum">     893 </span>            : # undef BOOST_ITERATOR_FACADE_RELATION
 <span class="lineNum">     894 </span>            : 

@@ -277,11 +277,11 @@
 <span class="lineNum">     215 </span>            :         */
 <a name="216"><span class="lineNum">     216 </span>            :         template&lt; typename PredicateT &gt;</a>
 <span class="lineNum">     217 </span>            :         inline detail::token_finderF&lt;PredicateT&gt;
-<span class="lineNum">     218 </span><span class="lineCov">         97 :         token_finder( </span>
+<span class="lineNum">     218 </span><span class="lineCov">        388 :         token_finder( </span>
 <span class="lineNum">     219 </span>            :             PredicateT Pred, 
 <span class="lineNum">     220 </span>            :             token_compress_mode_type eCompress=token_compress_off )
 <span class="lineNum">     221 </span>            :         {
-<span class="lineNum">     222 </span><span class="lineCov">         97 :             return detail::token_finderF&lt;PredicateT&gt;( Pred, eCompress );</span>
+<span class="lineNum">     222 </span><span class="lineCov">        388 :             return detail::token_finderF&lt;PredicateT&gt;( Pred, eCompress );</span>
 <span class="lineNum">     223 </span>            :         }
 <span class="lineNum">     224 </span>            : 
 <span class="lineNum">     225 </span>            :         //! &quot;Range&quot; finder

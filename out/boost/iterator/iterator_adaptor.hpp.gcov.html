@@ -310,7 +310,7 @@
 <span class="lineNum">     248 </span>            :     , class Reference    = use_default
 <a name="249"><span class="lineNum">     249 </span>            :     , class Difference   = use_default</a>
 <span class="lineNum">     250 </span>            :   &gt;
-<span class="lineNum">     251 </span><span class="lineCov">       1358 :   class iterator_adaptor</span>
+<span class="lineNum">     251 </span><span class="lineCov">       5432 :   class iterator_adaptor</span>
 <span class="lineNum">     252 </span>            :     : public boost::iterators::detail::iterator_adaptor_base&lt;
 <span class="lineNum">     253 </span>            :         Derived, Base, Value, Traversal, Reference, Difference
 <span class="lineNum">     254 </span>            :       &gt;::type
@@ -324,15 +324,15 @@
 <span class="lineNum">     262 </span>            :    public:
 <a name="263"><span class="lineNum">     263 </span>            :       iterator_adaptor() {}</a>
 <span class="lineNum">     264 </span>            : 
-<span class="lineNum">     265 </span><span class="lineCov">        194 :       explicit iterator_adaptor(Base const &amp;iter)</span>
-<span class="lineNum">     266 </span><span class="lineCov">        194 :           : m_iterator(iter)</span>
+<span class="lineNum">     265 </span><span class="lineCov">        776 :       explicit iterator_adaptor(Base const &amp;iter)</span>
+<span class="lineNum">     266 </span><span class="lineCov">        776 :           : m_iterator(iter)</span>
 <span class="lineNum">     267 </span>            :       {
-<span class="lineNum">     268 </span><span class="lineCov">        194 :       }</span>
+<span class="lineNum">     268 </span><span class="lineCov">        776 :       }</span>
 <span class="lineNum">     269 </span>            : 
 <a name="270"><span class="lineNum">     270 </span>            :       typedef Base base_type;</a>
 <span class="lineNum">     271 </span>            : 
-<span class="lineNum">     272 </span><span class="lineCov">        485 :       Base const&amp; base() const</span>
-<span class="lineNum">     273 </span><span class="lineCov">        485 :         { return m_iterator; }</span>
+<span class="lineNum">     272 </span><span class="lineCov">       1940 :       Base const&amp; base() const</span>
+<span class="lineNum">     273 </span><span class="lineCov">       1940 :         { return m_iterator; }</span>
 <span class="lineNum">     274 </span>            : 
 <span class="lineNum">     275 </span>            :    protected:
 <span class="lineNum">     276 </span>            :       // for convenience in derived classes
@@ -360,13 +360,13 @@
 <span class="lineNum">     298 </span>            :       template &lt;
 <a name="299"><span class="lineNum">     299 </span>            :       class OtherDerived, class OtherIterator, class V, class C, class R, class D</a>
 <span class="lineNum">     300 </span>            :       &gt;
-<span class="lineNum">     301 </span><span class="lineCov">        291 :       bool equal(iterator_adaptor&lt;OtherDerived, OtherIterator, V, C, R, D&gt; const&amp; x) const</span>
+<span class="lineNum">     301 </span><span class="lineCov">       1164 :       bool equal(iterator_adaptor&lt;OtherDerived, OtherIterator, V, C, R, D&gt; const&amp; x) const</span>
 <span class="lineNum">     302 </span>            :       {
 <span class="lineNum">     303 </span>            :         // Maybe readd with same_distance
 <span class="lineNum">     304 </span>            :         //           BOOST_STATIC_ASSERT(
 <span class="lineNum">     305 </span>            :         //               (detail::same_category_and_difference&lt;Derived,OtherDerived&gt;::value)
 <span class="lineNum">     306 </span>            :         //               );
-<span class="lineNum">     307 </span><span class="lineCov">        291 :           return m_iterator == x.base();</span>
+<span class="lineNum">     307 </span><span class="lineCov">       1164 :           return m_iterator == x.base();</span>
 <span class="lineNum">     308 </span>            :       }
 <span class="lineNum">     309 </span>            : 
 <span class="lineNum">     310 </span>            :       typedef typename iterator_category_to_traversal&lt;
@@ -382,7 +382,7 @@
 <span class="lineNum">     320 </span>            :           m_iterator += n;
 <a name="321"><span class="lineNum">     321 </span>            :       }</a>
 <span class="lineNum">     322 </span>            : 
-<span class="lineNum">     323 </span><span class="lineCov">        194 :       void increment() { ++m_iterator; }</span>
+<span class="lineNum">     323 </span><span class="lineCov">        776 :       void increment() { ++m_iterator; }</span>
 <span class="lineNum">     324 </span>            : 
 <span class="lineNum">     325 </span>            :       void decrement()
 <span class="lineNum">     326 </span>            :       {

@@ -607,34 +607,34 @@
 <span class="lineNum">     545 </span>            :                 concatenated into one match.
 <a name="546"><span class="lineNum">     546 </span>            :             */</a>
 <span class="lineNum">     547 </span>            :             template&lt; typename PredicateT &gt;
-<span class="lineNum">     548 </span><span class="lineCov">       2425 :             struct token_finderF</span>
+<span class="lineNum">     548 </span><span class="lineCov">       9700 :             struct token_finderF</span>
 <a name="549"><span class="lineNum">     549 </span>            :             {</a>
 <span class="lineNum">     550 </span>            :                 // Construction
-<span class="lineNum">     551 </span><span class="lineCov">         97 :                 token_finderF(</span>
+<span class="lineNum">     551 </span><span class="lineCov">        388 :                 token_finderF(</span>
 <span class="lineNum">     552 </span>            :                     PredicateT Pred,
 <span class="lineNum">     553 </span>            :                     token_compress_mode_type eCompress=token_compress_off ) :
-<span class="lineNum">     554 </span><span class="lineCov">         97 :                         m_Pred(Pred), m_eCompress(eCompress) {}</span>
+<span class="lineNum">     554 </span><span class="lineCov">        388 :                         m_Pred(Pred), m_eCompress(eCompress) {}</span>
 <span class="lineNum">     555 </span>            : 
 <span class="lineNum">     556 </span>            :                 // Operation
 <a name="557"><span class="lineNum">     557 </span>            :                 template&lt; typename ForwardIteratorT &gt;</a>
 <span class="lineNum">     558 </span>            :                 iterator_range&lt;ForwardIteratorT&gt;
-<span class="lineNum">     559 </span><span class="lineCov">        291 :                 operator()(</span>
+<span class="lineNum">     559 </span><span class="lineCov">       1164 :                 operator()(</span>
 <span class="lineNum">     560 </span>            :                     ForwardIteratorT Begin,
 <span class="lineNum">     561 </span>            :                     ForwardIteratorT End ) const
 <span class="lineNum">     562 </span>            :                 {
 <span class="lineNum">     563 </span>            :                     typedef iterator_range&lt;ForwardIteratorT&gt; result_type;
 <span class="lineNum">     564 </span>            : 
-<span class="lineNum">     565 </span><span class="lineCov">        291 :                     ForwardIteratorT It=std::find_if( Begin, End, m_Pred );</span>
+<span class="lineNum">     565 </span><span class="lineCov">       1164 :                     ForwardIteratorT It=std::find_if( Begin, End, m_Pred );</span>
 <span class="lineNum">     566 </span>            : 
-<span class="lineNum">     567 </span><span class="lineCov">        291 :                     if( It==End )</span>
+<span class="lineNum">     567 </span><span class="lineCov">       1164 :                     if( It==End )</span>
 <span class="lineNum">     568 </span>            :                     {
-<span class="lineNum">     569 </span><span class="lineCov">        194 :                         return result_type( End, End );</span>
+<span class="lineNum">     569 </span><span class="lineCov">        776 :                         return result_type( End, End );</span>
 <span class="lineNum">     570 </span>            :                     }
 <span class="lineNum">     571 </span>            :                     else
 <span class="lineNum">     572 </span>            :                     {
-<span class="lineNum">     573 </span><span class="lineCov">         97 :                         ForwardIteratorT It2=It;</span>
+<span class="lineNum">     573 </span><span class="lineCov">        388 :                         ForwardIteratorT It2=It;</span>
 <span class="lineNum">     574 </span>            : 
-<span class="lineNum">     575 </span><span class="lineCov">         97 :                         if( m_eCompress==token_compress_on )</span>
+<span class="lineNum">     575 </span><span class="lineCov">        388 :                         if( m_eCompress==token_compress_on )</span>
 <span class="lineNum">     576 </span>            :                         {
 <span class="lineNum">     577 </span>            :                             // Find first non-matching character
 <span class="lineNum">     578 </span><span class="lineNoCov">          0 :                             while( It2!=End &amp;&amp; m_Pred(*It2) ) ++It2;</span>
@@ -642,10 +642,10 @@
 <span class="lineNum">     580 </span>            :                         else
 <span class="lineNum">     581 </span>            :                         {
 <span class="lineNum">     582 </span>            :                             // Advance by one position
-<span class="lineNum">     583 </span><span class="lineCov">         97 :                             ++It2;</span>
+<span class="lineNum">     583 </span><span class="lineCov">        388 :                             ++It2;</span>
 <span class="lineNum">     584 </span>            :                         }
 <span class="lineNum">     585 </span>            : 
-<span class="lineNum">     586 </span><span class="lineCov">         97 :                         return result_type( It, It2 );</span>
+<span class="lineNum">     586 </span><span class="lineCov">        388 :                         return result_type( It, It2 );</span>
 <span class="lineNum">     587 </span>            :                     }
 <span class="lineNum">     588 </span>            :                 }
 <span class="lineNum">     589 </span>            : 

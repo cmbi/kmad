@@ -199,7 +199,7 @@
 <span class="lineNum">     137 </span>            :             \note This function provides the strong exception-safety guarantee
 <a name="138"><span class="lineNum">     138 </span>            :         */</a>
 <span class="lineNum">     139 </span>            :         template&lt; typename SequenceSequenceT, typename RangeT, typename PredicateT &gt;
-<span class="lineNum">     140 </span><span class="lineCov">         97 :         inline SequenceSequenceT&amp; split(</span>
+<span class="lineNum">     140 </span><span class="lineCov">        388 :         inline SequenceSequenceT&amp; split(</span>
 <span class="lineNum">     141 </span>            :             SequenceSequenceT&amp; Result,
 <span class="lineNum">     142 </span>            :             RangeT&amp; Input,
 <span class="lineNum">     143 </span>            :             PredicateT Pred,
@@ -208,7 +208,7 @@
 <span class="lineNum">     146 </span>            :             return ::boost::algorithm::iter_split(
 <span class="lineNum">     147 </span>            :                 Result,
 <span class="lineNum">     148 </span>            :                 Input,
-<span class="lineNum">     149 </span><span class="lineCov">         97 :                 ::boost::algorithm::token_finder( Pred, eCompress ) );         </span>
+<span class="lineNum">     149 </span><span class="lineCov">        388 :                 ::boost::algorithm::token_finder( Pred, eCompress ) );         </span>
 <span class="lineNum">     150 </span>            :         }
 <span class="lineNum">     151 </span>            : 
 <span class="lineNum">     152 </span>            :     } // namespace algorithm

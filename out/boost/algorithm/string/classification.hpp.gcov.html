@@ -262,10 +262,10 @@
 <span class="lineNum">     200 </span>            :         template&lt;typename RangeT&gt;
 <a name="201"><span class="lineNum">     201 </span>            :         inline detail::is_any_ofF&lt;</a>
 <span class="lineNum">     202 </span>            :             BOOST_STRING_TYPENAME range_value&lt;RangeT&gt;::type&gt; 
-<span class="lineNum">     203 </span><span class="lineCov">         97 :         is_any_of( const RangeT&amp; Set )</span>
+<span class="lineNum">     203 </span><span class="lineCov">        388 :         is_any_of( const RangeT&amp; Set )</span>
 <span class="lineNum">     204 </span>            :         {
-<span class="lineNum">     205 </span><span class="lineCov">         97 :             iterator_range&lt;BOOST_STRING_TYPENAME range_const_iterator&lt;RangeT&gt;::type&gt; lit_set(boost::as_literal(Set));</span>
-<span class="lineNum">     206 </span><span class="lineCov">         97 :             return detail::is_any_ofF&lt;BOOST_STRING_TYPENAME range_value&lt;RangeT&gt;::type&gt;(lit_set); </span>
+<span class="lineNum">     205 </span><span class="lineCov">        388 :             iterator_range&lt;BOOST_STRING_TYPENAME range_const_iterator&lt;RangeT&gt;::type&gt; lit_set(boost::as_literal(Set));</span>
+<span class="lineNum">     206 </span><span class="lineCov">        388 :             return detail::is_any_ofF&lt;BOOST_STRING_TYPENAME range_value&lt;RangeT&gt;::type&gt;(lit_set); </span>
 <span class="lineNum">     207 </span>            :         }
 <span class="lineNum">     208 </span>            : 
 <span class="lineNum">     209 </span>            :         //! is_from_range predicate

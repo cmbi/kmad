@@ -213,96 +213,96 @@
 <span class="lineNum">     151 </span>            :   /// This is an overload used by find() for the RAI case.
 <a name="152"><span class="lineNum">     152 </span>            :   template&lt;typename _RandomAccessIterator, typename _Tp&gt;</a>
 <span class="lineNum">     153 </span>            :     _RandomAccessIterator
-<span class="lineNum">     154 </span><span class="lineCov">         77 :     __find(_RandomAccessIterator __first, _RandomAccessIterator __last,</span>
+<span class="lineNum">     154 </span><span class="lineCov">        308 :     __find(_RandomAccessIterator __first, _RandomAccessIterator __last,</span>
 <span class="lineNum">     155 </span>            :            const _Tp&amp; __val, random_access_iterator_tag)
 <span class="lineNum">     156 </span>            :     {
 <span class="lineNum">     157 </span>            :       typename iterator_traits&lt;_RandomAccessIterator&gt;::difference_type
-<span class="lineNum">     158 </span><span class="lineCov">         77 :         __trip_count = (__last - __first) &gt;&gt; 2;</span>
+<span class="lineNum">     158 </span><span class="lineCov">        308 :         __trip_count = (__last - __first) &gt;&gt; 2;</span>
 <span class="lineNum">     159 </span>            : 
-<span class="lineNum">     160 </span><span class="lineCov">        128 :       for (; __trip_count &gt; 0; --__trip_count)</span>
+<span class="lineNum">     160 </span><span class="lineCov">        512 :       for (; __trip_count &gt; 0; --__trip_count)</span>
 <span class="lineNum">     161 </span>            :         {
-<span class="lineNum">     162 </span><span class="lineCov">         60 :           if (*__first == __val)</span>
-<span class="lineNum">     163 </span><span class="lineCov">          5 :             return __first;</span>
-<span class="lineNum">     164 </span><span class="lineCov">         55 :           ++__first;</span>
+<span class="lineNum">     162 </span><span class="lineCov">        240 :           if (*__first == __val)</span>
+<span class="lineNum">     163 </span><span class="lineCov">         20 :             return __first;</span>
+<span class="lineNum">     164 </span><span class="lineCov">        220 :           ++__first;</span>
 <span class="lineNum">     165 </span>            : 
-<span class="lineNum">     166 </span><span class="lineCov">         55 :           if (*__first == __val)</span>
-<span class="lineNum">     167 </span><span class="lineCov">          1 :             return __first;</span>
-<span class="lineNum">     168 </span><span class="lineCov">         54 :           ++__first;</span>
+<span class="lineNum">     166 </span><span class="lineCov">        220 :           if (*__first == __val)</span>
+<span class="lineNum">     167 </span><span class="lineCov">          4 :             return __first;</span>
+<span class="lineNum">     168 </span><span class="lineCov">        216 :           ++__first;</span>
 <span class="lineNum">     169 </span>            : 
-<span class="lineNum">     170 </span><span class="lineCov">         54 :           if (*__first == __val)</span>
-<span class="lineNum">     171 </span><span class="lineCov">          2 :             return __first;</span>
-<span class="lineNum">     172 </span><span class="lineCov">         52 :           ++__first;</span>
+<span class="lineNum">     170 </span><span class="lineCov">        216 :           if (*__first == __val)</span>
+<span class="lineNum">     171 </span><span class="lineCov">          8 :             return __first;</span>
+<span class="lineNum">     172 </span><span class="lineCov">        208 :           ++__first;</span>
 <span class="lineNum">     173 </span>            : 
-<span class="lineNum">     174 </span><span class="lineCov">         52 :           if (*__first == __val)</span>
-<span class="lineNum">     175 </span><span class="lineCov">          1 :             return __first;</span>
-<span class="lineNum">     176 </span><span class="lineCov">         51 :           ++__first;</span>
+<span class="lineNum">     174 </span><span class="lineCov">        208 :           if (*__first == __val)</span>
+<span class="lineNum">     175 </span><span class="lineCov">          4 :             return __first;</span>
+<span class="lineNum">     176 </span><span class="lineCov">        204 :           ++__first;</span>
 <span class="lineNum">     177 </span>            :         }
 <span class="lineNum">     178 </span>            : 
-<span class="lineNum">     179 </span><span class="lineCov">         68 :       switch (__last - __first)</span>
+<span class="lineNum">     179 </span><span class="lineCov">        272 :       switch (__last - __first)</span>
 <span class="lineNum">     180 </span>            :         {
 <span class="lineNum">     181 </span>            :         case 3:
-<span class="lineNum">     182 </span><span class="lineCov">          1 :           if (*__first == __val)</span>
+<span class="lineNum">     182 </span><span class="lineCov">          4 :           if (*__first == __val)</span>
 <span class="lineNum">     183 </span><span class="lineNoCov">          0 :             return __first;</span>
-<span class="lineNum">     184 </span><span class="lineCov">          1 :           ++__first;</span>
+<span class="lineNum">     184 </span><span class="lineCov">          4 :           ++__first;</span>
 <span class="lineNum">     185 </span>            :         case 2:
-<span class="lineNum">     186 </span><span class="lineCov">         25 :           if (*__first == __val)</span>
-<span class="lineNum">     187 </span><span class="lineCov">          6 :             return __first;</span>
-<span class="lineNum">     188 </span><span class="lineCov">         19 :           ++__first;</span>
+<span class="lineNum">     186 </span><span class="lineCov">        100 :           if (*__first == __val)</span>
+<span class="lineNum">     187 </span><span class="lineCov">         24 :             return __first;</span>
+<span class="lineNum">     188 </span><span class="lineCov">         76 :           ++__first;</span>
 <span class="lineNum">     189 </span>            :         case 1:
-<span class="lineNum">     190 </span><span class="lineCov">         62 :           if (*__first == __val)</span>
-<span class="lineNum">     191 </span><span class="lineCov">         13 :             return __first;</span>
-<span class="lineNum">     192 </span><span class="lineCov">         49 :           ++__first;</span>
+<span class="lineNum">     190 </span><span class="lineCov">        248 :           if (*__first == __val)</span>
+<span class="lineNum">     191 </span><span class="lineCov">         52 :             return __first;</span>
+<span class="lineNum">     192 </span><span class="lineCov">        196 :           ++__first;</span>
 <span class="lineNum">     193 </span>            :         case 0:
 <span class="lineNum">     194 </span>            :         default:
-<span class="lineNum">     195 </span><span class="lineCov">         49 :           return __last;</span>
+<span class="lineNum">     195 </span><span class="lineCov">        196 :           return __last;</span>
 <span class="lineNum">     196 </span>            :         }
 <span class="lineNum">     197 </span>            :     }
 <span class="lineNum">     198 </span>            : 
 <span class="lineNum">     199 </span>            :   /// This is an overload used by find_if() for the RAI case.
 <a name="200"><span class="lineNum">     200 </span>            :   template&lt;typename _RandomAccessIterator, typename _Predicate&gt;</a>
 <span class="lineNum">     201 </span>            :     _RandomAccessIterator
-<span class="lineNum">     202 </span><span class="lineCov">        291 :     __find_if(_RandomAccessIterator __first, _RandomAccessIterator __last,</span>
+<span class="lineNum">     202 </span><span class="lineCov">       1164 :     __find_if(_RandomAccessIterator __first, _RandomAccessIterator __last,</span>
 <span class="lineNum">     203 </span>            :               _Predicate __pred, random_access_iterator_tag)
 <span class="lineNum">     204 </span>            :     {
 <span class="lineNum">     205 </span>            :       typename iterator_traits&lt;_RandomAccessIterator&gt;::difference_type
-<span class="lineNum">     206 </span><span class="lineCov">        291 :         __trip_count = (__last - __first) &gt;&gt; 2;</span>
+<span class="lineNum">     206 </span><span class="lineCov">       1164 :         __trip_count = (__last - __first) &gt;&gt; 2;</span>
 <span class="lineNum">     207 </span>            : 
-<span class="lineNum">     208 </span><span class="lineCov">        582 :       for (; __trip_count &gt; 0; --__trip_count)</span>
+<span class="lineNum">     208 </span><span class="lineCov">       2328 :       for (; __trip_count &gt; 0; --__trip_count)</span>
 <span class="lineNum">     209 </span>            :         {
-<span class="lineNum">     210 </span><span class="lineCov">        388 :           if (__pred(*__first))</span>
+<span class="lineNum">     210 </span><span class="lineCov">       1552 :           if (__pred(*__first))</span>
 <span class="lineNum">     211 </span><span class="lineNoCov">          0 :             return __first;</span>
-<span class="lineNum">     212 </span><span class="lineCov">        388 :           ++__first;</span>
+<span class="lineNum">     212 </span><span class="lineCov">       1552 :           ++__first;</span>
 <span class="lineNum">     213 </span>            : 
-<span class="lineNum">     214 </span><span class="lineCov">        388 :           if (__pred(*__first))</span>
+<span class="lineNum">     214 </span><span class="lineCov">       1552 :           if (__pred(*__first))</span>
 <span class="lineNum">     215 </span><span class="lineNoCov">          0 :             return __first;</span>
-<span class="lineNum">     216 </span><span class="lineCov">        388 :           ++__first;</span>
+<span class="lineNum">     216 </span><span class="lineCov">       1552 :           ++__first;</span>
 <span class="lineNum">     217 </span>            : 
-<span class="lineNum">     218 </span><span class="lineCov">        388 :           if (__pred(*__first))</span>
-<span class="lineNum">     219 </span><span class="lineCov">         97 :             return __first;</span>
-<span class="lineNum">     220 </span><span class="lineCov">        291 :           ++__first;</span>
+<span class="lineNum">     218 </span><span class="lineCov">       1552 :           if (__pred(*__first))</span>
+<span class="lineNum">     219 </span><span class="lineCov">        388 :             return __first;</span>
+<span class="lineNum">     220 </span><span class="lineCov">       1164 :           ++__first;</span>
 <span class="lineNum">     221 </span>            : 
-<span class="lineNum">     222 </span><span class="lineCov">        291 :           if (__pred(*__first))</span>
+<span class="lineNum">     222 </span><span class="lineCov">       1164 :           if (__pred(*__first))</span>
 <span class="lineNum">     223 </span><span class="lineNoCov">          0 :             return __first;</span>
-<span class="lineNum">     224 </span><span class="lineCov">        291 :           ++__first;</span>
+<span class="lineNum">     224 </span><span class="lineCov">       1164 :           ++__first;</span>
 <span class="lineNum">     225 </span>            :         }
 <span class="lineNum">     226 </span>            : 
-<span class="lineNum">     227 </span><span class="lineCov">        194 :       switch (__last - __first)</span>
+<span class="lineNum">     227 </span><span class="lineCov">        776 :       switch (__last - __first)</span>
 <span class="lineNum">     228 </span>            :         {
 <span class="lineNum">     229 </span>            :         case 3:
 <span class="lineNum">     230 </span><span class="lineNoCov">          0 :           if (__pred(*__first))</span>
 <span class="lineNum">     231 </span><span class="lineNoCov">          0 :             return __first;</span>
 <span class="lineNum">     232 </span><span class="lineNoCov">          0 :           ++__first;</span>
 <span class="lineNum">     233 </span>            :         case 2:
-<span class="lineNum">     234 </span><span class="lineCov">         94 :           if (__pred(*__first))</span>
+<span class="lineNum">     234 </span><span class="lineCov">        376 :           if (__pred(*__first))</span>
 <span class="lineNum">     235 </span><span class="lineNoCov">          0 :             return __first;</span>
-<span class="lineNum">     236 </span><span class="lineCov">         94 :           ++__first;</span>
+<span class="lineNum">     236 </span><span class="lineCov">        376 :           ++__first;</span>
 <span class="lineNum">     237 </span>            :         case 1:
-<span class="lineNum">     238 </span><span class="lineCov">         97 :           if (__pred(*__first))</span>
+<span class="lineNum">     238 </span><span class="lineCov">        388 :           if (__pred(*__first))</span>
 <span class="lineNum">     239 </span><span class="lineNoCov">          0 :             return __first;</span>
-<span class="lineNum">     240 </span><span class="lineCov">         97 :           ++__first;</span>
+<span class="lineNum">     240 </span><span class="lineCov">        388 :           ++__first;</span>
 <span class="lineNum">     241 </span>            :         case 0:
 <span class="lineNum">     242 </span>            :         default:
-<span class="lineNum">     243 </span><span class="lineCov">        194 :           return __last;</span>
+<span class="lineNum">     243 </span><span class="lineCov">        776 :           return __last;</span>
 <span class="lineNum">     244 </span>            :         }
 <span class="lineNum">     245 </span>            :     }
 <span class="lineNum">     246 </span>            : 
@@ -1499,17 +1499,17 @@
 <span class="lineNum">    1437 </span>            :   */
 <a name="1438"><span class="lineNum">    1438 </span>            :   template&lt;typename _RandomAccessIterator&gt;</a>
 <span class="lineNum">    1439 </span>            :     void
-<span class="lineNum">    1440 </span><span class="lineCov">         10 :     __reverse(_RandomAccessIterator __first, _RandomAccessIterator __last,</span>
+<span class="lineNum">    1440 </span><span class="lineCov">         40 :     __reverse(_RandomAccessIterator __first, _RandomAccessIterator __last,</span>
 <span class="lineNum">    1441 </span>            :               random_access_iterator_tag)
 <span class="lineNum">    1442 </span>            :     {
-<span class="lineNum">    1443 </span><span class="lineCov">         10 :       if (__first == __last)</span>
-<span class="lineNum">    1444 </span><span class="lineCov">         10 :         return;</span>
-<span class="lineNum">    1445 </span><span class="lineCov">         10 :       --__last;</span>
-<span class="lineNum">    1446 </span><span class="lineCov">         60 :       while (__first &lt; __last)</span>
+<span class="lineNum">    1443 </span><span class="lineCov">         40 :       if (__first == __last)</span>
+<span class="lineNum">    1444 </span><span class="lineCov">         40 :         return;</span>
+<span class="lineNum">    1445 </span><span class="lineCov">         40 :       --__last;</span>
+<span class="lineNum">    1446 </span><span class="lineCov">        240 :       while (__first &lt; __last)</span>
 <span class="lineNum">    1447 </span>            :         {
-<span class="lineNum">    1448 </span><span class="lineCov">         40 :           std::iter_swap(__first, __last);</span>
-<span class="lineNum">    1449 </span><span class="lineCov">         40 :           ++__first;</span>
-<span class="lineNum">    1450 </span><span class="lineCov">         40 :           --__last;</span>
+<span class="lineNum">    1448 </span><span class="lineCov">        160 :           std::iter_swap(__first, __last);</span>
+<span class="lineNum">    1449 </span><span class="lineCov">        160 :           ++__first;</span>
+<span class="lineNum">    1450 </span><span class="lineCov">        160 :           --__last;</span>
 <span class="lineNum">    1451 </span>            :         }
 <span class="lineNum">    1452 </span>            :     }
 <span class="lineNum">    1453 </span>            : 
@@ -1527,14 +1527,14 @@
 <span class="lineNum">    1465 </span>            :   */
 <a name="1466"><span class="lineNum">    1466 </span>            :   template&lt;typename _BidirectionalIterator&gt;</a>
 <span class="lineNum">    1467 </span>            :     inline void
-<span class="lineNum">    1468 </span><span class="lineCov">         10 :     reverse(_BidirectionalIterator __first, _BidirectionalIterator __last)</span>
+<span class="lineNum">    1468 </span><span class="lineCov">         40 :     reverse(_BidirectionalIterator __first, _BidirectionalIterator __last)</span>
 <span class="lineNum">    1469 </span>            :     {
 <span class="lineNum">    1470 </span>            :       // concept requirements
 <span class="lineNum">    1471 </span>            :       __glibcxx_function_requires(_Mutable_BidirectionalIteratorConcept&lt;
 <span class="lineNum">    1472 </span>            :                                   _BidirectionalIterator&gt;)
 <span class="lineNum">    1473 </span>            :       __glibcxx_requires_valid_range(__first, __last);
-<span class="lineNum">    1474 </span><span class="lineCov">         10 :       std::__reverse(__first, __last, std::__iterator_category(__first));</span>
-<span class="lineNum">    1475 </span><span class="lineCov">         10 :     }</span>
+<span class="lineNum">    1474 </span><span class="lineCov">         40 :       std::__reverse(__first, __last, std::__iterator_category(__first));</span>
+<span class="lineNum">    1475 </span><span class="lineCov">         40 :     }</span>
 <span class="lineNum">    1476 </span>            : 
 <span class="lineNum">    1477 </span>            :   /**
 <span class="lineNum">    1478 </span>            :    *  @brief Copy a sequence, reversing its elements.
@@ -2177,20 +2177,20 @@
 <span class="lineNum">    2115 </span>            :   /// This is a helper function for the sort routine.
 <a name="2116"><span class="lineNum">    2116 </span>            :   template&lt;typename _RandomAccessIterator&gt;</a>
 <span class="lineNum">    2117 </span>            :     void
-<span class="lineNum">    2118 </span><span class="lineCov">         97 :     __unguarded_linear_insert(_RandomAccessIterator __last)</span>
+<span class="lineNum">    2118 </span><span class="lineCov">        388 :     __unguarded_linear_insert(_RandomAccessIterator __last)</span>
 <span class="lineNum">    2119 </span>            :     {
 <span class="lineNum">    2120 </span>            :       typename iterator_traits&lt;_RandomAccessIterator&gt;::value_type
-<span class="lineNum">    2121 </span><span class="lineCov">         97 :         __val = _GLIBCXX_MOVE(*__last);</span>
-<span class="lineNum">    2122 </span><span class="lineCov">         97 :       _RandomAccessIterator __next = __last;</span>
-<span class="lineNum">    2123 </span><span class="lineCov">         97 :       --__next;</span>
-<span class="lineNum">    2124 </span><span class="lineCov">        194 :       while (__val &lt; *__next)</span>
+<span class="lineNum">    2121 </span><span class="lineCov">        388 :         __val = _GLIBCXX_MOVE(*__last);</span>
+<span class="lineNum">    2122 </span><span class="lineCov">        388 :       _RandomAccessIterator __next = __last;</span>
+<span class="lineNum">    2123 </span><span class="lineCov">        388 :       --__next;</span>
+<span class="lineNum">    2124 </span><span class="lineCov">        776 :       while (__val &lt; *__next)</span>
 <span class="lineNum">    2125 </span>            :         {
 <span class="lineNum">    2126 </span><span class="lineNoCov">          0 :           *__last = _GLIBCXX_MOVE(*__next);</span>
 <span class="lineNum">    2127 </span><span class="lineNoCov">          0 :           __last = __next;</span>
 <span class="lineNum">    2128 </span><span class="lineNoCov">          0 :           --__next;</span>
 <span class="lineNum">    2129 </span>            :         }
-<span class="lineNum">    2130 </span><span class="lineCov">         97 :       *__last = _GLIBCXX_MOVE(__val);</span>
-<span class="lineNum">    2131 </span><span class="lineCov">         97 :     }</span>
+<span class="lineNum">    2130 </span><span class="lineCov">        388 :       *__last = _GLIBCXX_MOVE(__val);</span>
+<span class="lineNum">    2131 </span><span class="lineCov">        388 :     }</span>
 <span class="lineNum">    2132 </span>            : 
 <span class="lineNum">    2133 </span>            :   /// This is a helper function for the sort routine.
 <span class="lineNum">    2134 </span>            :   template&lt;typename _RandomAccessIterator, typename _Compare&gt;
@@ -2214,15 +2214,15 @@
 <span class="lineNum">    2152 </span>            :   /// This is a helper function for the sort routine.
 <a name="2153"><span class="lineNum">    2153 </span>            :   template&lt;typename _RandomAccessIterator&gt;</a>
 <span class="lineNum">    2154 </span>            :     void
-<span class="lineNum">    2155 </span><span class="lineCov">         97 :     __insertion_sort(_RandomAccessIterator __first,</span>
+<span class="lineNum">    2155 </span><span class="lineCov">        388 :     __insertion_sort(_RandomAccessIterator __first,</span>
 <span class="lineNum">    2156 </span>            :                      _RandomAccessIterator __last)
 <span class="lineNum">    2157 </span>            :     {
-<span class="lineNum">    2158 </span><span class="lineCov">         97 :       if (__first == __last)</span>
-<span class="lineNum">    2159 </span><span class="lineCov">         97 :         return;</span>
+<span class="lineNum">    2158 </span><span class="lineCov">        388 :       if (__first == __last)</span>
+<span class="lineNum">    2159 </span><span class="lineCov">        388 :         return;</span>
 <span class="lineNum">    2160 </span>            : 
-<span class="lineNum">    2161 </span><span class="lineCov">        194 :       for (_RandomAccessIterator __i = __first + 1; __i != __last; ++__i)</span>
+<span class="lineNum">    2161 </span><span class="lineCov">        776 :       for (_RandomAccessIterator __i = __first + 1; __i != __last; ++__i)</span>
 <span class="lineNum">    2162 </span>            :         {
-<span class="lineNum">    2163 </span><span class="lineCov">         97 :           if (*__i &lt; *__first)</span>
+<span class="lineNum">    2163 </span><span class="lineCov">        388 :           if (*__i &lt; *__first)</span>
 <span class="lineNum">    2164 </span>            :             {
 <span class="lineNum">    2165 </span>            :               typename iterator_traits&lt;_RandomAccessIterator&gt;::value_type
 <span class="lineNum">    2166 </span><span class="lineNoCov">          0 :                 __val = _GLIBCXX_MOVE(*__i);</span>
@@ -2230,7 +2230,7 @@
 <span class="lineNum">    2168 </span><span class="lineNoCov">          0 :               *__first = _GLIBCXX_MOVE(__val);</span>
 <span class="lineNum">    2169 </span>            :             }
 <span class="lineNum">    2170 </span>            :           else
-<span class="lineNum">    2171 </span><span class="lineCov">         97 :             std::__unguarded_linear_insert(__i);</span>
+<span class="lineNum">    2171 </span><span class="lineCov">        388 :             std::__unguarded_linear_insert(__i);</span>
 <span class="lineNum">    2172 </span>            :         }
 <span class="lineNum">    2173 </span>            :     }
 <span class="lineNum">    2174 </span>            : 
@@ -2291,17 +2291,17 @@
 <span class="lineNum">    2229 </span>            :   /// This is a helper function for the sort routine.
 <a name="2230"><span class="lineNum">    2230 </span>            :   template&lt;typename _RandomAccessIterator&gt;</a>
 <span class="lineNum">    2231 </span>            :     void
-<span class="lineNum">    2232 </span><span class="lineCov">         97 :     __final_insertion_sort(_RandomAccessIterator __first,</span>
+<span class="lineNum">    2232 </span><span class="lineCov">        388 :     __final_insertion_sort(_RandomAccessIterator __first,</span>
 <span class="lineNum">    2233 </span>            :                            _RandomAccessIterator __last)
 <span class="lineNum">    2234 </span>            :     {
-<span class="lineNum">    2235 </span><span class="lineCov">         97 :       if (__last - __first &gt; int(_S_threshold))</span>
+<span class="lineNum">    2235 </span><span class="lineCov">        388 :       if (__last - __first &gt; int(_S_threshold))</span>
 <span class="lineNum">    2236 </span>            :         {
 <span class="lineNum">    2237 </span><span class="lineNoCov">          0 :           std::__insertion_sort(__first, __first + int(_S_threshold));</span>
 <span class="lineNum">    2238 </span><span class="lineNoCov">          0 :           std::__unguarded_insertion_sort(__first + int(_S_threshold), __last);</span>
 <span class="lineNum">    2239 </span>            :         }
 <span class="lineNum">    2240 </span>            :       else
-<span class="lineNum">    2241 </span><span class="lineCov">         97 :         std::__insertion_sort(__first, __last);</span>
-<span class="lineNum">    2242 </span><span class="lineCov">         97 :     }</span>
+<span class="lineNum">    2241 </span><span class="lineCov">        388 :         std::__insertion_sort(__first, __last);</span>
+<span class="lineNum">    2242 </span><span class="lineCov">        388 :     }</span>
 <span class="lineNum">    2243 </span>            : 
 <span class="lineNum">    2244 </span>            :   /// This is a helper function for the sort routine.
 <span class="lineNum">    2245 </span>            :   template&lt;typename _RandomAccessIterator, typename _Compare&gt;
@@ -2386,16 +2386,16 @@
 <span class="lineNum">    2324 </span>            :   /// This is a helper function for the sort routine.
 <a name="2325"><span class="lineNum">    2325 </span>            :   template&lt;typename _RandomAccessIterator, typename _Size&gt;</a>
 <span class="lineNum">    2326 </span>            :     void
-<span class="lineNum">    2327 </span><span class="lineCov">         97 :     __introsort_loop(_RandomAccessIterator __first,</span>
+<span class="lineNum">    2327 </span><span class="lineCov">        388 :     __introsort_loop(_RandomAccessIterator __first,</span>
 <span class="lineNum">    2328 </span>            :                      _RandomAccessIterator __last,
 <span class="lineNum">    2329 </span>            :                      _Size __depth_limit)
 <span class="lineNum">    2330 </span>            :     {
-<span class="lineNum">    2331 </span><span class="lineCov">        194 :       while (__last - __first &gt; int(_S_threshold))</span>
+<span class="lineNum">    2331 </span><span class="lineCov">        776 :       while (__last - __first &gt; int(_S_threshold))</span>
 <span class="lineNum">    2332 </span>            :         {
 <span class="lineNum">    2333 </span><span class="lineNoCov">          0 :           if (__depth_limit == 0)</span>
 <span class="lineNum">    2334 </span>            :             {
 <span class="lineNum">    2335 </span><span class="lineNoCov">          0 :               _GLIBCXX_STD_A::partial_sort(__first, __last, __last);</span>
-<span class="lineNum">    2336 </span><span class="lineCov">         97 :               return;</span>
+<span class="lineNum">    2336 </span><span class="lineCov">        388 :               return;</span>
 <span class="lineNum">    2337 </span>            :             }
 <span class="lineNum">    2338 </span><span class="lineNoCov">          0 :           --__depth_limit;</span>
 <span class="lineNum">    2339 </span>            :           _RandomAccessIterator __cut =
@@ -2781,7 +2781,7 @@
 <span class="lineNum">    2719 </span>            :   */
 <a name="2720"><span class="lineNum">    2720 </span>            :   template&lt;typename _ForwardIterator, typename _Tp&gt;</a>
 <span class="lineNum">    2721 </span>            :     bool
-<span class="lineNum">    2722 </span><span class="lineCov">       1646 :     binary_search(_ForwardIterator __first, _ForwardIterator __last,</span>
+<span class="lineNum">    2722 </span><span class="lineCov">       6584 :     binary_search(_ForwardIterator __first, _ForwardIterator __last,</span>
 <span class="lineNum">    2723 </span>            :                   const _Tp&amp; __val)
 <span class="lineNum">    2724 </span>            :     {
 <span class="lineNum">    2725 </span>            :       typedef typename iterator_traits&lt;_ForwardIterator&gt;::value_type
@@ -2793,8 +2793,8 @@
 <span class="lineNum">    2731 </span>            :       __glibcxx_requires_partitioned_lower(__first, __last, __val);
 <span class="lineNum">    2732 </span>            :       __glibcxx_requires_partitioned_upper(__first, __last, __val);
 <span class="lineNum">    2733 </span>            : 
-<span class="lineNum">    2734 </span><span class="lineCov">       1646 :       _ForwardIterator __i = std::lower_bound(__first, __last, __val);</span>
-<span class="lineNum">    2735 </span><span class="lineCov">       1646 :       return __i != __last &amp;&amp; !(__val &lt; *__i);</span>
+<span class="lineNum">    2734 </span><span class="lineCov">       6584 :       _ForwardIterator __i = std::lower_bound(__first, __last, __val);</span>
+<span class="lineNum">    2735 </span><span class="lineCov">       6584 :       return __i != __last &amp;&amp; !(__val &lt; *__i);</span>
 <span class="lineNum">    2736 </span>            :     }
 <span class="lineNum">    2737 </span>            : 
 <span class="lineNum">    2738 </span>            :   /**
@@ -4516,7 +4516,7 @@
 <span class="lineNum">    4454 </span>            :   */
 <a name="4455"><span class="lineNum">    4455 </span>            :   template&lt;typename _InputIterator, typename _Tp&gt;</a>
 <span class="lineNum">    4456 </span>            :     inline _InputIterator
-<span class="lineNum">    4457 </span><span class="lineCov">         77 :     find(_InputIterator __first, _InputIterator __last,</span>
+<span class="lineNum">    4457 </span><span class="lineCov">        308 :     find(_InputIterator __first, _InputIterator __last,</span>
 <span class="lineNum">    4458 </span>            :          const _Tp&amp; __val)
 <span class="lineNum">    4459 </span>            :     {
 <span class="lineNum">    4460 </span>            :       // concept requirements
@@ -4525,7 +4525,7 @@
 <span class="lineNum">    4463 </span>            :                 typename iterator_traits&lt;_InputIterator&gt;::value_type, _Tp&gt;)
 <span class="lineNum">    4464 </span>            :       __glibcxx_requires_valid_range(__first, __last);
 <span class="lineNum">    4465 </span>            :       return std::__find(__first, __last, __val,
-<span class="lineNum">    4466 </span><span class="lineCov">         77 :                          std::__iterator_category(__first));</span>
+<span class="lineNum">    4466 </span><span class="lineCov">        308 :                          std::__iterator_category(__first));</span>
 <span class="lineNum">    4467 </span>            :     }
 <span class="lineNum">    4468 </span>            : 
 <span class="lineNum">    4469 </span>            :   /**
@@ -4540,7 +4540,7 @@
 <span class="lineNum">    4478 </span>            :   */
 <a name="4479"><span class="lineNum">    4479 </span>            :   template&lt;typename _InputIterator, typename _Predicate&gt;</a>
 <span class="lineNum">    4480 </span>            :     inline _InputIterator
-<span class="lineNum">    4481 </span><span class="lineCov">        291 :     find_if(_InputIterator __first, _InputIterator __last,</span>
+<span class="lineNum">    4481 </span><span class="lineCov">       1164 :     find_if(_InputIterator __first, _InputIterator __last,</span>
 <span class="lineNum">    4482 </span>            :             _Predicate __pred)
 <span class="lineNum">    4483 </span>            :     {
 <span class="lineNum">    4484 </span>            :       // concept requirements
@@ -4549,7 +4549,7 @@
 <span class="lineNum">    4487 </span>            :               typename iterator_traits&lt;_InputIterator&gt;::value_type&gt;)
 <span class="lineNum">    4488 </span>            :       __glibcxx_requires_valid_range(__first, __last);
 <span class="lineNum">    4489 </span>            :       return std::__find_if(__first, __last, __pred,
-<span class="lineNum">    4490 </span><span class="lineCov">        291 :                             std::__iterator_category(__first));</span>
+<span class="lineNum">    4490 </span><span class="lineCov">       1164 :                             std::__iterator_category(__first));</span>
 <span class="lineNum">    4491 </span>            :     }
 <span class="lineNum">    4492 </span>            : 
 <span class="lineNum">    4493 </span>            :   /**
@@ -5522,7 +5522,7 @@
 <span class="lineNum">    5460 </span>            :   */
 <a name="5461"><span class="lineNum">    5461 </span>            :   template&lt;typename _RandomAccessIterator&gt;</a>
 <span class="lineNum">    5462 </span>            :     inline void
-<span class="lineNum">    5463 </span><span class="lineCov">         97 :     sort(_RandomAccessIterator __first, _RandomAccessIterator __last)</span>
+<span class="lineNum">    5463 </span><span class="lineCov">        388 :     sort(_RandomAccessIterator __first, _RandomAccessIterator __last)</span>
 <span class="lineNum">    5464 </span>            :     {
 <span class="lineNum">    5465 </span>            :       typedef typename iterator_traits&lt;_RandomAccessIterator&gt;::value_type
 <span class="lineNum">    5466 </span>            :         _ValueType;
@@ -5533,13 +5533,13 @@
 <span class="lineNum">    5471 </span>            :       __glibcxx_function_requires(_LessThanComparableConcept&lt;_ValueType&gt;)
 <span class="lineNum">    5472 </span>            :       __glibcxx_requires_valid_range(__first, __last);
 <span class="lineNum">    5473 </span>            : 
-<span class="lineNum">    5474 </span><span class="lineCov">         97 :       if (__first != __last)</span>
+<span class="lineNum">    5474 </span><span class="lineCov">        388 :       if (__first != __last)</span>
 <span class="lineNum">    5475 </span>            :         {
-<span class="lineNum">    5476 </span><span class="lineCov">         97 :           std::__introsort_loop(__first, __last,</span>
+<span class="lineNum">    5476 </span><span class="lineCov">        388 :           std::__introsort_loop(__first, __last,</span>
 <span class="lineNum">    5477 </span>            :                                 std::__lg(__last - __first) * 2);
-<span class="lineNum">    5478 </span><span class="lineCov">         97 :           std::__final_insertion_sort(__first, __last);</span>
+<span class="lineNum">    5478 </span><span class="lineCov">        388 :           std::__final_insertion_sort(__first, __last);</span>
 <span class="lineNum">    5479 </span>            :         }
-<span class="lineNum">    5480 </span><span class="lineCov">         97 :     }</span>
+<span class="lineNum">    5480 </span><span class="lineCov">        388 :     }</span>
 <span class="lineNum">    5481 </span>            : 
 <span class="lineNum">    5482 </span>            :   /**
 <span class="lineNum">    5483 </span>            :    *  @brief Sort the elements of a sequence using a predicate for comparison.
