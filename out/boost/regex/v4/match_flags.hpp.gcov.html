@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - boost/regex/v4/match_flags.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../index.html">top level</a> - <a href="index.html">boost/regex/v4</a> - match_flags.hpp<span style="font-size: 80%;"> (source / <a href="match_flags.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryLo">33.3 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2015-01-19</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryLo">33.3 %</td>
+          </tr>
+          <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  *
+<span class="lineNum">       3 </span>            :  * Copyright (c) 1998-2002
+<span class="lineNum">       4 </span>            :  * John Maddock
+<span class="lineNum">       5 </span>            :  *
+<span class="lineNum">       6 </span>            :  * Use, modification and distribution are subject to the 
+<span class="lineNum">       7 </span>            :  * Boost Software License, Version 1.0. (See accompanying file 
+<span class="lineNum">       8 </span>            :  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+<span class="lineNum">       9 </span>            :  *
+<span class="lineNum">      10 </span>            :  */
+<span class="lineNum">      11 </span>            :  
+<span class="lineNum">      12 </span>            :  /*
+<span class="lineNum">      13 </span>            :   *   LOCATION:    see http://www.boost.org for most recent version.
+<span class="lineNum">      14 </span>            :   *   FILE         match_flags.hpp
+<span class="lineNum">      15 </span>            :   *   VERSION      see &lt;boost/version.hpp&gt;
+<span class="lineNum">      16 </span>            :   *   DESCRIPTION: Declares match_flags type.
+<span class="lineNum">      17 </span>            :   */
+<span class="lineNum">      18 </span>            : 
+<span class="lineNum">      19 </span>            : #ifndef BOOST_REGEX_V4_MATCH_FLAGS
+<span class="lineNum">      20 </span>            : #define BOOST_REGEX_V4_MATCH_FLAGS
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span>            : #ifdef __cplusplus
+<span class="lineNum">      23 </span>            : #  include &lt;boost/cstdint.hpp&gt;
+<span class="lineNum">      24 </span>            : #endif
+<span class="lineNum">      25 </span>            : 
+<span class="lineNum">      26 </span>            : #ifdef __cplusplus
+<span class="lineNum">      27 </span>            : namespace boost{
+<span class="lineNum">      28 </span>            :    namespace regex_constants{
+<span class="lineNum">      29 </span>            : #endif
+<span class="lineNum">      30 </span>            : 
+<span class="lineNum">      31 </span>            : typedef enum _match_flags
+<span class="lineNum">      32 </span>            : {
+<span class="lineNum">      33 </span>            :    match_default = 0,
+<span class="lineNum">      34 </span>            :    match_not_bol = 1,                                /* first is not start of line */
+<span class="lineNum">      35 </span>            :    match_not_eol = match_not_bol &lt;&lt; 1,               /* last is not end of line */
+<span class="lineNum">      36 </span>            :    match_not_bob = match_not_eol &lt;&lt; 1,               /* first is not start of buffer */
+<span class="lineNum">      37 </span>            :    match_not_eob = match_not_bob &lt;&lt; 1,               /* last is not end of buffer */
+<span class="lineNum">      38 </span>            :    match_not_bow = match_not_eob &lt;&lt; 1,               /* first is not start of word */
+<span class="lineNum">      39 </span>            :    match_not_eow = match_not_bow &lt;&lt; 1,               /* last is not end of word */
+<span class="lineNum">      40 </span>            :    match_not_dot_newline = match_not_eow &lt;&lt; 1,       /* \n is not matched by '.' */
+<span class="lineNum">      41 </span>            :    match_not_dot_null = match_not_dot_newline &lt;&lt; 1,  /* '\0' is not matched by '.' */
+<span class="lineNum">      42 </span>            :    match_prev_avail = match_not_dot_null &lt;&lt; 1,       /* *--first is a valid expression */
+<span class="lineNum">      43 </span>            :    match_init = match_prev_avail &lt;&lt; 1,               /* internal use */
+<span class="lineNum">      44 </span>            :    match_any = match_init &lt;&lt; 1,                      /* don't care what we match */
+<span class="lineNum">      45 </span>            :    match_not_null = match_any &lt;&lt; 1,                  /* string can't be null */
+<span class="lineNum">      46 </span>            :    match_continuous = match_not_null &lt;&lt; 1,           /* each grep match must continue from */
+<span class="lineNum">      47 </span>            :                                                      /* uninterupted from the previous one */
+<span class="lineNum">      48 </span>            :    match_partial = match_continuous &lt;&lt; 1,            /* find partial matches */
+<span class="lineNum">      49 </span>            :    
+<span class="lineNum">      50 </span>            :    match_stop = match_partial &lt;&lt; 1,                  /* stop after first match (grep) V3 only */
+<span class="lineNum">      51 </span>            :    match_not_initial_null = match_stop,              /* don't match initial null, V4 only */
+<span class="lineNum">      52 </span>            :    match_all = match_stop &lt;&lt; 1,                      /* must find the whole of input even if match_any is set */
+<span class="lineNum">      53 </span>            :    match_perl = match_all &lt;&lt; 1,                      /* Use perl matching rules */
+<span class="lineNum">      54 </span>            :    match_posix = match_perl &lt;&lt; 1,                    /* Use POSIX matching rules */
+<span class="lineNum">      55 </span>            :    match_nosubs = match_posix &lt;&lt; 1,                  /* don't trap marked subs */
+<span class="lineNum">      56 </span>            :    match_extra = match_nosubs &lt;&lt; 1,                  /* include full capture information for repeated captures */
+<span class="lineNum">      57 </span>            :    match_single_line = match_extra &lt;&lt; 1,             /* treat text as single line and ignor any \n's when matching ^ and $. */
+<span class="lineNum">      58 </span>            :    match_unused1 = match_single_line &lt;&lt; 1,           /* unused */
+<span class="lineNum">      59 </span>            :    match_unused2 = match_unused1 &lt;&lt; 1,               /* unused */
+<span class="lineNum">      60 </span>            :    match_unused3 = match_unused2 &lt;&lt; 1,               /* unused */
+<span class="lineNum">      61 </span>            :    match_max = match_unused3,
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span>            :    format_perl = 0,                                  /* perl style replacement */
+<span class="lineNum">      64 </span>            :    format_default = 0,                               /* ditto. */
+<span class="lineNum">      65 </span>            :    format_sed = match_max &lt;&lt; 1,                      /* sed style replacement. */
+<span class="lineNum">      66 </span>            :    format_all = format_sed &lt;&lt; 1,                     /* enable all extentions to sytax. */
+<span class="lineNum">      67 </span>            :    format_no_copy = format_all &lt;&lt; 1,                 /* don't copy non-matching segments. */
+<span class="lineNum">      68 </span>            :    format_first_only = format_no_copy &lt;&lt; 1,          /* Only replace first occurance. */
+<span class="lineNum">      69 </span>            :    format_is_if = format_first_only &lt;&lt; 1,            /* internal use only. */
+<span class="lineNum">      70 </span>            :    format_literal = format_is_if &lt;&lt; 1                /* treat string as a literal */
+<span class="lineNum">      71 </span>            : 
+<span class="lineNum">      72 </span>            : } match_flags;
+<span class="lineNum">      73 </span>            : 
+<span class="lineNum">      74 </span>            : #if defined(__BORLANDC__)
+<span class="lineNum">      75 </span>            : typedef unsigned long match_flag_type;
+<span class="lineNum">      76 </span>            : #else
+<span class="lineNum">      77 </span>            : typedef match_flags match_flag_type;
+<span class="lineNum">      78 </span>            : 
+<a name="79"><span class="lineNum">      79 </span>            : </a>
+<span class="lineNum">      80 </span>            : #ifdef __cplusplus
+<a name="81"><span class="lineNum">      81 </span><span class="lineNoCov">          0 : inline match_flags operator&amp;(match_flags m1, match_flags m2)</span></a>
+<span class="lineNum">      82 </span><span class="lineNoCov">          0 : { return static_cast&lt;match_flags&gt;(static_cast&lt;boost::int32_t&gt;(m1) &amp; static_cast&lt;boost::int32_t&gt;(m2)); }</span>
+<span class="lineNum">      83 </span><span class="lineCov">      17495 : inline match_flags operator|(match_flags m1, match_flags m2)</span>
+<span class="lineNum">      84 </span><span class="lineCov">      17495 : { return static_cast&lt;match_flags&gt;(static_cast&lt;boost::int32_t&gt;(m1) | static_cast&lt;boost::int32_t&gt;(m2)); }</span>
+<span class="lineNum">      85 </span>            : inline match_flags operator^(match_flags m1, match_flags m2)
+<span class="lineNum">      86 </span>            : { return static_cast&lt;match_flags&gt;(static_cast&lt;boost::int32_t&gt;(m1) ^ static_cast&lt;boost::int32_t&gt;(m2)); }
+<span class="lineNum">      87 </span>            : inline match_flags operator~(match_flags m1)
+<span class="lineNum">      88 </span>            : { return static_cast&lt;match_flags&gt;(~static_cast&lt;boost::int32_t&gt;(m1)); }
+<a name="89"><span class="lineNum">      89 </span>            : inline match_flags&amp; operator&amp;=(match_flags&amp; m1, match_flags m2)</a>
+<span class="lineNum">      90 </span>            : { m1 = m1&amp;m2; return m1; }
+<span class="lineNum">      91 </span><span class="lineNoCov">          0 : inline match_flags&amp; operator|=(match_flags&amp; m1, match_flags m2)</span>
+<span class="lineNum">      92 </span><span class="lineNoCov">          0 : { m1 = m1|m2; return m1; }</span>
+<span class="lineNum">      93 </span>            : inline match_flags&amp; operator^=(match_flags&amp; m1, match_flags m2)
+<span class="lineNum">      94 </span>            : { m1 = m1^m2; return m1; }
+<span class="lineNum">      95 </span>            : #endif
+<span class="lineNum">      96 </span>            : #endif
+<span class="lineNum">      97 </span>            : 
+<span class="lineNum">      98 </span>            : #ifdef __cplusplus
+<span class="lineNum">      99 </span>            : } /* namespace regex_constants */
+<span class="lineNum">     100 </span>            : /*
+<span class="lineNum">     101 </span>            :  * import names into boost for backwards compatiblity:
+<span class="lineNum">     102 </span>            :  */
+<span class="lineNum">     103 </span>            : using regex_constants::match_flag_type;
+<span class="lineNum">     104 </span>            : using regex_constants::match_default;
+<span class="lineNum">     105 </span>            : using regex_constants::match_not_bol;
+<span class="lineNum">     106 </span>            : using regex_constants::match_not_eol;
+<span class="lineNum">     107 </span>            : using regex_constants::match_not_bob;
+<span class="lineNum">     108 </span>            : using regex_constants::match_not_eob;
+<span class="lineNum">     109 </span>            : using regex_constants::match_not_bow;
+<span class="lineNum">     110 </span>            : using regex_constants::match_not_eow;
+<span class="lineNum">     111 </span>            : using regex_constants::match_not_dot_newline;
+<span class="lineNum">     112 </span>            : using regex_constants::match_not_dot_null;
+<span class="lineNum">     113 </span>            : using regex_constants::match_prev_avail;
+<span class="lineNum">     114 </span>            : /* using regex_constants::match_init; */
+<span class="lineNum">     115 </span>            : using regex_constants::match_any;
+<span class="lineNum">     116 </span>            : using regex_constants::match_not_null;
+<span class="lineNum">     117 </span>            : using regex_constants::match_continuous;
+<span class="lineNum">     118 </span>            : using regex_constants::match_partial;
+<span class="lineNum">     119 </span>            : /*using regex_constants::match_stop; */
+<span class="lineNum">     120 </span>            : using regex_constants::match_all;
+<span class="lineNum">     121 </span>            : using regex_constants::match_perl;
+<span class="lineNum">     122 </span>            : using regex_constants::match_posix;
+<span class="lineNum">     123 </span>            : using regex_constants::match_nosubs;
+<span class="lineNum">     124 </span>            : using regex_constants::match_extra;
+<span class="lineNum">     125 </span>            : using regex_constants::match_single_line;
+<span class="lineNum">     126 </span>            : /*using regex_constants::match_max; */
+<span class="lineNum">     127 </span>            : using regex_constants::format_all;
+<span class="lineNum">     128 </span>            : using regex_constants::format_sed;
+<span class="lineNum">     129 </span>            : using regex_constants::format_perl;
+<span class="lineNum">     130 </span>            : using regex_constants::format_default;
+<span class="lineNum">     131 </span>            : using regex_constants::format_no_copy;
+<span class="lineNum">     132 </span>            : using regex_constants::format_first_only;
+<span class="lineNum">     133 </span>            : /*using regex_constants::format_is_if;*/
+<span class="lineNum">     134 </span>            : 
+<span class="lineNum">     135 </span>            : } /* namespace boost */
+<span class="lineNum">     136 </span>            : #endif /* __cplusplus */
+<span class="lineNum">     137 </span>            : #endif /* include guard */
+<span class="lineNum">     138 </span>            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

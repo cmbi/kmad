@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - boost/regex/v4/regbase.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../index.html">top level</a> - <a href="index.html">boost/regex/v4</a> - regbase.hpp<span style="font-size: 80%;"> (source / <a href="regbase.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2015-01-19</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  *
+<span class="lineNum">       3 </span>            :  * Copyright (c) 1998-2002
+<span class="lineNum">       4 </span>            :  * John Maddock
+<span class="lineNum">       5 </span>            :  *
+<span class="lineNum">       6 </span>            :  * Use, modification and distribution are subject to the 
+<span class="lineNum">       7 </span>            :  * Boost Software License, Version 1.0. (See accompanying file 
+<span class="lineNum">       8 </span>            :  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+<span class="lineNum">       9 </span>            :  *
+<span class="lineNum">      10 </span>            :  */
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            :  /*
+<span class="lineNum">      13 </span>            :   *   LOCATION:    see http://www.boost.org for most recent version.
+<span class="lineNum">      14 </span>            :   *   FILE         regbase.cpp
+<span class="lineNum">      15 </span>            :   *   VERSION      see &lt;boost/version.hpp&gt;
+<span class="lineNum">      16 </span>            :   *   DESCRIPTION: Declares class regbase.
+<span class="lineNum">      17 </span>            :   */
+<span class="lineNum">      18 </span>            : 
+<span class="lineNum">      19 </span>            : #ifndef BOOST_REGEX_V4_REGBASE_HPP
+<span class="lineNum">      20 </span>            : #define BOOST_REGEX_V4_REGBASE_HPP
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">      23 </span>            : #pragma warning(push)
+<span class="lineNum">      24 </span>            : #pragma warning(disable: 4103)
+<span class="lineNum">      25 </span>            : #endif
+<span class="lineNum">      26 </span>            : #ifdef BOOST_HAS_ABI_HEADERS
+<span class="lineNum">      27 </span>            : #  include BOOST_ABI_PREFIX
+<span class="lineNum">      28 </span>            : #endif
+<span class="lineNum">      29 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">      30 </span>            : #pragma warning(pop)
+<span class="lineNum">      31 </span>            : #endif
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span>            : namespace boost{
+<span class="lineNum">      34 </span>            : //
+<span class="lineNum">      35 </span>            : // class regbase
+<a name="36"><span class="lineNum">      36 </span>            : // handles error codes and flags</a>
+<span class="lineNum">      37 </span>            : //
+<span class="lineNum">      38 </span><span class="lineCov">      17495 : class BOOST_REGEX_DECL regbase</span>
+<span class="lineNum">      39 </span>            : {
+<span class="lineNum">      40 </span>            : public:
+<span class="lineNum">      41 </span>            :    enum flag_type_
+<span class="lineNum">      42 </span>            :    {
+<span class="lineNum">      43 </span>            :       //
+<span class="lineNum">      44 </span>            :       // Divide the flags up into logical groups:
+<span class="lineNum">      45 </span>            :       // bits 0-7 indicate main synatx type.
+<span class="lineNum">      46 </span>            :       // bits 8-15 indicate syntax subtype.
+<span class="lineNum">      47 </span>            :       // bits 16-31 indicate options that are common to all
+<span class="lineNum">      48 </span>            :       // regex syntaxes.
+<span class="lineNum">      49 </span>            :       // In all cases the default is 0.
+<span class="lineNum">      50 </span>            :       //
+<span class="lineNum">      51 </span>            :       // Main synatx group:
+<span class="lineNum">      52 </span>            :       //
+<span class="lineNum">      53 </span>            :       perl_syntax_group = 0,                      // default
+<span class="lineNum">      54 </span>            :       basic_syntax_group = 1,                     // POSIX basic
+<span class="lineNum">      55 </span>            :       literal = 2,                                // all characters are literals
+<span class="lineNum">      56 </span>            :       main_option_type = literal | basic_syntax_group | perl_syntax_group, // everything!
+<span class="lineNum">      57 </span>            :       //
+<span class="lineNum">      58 </span>            :       // options specific to perl group:
+<span class="lineNum">      59 </span>            :       //
+<span class="lineNum">      60 </span>            :       no_bk_refs = 1 &lt;&lt; 8,                        // \d not allowed
+<span class="lineNum">      61 </span>            :       no_perl_ex = 1 &lt;&lt; 9,                        // disable perl extensions
+<span class="lineNum">      62 </span>            :       no_mod_m = 1 &lt;&lt; 10,                         // disable Perl m modifier
+<span class="lineNum">      63 </span>            :       mod_x = 1 &lt;&lt; 11,                            // Perl x modifier
+<span class="lineNum">      64 </span>            :       mod_s = 1 &lt;&lt; 12,                            // force s modifier on (overrides match_not_dot_newline)
+<span class="lineNum">      65 </span>            :       no_mod_s = 1 &lt;&lt; 13,                         // force s modifier off (overrides match_not_dot_newline)
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span>            :       //
+<span class="lineNum">      68 </span>            :       // options specific to basic group:
+<span class="lineNum">      69 </span>            :       //
+<span class="lineNum">      70 </span>            :       no_char_classes = 1 &lt;&lt; 8,                   // [[:CLASS:]] not allowed
+<span class="lineNum">      71 </span>            :       no_intervals = 1 &lt;&lt; 9,                      // {x,y} not allowed
+<span class="lineNum">      72 </span>            :       bk_plus_qm = 1 &lt;&lt; 10,                       // uses \+ and \?
+<span class="lineNum">      73 </span>            :       bk_vbar = 1 &lt;&lt; 11,                          // use \| for alternatives
+<span class="lineNum">      74 </span>            :       emacs_ex = 1 &lt;&lt; 12,                         // enables emacs extensions
+<span class="lineNum">      75 </span>            : 
+<span class="lineNum">      76 </span>            :       //
+<span class="lineNum">      77 </span>            :       // options common to all groups:
+<span class="lineNum">      78 </span>            :       //
+<span class="lineNum">      79 </span>            :       no_escape_in_lists = 1 &lt;&lt; 16,                     // '\' not special inside [...]
+<span class="lineNum">      80 </span>            :       newline_alt = 1 &lt;&lt; 17,                            // \n is the same as |
+<span class="lineNum">      81 </span>            :       no_except = 1 &lt;&lt; 18,                              // no exception on error
+<span class="lineNum">      82 </span>            :       failbit = 1 &lt;&lt; 19,                                // error flag
+<span class="lineNum">      83 </span>            :       icase = 1 &lt;&lt; 20,                                  // characters are matched regardless of case
+<span class="lineNum">      84 </span>            :       nocollate = 0,                                    // don't use locale specific collation (deprecated)
+<span class="lineNum">      85 </span>            :       collate = 1 &lt;&lt; 21,                                // use locale specific collation
+<span class="lineNum">      86 </span>            :       nosubs = 1 &lt;&lt; 22,                                 // don't mark sub-expressions
+<span class="lineNum">      87 </span>            :       save_subexpression_location = 1 &lt;&lt; 23,            // save subexpression locations
+<span class="lineNum">      88 </span>            :       no_empty_expressions = 1 &lt;&lt; 24,                   // no empty expressions allowed
+<span class="lineNum">      89 </span>            :       optimize = 0,                                     // not really supported
+<span class="lineNum">      90 </span>            :       
+<span class="lineNum">      91 </span>            : 
+<span class="lineNum">      92 </span>            : 
+<span class="lineNum">      93 </span>            :       basic = basic_syntax_group | collate | no_escape_in_lists,
+<span class="lineNum">      94 </span>            :       extended = no_bk_refs | collate | no_perl_ex | no_escape_in_lists,
+<span class="lineNum">      95 </span>            :       normal = 0,
+<span class="lineNum">      96 </span>            :       emacs = basic_syntax_group | collate | emacs_ex | bk_vbar,
+<span class="lineNum">      97 </span>            :       awk = no_bk_refs | collate | no_perl_ex,
+<span class="lineNum">      98 </span>            :       grep = basic | newline_alt,
+<span class="lineNum">      99 </span>            :       egrep = extended | newline_alt,
+<span class="lineNum">     100 </span>            :       sed = basic,
+<span class="lineNum">     101 </span>            :       perl = normal,
+<span class="lineNum">     102 </span>            :       ECMAScript = normal,
+<span class="lineNum">     103 </span>            :       JavaScript = normal,
+<span class="lineNum">     104 </span>            :       JScript = normal
+<span class="lineNum">     105 </span>            :    };
+<span class="lineNum">     106 </span>            :    typedef unsigned int flag_type;
+<span class="lineNum">     107 </span>            : 
+<span class="lineNum">     108 </span>            :    enum restart_info
+<span class="lineNum">     109 </span>            :    {
+<span class="lineNum">     110 </span>            :       restart_any = 0,
+<span class="lineNum">     111 </span>            :       restart_word = 1,
+<span class="lineNum">     112 </span>            :       restart_line = 2,
+<span class="lineNum">     113 </span>            :       restart_buf = 3,
+<span class="lineNum">     114 </span>            :       restart_continue = 4,
+<span class="lineNum">     115 </span>            :       restart_lit = 5,
+<span class="lineNum">     116 </span>            :       restart_fixed_lit = 6, 
+<span class="lineNum">     117 </span>            :       restart_count = 7
+<span class="lineNum">     118 </span>            :    };
+<span class="lineNum">     119 </span>            : };
+<span class="lineNum">     120 </span>            : 
+<span class="lineNum">     121 </span>            : //
+<span class="lineNum">     122 </span>            : // provide std lib proposal compatible constants:
+<span class="lineNum">     123 </span>            : //
+<span class="lineNum">     124 </span>            : namespace regex_constants{
+<span class="lineNum">     125 </span>            : 
+<span class="lineNum">     126 </span>            :    enum flag_type_
+<span class="lineNum">     127 </span>            :    {
+<span class="lineNum">     128 </span>            : 
+<span class="lineNum">     129 </span>            :       no_except = ::boost::regbase::no_except,
+<span class="lineNum">     130 </span>            :       failbit = ::boost::regbase::failbit,
+<span class="lineNum">     131 </span>            :       literal = ::boost::regbase::literal,
+<span class="lineNum">     132 </span>            :       icase = ::boost::regbase::icase,
+<span class="lineNum">     133 </span>            :       nocollate = ::boost::regbase::nocollate,
+<span class="lineNum">     134 </span>            :       collate = ::boost::regbase::collate,
+<span class="lineNum">     135 </span>            :       nosubs = ::boost::regbase::nosubs,
+<span class="lineNum">     136 </span>            :       optimize = ::boost::regbase::optimize,
+<span class="lineNum">     137 </span>            :       bk_plus_qm = ::boost::regbase::bk_plus_qm,
+<span class="lineNum">     138 </span>            :       bk_vbar = ::boost::regbase::bk_vbar,
+<span class="lineNum">     139 </span>            :       no_intervals = ::boost::regbase::no_intervals,
+<span class="lineNum">     140 </span>            :       no_char_classes = ::boost::regbase::no_char_classes,
+<span class="lineNum">     141 </span>            :       no_escape_in_lists = ::boost::regbase::no_escape_in_lists,
+<span class="lineNum">     142 </span>            :       no_mod_m = ::boost::regbase::no_mod_m,
+<span class="lineNum">     143 </span>            :       mod_x = ::boost::regbase::mod_x,
+<span class="lineNum">     144 </span>            :       mod_s = ::boost::regbase::mod_s,
+<span class="lineNum">     145 </span>            :       no_mod_s = ::boost::regbase::no_mod_s,
+<span class="lineNum">     146 </span>            :       save_subexpression_location = ::boost::regbase::save_subexpression_location,
+<span class="lineNum">     147 </span>            :       no_empty_expressions = ::boost::regbase::no_empty_expressions,
+<span class="lineNum">     148 </span>            : 
+<span class="lineNum">     149 </span>            :       basic = ::boost::regbase::basic,
+<span class="lineNum">     150 </span>            :       extended = ::boost::regbase::extended,
+<span class="lineNum">     151 </span>            :       normal = ::boost::regbase::normal,
+<span class="lineNum">     152 </span>            :       emacs = ::boost::regbase::emacs,
+<span class="lineNum">     153 </span>            :       awk = ::boost::regbase::awk,
+<span class="lineNum">     154 </span>            :       grep = ::boost::regbase::grep,
+<span class="lineNum">     155 </span>            :       egrep = ::boost::regbase::egrep,
+<span class="lineNum">     156 </span>            :       sed = basic,
+<span class="lineNum">     157 </span>            :       perl = normal,
+<span class="lineNum">     158 </span>            :       ECMAScript = normal,
+<span class="lineNum">     159 </span>            :       JavaScript = normal,
+<span class="lineNum">     160 </span>            :       JScript = normal
+<span class="lineNum">     161 </span>            :    };
+<span class="lineNum">     162 </span>            :    typedef ::boost::regbase::flag_type syntax_option_type;
+<span class="lineNum">     163 </span>            : 
+<span class="lineNum">     164 </span>            : } // namespace regex_constants
+<span class="lineNum">     165 </span>            : 
+<span class="lineNum">     166 </span>            : } // namespace boost
+<span class="lineNum">     167 </span>            : 
+<span class="lineNum">     168 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     169 </span>            : #pragma warning(push)
+<span class="lineNum">     170 </span>            : #pragma warning(disable: 4103)
+<span class="lineNum">     171 </span>            : #endif
+<span class="lineNum">     172 </span>            : #ifdef BOOST_HAS_ABI_HEADERS
+<span class="lineNum">     173 </span>            : #  include BOOST_ABI_SUFFIX
+<span class="lineNum">     174 </span>            : #endif
+<span class="lineNum">     175 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     176 </span>            : #pragma warning(pop)
+<span class="lineNum">     177 </span>            : #endif
+<span class="lineNum">     178 </span>            : 
+<span class="lineNum">     179 </span>            : #endif
+<span class="lineNum">     180 </span>            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

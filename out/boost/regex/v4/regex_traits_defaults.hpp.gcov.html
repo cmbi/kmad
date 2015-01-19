@@ -1,0 +1,447 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - boost/regex/v4/regex_traits_defaults.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../index.html">top level</a> - <a href="index.html">boost/regex/v4</a> - regex_traits_defaults.hpp<span style="font-size: 80%;"> (source / <a href="regex_traits_defaults.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2015-01-19</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  *
+<span class="lineNum">       3 </span>            :  * Copyright (c) 2004
+<span class="lineNum">       4 </span>            :  * John Maddock
+<span class="lineNum">       5 </span>            :  *
+<span class="lineNum">       6 </span>            :  * Use, modification and distribution are subject to the
+<span class="lineNum">       7 </span>            :  * Boost Software License, Version 1.0. (See accompanying file
+<span class="lineNum">       8 </span>            :  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+<span class="lineNum">       9 </span>            :  *
+<span class="lineNum">      10 </span>            :  */
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            :  /*
+<span class="lineNum">      13 </span>            :   *   LOCATION:    see http://www.boost.org for most recent version.
+<span class="lineNum">      14 </span>            :   *   FILE         regex_traits_defaults.hpp
+<span class="lineNum">      15 </span>            :   *   VERSION      see &lt;boost/version.hpp&gt;
+<span class="lineNum">      16 </span>            :   *   DESCRIPTION: Declares API's for access to regex_traits default properties.
+<span class="lineNum">      17 </span>            :   */
+<span class="lineNum">      18 </span>            : 
+<span class="lineNum">      19 </span>            : #ifndef BOOST_REGEX_TRAITS_DEFAULTS_HPP_INCLUDED
+<span class="lineNum">      20 </span>            : #define BOOST_REGEX_TRAITS_DEFAULTS_HPP_INCLUDED
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">      23 </span>            : #pragma warning(push)
+<span class="lineNum">      24 </span>            : #pragma warning(disable: 4103)
+<span class="lineNum">      25 </span>            : #endif
+<span class="lineNum">      26 </span>            : #ifdef BOOST_HAS_ABI_HEADERS
+<span class="lineNum">      27 </span>            : #  include BOOST_ABI_PREFIX
+<span class="lineNum">      28 </span>            : #endif
+<span class="lineNum">      29 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">      30 </span>            : #pragma warning(pop)
+<span class="lineNum">      31 </span>            : #endif
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span>            : #ifndef BOOST_REGEX_SYNTAX_TYPE_HPP
+<span class="lineNum">      34 </span>            : #include &lt;boost/regex/v4/syntax_type.hpp&gt;
+<span class="lineNum">      35 </span>            : #endif
+<span class="lineNum">      36 </span>            : #ifndef BOOST_REGEX_ERROR_TYPE_HPP
+<span class="lineNum">      37 </span>            : #include &lt;boost/regex/v4/error_type.hpp&gt;
+<span class="lineNum">      38 </span>            : #endif
+<span class="lineNum">      39 </span>            : 
+<span class="lineNum">      40 </span>            : #ifdef BOOST_NO_STDC_NAMESPACE
+<span class="lineNum">      41 </span>            : namespace std{
+<span class="lineNum">      42 </span>            :    using ::strlen;
+<span class="lineNum">      43 </span>            : }
+<span class="lineNum">      44 </span>            : #endif
+<span class="lineNum">      45 </span>            : 
+<span class="lineNum">      46 </span>            : namespace boost{ namespace re_detail{
+<span class="lineNum">      47 </span>            : 
+<span class="lineNum">      48 </span>            : 
+<span class="lineNum">      49 </span>            : //
+<span class="lineNum">      50 </span>            : // helpers to suppress warnings:
+<span class="lineNum">      51 </span>            : //
+<span class="lineNum">      52 </span>            : template &lt;class charT&gt;
+<a name="53"><span class="lineNum">      53 </span>            : inline bool is_extended(charT c)</a>
+<span class="lineNum">      54 </span>            : { return c &gt; 256; }
+<span class="lineNum">      55 </span><span class="lineNoCov">          0 : inline bool is_extended(char)</span>
+<span class="lineNum">      56 </span><span class="lineNoCov">          0 : { return false; }</span>
+<span class="lineNum">      57 </span>            : 
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span>            : BOOST_REGEX_DECL const char* BOOST_REGEX_CALL get_default_syntax(regex_constants::syntax_type n);
+<span class="lineNum">      60 </span>            : BOOST_REGEX_DECL const char* BOOST_REGEX_CALL get_default_error_string(regex_constants::error_type n);
+<span class="lineNum">      61 </span>            : BOOST_REGEX_DECL regex_constants::syntax_type BOOST_REGEX_CALL get_default_syntax_type(char c);
+<span class="lineNum">      62 </span>            : BOOST_REGEX_DECL regex_constants::escape_syntax_type BOOST_REGEX_CALL get_default_escape_syntax_type(char c);
+<span class="lineNum">      63 </span>            : 
+<span class="lineNum">      64 </span>            : // is charT c a combining character?
+<span class="lineNum">      65 </span>            : BOOST_REGEX_DECL bool BOOST_REGEX_CALL is_combining_implementation(uint_least16_t s);
+<span class="lineNum">      66 </span>            : 
+<span class="lineNum">      67 </span>            : template &lt;class charT&gt;
+<span class="lineNum">      68 </span>            : inline bool is_combining(charT c)
+<span class="lineNum">      69 </span>            : {
+<span class="lineNum">      70 </span>            :    return (c &lt;= static_cast&lt;charT&gt;(0)) ? false : ((c &gt;= static_cast&lt;charT&gt;((std::numeric_limits&lt;uint_least16_t&gt;::max)())) ? false : is_combining_implementation(static_cast&lt;unsigned short&gt;(c)));
+<a name="71"><span class="lineNum">      71 </span>            : }</a>
+<span class="lineNum">      72 </span>            : template &lt;&gt;
+<span class="lineNum">      73 </span><span class="lineNoCov">          0 : inline bool is_combining&lt;char&gt;(char)</span>
+<span class="lineNum">      74 </span>            : {
+<span class="lineNum">      75 </span><span class="lineNoCov">          0 :    return false;</span>
+<span class="lineNum">      76 </span>            : }
+<span class="lineNum">      77 </span>            : template &lt;&gt;
+<span class="lineNum">      78 </span>            : inline bool is_combining&lt;signed char&gt;(signed char)
+<span class="lineNum">      79 </span>            : {
+<span class="lineNum">      80 </span>            :    return false;
+<span class="lineNum">      81 </span>            : }
+<span class="lineNum">      82 </span>            : template &lt;&gt;
+<span class="lineNum">      83 </span>            : inline bool is_combining&lt;unsigned char&gt;(unsigned char)
+<span class="lineNum">      84 </span>            : {
+<span class="lineNum">      85 </span>            :    return false;
+<span class="lineNum">      86 </span>            : }
+<span class="lineNum">      87 </span>            : #if !defined(__hpux) &amp;&amp; !defined(__WINSCW__) // can't use WCHAR_MAX/MIN in pp-directives
+<span class="lineNum">      88 </span>            : #ifdef _MSC_VER
+<span class="lineNum">      89 </span>            : template&lt;&gt;
+<span class="lineNum">      90 </span>            : inline bool is_combining&lt;wchar_t&gt;(wchar_t c)
+<span class="lineNum">      91 </span>            : {
+<span class="lineNum">      92 </span>            :    return is_combining_implementation(static_cast&lt;unsigned short&gt;(c));
+<span class="lineNum">      93 </span>            : }
+<span class="lineNum">      94 </span>            : #elif !defined(__DECCXX) &amp;&amp; !defined(__osf__) &amp;&amp; !defined(__OSF__) &amp;&amp; defined(WCHAR_MIN) &amp;&amp; (WCHAR_MIN == 0) &amp;&amp; !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+<span class="lineNum">      95 </span>            : #if defined(WCHAR_MAX) &amp;&amp; (WCHAR_MAX &lt;= USHRT_MAX)
+<span class="lineNum">      96 </span>            : template&lt;&gt;
+<span class="lineNum">      97 </span>            : inline bool is_combining&lt;wchar_t&gt;(wchar_t c)
+<span class="lineNum">      98 </span>            : {
+<span class="lineNum">      99 </span>            :    return is_combining_implementation(static_cast&lt;unsigned short&gt;(c));
+<span class="lineNum">     100 </span>            : }
+<span class="lineNum">     101 </span>            : #else
+<span class="lineNum">     102 </span>            : template&lt;&gt;
+<span class="lineNum">     103 </span>            : inline bool is_combining&lt;wchar_t&gt;(wchar_t c)
+<span class="lineNum">     104 </span>            : {
+<span class="lineNum">     105 </span>            :    return (c &gt;= (std::numeric_limits&lt;uint_least16_t&gt;::max)()) ? false : is_combining_implementation(static_cast&lt;unsigned short&gt;(c));
+<span class="lineNum">     106 </span>            : }
+<span class="lineNum">     107 </span>            : #endif
+<span class="lineNum">     108 </span>            : #endif
+<span class="lineNum">     109 </span>            : #endif
+<span class="lineNum">     110 </span>            : 
+<span class="lineNum">     111 </span>            : //
+<span class="lineNum">     112 </span>            : // is a charT c a line separator?
+<span class="lineNum">     113 </span>            : //
+<span class="lineNum">     114 </span>            : template &lt;class charT&gt;
+<span class="lineNum">     115 </span>            : inline bool is_separator(charT c)
+<span class="lineNum">     116 </span>            : {
+<span class="lineNum">     117 </span>            :    return BOOST_REGEX_MAKE_BOOL(
+<span class="lineNum">     118 </span>            :       (c == static_cast&lt;charT&gt;('\n'))
+<span class="lineNum">     119 </span>            :       || (c == static_cast&lt;charT&gt;('\r'))
+<span class="lineNum">     120 </span>            :       || (c == static_cast&lt;charT&gt;('\f'))
+<span class="lineNum">     121 </span>            :       || (static_cast&lt;boost::uint16_t&gt;(c) == 0x2028u)
+<span class="lineNum">     122 </span>            :       || (static_cast&lt;boost::uint16_t&gt;(c) == 0x2029u)
+<span class="lineNum">     123 </span>            :       || (static_cast&lt;boost::uint16_t&gt;(c) == 0x85u));
+<a name="124"><span class="lineNum">     124 </span>            : }</a>
+<span class="lineNum">     125 </span>            : template &lt;&gt;
+<span class="lineNum">     126 </span><span class="lineNoCov">          0 : inline bool is_separator&lt;char&gt;(char c)</span>
+<span class="lineNum">     127 </span>            : {
+<span class="lineNum">     128 </span><span class="lineNoCov">          0 :    return BOOST_REGEX_MAKE_BOOL((c == '\n') || (c == '\r') || (c == '\f'));</span>
+<span class="lineNum">     129 </span>            : }
+<span class="lineNum">     130 </span>            : 
+<span class="lineNum">     131 </span>            : //
+<span class="lineNum">     132 </span>            : // get a default collating element:
+<span class="lineNum">     133 </span>            : //
+<span class="lineNum">     134 </span>            : BOOST_REGEX_DECL std::string BOOST_REGEX_CALL lookup_default_collate_name(const std::string&amp; name);
+<span class="lineNum">     135 </span>            : 
+<span class="lineNum">     136 </span>            : //
+<span class="lineNum">     137 </span>            : // get the state_id of a character clasification, the individual
+<span class="lineNum">     138 </span>            : // traits classes then transform that state_id into a bitmask:
+<span class="lineNum">     139 </span>            : //
+<span class="lineNum">     140 </span>            : template &lt;class charT&gt;
+<span class="lineNum">     141 </span>            : struct character_pointer_range
+<span class="lineNum">     142 </span>            : {
+<span class="lineNum">     143 </span>            :    const charT* p1;
+<span class="lineNum">     144 </span>            :    const charT* p2;
+<span class="lineNum">     145 </span>            : 
+<span class="lineNum">     146 </span>            :    bool operator &lt; (const character_pointer_range&amp; r)const
+<span class="lineNum">     147 </span>            :    {
+<span class="lineNum">     148 </span>            :       return std::lexicographical_compare(p1, p2, r.p1, r.p2);
+<span class="lineNum">     149 </span>            :    }
+<span class="lineNum">     150 </span>            :    bool operator == (const character_pointer_range&amp; r)const
+<span class="lineNum">     151 </span>            :    {
+<span class="lineNum">     152 </span>            :       // Not only do we check that the ranges are of equal size before
+<span class="lineNum">     153 </span>            :       // calling std::equal, but there is no other algorithm available:
+<span class="lineNum">     154 </span>            :       // not even a non-standard MS one.  So forward to unchecked_equal
+<span class="lineNum">     155 </span>            :       // in the MS case.
+<span class="lineNum">     156 </span>            :       return ((p2 - p1) == (r.p2 - r.p1)) &amp;&amp; re_detail::equal(p1, p2, r.p1);
+<span class="lineNum">     157 </span>            :    }
+<span class="lineNum">     158 </span>            : };
+<span class="lineNum">     159 </span>            : template &lt;class charT&gt;
+<span class="lineNum">     160 </span>            : int get_default_class_id(const charT* p1, const charT* p2)
+<span class="lineNum">     161 </span>            : {
+<span class="lineNum">     162 </span>            :    static const charT data[73] = {
+<span class="lineNum">     163 </span>            :       'a', 'l', 'n', 'u', 'm',
+<span class="lineNum">     164 </span>            :       'a', 'l', 'p', 'h', 'a',
+<span class="lineNum">     165 </span>            :       'b', 'l', 'a', 'n', 'k',
+<span class="lineNum">     166 </span>            :       'c', 'n', 't', 'r', 'l',
+<span class="lineNum">     167 </span>            :       'd', 'i', 'g', 'i', 't',
+<span class="lineNum">     168 </span>            :       'g', 'r', 'a', 'p', 'h',
+<span class="lineNum">     169 </span>            :       'l', 'o', 'w', 'e', 'r',
+<span class="lineNum">     170 </span>            :       'p', 'r', 'i', 'n', 't',
+<span class="lineNum">     171 </span>            :       'p', 'u', 'n', 'c', 't',
+<span class="lineNum">     172 </span>            :       's', 'p', 'a', 'c', 'e',
+<span class="lineNum">     173 </span>            :       'u', 'n', 'i', 'c', 'o', 'd', 'e',
+<span class="lineNum">     174 </span>            :       'u', 'p', 'p', 'e', 'r',
+<span class="lineNum">     175 </span>            :       'v',
+<span class="lineNum">     176 </span>            :       'w', 'o', 'r', 'd',
+<span class="lineNum">     177 </span>            :       'x', 'd', 'i', 'g', 'i', 't',
+<span class="lineNum">     178 </span>            :    };
+<span class="lineNum">     179 </span>            : 
+<span class="lineNum">     180 </span>            :    static const character_pointer_range&lt;charT&gt; ranges[21] =
+<span class="lineNum">     181 </span>            :    {
+<span class="lineNum">     182 </span>            :       {data+0, data+5,}, // alnum
+<span class="lineNum">     183 </span>            :       {data+5, data+10,}, // alpha
+<span class="lineNum">     184 </span>            :       {data+10, data+15,}, // blank
+<span class="lineNum">     185 </span>            :       {data+15, data+20,}, // cntrl
+<span class="lineNum">     186 </span>            :       {data+20, data+21,}, // d
+<span class="lineNum">     187 </span>            :       {data+20, data+25,}, // digit
+<span class="lineNum">     188 </span>            :       {data+25, data+30,}, // graph
+<span class="lineNum">     189 </span>            :       {data+29, data+30,}, // h
+<span class="lineNum">     190 </span>            :       {data+30, data+31,}, // l
+<span class="lineNum">     191 </span>            :       {data+30, data+35,}, // lower
+<span class="lineNum">     192 </span>            :       {data+35, data+40,}, // print
+<span class="lineNum">     193 </span>            :       {data+40, data+45,}, // punct
+<span class="lineNum">     194 </span>            :       {data+45, data+46,}, // s
+<span class="lineNum">     195 </span>            :       {data+45, data+50,}, // space
+<span class="lineNum">     196 </span>            :       {data+57, data+58,}, // u
+<span class="lineNum">     197 </span>            :       {data+50, data+57,}, // unicode
+<span class="lineNum">     198 </span>            :       {data+57, data+62,}, // upper
+<span class="lineNum">     199 </span>            :       {data+62, data+63,}, // v
+<span class="lineNum">     200 </span>            :       {data+63, data+64,}, // w
+<span class="lineNum">     201 </span>            :       {data+63, data+67,}, // word
+<span class="lineNum">     202 </span>            :       {data+67, data+73,}, // xdigit
+<span class="lineNum">     203 </span>            :    };
+<span class="lineNum">     204 </span>            :    static const character_pointer_range&lt;charT&gt;* ranges_begin = ranges;
+<span class="lineNum">     205 </span>            :    static const character_pointer_range&lt;charT&gt;* ranges_end = ranges + (sizeof(ranges)/sizeof(ranges[0]));
+<span class="lineNum">     206 </span>            : 
+<span class="lineNum">     207 </span>            :    character_pointer_range&lt;charT&gt; t = { p1, p2, };
+<span class="lineNum">     208 </span>            :    const character_pointer_range&lt;charT&gt;* p = std::lower_bound(ranges_begin, ranges_end, t);
+<span class="lineNum">     209 </span>            :    if((p != ranges_end) &amp;&amp; (t == *p))
+<span class="lineNum">     210 </span>            :       return static_cast&lt;int&gt;(p - ranges);
+<span class="lineNum">     211 </span>            :    return -1;
+<span class="lineNum">     212 </span>            : }
+<span class="lineNum">     213 </span>            : 
+<span class="lineNum">     214 </span>            : //
+<span class="lineNum">     215 </span>            : // helper functions:
+<span class="lineNum">     216 </span>            : //
+<span class="lineNum">     217 </span>            : template &lt;class charT&gt;
+<span class="lineNum">     218 </span>            : std::ptrdiff_t global_length(const charT* p)
+<span class="lineNum">     219 </span>            : {
+<span class="lineNum">     220 </span>            :    std::ptrdiff_t n = 0;
+<span class="lineNum">     221 </span>            :    while(*p)
+<span class="lineNum">     222 </span>            :    {
+<span class="lineNum">     223 </span>            :       ++p;
+<span class="lineNum">     224 </span>            :       ++n;
+<span class="lineNum">     225 </span>            :    }
+<span class="lineNum">     226 </span>            :    return n;
+<span class="lineNum">     227 </span>            : }
+<span class="lineNum">     228 </span>            : template&lt;&gt;
+<span class="lineNum">     229 </span>            : inline std::ptrdiff_t global_length&lt;char&gt;(const char* p)
+<span class="lineNum">     230 </span>            : {
+<span class="lineNum">     231 </span>            :    return (std::strlen)(p);
+<span class="lineNum">     232 </span>            : }
+<span class="lineNum">     233 </span>            : #ifndef BOOST_NO_WREGEX
+<span class="lineNum">     234 </span>            : template&lt;&gt;
+<span class="lineNum">     235 </span>            : inline std::ptrdiff_t global_length&lt;wchar_t&gt;(const wchar_t* p)
+<span class="lineNum">     236 </span>            : {
+<span class="lineNum">     237 </span>            :    return (std::wcslen)(p);
+<span class="lineNum">     238 </span>            : }
+<span class="lineNum">     239 </span>            : #endif
+<span class="lineNum">     240 </span>            : template &lt;class charT&gt;
+<span class="lineNum">     241 </span>            : inline charT BOOST_REGEX_CALL global_lower(charT c)
+<span class="lineNum">     242 </span>            : {
+<span class="lineNum">     243 </span>            :    return c;
+<span class="lineNum">     244 </span>            : }
+<span class="lineNum">     245 </span>            : template &lt;class charT&gt;
+<span class="lineNum">     246 </span>            : inline charT BOOST_REGEX_CALL global_upper(charT c)
+<span class="lineNum">     247 </span>            : {
+<span class="lineNum">     248 </span>            :    return c;
+<span class="lineNum">     249 </span>            : }
+<span class="lineNum">     250 </span>            : 
+<span class="lineNum">     251 </span>            : BOOST_REGEX_DECL char BOOST_REGEX_CALL do_global_lower(char c);
+<span class="lineNum">     252 </span>            : BOOST_REGEX_DECL char BOOST_REGEX_CALL do_global_upper(char c);
+<span class="lineNum">     253 </span>            : #ifndef BOOST_NO_WREGEX
+<span class="lineNum">     254 </span>            : BOOST_REGEX_DECL wchar_t BOOST_REGEX_CALL do_global_lower(wchar_t c);
+<span class="lineNum">     255 </span>            : BOOST_REGEX_DECL wchar_t BOOST_REGEX_CALL do_global_upper(wchar_t c);
+<span class="lineNum">     256 </span>            : #endif
+<span class="lineNum">     257 </span>            : #ifdef BOOST_REGEX_HAS_OTHER_WCHAR_T
+<span class="lineNum">     258 </span>            : BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL do_global_lower(unsigned short c);
+<span class="lineNum">     259 </span>            : BOOST_REGEX_DECL unsigned short BOOST_REGEX_CALL do_global_upper(unsigned short c);
+<span class="lineNum">     260 </span>            : #endif
+<span class="lineNum">     261 </span>            : //
+<span class="lineNum">     262 </span>            : // This sucks: declare template specialisations of global_lower/global_upper
+<span class="lineNum">     263 </span>            : // that just forward to the non-template implementation functions.  We do
+<span class="lineNum">     264 </span>            : // this because there is one compiler (Compaq Tru64 C++) that doesn't seem
+<span class="lineNum">     265 </span>            : // to differentiate between templates and non-template overloads....
+<span class="lineNum">     266 </span>            : // what's more, the primary template, plus all overloads have to be
+<span class="lineNum">     267 </span>            : // defined in the same translation unit (if one is inline they all must be)
+<span class="lineNum">     268 </span>            : // otherwise the &quot;local template instantiation&quot; compiler option can pick
+<span class="lineNum">     269 </span>            : // the wrong instantiation when linking:
+<span class="lineNum">     270 </span>            : //
+<span class="lineNum">     271 </span>            : template&lt;&gt; inline char BOOST_REGEX_CALL global_lower&lt;char&gt;(char c){ return do_global_lower(c); }
+<span class="lineNum">     272 </span>            : template&lt;&gt; inline char BOOST_REGEX_CALL global_upper&lt;char&gt;(char c){ return do_global_upper(c); }
+<span class="lineNum">     273 </span>            : #ifndef BOOST_NO_WREGEX
+<span class="lineNum">     274 </span>            : template&lt;&gt; inline wchar_t BOOST_REGEX_CALL global_lower&lt;wchar_t&gt;(wchar_t c){ return do_global_lower(c); }
+<span class="lineNum">     275 </span>            : template&lt;&gt; inline wchar_t BOOST_REGEX_CALL global_upper&lt;wchar_t&gt;(wchar_t c){ return do_global_upper(c); }
+<span class="lineNum">     276 </span>            : #endif
+<span class="lineNum">     277 </span>            : #ifdef BOOST_REGEX_HAS_OTHER_WCHAR_T
+<span class="lineNum">     278 </span>            : template&lt;&gt; inline unsigned short BOOST_REGEX_CALL global_lower&lt;unsigned short&gt;(unsigned short c){ return do_global_lower(c); }
+<span class="lineNum">     279 </span>            : template&lt;&gt; inline unsigned short BOOST_REGEX_CALL global_upper&lt;unsigned short&gt;(unsigned short c){ return do_global_upper(c); }
+<span class="lineNum">     280 </span>            : #endif
+<span class="lineNum">     281 </span>            : 
+<span class="lineNum">     282 </span>            : template &lt;class charT&gt;
+<span class="lineNum">     283 </span>            : int global_value(charT c)
+<span class="lineNum">     284 </span>            : {
+<span class="lineNum">     285 </span>            :    static const charT zero = '0';
+<span class="lineNum">     286 </span>            :    static const charT nine = '9';
+<span class="lineNum">     287 </span>            :    static const charT a = 'a';
+<span class="lineNum">     288 </span>            :    static const charT f = 'f';
+<span class="lineNum">     289 </span>            :    static const charT A = 'A';
+<span class="lineNum">     290 </span>            :    static const charT F = 'F';
+<span class="lineNum">     291 </span>            : 
+<span class="lineNum">     292 </span>            :    if(c &gt; f) return -1;
+<span class="lineNum">     293 </span>            :    if(c &gt;= a) return 10 + (c - a);
+<span class="lineNum">     294 </span>            :    if(c &gt; F) return -1;
+<span class="lineNum">     295 </span>            :    if(c &gt;= A) return 10 + (c - A);
+<span class="lineNum">     296 </span>            :    if(c &gt; nine) return -1;
+<span class="lineNum">     297 </span>            :    if(c &gt;= zero) return c - zero;
+<span class="lineNum">     298 </span>            :    return -1;
+<span class="lineNum">     299 </span>            : }
+<span class="lineNum">     300 </span>            : template &lt;class charT, class traits&gt;
+<span class="lineNum">     301 </span>            : int global_toi(const charT*&amp; p1, const charT* p2, int radix, const traits&amp; t)
+<span class="lineNum">     302 </span>            : {
+<span class="lineNum">     303 </span>            :    (void)t; // warning suppression
+<span class="lineNum">     304 </span>            :    int next_value = t.value(*p1, radix);
+<span class="lineNum">     305 </span>            :    if((p1 == p2) || (next_value &lt; 0) || (next_value &gt;= radix))
+<span class="lineNum">     306 </span>            :       return -1;
+<span class="lineNum">     307 </span>            :    int result = 0;
+<span class="lineNum">     308 </span>            :    while(p1 != p2)
+<span class="lineNum">     309 </span>            :    {
+<span class="lineNum">     310 </span>            :       next_value = t.value(*p1, radix);
+<span class="lineNum">     311 </span>            :       if((next_value &lt; 0) || (next_value &gt;= radix))
+<span class="lineNum">     312 </span>            :          break;
+<span class="lineNum">     313 </span>            :       result *= radix;
+<span class="lineNum">     314 </span>            :       result += next_value;
+<span class="lineNum">     315 </span>            :       ++p1;
+<span class="lineNum">     316 </span>            :    }
+<span class="lineNum">     317 </span>            :    return result;
+<span class="lineNum">     318 </span>            : }
+<span class="lineNum">     319 </span>            : 
+<span class="lineNum">     320 </span>            : template &lt;class charT&gt;
+<span class="lineNum">     321 </span>            : inline const charT* get_escape_R_string()
+<span class="lineNum">     322 </span>            : {
+<span class="lineNum">     323 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     324 </span>            : #  pragma warning(push)
+<span class="lineNum">     325 </span>            : #  pragma warning(disable:4309 4245)
+<span class="lineNum">     326 </span>            : #endif
+<span class="lineNum">     327 </span>            :    static const charT e1[] = { '(', '?', '&gt;', '\x0D', '\x0A', '?',
+<span class="lineNum">     328 </span>            :       '|', '[', '\x0A', '\x0B', '\x0C', static_cast&lt;unsigned char&gt;('\x85'), '\\', 'x', '{', '2', '0', '2', '8', '}',
+<span class="lineNum">     329 </span>            :                 '\\', 'x', '{', '2', '0', '2', '9', '}', ']', ')', '\0' };
+<span class="lineNum">     330 </span>            :    static const charT e2[] = { '(', '?', '&gt;', '\x0D', '\x0A', '?',
+<span class="lineNum">     331 </span>            :       '|', '[', '\x0A', '\x0B', '\x0C', static_cast&lt;unsigned char&gt;('\x85'), ']', ')', '\0' };
+<span class="lineNum">     332 </span>            : 
+<span class="lineNum">     333 </span>            :    charT c = static_cast&lt;charT&gt;(0x2029u);
+<span class="lineNum">     334 </span>            :    bool b = (static_cast&lt;unsigned&gt;(c) == 0x2029u);
+<span class="lineNum">     335 </span>            : 
+<span class="lineNum">     336 </span>            :    return (b ? e1 : e2);
+<span class="lineNum">     337 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     338 </span>            : #  pragma warning(pop)
+<span class="lineNum">     339 </span>            : #endif
+<span class="lineNum">     340 </span>            : }
+<span class="lineNum">     341 </span>            : 
+<span class="lineNum">     342 </span>            : template &lt;&gt;
+<span class="lineNum">     343 </span>            : inline const char* get_escape_R_string&lt;char&gt;()
+<span class="lineNum">     344 </span>            : {
+<span class="lineNum">     345 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     346 </span>            : #  pragma warning(push)
+<span class="lineNum">     347 </span>            : #  pragma warning(disable:4309)
+<span class="lineNum">     348 </span>            : #endif
+<span class="lineNum">     349 </span>            :    static const char e2[] = { '(', '?', '&gt;', '\x0D', '\x0A', '?',
+<span class="lineNum">     350 </span>            :       '|', '[', '\x0A', '\x0B', '\x0C', '\x85', ']', ')', '\0' };
+<span class="lineNum">     351 </span>            :    return e2;
+<span class="lineNum">     352 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     353 </span>            : #  pragma warning(pop)
+<span class="lineNum">     354 </span>            : #endif
+<span class="lineNum">     355 </span>            : }
+<span class="lineNum">     356 </span>            : 
+<span class="lineNum">     357 </span>            : } // re_detail
+<span class="lineNum">     358 </span>            : } // boost
+<span class="lineNum">     359 </span>            : 
+<span class="lineNum">     360 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     361 </span>            : #pragma warning(push)
+<span class="lineNum">     362 </span>            : #pragma warning(disable: 4103)
+<span class="lineNum">     363 </span>            : #endif
+<span class="lineNum">     364 </span>            : #ifdef BOOST_HAS_ABI_HEADERS
+<span class="lineNum">     365 </span>            : #  include BOOST_ABI_SUFFIX
+<span class="lineNum">     366 </span>            : #endif
+<span class="lineNum">     367 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     368 </span>            : #pragma warning(pop)
+<span class="lineNum">     369 </span>            : #endif
+<span class="lineNum">     370 </span>            : 
+<span class="lineNum">     371 </span>            : #endif
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

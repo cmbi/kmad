@@ -1,0 +1,587 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - boost/regex/v4/sub_match.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../index.html">top level</a> - <a href="index.html">boost/regex/v4</a> - sub_match.hpp<span style="font-size: 80%;"> (source / <a href="sub_match.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntryLo">10.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2015-01-19</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntryLo">25.0 %</td>
+          </tr>
+          <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  *
+<span class="lineNum">       3 </span>            :  * Copyright (c) 1998-2002
+<span class="lineNum">       4 </span>            :  * John Maddock
+<span class="lineNum">       5 </span>            :  *
+<span class="lineNum">       6 </span>            :  * Use, modification and distribution are subject to the 
+<span class="lineNum">       7 </span>            :  * Boost Software License, Version 1.0. (See accompanying file 
+<span class="lineNum">       8 </span>            :  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+<span class="lineNum">       9 </span>            :  *
+<span class="lineNum">      10 </span>            :  */
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            :  /*
+<span class="lineNum">      13 </span>            :   *   LOCATION:    see http://www.boost.org for most recent version.
+<span class="lineNum">      14 </span>            :   *   FILE         sub_match.cpp
+<span class="lineNum">      15 </span>            :   *   VERSION      see &lt;boost/version.hpp&gt;
+<span class="lineNum">      16 </span>            :   *   DESCRIPTION: Declares template class sub_match.
+<span class="lineNum">      17 </span>            :   */
+<span class="lineNum">      18 </span>            : 
+<span class="lineNum">      19 </span>            : #ifndef BOOST_REGEX_V4_SUB_MATCH_HPP
+<span class="lineNum">      20 </span>            : #define BOOST_REGEX_V4_SUB_MATCH_HPP
+<span class="lineNum">      21 </span>            : 
+<span class="lineNum">      22 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">      23 </span>            : #pragma warning(push)
+<span class="lineNum">      24 </span>            : #pragma warning(disable: 4103)
+<span class="lineNum">      25 </span>            : #endif
+<span class="lineNum">      26 </span>            : #ifdef BOOST_HAS_ABI_HEADERS
+<span class="lineNum">      27 </span>            : #  include BOOST_ABI_PREFIX
+<span class="lineNum">      28 </span>            : #endif
+<span class="lineNum">      29 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">      30 </span>            : #pragma warning(pop)
+<span class="lineNum">      31 </span>            : #endif
+<span class="lineNum">      32 </span>            : 
+<span class="lineNum">      33 </span>            : namespace boost{
+<span class="lineNum">      34 </span>            : 
+<span class="lineNum">      35 </span>            : template &lt;class BidiIterator&gt;
+<span class="lineNum">      36 </span>            : struct sub_match : public std::pair&lt;BidiIterator, BidiIterator&gt;
+<span class="lineNum">      37 </span>            : {
+<span class="lineNum">      38 </span>            :    typedef typename re_detail::regex_iterator_traits&lt;BidiIterator&gt;::value_type       value_type;
+<span class="lineNum">      39 </span>            : #if defined(BOOST_NO_STD_ITERATOR_TRAITS)
+<span class="lineNum">      40 </span>            :    typedef          std::ptrdiff_t                                                   difference_type;
+<span class="lineNum">      41 </span>            : #else
+<span class="lineNum">      42 </span>            :    typedef typename re_detail::regex_iterator_traits&lt;BidiIterator&gt;::difference_type  difference_type;
+<span class="lineNum">      43 </span>            : #endif
+<span class="lineNum">      44 </span>            :    typedef          BidiIterator                                                     iterator_type;
+<span class="lineNum">      45 </span>            :    typedef          BidiIterator                                                     iterator;
+<span class="lineNum">      46 </span>            :    typedef          BidiIterator                                                     const_iterator;
+<span class="lineNum">      47 </span>            : 
+<a name="48"><span class="lineNum">      48 </span>            :    bool matched;</a>
+<a name="49"><span class="lineNum">      49 </span>            : </a>
+<span class="lineNum">      50 </span><span class="lineCov">      17495 :    sub_match() : std::pair&lt;BidiIterator, BidiIterator&gt;(), matched(false) {}</span>
+<span class="lineNum">      51 </span><span class="lineNoCov">          0 :    sub_match(BidiIterator i) : std::pair&lt;BidiIterator, BidiIterator&gt;(i, i), matched(false) {}</span>
+<span class="lineNum">      52 </span>            : #if !defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)\
+<span class="lineNum">      53 </span>            :                &amp;&amp; !BOOST_WORKAROUND(__BORLANDC__, &lt;= 0x0551)\
+<span class="lineNum">      54 </span>            :                &amp;&amp; !BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042))
+<span class="lineNum">      55 </span>            :    template &lt;class T, class A&gt;
+<span class="lineNum">      56 </span>            :    operator std::basic_string&lt;value_type, T, A&gt; ()const
+<span class="lineNum">      57 </span>            :    {
+<span class="lineNum">      58 </span>            :       return matched ? std::basic_string&lt;value_type, T, A&gt;(this-&gt;first, this-&gt;second) : std::basic_string&lt;value_type, T, A&gt;();
+<span class="lineNum">      59 </span>            :    }
+<span class="lineNum">      60 </span>            : #else
+<span class="lineNum">      61 </span>            :    operator std::basic_string&lt;value_type&gt; ()const
+<span class="lineNum">      62 </span>            :    {
+<span class="lineNum">      63 </span>            :       return str();
+<span class="lineNum">      64 </span>            :    }
+<span class="lineNum">      65 </span>            : #endif
+<span class="lineNum">      66 </span>            :    difference_type BOOST_REGEX_CALL length()const
+<span class="lineNum">      67 </span>            :    {
+<span class="lineNum">      68 </span>            :       difference_type n = matched ? ::boost::re_detail::distance((BidiIterator)this-&gt;first, (BidiIterator)this-&gt;second) : 0;
+<span class="lineNum">      69 </span>            :       return n;
+<span class="lineNum">      70 </span>            :    }
+<span class="lineNum">      71 </span>            :    std::basic_string&lt;value_type&gt; str()const
+<span class="lineNum">      72 </span>            :    {
+<span class="lineNum">      73 </span>            :       std::basic_string&lt;value_type&gt; result;
+<span class="lineNum">      74 </span>            :       if(matched)
+<span class="lineNum">      75 </span>            :       {
+<span class="lineNum">      76 </span>            :          std::size_t len = ::boost::re_detail::distance((BidiIterator)this-&gt;first, (BidiIterator)this-&gt;second);
+<span class="lineNum">      77 </span>            :          result.reserve(len);
+<span class="lineNum">      78 </span>            :          BidiIterator i = this-&gt;first;
+<span class="lineNum">      79 </span>            :          while(i != this-&gt;second)
+<span class="lineNum">      80 </span>            :          {
+<span class="lineNum">      81 </span>            :             result.append(1, *i);
+<span class="lineNum">      82 </span>            :             ++i;
+<span class="lineNum">      83 </span>            :          }
+<span class="lineNum">      84 </span>            :       }
+<span class="lineNum">      85 </span>            :       return result;
+<span class="lineNum">      86 </span>            :    }
+<span class="lineNum">      87 </span>            :    int compare(const sub_match&amp; s)const
+<span class="lineNum">      88 </span>            :    {
+<span class="lineNum">      89 </span>            :       if(matched != s.matched)
+<span class="lineNum">      90 </span>            :          return static_cast&lt;int&gt;(matched) - static_cast&lt;int&gt;(s.matched);
+<span class="lineNum">      91 </span>            :       return str().compare(s.str());
+<span class="lineNum">      92 </span>            :    }
+<span class="lineNum">      93 </span>            :    int compare(const std::basic_string&lt;value_type&gt;&amp; s)const
+<span class="lineNum">      94 </span>            :    {
+<span class="lineNum">      95 </span>            :       return str().compare(s);
+<span class="lineNum">      96 </span>            :    }
+<span class="lineNum">      97 </span>            :    int compare(const value_type* p)const
+<span class="lineNum">      98 </span>            :    {
+<span class="lineNum">      99 </span>            :       return str().compare(p);
+<span class="lineNum">     100 </span>            :    }
+<span class="lineNum">     101 </span>            : 
+<span class="lineNum">     102 </span>            :    bool operator==(const sub_match&amp; that)const
+<span class="lineNum">     103 </span>            :    { return compare(that) == 0; }
+<span class="lineNum">     104 </span>            :    bool BOOST_REGEX_CALL operator !=(const sub_match&amp; that)const
+<span class="lineNum">     105 </span>            :    { return compare(that) != 0; }
+<span class="lineNum">     106 </span>            :    bool operator&lt;(const sub_match&amp; that)const
+<span class="lineNum">     107 </span>            :    { return compare(that) &lt; 0; }
+<span class="lineNum">     108 </span>            :    bool operator&gt;(const sub_match&amp; that)const
+<span class="lineNum">     109 </span>            :    { return compare(that) &gt; 0; }
+<span class="lineNum">     110 </span>            :    bool operator&lt;=(const sub_match&amp; that)const
+<span class="lineNum">     111 </span>            :    { return compare(that) &lt;= 0; }
+<span class="lineNum">     112 </span>            :    bool operator&gt;=(const sub_match&amp; that)const
+<span class="lineNum">     113 </span>            :    { return compare(that) &gt;= 0; }
+<span class="lineNum">     114 </span>            : 
+<span class="lineNum">     115 </span>            : #ifdef BOOST_REGEX_MATCH_EXTRA
+<span class="lineNum">     116 </span>            :    typedef std::vector&lt;sub_match&lt;BidiIterator&gt; &gt; capture_sequence_type;
+<span class="lineNum">     117 </span>            : 
+<span class="lineNum">     118 </span>            :    const capture_sequence_type&amp; captures()const
+<span class="lineNum">     119 </span>            :    {
+<span class="lineNum">     120 </span>            :       if(!m_captures) 
+<span class="lineNum">     121 </span>            :          m_captures.reset(new capture_sequence_type());
+<span class="lineNum">     122 </span>            :       return *m_captures;
+<span class="lineNum">     123 </span>            :    }
+<span class="lineNum">     124 </span>            :    //
+<span class="lineNum">     125 </span>            :    // Private implementation API: DO NOT USE!
+<span class="lineNum">     126 </span>            :    //
+<span class="lineNum">     127 </span>            :    capture_sequence_type&amp; get_captures()const
+<span class="lineNum">     128 </span>            :    {
+<span class="lineNum">     129 </span>            :       if(!m_captures) 
+<span class="lineNum">     130 </span>            :          m_captures.reset(new capture_sequence_type());
+<span class="lineNum">     131 </span>            :       return *m_captures;
+<span class="lineNum">     132 </span>            :    }
+<span class="lineNum">     133 </span>            : 
+<span class="lineNum">     134 </span>            : private:
+<span class="lineNum">     135 </span>            :    mutable boost::scoped_ptr&lt;capture_sequence_type&gt; m_captures;
+<span class="lineNum">     136 </span>            : public:
+<a name="137"><span class="lineNum">     137 </span>            : </a>
+<span class="lineNum">     138 </span>            : #endif
+<span class="lineNum">     139 </span><span class="lineNoCov">          0 :    sub_match(const sub_match&amp; that, bool </span>
+<span class="lineNum">     140 </span>            : #ifdef BOOST_REGEX_MATCH_EXTRA
+<span class="lineNum">     141 </span>            :       deep_copy
+<span class="lineNum">     142 </span>            : #endif
+<span class="lineNum">     143 </span>            :       = true
+<span class="lineNum">     144 </span>            :       ) 
+<span class="lineNum">     145 </span>            :       : std::pair&lt;BidiIterator, BidiIterator&gt;(that), 
+<span class="lineNum">     146 </span><span class="lineNoCov">          0 :         matched(that.matched) </span>
+<span class="lineNum">     147 </span>            :    {
+<span class="lineNum">     148 </span>            : #ifdef BOOST_REGEX_MATCH_EXTRA
+<span class="lineNum">     149 </span>            :       if(that.m_captures)
+<span class="lineNum">     150 </span>            :          if(deep_copy)
+<span class="lineNum">     151 </span>            :             m_captures.reset(new capture_sequence_type(*(that.m_captures)));
+<a name="152"><span class="lineNum">     152 </span>            : #endif</a>
+<span class="lineNum">     153 </span><span class="lineNoCov">          0 :    }</span>
+<span class="lineNum">     154 </span><span class="lineNoCov">          0 :    sub_match&amp; operator=(const sub_match&amp; that)</span>
+<span class="lineNum">     155 </span>            :    {
+<span class="lineNum">     156 </span><span class="lineNoCov">          0 :       this-&gt;first = that.first;</span>
+<span class="lineNum">     157 </span><span class="lineNoCov">          0 :       this-&gt;second = that.second;</span>
+<span class="lineNum">     158 </span><span class="lineNoCov">          0 :       matched = that.matched;</span>
+<span class="lineNum">     159 </span>            : #ifdef BOOST_REGEX_MATCH_EXTRA
+<span class="lineNum">     160 </span>            :       if(that.m_captures)
+<span class="lineNum">     161 </span>            :          get_captures() = *(that.m_captures);
+<span class="lineNum">     162 </span>            : #endif
+<span class="lineNum">     163 </span><span class="lineNoCov">          0 :       return *this;</span>
+<span class="lineNum">     164 </span>            :    }
+<span class="lineNum">     165 </span>            : 
+<span class="lineNum">     166 </span>            : 
+<span class="lineNum">     167 </span>            : #ifdef BOOST_OLD_REGEX_H
+<span class="lineNum">     168 </span>            :    //
+<span class="lineNum">     169 </span>            :    // the following are deprecated, do not use!!
+<span class="lineNum">     170 </span>            :    //
+<span class="lineNum">     171 </span>            :    operator int()const;
+<span class="lineNum">     172 </span>            :    operator unsigned int()const;
+<span class="lineNum">     173 </span>            :    operator short()const
+<span class="lineNum">     174 </span>            :    {
+<span class="lineNum">     175 </span>            :       return (short)(int)(*this);
+<span class="lineNum">     176 </span>            :    }
+<span class="lineNum">     177 </span>            :    operator unsigned short()const
+<span class="lineNum">     178 </span>            :    {
+<span class="lineNum">     179 </span>            :       return (unsigned short)(unsigned int)(*this);
+<span class="lineNum">     180 </span>            :    }
+<span class="lineNum">     181 </span>            : #endif
+<span class="lineNum">     182 </span>            : };
+<span class="lineNum">     183 </span>            : 
+<span class="lineNum">     184 </span>            : typedef sub_match&lt;const char*&gt; csub_match;
+<span class="lineNum">     185 </span>            : typedef sub_match&lt;std::string::const_iterator&gt; ssub_match;
+<span class="lineNum">     186 </span>            : #ifndef BOOST_NO_WREGEX
+<span class="lineNum">     187 </span>            : typedef sub_match&lt;const wchar_t*&gt; wcsub_match;
+<span class="lineNum">     188 </span>            : typedef sub_match&lt;std::wstring::const_iterator&gt; wssub_match;
+<span class="lineNum">     189 </span>            : #endif
+<span class="lineNum">     190 </span>            : 
+<span class="lineNum">     191 </span>            : // comparison to std::basic_string&lt;&gt; part 1:
+<span class="lineNum">     192 </span>            : template &lt;class RandomAccessIterator, class traits, class Allocator&gt;
+<span class="lineNum">     193 </span>            : inline bool operator == (const std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt;&amp; s,
+<span class="lineNum">     194 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     195 </span>            : { return s.compare(m.str()) == 0; }
+<span class="lineNum">     196 </span>            : template &lt;class RandomAccessIterator, class traits, class Allocator&gt;
+<span class="lineNum">     197 </span>            : inline bool operator != (const std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt;&amp; s,
+<span class="lineNum">     198 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     199 </span>            : { return s.compare(m.str()) != 0; }
+<span class="lineNum">     200 </span>            : template &lt;class RandomAccessIterator, class traits, class Allocator&gt;
+<span class="lineNum">     201 </span>            : inline bool operator &lt; (const std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt;&amp; s,
+<span class="lineNum">     202 </span>            :                  const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     203 </span>            : { return s.compare(m.str()) &lt; 0; }
+<span class="lineNum">     204 </span>            : template &lt;class RandomAccessIterator, class traits, class Allocator&gt;
+<span class="lineNum">     205 </span>            : inline bool operator &lt;= (const std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt;&amp; s,
+<span class="lineNum">     206 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     207 </span>            : { return s.compare(m.str()) &lt;= 0; }
+<span class="lineNum">     208 </span>            : template &lt;class RandomAccessIterator, class traits, class Allocator&gt;
+<span class="lineNum">     209 </span>            : inline bool operator &gt;= (const std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt;&amp; s,
+<span class="lineNum">     210 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     211 </span>            : { return s.compare(m.str()) &gt;= 0; }
+<span class="lineNum">     212 </span>            : template &lt;class RandomAccessIterator, class traits, class Allocator&gt;
+<span class="lineNum">     213 </span>            : inline bool operator &gt; (const std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt;&amp; s,
+<span class="lineNum">     214 </span>            :                  const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     215 </span>            : { return s.compare(m.str()) &gt; 0; }
+<span class="lineNum">     216 </span>            : // comparison to std::basic_string&lt;&gt; part 2:
+<span class="lineNum">     217 </span>            : template &lt;class RandomAccessIterator, class traits, class Allocator&gt;
+<span class="lineNum">     218 </span>            : inline bool operator == (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     219 </span>            :                   const std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt;&amp; s)
+<span class="lineNum">     220 </span>            : { return m.str().compare(s) == 0; }
+<span class="lineNum">     221 </span>            : template &lt;class RandomAccessIterator, class traits, class Allocator&gt;
+<span class="lineNum">     222 </span>            : inline bool operator != (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     223 </span>            :                   const std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt;&amp; s)
+<span class="lineNum">     224 </span>            : { return m.str().compare(s) != 0; }
+<span class="lineNum">     225 </span>            : template &lt;class RandomAccessIterator, class traits, class Allocator&gt;
+<span class="lineNum">     226 </span>            : inline bool operator &lt; (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     227 </span>            :                   const std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt;&amp; s)
+<span class="lineNum">     228 </span>            : { return m.str().compare(s) &lt; 0; }
+<span class="lineNum">     229 </span>            : template &lt;class RandomAccessIterator, class traits, class Allocator&gt;
+<span class="lineNum">     230 </span>            : inline bool operator &gt; (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     231 </span>            :                   const std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt;&amp; s)
+<span class="lineNum">     232 </span>            : { return m.str().compare(s) &gt; 0; }
+<span class="lineNum">     233 </span>            : template &lt;class RandomAccessIterator, class traits, class Allocator&gt;
+<span class="lineNum">     234 </span>            : inline bool operator &lt;= (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     235 </span>            :                   const std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt;&amp; s)
+<span class="lineNum">     236 </span>            : { return m.str().compare(s) &lt;= 0; }
+<span class="lineNum">     237 </span>            : template &lt;class RandomAccessIterator, class traits, class Allocator&gt;
+<span class="lineNum">     238 </span>            : inline bool operator &gt;= (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     239 </span>            :                   const std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt;&amp; s)
+<span class="lineNum">     240 </span>            : { return m.str().compare(s) &gt;= 0; }
+<span class="lineNum">     241 </span>            : // comparison to const charT* part 1:
+<span class="lineNum">     242 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     243 </span>            : inline bool operator == (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     244 </span>            :                   typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const* s)
+<span class="lineNum">     245 </span>            : { return m.str().compare(s) == 0; }
+<span class="lineNum">     246 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     247 </span>            : inline bool operator != (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     248 </span>            :                   typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const* s)
+<span class="lineNum">     249 </span>            : { return m.str().compare(s) != 0; }
+<span class="lineNum">     250 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     251 </span>            : inline bool operator &gt; (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     252 </span>            :                   typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const* s)
+<span class="lineNum">     253 </span>            : { return m.str().compare(s) &gt; 0; }
+<span class="lineNum">     254 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     255 </span>            : inline bool operator &lt; (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     256 </span>            :                   typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const* s)
+<span class="lineNum">     257 </span>            : { return m.str().compare(s) &lt; 0; }
+<span class="lineNum">     258 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     259 </span>            : inline bool operator &gt;= (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     260 </span>            :                   typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const* s)
+<span class="lineNum">     261 </span>            : { return m.str().compare(s) &gt;= 0; }
+<span class="lineNum">     262 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     263 </span>            : inline bool operator &lt;= (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     264 </span>            :                   typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const* s)
+<span class="lineNum">     265 </span>            : { return m.str().compare(s) &lt;= 0; }
+<span class="lineNum">     266 </span>            : // comparison to const charT* part 2:
+<span class="lineNum">     267 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     268 </span>            : inline bool operator == (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const* s,
+<span class="lineNum">     269 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     270 </span>            : { return m.str().compare(s) == 0; }
+<span class="lineNum">     271 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     272 </span>            : inline bool operator != (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const* s,
+<span class="lineNum">     273 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     274 </span>            : { return m.str().compare(s) != 0; }
+<span class="lineNum">     275 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     276 </span>            : inline bool operator &lt; (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const* s,
+<span class="lineNum">     277 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     278 </span>            : { return m.str().compare(s) &gt; 0; }
+<span class="lineNum">     279 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     280 </span>            : inline bool operator &gt; (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const* s,
+<span class="lineNum">     281 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     282 </span>            : { return m.str().compare(s) &lt; 0; }
+<span class="lineNum">     283 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     284 </span>            : inline bool operator &lt;= (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const* s,
+<span class="lineNum">     285 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     286 </span>            : { return m.str().compare(s) &gt;= 0; }
+<span class="lineNum">     287 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     288 </span>            : inline bool operator &gt;= (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const* s,
+<span class="lineNum">     289 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     290 </span>            : { return m.str().compare(s) &lt;= 0; }
+<span class="lineNum">     291 </span>            : 
+<span class="lineNum">     292 </span>            : // comparison to const charT&amp; part 1:
+<span class="lineNum">     293 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     294 </span>            : inline bool operator == (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     295 </span>            :                   typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const&amp; s)
+<span class="lineNum">     296 </span>            : { return m.str().compare(0, m.length(), &amp;s, 1) == 0; }
+<span class="lineNum">     297 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     298 </span>            : inline bool operator != (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     299 </span>            :                   typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const&amp; s)
+<span class="lineNum">     300 </span>            : { return m.str().compare(0, m.length(), &amp;s, 1) != 0; }
+<span class="lineNum">     301 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     302 </span>            : inline bool operator &gt; (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     303 </span>            :                   typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const&amp; s)
+<span class="lineNum">     304 </span>            : { return m.str().compare(0, m.length(), &amp;s, 1) &gt; 0; }
+<span class="lineNum">     305 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     306 </span>            : inline bool operator &lt; (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     307 </span>            :                   typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const&amp; s)
+<span class="lineNum">     308 </span>            : { return m.str().compare(0, m.length(), &amp;s, 1) &lt; 0; }
+<span class="lineNum">     309 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     310 </span>            : inline bool operator &gt;= (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     311 </span>            :                   typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const&amp; s)
+<span class="lineNum">     312 </span>            : { return m.str().compare(0, m.length(), &amp;s, 1) &gt;= 0; }
+<span class="lineNum">     313 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     314 </span>            : inline bool operator &lt;= (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     315 </span>            :                   typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const&amp; s)
+<span class="lineNum">     316 </span>            : { return m.str().compare(0, m.length(), &amp;s, 1) &lt;= 0; }
+<span class="lineNum">     317 </span>            : // comparison to const charT* part 2:
+<span class="lineNum">     318 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     319 </span>            : inline bool operator == (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const&amp; s,
+<span class="lineNum">     320 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     321 </span>            : { return m.str().compare(0, m.length(), &amp;s, 1) == 0; }
+<span class="lineNum">     322 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     323 </span>            : inline bool operator != (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const&amp; s,
+<span class="lineNum">     324 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     325 </span>            : { return m.str().compare(0, m.length(), &amp;s, 1) != 0; }
+<span class="lineNum">     326 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     327 </span>            : inline bool operator &lt; (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const&amp; s,
+<span class="lineNum">     328 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     329 </span>            : { return m.str().compare(0, m.length(), &amp;s, 1) &gt; 0; }
+<span class="lineNum">     330 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     331 </span>            : inline bool operator &gt; (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const&amp; s,
+<span class="lineNum">     332 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     333 </span>            : { return m.str().compare(0, m.length(), &amp;s, 1) &lt; 0; }
+<span class="lineNum">     334 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     335 </span>            : inline bool operator &lt;= (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const&amp; s,
+<span class="lineNum">     336 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     337 </span>            : { return m.str().compare(0, m.length(), &amp;s, 1) &gt;= 0; }
+<span class="lineNum">     338 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     339 </span>            : inline bool operator &gt;= (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const&amp; s,
+<span class="lineNum">     340 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     341 </span>            : { return m.str().compare(0, m.length(), &amp;s, 1) &lt;= 0; }
+<span class="lineNum">     342 </span>            : 
+<span class="lineNum">     343 </span>            : // addition operators:
+<span class="lineNum">     344 </span>            : template &lt;class RandomAccessIterator, class traits, class Allocator&gt;
+<span class="lineNum">     345 </span>            : inline std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt; 
+<span class="lineNum">     346 </span>            : operator + (const std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt;&amp; s,
+<span class="lineNum">     347 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     348 </span>            : {
+<span class="lineNum">     349 </span>            :    std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt; result;
+<span class="lineNum">     350 </span>            :    result.reserve(s.size() + m.length() + 1);
+<span class="lineNum">     351 </span>            :    return result.append(s).append(m.first, m.second);
+<span class="lineNum">     352 </span>            : }
+<span class="lineNum">     353 </span>            : template &lt;class RandomAccessIterator, class traits, class Allocator&gt;
+<span class="lineNum">     354 </span>            : inline std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt; 
+<span class="lineNum">     355 </span>            : operator + (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     356 </span>            :             const std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt;&amp; s)
+<span class="lineNum">     357 </span>            : {
+<span class="lineNum">     358 </span>            :    std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type, traits, Allocator&gt; result;
+<span class="lineNum">     359 </span>            :    result.reserve(s.size() + m.length() + 1);
+<span class="lineNum">     360 </span>            :    return result.append(m.first, m.second).append(s);
+<span class="lineNum">     361 </span>            : }
+<span class="lineNum">     362 </span>            : #if !(defined(__GNUC__) &amp;&amp; defined(BOOST_NO_STD_LOCALE))
+<span class="lineNum">     363 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     364 </span>            : inline std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type&gt; 
+<span class="lineNum">     365 </span>            : operator + (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const* s,
+<span class="lineNum">     366 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     367 </span>            : {
+<span class="lineNum">     368 </span>            :    std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type&gt; result;
+<span class="lineNum">     369 </span>            :    result.reserve(std::char_traits&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type&gt;::length(s) + m.length() + 1);
+<span class="lineNum">     370 </span>            :    return result.append(s).append(m.first, m.second);
+<span class="lineNum">     371 </span>            : }
+<span class="lineNum">     372 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     373 </span>            : inline std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type&gt; 
+<span class="lineNum">     374 </span>            : operator + (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     375 </span>            :             typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const * s)
+<span class="lineNum">     376 </span>            : {
+<span class="lineNum">     377 </span>            :    std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type&gt; result;
+<span class="lineNum">     378 </span>            :    result.reserve(std::char_traits&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type&gt;::length(s) + m.length() + 1);
+<span class="lineNum">     379 </span>            :    return result.append(m.first, m.second).append(s);
+<span class="lineNum">     380 </span>            : }
+<span class="lineNum">     381 </span>            : #else
+<span class="lineNum">     382 </span>            : // worwaround versions:
+<span class="lineNum">     383 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     384 </span>            : inline std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type&gt; 
+<span class="lineNum">     385 </span>            : operator + (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const* s,
+<span class="lineNum">     386 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     387 </span>            : {
+<span class="lineNum">     388 </span>            :    return s + m.str();
+<span class="lineNum">     389 </span>            : }
+<span class="lineNum">     390 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     391 </span>            : inline std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type&gt; 
+<span class="lineNum">     392 </span>            : operator + (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     393 </span>            :             typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const * s)
+<span class="lineNum">     394 </span>            : {
+<span class="lineNum">     395 </span>            :    return m.str() + s;
+<span class="lineNum">     396 </span>            : }
+<span class="lineNum">     397 </span>            : #endif
+<span class="lineNum">     398 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     399 </span>            : inline std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type&gt; 
+<span class="lineNum">     400 </span>            : operator + (typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const&amp; s,
+<span class="lineNum">     401 </span>            :                   const sub_match&lt;RandomAccessIterator&gt;&amp; m)
+<span class="lineNum">     402 </span>            : {
+<span class="lineNum">     403 </span>            :    std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type&gt; result;
+<span class="lineNum">     404 </span>            :    result.reserve(m.length() + 2);
+<span class="lineNum">     405 </span>            :    return result.append(1, s).append(m.first, m.second);
+<span class="lineNum">     406 </span>            : }
+<span class="lineNum">     407 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     408 </span>            : inline std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type&gt; 
+<span class="lineNum">     409 </span>            : operator + (const sub_match&lt;RandomAccessIterator&gt;&amp; m,
+<span class="lineNum">     410 </span>            :             typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type const&amp; s)
+<span class="lineNum">     411 </span>            : {
+<span class="lineNum">     412 </span>            :    std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type&gt; result;
+<span class="lineNum">     413 </span>            :    result.reserve(m.length() + 2);
+<span class="lineNum">     414 </span>            :    return result.append(m.first, m.second).append(1, s);
+<span class="lineNum">     415 </span>            : }
+<span class="lineNum">     416 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     417 </span>            : inline std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type&gt; 
+<span class="lineNum">     418 </span>            : operator + (const sub_match&lt;RandomAccessIterator&gt;&amp; m1,
+<span class="lineNum">     419 </span>            :             const sub_match&lt;RandomAccessIterator&gt;&amp; m2)
+<span class="lineNum">     420 </span>            : {
+<span class="lineNum">     421 </span>            :    std::basic_string&lt;typename re_detail::regex_iterator_traits&lt;RandomAccessIterator&gt;::value_type&gt; result;
+<span class="lineNum">     422 </span>            :    result.reserve(m1.length() + m2.length() + 1);
+<span class="lineNum">     423 </span>            :    return result.append(m1.first, m1.second).append(m2.first, m2.second);
+<span class="lineNum">     424 </span>            : }
+<span class="lineNum">     425 </span>            : #ifndef BOOST_NO_STD_LOCALE
+<span class="lineNum">     426 </span>            : template &lt;class charT, class traits, class RandomAccessIterator&gt;
+<span class="lineNum">     427 </span>            : std::basic_ostream&lt;charT, traits&gt;&amp;
+<span class="lineNum">     428 </span>            :    operator &lt;&lt; (std::basic_ostream&lt;charT, traits&gt;&amp; os,
+<span class="lineNum">     429 </span>            :                 const sub_match&lt;RandomAccessIterator&gt;&amp; s)
+<span class="lineNum">     430 </span>            : {
+<span class="lineNum">     431 </span>            :    return (os &lt;&lt; s.str());
+<span class="lineNum">     432 </span>            : }
+<span class="lineNum">     433 </span>            : #else
+<span class="lineNum">     434 </span>            : template &lt;class RandomAccessIterator&gt;
+<span class="lineNum">     435 </span>            : std::ostream&amp; operator &lt;&lt; (std::ostream&amp; os,
+<span class="lineNum">     436 </span>            :                            const sub_match&lt;RandomAccessIterator&gt;&amp; s)
+<span class="lineNum">     437 </span>            : {
+<span class="lineNum">     438 </span>            :    return (os &lt;&lt; s.str());
+<span class="lineNum">     439 </span>            : }
+<span class="lineNum">     440 </span>            : #endif
+<span class="lineNum">     441 </span>            : 
+<span class="lineNum">     442 </span>            : #ifdef BOOST_OLD_REGEX_H
+<span class="lineNum">     443 </span>            : namespace re_detail{
+<span class="lineNum">     444 </span>            : template &lt;class BidiIterator, class charT&gt;
+<span class="lineNum">     445 </span>            : int do_toi(BidiIterator i, BidiIterator j, char c, int radix)
+<span class="lineNum">     446 </span>            : {
+<span class="lineNum">     447 </span>            :    std::string s(i, j);
+<span class="lineNum">     448 </span>            :    char* p;
+<span class="lineNum">     449 </span>            :    int result = std::strtol(s.c_str(), &amp;p, radix);
+<span class="lineNum">     450 </span>            :    if(*p)raise_regex_exception(&quot;Bad sub-expression&quot;);
+<span class="lineNum">     451 </span>            :    return result;
+<span class="lineNum">     452 </span>            : }
+<span class="lineNum">     453 </span>            : 
+<span class="lineNum">     454 </span>            : //
+<span class="lineNum">     455 </span>            : // helper:
+<span class="lineNum">     456 </span>            : template &lt;class I, class charT&gt;
+<span class="lineNum">     457 </span>            : int do_toi(I&amp; i, I j, charT c)
+<span class="lineNum">     458 </span>            : {
+<span class="lineNum">     459 </span>            :    int result = 0;
+<span class="lineNum">     460 </span>            :    while((i != j) &amp;&amp; (isdigit(*i)))
+<span class="lineNum">     461 </span>            :    {
+<span class="lineNum">     462 </span>            :       result = result*10 + (*i - '0');
+<span class="lineNum">     463 </span>            :       ++i;
+<span class="lineNum">     464 </span>            :    }
+<span class="lineNum">     465 </span>            :    return result;
+<span class="lineNum">     466 </span>            : }
+<span class="lineNum">     467 </span>            : }
+<span class="lineNum">     468 </span>            : 
+<span class="lineNum">     469 </span>            : 
+<span class="lineNum">     470 </span>            : template &lt;class BidiIterator&gt;
+<span class="lineNum">     471 </span>            : sub_match&lt;BidiIterator&gt;::operator int()const
+<span class="lineNum">     472 </span>            : {
+<span class="lineNum">     473 </span>            :    BidiIterator i = first;
+<span class="lineNum">     474 </span>            :    BidiIterator j = second;
+<span class="lineNum">     475 </span>            :    if(i == j)raise_regex_exception(&quot;Bad sub-expression&quot;);
+<span class="lineNum">     476 </span>            :    int neg = 1;
+<span class="lineNum">     477 </span>            :    if((i != j) &amp;&amp; (*i == '-'))
+<span class="lineNum">     478 </span>            :    {
+<span class="lineNum">     479 </span>            :       neg = -1;
+<span class="lineNum">     480 </span>            :       ++i;
+<span class="lineNum">     481 </span>            :    }
+<span class="lineNum">     482 </span>            :    neg *= re_detail::do_toi(i, j, *i);
+<span class="lineNum">     483 </span>            :    if(i != j)raise_regex_exception(&quot;Bad sub-expression&quot;);
+<span class="lineNum">     484 </span>            :    return neg;
+<span class="lineNum">     485 </span>            : }
+<span class="lineNum">     486 </span>            : template &lt;class BidiIterator&gt;
+<span class="lineNum">     487 </span>            : sub_match&lt;BidiIterator&gt;::operator unsigned int()const
+<span class="lineNum">     488 </span>            : {
+<span class="lineNum">     489 </span>            :    BidiIterator i = first;
+<span class="lineNum">     490 </span>            :    BidiIterator j = second;
+<span class="lineNum">     491 </span>            :    if(i == j)
+<span class="lineNum">     492 </span>            :       raise_regex_exception(&quot;Bad sub-expression&quot;);
+<span class="lineNum">     493 </span>            :    return re_detail::do_toi(i, j, *first);
+<span class="lineNum">     494 </span>            : }
+<span class="lineNum">     495 </span>            : #endif
+<span class="lineNum">     496 </span>            : 
+<span class="lineNum">     497 </span>            : } // namespace boost
+<span class="lineNum">     498 </span>            : 
+<span class="lineNum">     499 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     500 </span>            : #pragma warning(push)
+<span class="lineNum">     501 </span>            : #pragma warning(disable: 4103)
+<span class="lineNum">     502 </span>            : #endif
+<span class="lineNum">     503 </span>            : #ifdef BOOST_HAS_ABI_HEADERS
+<span class="lineNum">     504 </span>            : #  include BOOST_ABI_SUFFIX
+<span class="lineNum">     505 </span>            : #endif
+<span class="lineNum">     506 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     507 </span>            : #pragma warning(pop)
+<span class="lineNum">     508 </span>            : #endif
+<span class="lineNum">     509 </span>            : 
+<span class="lineNum">     510 </span>            : #endif
+<span class="lineNum">     511 </span>            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

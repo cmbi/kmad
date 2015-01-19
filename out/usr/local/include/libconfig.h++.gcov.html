@@ -1,0 +1,534 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - /usr/local/include/libconfig.h++</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../index.html">top level</a> - <a href="index.html">usr/local/include</a> - libconfig.h++<span style="font-size: 80%;"> (source / <a href="libconfig.h++.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2015-01-19</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /* ----------------------------------------------------------------------------</a>
+<span class="lineNum">       2 </span>            :    libconfig - A library for processing structured configuration files
+<span class="lineNum">       3 </span>            :    Copyright (C) 2005-2010  Mark A Lindner
+<span class="lineNum">       4 </span>            : 
+<span class="lineNum">       5 </span>            :    This file is part of libconfig.
+<span class="lineNum">       6 </span>            : 
+<span class="lineNum">       7 </span>            :    This library is free software; you can redistribute it and/or
+<span class="lineNum">       8 </span>            :    modify it under the terms of the GNU Lesser General Public License
+<span class="lineNum">       9 </span>            :    as published by the Free Software Foundation; either version 2.1 of
+<span class="lineNum">      10 </span>            :    the License, or (at your option) any later version.
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            :    This library is distributed in the hope that it will be useful, but
+<span class="lineNum">      13 </span>            :    WITHOUT ANY WARRANTY; without even the implied warranty of
+<span class="lineNum">      14 </span>            :    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+<span class="lineNum">      15 </span>            :    Lesser General Public License for more details.
+<span class="lineNum">      16 </span>            : 
+<span class="lineNum">      17 </span>            :    You should have received a copy of the GNU Library General Public
+<span class="lineNum">      18 </span>            :    License along with this library; if not, see
+<span class="lineNum">      19 </span>            :    &lt;http://www.gnu.org/licenses/&gt;.
+<span class="lineNum">      20 </span>            :    ----------------------------------------------------------------------------
+<span class="lineNum">      21 </span>            : */
+<span class="lineNum">      22 </span>            : 
+<span class="lineNum">      23 </span>            : #ifndef __libconfig_hpp
+<span class="lineNum">      24 </span>            : #define __libconfig_hpp
+<span class="lineNum">      25 </span>            : 
+<span class="lineNum">      26 </span>            : #include &lt;stdio.h&gt;
+<span class="lineNum">      27 </span>            : #include &lt;exception&gt;
+<span class="lineNum">      28 </span>            : #include &lt;string&gt;
+<span class="lineNum">      29 </span>            : 
+<span class="lineNum">      30 </span>            : #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+<span class="lineNum">      31 </span>            : #if defined(LIBCONFIGXX_STATIC)
+<span class="lineNum">      32 </span>            : #define LIBCONFIGXX_API
+<span class="lineNum">      33 </span>            : #elif defined(LIBCONFIGXX_EXPORTS)
+<span class="lineNum">      34 </span>            : #define LIBCONFIGXX_API __declspec(dllexport)
+<span class="lineNum">      35 </span>            : #else /* ! LIBCONFIGXX_EXPORTS */
+<span class="lineNum">      36 </span>            : #define LIBCONFIGXX_API __declspec(dllimport)
+<span class="lineNum">      37 </span>            : #endif /* LIBCONFIGXX_STATIC */
+<span class="lineNum">      38 </span>            : #else /* ! WIN32 */
+<span class="lineNum">      39 </span>            : #define LIBCONFIGXX_API
+<span class="lineNum">      40 </span>            : #endif /* WIN32 */
+<span class="lineNum">      41 </span>            : 
+<span class="lineNum">      42 </span>            : #define LIBCONFIGXX_VER_MAJOR    1
+<span class="lineNum">      43 </span>            : #define LIBCONFIGXX_VER_MINOR    4
+<span class="lineNum">      44 </span>            : #define LIBCONFIGXX_VER_REVISION 9
+<span class="lineNum">      45 </span>            : 
+<span class="lineNum">      46 </span>            : struct config_t; // fwd decl
+<span class="lineNum">      47 </span>            : struct config_setting_t; // fwd decl
+<span class="lineNum">      48 </span>            : 
+<span class="lineNum">      49 </span>            : namespace libconfig {
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span>            : class LIBCONFIGXX_API ConfigException : public std::exception { };
+<span class="lineNum">      52 </span>            : 
+<span class="lineNum">      53 </span>            : class Setting; // fwd decl
+<span class="lineNum">      54 </span>            : 
+<span class="lineNum">      55 </span>            : class LIBCONFIGXX_API SettingException : public ConfigException
+<span class="lineNum">      56 </span>            : {
+<span class="lineNum">      57 </span>            :   friend class Config;
+<span class="lineNum">      58 </span>            : 
+<span class="lineNum">      59 </span>            :   public:
+<span class="lineNum">      60 </span>            : 
+<span class="lineNum">      61 </span>            :   SettingException(const SettingException &amp;other);
+<span class="lineNum">      62 </span>            :   SettingException&amp; operator=(const SettingException &amp;other);
+<span class="lineNum">      63 </span>            : 
+<span class="lineNum">      64 </span>            :   virtual ~SettingException() throw();
+<span class="lineNum">      65 </span>            : 
+<span class="lineNum">      66 </span>            :   const char *getPath() const;
+<span class="lineNum">      67 </span>            : 
+<span class="lineNum">      68 </span>            :   virtual const char *what() const throw();
+<span class="lineNum">      69 </span>            : 
+<span class="lineNum">      70 </span>            :   protected:
+<span class="lineNum">      71 </span>            : 
+<span class="lineNum">      72 </span>            :   SettingException(const Setting &amp;setting);
+<span class="lineNum">      73 </span>            :   SettingException(const Setting &amp;setting, int idx);
+<span class="lineNum">      74 </span>            :   SettingException(const Setting &amp;setting, const char *name);
+<span class="lineNum">      75 </span>            :   SettingException(const char *path);
+<span class="lineNum">      76 </span>            : 
+<span class="lineNum">      77 </span>            :   private:
+<span class="lineNum">      78 </span>            : 
+<span class="lineNum">      79 </span>            :   char *_path;
+<span class="lineNum">      80 </span>            : };
+<span class="lineNum">      81 </span>            : 
+<span class="lineNum">      82 </span>            : class LIBCONFIGXX_API SettingTypeException : public SettingException
+<span class="lineNum">      83 </span>            : {
+<span class="lineNum">      84 </span>            :   friend class Config;
+<span class="lineNum">      85 </span>            :   friend class Setting;
+<span class="lineNum">      86 </span>            : 
+<span class="lineNum">      87 </span>            :   public:
+<span class="lineNum">      88 </span>            : 
+<span class="lineNum">      89 </span>            :   virtual const char *what() const throw();
+<span class="lineNum">      90 </span>            : 
+<span class="lineNum">      91 </span>            :   private:
+<span class="lineNum">      92 </span>            : 
+<span class="lineNum">      93 </span>            :   SettingTypeException(const Setting &amp;setting);
+<span class="lineNum">      94 </span>            :   SettingTypeException(const Setting &amp;setting, int idx);
+<span class="lineNum">      95 </span>            :   SettingTypeException(const Setting &amp;setting, const char *name);
+<span class="lineNum">      96 </span>            : };
+<span class="lineNum">      97 </span>            : 
+<span class="lineNum">      98 </span>            : class LIBCONFIGXX_API SettingNotFoundException : public SettingException
+<span class="lineNum">      99 </span>            : {
+<span class="lineNum">     100 </span>            :   friend class Config;
+<span class="lineNum">     101 </span>            :   friend class Setting;
+<span class="lineNum">     102 </span>            : 
+<span class="lineNum">     103 </span>            :   public:
+<span class="lineNum">     104 </span>            : 
+<span class="lineNum">     105 </span>            :   virtual const char *what() const throw();
+<span class="lineNum">     106 </span>            : 
+<span class="lineNum">     107 </span>            :   private:
+<span class="lineNum">     108 </span>            : 
+<span class="lineNum">     109 </span>            :   SettingNotFoundException(const Setting &amp;setting, int idx);
+<span class="lineNum">     110 </span>            :   SettingNotFoundException(const Setting &amp;setting, const char *name);
+<span class="lineNum">     111 </span>            :   SettingNotFoundException(const char *path);
+<span class="lineNum">     112 </span>            : };
+<span class="lineNum">     113 </span>            : 
+<span class="lineNum">     114 </span>            : class LIBCONFIGXX_API SettingNameException : public SettingException
+<span class="lineNum">     115 </span>            : {
+<span class="lineNum">     116 </span>            :   friend class Config;
+<span class="lineNum">     117 </span>            :   friend class Setting;
+<span class="lineNum">     118 </span>            : 
+<span class="lineNum">     119 </span>            :   public:
+<span class="lineNum">     120 </span>            : 
+<span class="lineNum">     121 </span>            :   virtual const char *what() const throw();
+<span class="lineNum">     122 </span>            : 
+<span class="lineNum">     123 </span>            :   private:
+<span class="lineNum">     124 </span>            : 
+<span class="lineNum">     125 </span>            :   SettingNameException(const Setting &amp;setting, const char *name);
+<span class="lineNum">     126 </span>            : };
+<span class="lineNum">     127 </span>            : 
+<span class="lineNum">     128 </span>            : class LIBCONFIGXX_API FileIOException : public ConfigException
+<span class="lineNum">     129 </span>            : {
+<span class="lineNum">     130 </span>            :   public:
+<span class="lineNum">     131 </span>            : 
+<span class="lineNum">     132 </span>            :   virtual const char *what() const throw();
+<span class="lineNum">     133 </span>            : };
+<span class="lineNum">     134 </span>            : 
+<span class="lineNum">     135 </span>            : class LIBCONFIGXX_API ParseException : public ConfigException
+<span class="lineNum">     136 </span>            : {
+<span class="lineNum">     137 </span>            :   friend class Config;
+<span class="lineNum">     138 </span>            : 
+<span class="lineNum">     139 </span>            :   public:
+<span class="lineNum">     140 </span>            : 
+<span class="lineNum">     141 </span>            :   ParseException(const ParseException &amp;other);
+<span class="lineNum">     142 </span>            : 
+<a name="143"><span class="lineNum">     143 </span>            :   virtual ~ParseException() throw();</a>
+<span class="lineNum">     144 </span>            : 
+<span class="lineNum">     145 </span><span class="lineNoCov">          0 :   inline const char *getFile() const throw()</span>
+<a name="146"><span class="lineNum">     146 </span><span class="lineNoCov">          0 :   { return(_file); }</span></a>
+<span class="lineNum">     147 </span>            : 
+<span class="lineNum">     148 </span><span class="lineNoCov">          0 :   inline int getLine() const throw()</span>
+<a name="149"><span class="lineNum">     149 </span><span class="lineNoCov">          0 :   { return(_line); }</span></a>
+<span class="lineNum">     150 </span>            : 
+<span class="lineNum">     151 </span><span class="lineNoCov">          0 :   inline const char *getError() const throw()</span>
+<span class="lineNum">     152 </span><span class="lineNoCov">          0 :   { return(_error); }</span>
+<span class="lineNum">     153 </span>            : 
+<span class="lineNum">     154 </span>            :   virtual const char *what() const throw();
+<span class="lineNum">     155 </span>            : 
+<span class="lineNum">     156 </span>            :   private:
+<span class="lineNum">     157 </span>            : 
+<span class="lineNum">     158 </span>            :   ParseException(const char *file, int line, const char *error);
+<span class="lineNum">     159 </span>            : 
+<span class="lineNum">     160 </span>            :   const char *_file;
+<span class="lineNum">     161 </span>            :   int _line;
+<span class="lineNum">     162 </span>            :   const char *_error;
+<span class="lineNum">     163 </span>            : };
+<span class="lineNum">     164 </span>            : 
+<span class="lineNum">     165 </span>            : class LIBCONFIGXX_API Setting
+<span class="lineNum">     166 </span>            : {
+<span class="lineNum">     167 </span>            :   friend class Config;
+<span class="lineNum">     168 </span>            : 
+<span class="lineNum">     169 </span>            :   public:
+<span class="lineNum">     170 </span>            : 
+<span class="lineNum">     171 </span>            :   enum Type
+<span class="lineNum">     172 </span>            :   {
+<span class="lineNum">     173 </span>            :     TypeNone = 0,
+<span class="lineNum">     174 </span>            :     // scalar types
+<span class="lineNum">     175 </span>            :     TypeInt,
+<span class="lineNum">     176 </span>            :     TypeInt64,
+<span class="lineNum">     177 </span>            :     TypeFloat,
+<span class="lineNum">     178 </span>            :     TypeString,
+<span class="lineNum">     179 </span>            :     TypeBoolean,
+<span class="lineNum">     180 </span>            :     // aggregate types
+<span class="lineNum">     181 </span>            :     TypeGroup,
+<span class="lineNum">     182 </span>            :     TypeArray,
+<span class="lineNum">     183 </span>            :     TypeList
+<span class="lineNum">     184 </span>            :   };
+<span class="lineNum">     185 </span>            : 
+<span class="lineNum">     186 </span>            :   enum Format
+<span class="lineNum">     187 </span>            :   {
+<span class="lineNum">     188 </span>            :     FormatDefault = 0,
+<span class="lineNum">     189 </span>            :     FormatHex = 1
+<span class="lineNum">     190 </span>            :   };
+<span class="lineNum">     191 </span>            : 
+<span class="lineNum">     192 </span>            :   private:
+<span class="lineNum">     193 </span>            : 
+<span class="lineNum">     194 </span>            :   config_setting_t *_setting;
+<span class="lineNum">     195 </span>            :   Type _type;
+<span class="lineNum">     196 </span>            :   Format _format;
+<span class="lineNum">     197 </span>            : 
+<span class="lineNum">     198 </span>            :   Setting(config_setting_t *setting);
+<span class="lineNum">     199 </span>            : 
+<span class="lineNum">     200 </span>            :   void assertType(Type type) const throw(SettingTypeException);
+<span class="lineNum">     201 </span>            :   static Setting &amp; wrapSetting(config_setting_t *setting);
+<span class="lineNum">     202 </span>            : 
+<span class="lineNum">     203 </span>            :   Setting(const Setting&amp; other); // not supported
+<span class="lineNum">     204 </span>            :   Setting&amp; operator=(const Setting&amp; other); // not supported
+<span class="lineNum">     205 </span>            : 
+<span class="lineNum">     206 </span>            :   public:
+<span class="lineNum">     207 </span>            : 
+<span class="lineNum">     208 </span>            :   virtual ~Setting() throw();
+<span class="lineNum">     209 </span>            : 
+<span class="lineNum">     210 </span>            :   inline Type getType() const throw() { return(_type); }
+<span class="lineNum">     211 </span>            : 
+<span class="lineNum">     212 </span>            :   inline Format getFormat() const throw() { return(_format); }
+<span class="lineNum">     213 </span>            :   void setFormat(Format format) throw();
+<span class="lineNum">     214 </span>            : 
+<span class="lineNum">     215 </span>            :   operator bool() const throw(SettingTypeException);
+<span class="lineNum">     216 </span>            :   operator int() const throw(SettingTypeException);
+<span class="lineNum">     217 </span>            :   operator unsigned int() const throw(SettingTypeException);
+<span class="lineNum">     218 </span>            :   operator long() const throw(SettingTypeException);
+<span class="lineNum">     219 </span>            :   operator unsigned long() const throw(SettingTypeException);
+<span class="lineNum">     220 </span>            :   operator long long() const throw(SettingTypeException);
+<span class="lineNum">     221 </span>            :   operator unsigned long long() const throw(SettingTypeException);
+<span class="lineNum">     222 </span>            :   operator double() const throw(SettingTypeException);
+<span class="lineNum">     223 </span>            :   operator float() const throw(SettingTypeException);
+<span class="lineNum">     224 </span>            :   operator const char *() const throw(SettingTypeException);
+<span class="lineNum">     225 </span>            :   operator std::string() const throw(SettingTypeException);
+<span class="lineNum">     226 </span>            : 
+<span class="lineNum">     227 </span>            :   inline const char *c_str() const throw(SettingTypeException)
+<span class="lineNum">     228 </span>            :   { return operator const char*(); }
+<span class="lineNum">     229 </span>            : 
+<span class="lineNum">     230 </span>            :   Setting &amp; operator=(bool value) throw(SettingTypeException);
+<span class="lineNum">     231 </span>            :   Setting &amp; operator=(int value) throw(SettingTypeException);
+<span class="lineNum">     232 </span>            :   Setting &amp; operator=(long value) throw(SettingTypeException);
+<span class="lineNum">     233 </span>            :   Setting &amp; operator=(const long long &amp;value) throw(SettingTypeException);
+<span class="lineNum">     234 </span>            :   Setting &amp; operator=(const double &amp;value) throw(SettingTypeException);
+<span class="lineNum">     235 </span>            :   Setting &amp; operator=(float value) throw(SettingTypeException);
+<span class="lineNum">     236 </span>            :   Setting &amp; operator=(const char *value) throw(SettingTypeException);
+<span class="lineNum">     237 </span>            :   Setting &amp; operator=(const std::string &amp;value) throw(SettingTypeException);
+<span class="lineNum">     238 </span>            : 
+<span class="lineNum">     239 </span>            :   Setting &amp; operator[](const char *key) const
+<span class="lineNum">     240 </span>            :     throw(SettingTypeException, SettingNotFoundException);
+<span class="lineNum">     241 </span>            : 
+<span class="lineNum">     242 </span>            :   inline Setting &amp; operator[](const std::string &amp;key) const
+<span class="lineNum">     243 </span>            :     throw(SettingTypeException, SettingNotFoundException)
+<span class="lineNum">     244 </span>            :   { return(operator[](key.c_str())); }
+<span class="lineNum">     245 </span>            : 
+<span class="lineNum">     246 </span>            :   Setting &amp; operator[](int index) const
+<span class="lineNum">     247 </span>            :     throw(SettingTypeException, SettingNotFoundException);
+<span class="lineNum">     248 </span>            : 
+<span class="lineNum">     249 </span>            :   bool lookupValue(const char *name, bool &amp;value) const throw();
+<span class="lineNum">     250 </span>            :   bool lookupValue(const char *name, int &amp;value) const throw();
+<span class="lineNum">     251 </span>            :   bool lookupValue(const char *name, unsigned int &amp;value) const throw();
+<span class="lineNum">     252 </span>            :   bool lookupValue(const char *name, long long &amp;value) const throw();
+<span class="lineNum">     253 </span>            :   bool lookupValue(const char *name, unsigned long long &amp;value)
+<span class="lineNum">     254 </span>            :     const throw();
+<span class="lineNum">     255 </span>            :   bool lookupValue(const char *name, double &amp;value) const throw();
+<span class="lineNum">     256 </span>            :   bool lookupValue(const char *name, float &amp;value) const throw();
+<span class="lineNum">     257 </span>            :   bool lookupValue(const char *name, const char *&amp;value) const throw();
+<span class="lineNum">     258 </span>            :   bool lookupValue(const char *name, std::string &amp;value) const throw();
+<span class="lineNum">     259 </span>            : 
+<span class="lineNum">     260 </span>            :   inline bool lookupValue(const std::string &amp;name, bool &amp;value)
+<span class="lineNum">     261 </span>            :     const throw()
+<span class="lineNum">     262 </span>            :   { return(lookupValue(name.c_str(), value)); }
+<span class="lineNum">     263 </span>            : 
+<span class="lineNum">     264 </span>            :   inline bool lookupValue(const std::string &amp;name, int &amp;value)
+<span class="lineNum">     265 </span>            :     const throw()
+<span class="lineNum">     266 </span>            :   { return(lookupValue(name.c_str(), value)); }
+<span class="lineNum">     267 </span>            : 
+<span class="lineNum">     268 </span>            :   inline bool lookupValue(const std::string &amp;name, unsigned int &amp;value)
+<span class="lineNum">     269 </span>            :     const throw()
+<span class="lineNum">     270 </span>            :   { return(lookupValue(name.c_str(), value)); }
+<span class="lineNum">     271 </span>            : 
+<span class="lineNum">     272 </span>            :   inline bool lookupValue(const std::string &amp;name, long long &amp;value)
+<span class="lineNum">     273 </span>            :     const throw()
+<span class="lineNum">     274 </span>            :   { return(lookupValue(name.c_str(), value)); }
+<span class="lineNum">     275 </span>            : 
+<span class="lineNum">     276 </span>            :   inline bool lookupValue(const std::string &amp;name,
+<span class="lineNum">     277 </span>            :                           unsigned long long &amp;value) const throw()
+<span class="lineNum">     278 </span>            :   { return(lookupValue(name.c_str(), value)); }
+<span class="lineNum">     279 </span>            : 
+<span class="lineNum">     280 </span>            :   inline bool lookupValue(const std::string &amp;name, double &amp;value) const
+<span class="lineNum">     281 </span>            :     throw()
+<span class="lineNum">     282 </span>            :   { return(lookupValue(name.c_str(), value)); }
+<span class="lineNum">     283 </span>            : 
+<span class="lineNum">     284 </span>            :   inline bool lookupValue(const std::string &amp;name, float &amp;value) const
+<span class="lineNum">     285 </span>            :     throw()
+<span class="lineNum">     286 </span>            :   { return(lookupValue(name.c_str(), value)); }
+<span class="lineNum">     287 </span>            : 
+<span class="lineNum">     288 </span>            :   inline bool lookupValue(const std::string &amp;name, const char *&amp;value) const
+<span class="lineNum">     289 </span>            :     throw()
+<span class="lineNum">     290 </span>            :   { return(lookupValue(name.c_str(), value)); }
+<span class="lineNum">     291 </span>            : 
+<span class="lineNum">     292 </span>            :   inline bool lookupValue(const std::string &amp;name, std::string &amp;value) const
+<span class="lineNum">     293 </span>            :     throw()
+<span class="lineNum">     294 </span>            :   { return(lookupValue(name.c_str(), value)); }
+<span class="lineNum">     295 </span>            : 
+<span class="lineNum">     296 </span>            :   void remove(const char *name)
+<span class="lineNum">     297 </span>            :     throw(SettingTypeException, SettingNotFoundException);
+<span class="lineNum">     298 </span>            : 
+<span class="lineNum">     299 </span>            :   inline void remove(const std::string &amp; name)
+<span class="lineNum">     300 </span>            :     throw(SettingTypeException, SettingNotFoundException)
+<span class="lineNum">     301 </span>            :   { remove(name.c_str()); }
+<span class="lineNum">     302 </span>            : 
+<span class="lineNum">     303 </span>            :   void remove(unsigned int idx)
+<span class="lineNum">     304 </span>            :     throw(SettingTypeException, SettingNotFoundException);
+<span class="lineNum">     305 </span>            : 
+<span class="lineNum">     306 </span>            :   inline Setting &amp; add(const std::string &amp; name, Type type)
+<span class="lineNum">     307 </span>            :     throw(SettingNameException, SettingTypeException)
+<span class="lineNum">     308 </span>            :   { return(add(name.c_str(), type)); }
+<span class="lineNum">     309 </span>            : 
+<span class="lineNum">     310 </span>            :   Setting &amp; add(const char *name, Type type)
+<span class="lineNum">     311 </span>            :     throw(SettingNameException, SettingTypeException);
+<span class="lineNum">     312 </span>            : 
+<span class="lineNum">     313 </span>            :   Setting &amp; add(Type type) throw(SettingTypeException);
+<span class="lineNum">     314 </span>            : 
+<span class="lineNum">     315 </span>            :   inline bool exists(const std::string &amp;name) const throw()
+<span class="lineNum">     316 </span>            :   { return(exists(name.c_str())); }
+<span class="lineNum">     317 </span>            : 
+<span class="lineNum">     318 </span>            :   bool exists(const char *name) const throw();
+<span class="lineNum">     319 </span>            : 
+<span class="lineNum">     320 </span>            :   int getLength() const throw();
+<span class="lineNum">     321 </span>            :   const char *getName() const throw();
+<span class="lineNum">     322 </span>            :   std::string getPath() const;
+<span class="lineNum">     323 </span>            :   int getIndex() const throw();
+<span class="lineNum">     324 </span>            : 
+<span class="lineNum">     325 </span>            :   const Setting &amp; getParent() const throw(SettingNotFoundException);
+<span class="lineNum">     326 </span>            :   Setting &amp; getParent() throw(SettingNotFoundException);
+<span class="lineNum">     327 </span>            : 
+<span class="lineNum">     328 </span>            :   bool isRoot() const throw();
+<span class="lineNum">     329 </span>            : 
+<span class="lineNum">     330 </span>            :   inline bool isGroup() const throw()
+<span class="lineNum">     331 </span>            :   { return(_type == TypeGroup); }
+<span class="lineNum">     332 </span>            : 
+<span class="lineNum">     333 </span>            :   inline bool isArray() const throw()
+<span class="lineNum">     334 </span>            :   { return(_type == TypeArray); }
+<span class="lineNum">     335 </span>            : 
+<span class="lineNum">     336 </span>            :   inline bool isList() const throw()
+<span class="lineNum">     337 </span>            :   { return(_type == TypeList); }
+<span class="lineNum">     338 </span>            : 
+<span class="lineNum">     339 </span>            :   inline bool isAggregate() const throw()
+<span class="lineNum">     340 </span>            :   { return(_type &gt;= TypeGroup); }
+<span class="lineNum">     341 </span>            : 
+<span class="lineNum">     342 </span>            :   inline bool isScalar() const throw()
+<span class="lineNum">     343 </span>            :   { return((_type &gt; TypeNone) &amp;&amp; (_type &lt; TypeGroup)); }
+<span class="lineNum">     344 </span>            : 
+<span class="lineNum">     345 </span>            :   inline bool isNumber() const throw()
+<span class="lineNum">     346 </span>            :   { return((_type == TypeInt) || (_type == TypeInt64)
+<span class="lineNum">     347 </span>            :            || (_type == TypeFloat)); }
+<span class="lineNum">     348 </span>            : 
+<span class="lineNum">     349 </span>            :   unsigned int getSourceLine() const throw();
+<span class="lineNum">     350 </span>            :   const char *getSourceFile() const throw();
+<span class="lineNum">     351 </span>            : };
+<span class="lineNum">     352 </span>            : 
+<span class="lineNum">     353 </span>            : class LIBCONFIGXX_API Config
+<span class="lineNum">     354 </span>            : {
+<span class="lineNum">     355 </span>            :   private:
+<span class="lineNum">     356 </span>            : 
+<span class="lineNum">     357 </span>            :   config_t *_config;
+<span class="lineNum">     358 </span>            : 
+<span class="lineNum">     359 </span>            :   static void ConfigDestructor(void *arg);
+<span class="lineNum">     360 </span>            :   Config(const Config&amp; other); // not supported
+<span class="lineNum">     361 </span>            :   Config&amp; operator=(const Config&amp; other); // not supported
+<span class="lineNum">     362 </span>            : 
+<span class="lineNum">     363 </span>            :   public:
+<span class="lineNum">     364 </span>            : 
+<span class="lineNum">     365 </span>            :   Config();
+<span class="lineNum">     366 </span>            :   virtual ~Config();
+<span class="lineNum">     367 </span>            : 
+<span class="lineNum">     368 </span>            :   void setAutoConvert(bool flag);
+<span class="lineNum">     369 </span>            :   bool getAutoConvert() const;
+<span class="lineNum">     370 </span>            : 
+<span class="lineNum">     371 </span>            :   void setDefaultFormat(Setting::Format format);
+<span class="lineNum">     372 </span>            :   inline Setting::Format getDefaultFormat() const
+<span class="lineNum">     373 </span>            :   { return(_defaultFormat); }
+<span class="lineNum">     374 </span>            : 
+<span class="lineNum">     375 </span>            :   void setTabWidth(unsigned short width) throw();
+<span class="lineNum">     376 </span>            :   unsigned short getTabWidth() const throw();
+<span class="lineNum">     377 </span>            : 
+<span class="lineNum">     378 </span>            :   void setIncludeDir(const char *includeDir) throw();
+<span class="lineNum">     379 </span>            :   const char *getIncludeDir() const throw();
+<span class="lineNum">     380 </span>            : 
+<span class="lineNum">     381 </span>            :   void read(FILE *stream) throw(ParseException);
+<span class="lineNum">     382 </span>            :   void write(FILE *stream) const;
+<span class="lineNum">     383 </span>            : 
+<span class="lineNum">     384 </span>            :   void readString(const char *str) throw(ParseException);
+<span class="lineNum">     385 </span>            :   inline void readString(const std::string &amp;str) throw(ParseException)
+<span class="lineNum">     386 </span>            :   { return(readString(str.c_str())); }
+<span class="lineNum">     387 </span>            : 
+<span class="lineNum">     388 </span>            :   void readFile(const char *filename) throw(FileIOException, ParseException);
+<span class="lineNum">     389 </span>            :   void writeFile(const char *filename) throw(FileIOException);
+<span class="lineNum">     390 </span>            : 
+<span class="lineNum">     391 </span>            :   inline Setting &amp; lookup(const std::string &amp;path) const
+<span class="lineNum">     392 </span>            :     throw(SettingNotFoundException)
+<span class="lineNum">     393 </span>            :   { return(lookup(path.c_str())); }
+<span class="lineNum">     394 </span>            : 
+<span class="lineNum">     395 </span>            :   Setting &amp; lookup(const char *path) const throw(SettingNotFoundException);
+<span class="lineNum">     396 </span>            : 
+<span class="lineNum">     397 </span>            :   inline bool exists(const std::string &amp; path) const throw()
+<span class="lineNum">     398 </span>            :   { return(exists(path.c_str())); }
+<span class="lineNum">     399 </span>            : 
+<span class="lineNum">     400 </span>            :   bool exists(const char *path) const throw();
+<span class="lineNum">     401 </span>            : 
+<span class="lineNum">     402 </span>            :   bool lookupValue(const char *path, bool &amp;value) const throw();
+<span class="lineNum">     403 </span>            :   bool lookupValue(const char *path, int &amp;value) const throw();
+<span class="lineNum">     404 </span>            :   bool lookupValue(const char *path, unsigned int &amp;value) const throw();
+<span class="lineNum">     405 </span>            :   bool lookupValue(const char *path, long long &amp;value) const throw();
+<span class="lineNum">     406 </span>            :   bool lookupValue(const char *path, unsigned long long &amp;value)
+<span class="lineNum">     407 </span>            :     const throw();
+<span class="lineNum">     408 </span>            :   bool lookupValue(const char *path, double &amp;value) const throw();
+<span class="lineNum">     409 </span>            :   bool lookupValue(const char *path, float &amp;value) const throw();
+<span class="lineNum">     410 </span>            :   bool lookupValue(const char *path, const char *&amp;value) const throw();
+<span class="lineNum">     411 </span>            :   bool lookupValue(const char *path, std::string &amp;value) const throw();
+<span class="lineNum">     412 </span>            : 
+<span class="lineNum">     413 </span>            :   inline bool lookupValue(const std::string &amp;path, bool &amp;value) const throw()
+<span class="lineNum">     414 </span>            :   { return(lookupValue(path.c_str(), value)); }
+<span class="lineNum">     415 </span>            : 
+<span class="lineNum">     416 </span>            :   inline bool lookupValue(const std::string &amp;path, int &amp;value) const throw()
+<span class="lineNum">     417 </span>            :   { return(lookupValue(path.c_str(), value)); }
+<span class="lineNum">     418 </span>            : 
+<span class="lineNum">     419 </span>            :   inline bool lookupValue(const std::string &amp;path, unsigned int &amp;value)
+<span class="lineNum">     420 </span>            :     const throw()
+<span class="lineNum">     421 </span>            :   { return(lookupValue(path.c_str(), value)); }
+<span class="lineNum">     422 </span>            : 
+<span class="lineNum">     423 </span>            :   inline bool lookupValue(const std::string &amp;path, long long &amp;value)
+<span class="lineNum">     424 </span>            :     const throw()
+<span class="lineNum">     425 </span>            :   { return(lookupValue(path.c_str(), value)); }
+<span class="lineNum">     426 </span>            : 
+<span class="lineNum">     427 </span>            :   inline bool lookupValue(const std::string &amp;path,
+<span class="lineNum">     428 </span>            :                           unsigned long long &amp;value) const throw()
+<span class="lineNum">     429 </span>            :   { return(lookupValue(path.c_str(), value)); }
+<span class="lineNum">     430 </span>            : 
+<span class="lineNum">     431 </span>            :   inline bool lookupValue(const std::string &amp;path, double &amp;value)
+<span class="lineNum">     432 </span>            :     const throw()
+<span class="lineNum">     433 </span>            :   { return(lookupValue(path.c_str(), value)); }
+<span class="lineNum">     434 </span>            : 
+<span class="lineNum">     435 </span>            :   inline bool lookupValue(const std::string &amp;path, float &amp;value)
+<span class="lineNum">     436 </span>            :     const throw()
+<span class="lineNum">     437 </span>            :   { return(lookupValue(path.c_str(), value)); }
+<span class="lineNum">     438 </span>            : 
+<span class="lineNum">     439 </span>            :   inline bool lookupValue(const std::string &amp;path, const char *&amp;value)
+<span class="lineNum">     440 </span>            :     const throw()
+<span class="lineNum">     441 </span>            :   { return(lookupValue(path.c_str(), value)); }
+<span class="lineNum">     442 </span>            : 
+<span class="lineNum">     443 </span>            :   inline bool lookupValue(const std::string &amp;path, std::string &amp;value)
+<span class="lineNum">     444 </span>            :     const throw()
+<span class="lineNum">     445 </span>            :   { return(lookupValue(path.c_str(), value)); }
+<span class="lineNum">     446 </span>            : 
+<span class="lineNum">     447 </span>            :   Setting &amp; getRoot() const;
+<span class="lineNum">     448 </span>            : 
+<span class="lineNum">     449 </span>            :   private:
+<span class="lineNum">     450 </span>            : 
+<span class="lineNum">     451 </span>            :   Setting::Format _defaultFormat;
+<span class="lineNum">     452 </span>            : 
+<span class="lineNum">     453 </span>            :   void handleError() const;
+<span class="lineNum">     454 </span>            : };
+<span class="lineNum">     455 </span>            : 
+<span class="lineNum">     456 </span>            : } // namespace libconfig
+<span class="lineNum">     457 </span>            : 
+<span class="lineNum">     458 </span>            : #endif // __libconfig_hpp
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

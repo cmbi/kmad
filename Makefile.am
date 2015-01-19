@@ -52,5 +52,3 @@ cppcheck:
 								--suppress=missingIncludeSystem src
 check:	cppcheck
 endif
-
-

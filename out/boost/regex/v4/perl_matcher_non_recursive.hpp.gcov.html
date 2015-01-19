@@ -1,0 +1,1736 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - boost/regex/v4/perl_matcher_non_recursive.hpp</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../index.html">top level</a> - <a href="index.html">boost/regex/v4</a> - perl_matcher_non_recursive.hpp<span style="font-size: 80%;"> (source / <a href="perl_matcher_non_recursive.hpp.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">732</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2015-01-19</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">60</td>
+            <td class="headerCovTableEntryLo">0.0 %</td>
+          </tr>
+          <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  *
+<span class="lineNum">       3 </span>            :  * Copyright (c) 2002
+<span class="lineNum">       4 </span>            :  * John Maddock
+<span class="lineNum">       5 </span>            :  *
+<span class="lineNum">       6 </span>            :  * Use, modification and distribution are subject to the 
+<span class="lineNum">       7 </span>            :  * Boost Software License, Version 1.0. (See accompanying file 
+<span class="lineNum">       8 </span>            :  * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+<span class="lineNum">       9 </span>            :  *
+<span class="lineNum">      10 </span>            :  */
+<span class="lineNum">      11 </span>            : 
+<span class="lineNum">      12 </span>            :  /*
+<span class="lineNum">      13 </span>            :   *   LOCATION:    see http://www.boost.org for most recent version.
+<span class="lineNum">      14 </span>            :   *   FILE         perl_matcher_common.cpp
+<span class="lineNum">      15 </span>            :   *   VERSION      see &lt;boost/version.hpp&gt;
+<span class="lineNum">      16 </span>            :   *   DESCRIPTION: Definitions of perl_matcher member functions that are 
+<span class="lineNum">      17 </span>            :   *                specific to the non-recursive implementation.
+<span class="lineNum">      18 </span>            :   */
+<span class="lineNum">      19 </span>            : 
+<span class="lineNum">      20 </span>            : #ifndef BOOST_REGEX_V4_PERL_MATCHER_NON_RECURSIVE_HPP
+<span class="lineNum">      21 </span>            : #define BOOST_REGEX_V4_PERL_MATCHER_NON_RECURSIVE_HPP
+<span class="lineNum">      22 </span>            : 
+<span class="lineNum">      23 </span>            : #include &lt;new&gt;
+<span class="lineNum">      24 </span>            : 
+<span class="lineNum">      25 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">      26 </span>            : #pragma warning(push)
+<span class="lineNum">      27 </span>            : #pragma warning(disable: 4103)
+<span class="lineNum">      28 </span>            : #endif
+<span class="lineNum">      29 </span>            : #ifdef BOOST_HAS_ABI_HEADERS
+<span class="lineNum">      30 </span>            : #  include BOOST_ABI_PREFIX
+<span class="lineNum">      31 </span>            : #endif
+<span class="lineNum">      32 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">      33 </span>            : #pragma warning(pop)
+<span class="lineNum">      34 </span>            : #endif
+<span class="lineNum">      35 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">      36 </span>            : #  pragma warning(push)
+<span class="lineNum">      37 </span>            : #  pragma warning(disable: 4800)
+<span class="lineNum">      38 </span>            : #endif
+<span class="lineNum">      39 </span>            : 
+<span class="lineNum">      40 </span>            : namespace boost{
+<span class="lineNum">      41 </span>            : namespace re_detail{
+<a name="42"><span class="lineNum">      42 </span>            : </a>
+<span class="lineNum">      43 </span>            : template &lt;class T&gt;
+<span class="lineNum">      44 </span><span class="lineNoCov">          0 : inline void inplace_destroy(T* p)</span>
+<span class="lineNum">      45 </span>            : {
+<span class="lineNum">      46 </span>            :    (void)p;  // warning suppression
+<span class="lineNum">      47 </span><span class="lineNoCov">          0 :    p-&gt;~T();</span>
+<span class="lineNum">      48 </span><span class="lineNoCov">          0 : }</span>
+<span class="lineNum">      49 </span>            : 
+<span class="lineNum">      50 </span>            : struct saved_state
+<span class="lineNum">      51 </span>            : {
+<span class="lineNum">      52 </span>            :    union{
+<span class="lineNum">      53 </span>            :       unsigned int state_id;
+<span class="lineNum">      54 </span>            :       // this padding ensures correct alignment on 64-bit platforms:
+<span class="lineNum">      55 </span>            :       std::size_t padding1;
+<span class="lineNum">      56 </span>            :       std::ptrdiff_t padding2;
+<a name="57"><span class="lineNum">      57 </span>            :       void* padding3;</a>
+<span class="lineNum">      58 </span>            :    };
+<span class="lineNum">      59 </span><span class="lineNoCov">          0 :    saved_state(unsigned i) : state_id(i) {}</span>
+<span class="lineNum">      60 </span>            : };
+<span class="lineNum">      61 </span>            : 
+<span class="lineNum">      62 </span>            : template &lt;class BidiIterator&gt;
+<span class="lineNum">      63 </span>            : struct saved_matched_paren : public saved_state
+<span class="lineNum">      64 </span>            : {
+<a name="65"><span class="lineNum">      65 </span>            :    int index;</a>
+<span class="lineNum">      66 </span>            :    sub_match&lt;BidiIterator&gt; sub;
+<span class="lineNum">      67 </span><span class="lineNoCov">          0 :    saved_matched_paren(int i, const sub_match&lt;BidiIterator&gt;&amp; s) : saved_state(1), index(i), sub(s){};</span>
+<span class="lineNum">      68 </span>            : };
+<span class="lineNum">      69 </span>            : 
+<span class="lineNum">      70 </span>            : template &lt;class BidiIterator&gt;
+<span class="lineNum">      71 </span>            : struct saved_position : public saved_state
+<span class="lineNum">      72 </span>            : {
+<a name="73"><span class="lineNum">      73 </span>            :    const re_syntax_base* pstate;</a>
+<span class="lineNum">      74 </span>            :    BidiIterator position;
+<span class="lineNum">      75 </span><span class="lineNoCov">          0 :    saved_position(const re_syntax_base* ps, BidiIterator pos, int i) : saved_state(i), pstate(ps), position(pos){};</span>
+<span class="lineNum">      76 </span>            : };
+<span class="lineNum">      77 </span>            : 
+<span class="lineNum">      78 </span>            : template &lt;class BidiIterator&gt;
+<span class="lineNum">      79 </span>            : struct saved_assertion : public saved_position&lt;BidiIterator&gt;
+<a name="80"><span class="lineNum">      80 </span>            : {</a>
+<span class="lineNum">      81 </span>            :    bool positive;
+<span class="lineNum">      82 </span><span class="lineNoCov">          0 :    saved_assertion(bool p, const re_syntax_base* ps, BidiIterator pos) </span>
+<span class="lineNum">      83 </span><span class="lineNoCov">          0 :       : saved_position&lt;BidiIterator&gt;(ps, pos, saved_type_assertion), positive(p){};</span>
+<span class="lineNum">      84 </span>            : };
+<a name="85"><span class="lineNum">      85 </span>            : </a>
+<span class="lineNum">      86 </span>            : template &lt;class BidiIterator&gt;
+<span class="lineNum">      87 </span><span class="lineNoCov">          0 : struct saved_repeater : public saved_state</span>
+<a name="88"><span class="lineNum">      88 </span>            : {</a>
+<span class="lineNum">      89 </span>            :    repeater_count&lt;BidiIterator&gt; count;
+<span class="lineNum">      90 </span><span class="lineNoCov">          0 :    saved_repeater(int i, repeater_count&lt;BidiIterator&gt;** s, BidiIterator start) </span>
+<span class="lineNum">      91 </span><span class="lineNoCov">          0 :       : saved_state(saved_state_repeater_count), count(i,s,start){}</span>
+<span class="lineNum">      92 </span>            : };
+<span class="lineNum">      93 </span>            : 
+<span class="lineNum">      94 </span>            : struct saved_extra_block : public saved_state
+<a name="95"><span class="lineNum">      95 </span>            : {</a>
+<span class="lineNum">      96 </span>            :    saved_state *base, *end;
+<span class="lineNum">      97 </span><span class="lineNoCov">          0 :    saved_extra_block(saved_state* b, saved_state* e) </span>
+<span class="lineNum">      98 </span><span class="lineNoCov">          0 :       : saved_state(saved_state_extra_block), base(b), end(e) {}</span>
+<span class="lineNum">      99 </span>            : };
+<span class="lineNum">     100 </span>            : 
+<span class="lineNum">     101 </span>            : struct save_state_init
+<a name="102"><span class="lineNum">     102 </span>            : {</a>
+<span class="lineNum">     103 </span>            :    saved_state** stack;
+<span class="lineNum">     104 </span><span class="lineNoCov">          0 :    save_state_init(saved_state** base, saved_state** end)</span>
+<span class="lineNum">     105 </span><span class="lineNoCov">          0 :       : stack(base)</span>
+<span class="lineNum">     106 </span>            :    {
+<span class="lineNum">     107 </span><span class="lineNoCov">          0 :       *base = static_cast&lt;saved_state*&gt;(get_mem_block());</span>
+<span class="lineNum">     108 </span><span class="lineNoCov">          0 :       *end = reinterpret_cast&lt;saved_state*&gt;(reinterpret_cast&lt;char*&gt;(*base)+BOOST_REGEX_BLOCKSIZE);</span>
+<span class="lineNum">     109 </span><span class="lineNoCov">          0 :       --(*end);</span>
+<span class="lineNum">     110 </span><span class="lineNoCov">          0 :       (void) new (*end)saved_state(0);</span>
+<a name="111"><span class="lineNum">     111 </span><span class="lineNoCov">          0 :       BOOST_ASSERT(*end &gt; *base);</span></a>
+<span class="lineNum">     112 </span><span class="lineNoCov">          0 :    }</span>
+<span class="lineNum">     113 </span><span class="lineNoCov">          0 :    ~save_state_init()</span>
+<span class="lineNum">     114 </span>            :    {
+<span class="lineNum">     115 </span><span class="lineNoCov">          0 :       put_mem_block(*stack);</span>
+<span class="lineNum">     116 </span><span class="lineNoCov">          0 :       *stack = 0;</span>
+<span class="lineNum">     117 </span><span class="lineNoCov">          0 :    }</span>
+<span class="lineNum">     118 </span>            : };
+<span class="lineNum">     119 </span>            : 
+<span class="lineNum">     120 </span>            : template &lt;class BidiIterator&gt;
+<span class="lineNum">     121 </span>            : struct saved_single_repeat : public saved_state
+<span class="lineNum">     122 </span>            : {
+<span class="lineNum">     123 </span>            :    std::size_t count;
+<a name="124"><span class="lineNum">     124 </span>            :    const re_repeat* rep;</a>
+<span class="lineNum">     125 </span>            :    BidiIterator last_position;
+<span class="lineNum">     126 </span><span class="lineNoCov">          0 :    saved_single_repeat(std::size_t c, const re_repeat* r, BidiIterator lp, int arg_id) </span>
+<span class="lineNum">     127 </span><span class="lineNoCov">          0 :       : saved_state(arg_id), count(c), rep(r), last_position(lp){}</span>
+<span class="lineNum">     128 </span>            : };
+<a name="129"><span class="lineNum">     129 </span>            : </a>
+<span class="lineNum">     130 </span>            : template &lt;class Results&gt;
+<a name="131"><span class="lineNum">     131 </span><span class="lineNoCov">          0 : struct saved_recursion : public saved_state</span></a>
+<span class="lineNum">     132 </span>            : {
+<span class="lineNum">     133 </span><span class="lineNoCov">          0 :    saved_recursion(int idx, const re_syntax_base* p, Results* pr) </span>
+<span class="lineNum">     134 </span><span class="lineNoCov">          0 :       : saved_state(14), recursion_id(idx), preturn_address(p), results(*pr)</span>
+<span class="lineNum">     135 </span><span class="lineNoCov">          0 :    {}</span>
+<span class="lineNum">     136 </span>            :    int recursion_id;
+<span class="lineNum">     137 </span>            :    const re_syntax_base* preturn_address;
+<span class="lineNum">     138 </span>            :    Results results;
+<span class="lineNum">     139 </span>            : };
+<a name="140"><span class="lineNum">     140 </span>            : </a>
+<span class="lineNum">     141 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     142 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_all_states()</span>
+<span class="lineNum">     143 </span>            : {
+<span class="lineNum">     144 </span>            :    static matcher_proc_type const s_match_vtable[30] = 
+<span class="lineNum">     145 </span>            :    {
+<span class="lineNum">     146 </span>            :       (&amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_startmark),
+<span class="lineNum">     147 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_endmark,
+<span class="lineNum">     148 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_literal,
+<span class="lineNum">     149 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_start_line,
+<span class="lineNum">     150 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_end_line,
+<span class="lineNum">     151 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_wild,
+<span class="lineNum">     152 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_match,
+<span class="lineNum">     153 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_word_boundary,
+<span class="lineNum">     154 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_within_word,
+<span class="lineNum">     155 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_word_start,
+<span class="lineNum">     156 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_word_end,
+<span class="lineNum">     157 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_buffer_start,
+<span class="lineNum">     158 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_buffer_end,
+<span class="lineNum">     159 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_backref,
+<span class="lineNum">     160 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_long_set,
+<span class="lineNum">     161 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_set,
+<span class="lineNum">     162 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_jump,
+<span class="lineNum">     163 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_alt,
+<span class="lineNum">     164 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_rep,
+<span class="lineNum">     165 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_combining,
+<span class="lineNum">     166 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_soft_buffer_end,
+<span class="lineNum">     167 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_restart_continue,
+<span class="lineNum">     168 </span>            :       // Although this next line *should* be evaluated at compile time, in practice
+<span class="lineNum">     169 </span>            :       // some compilers (VC++) emit run-time initialisation which breaks thread
+<span class="lineNum">     170 </span>            :       // safety, so use a dispatch function instead:
+<span class="lineNum">     171 </span>            :       //(::boost::is_random_access_iterator&lt;BidiIterator&gt;::value ? &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_dot_repeat_fast : &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_dot_repeat_slow),
+<span class="lineNum">     172 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_dot_repeat_dispatch,
+<span class="lineNum">     173 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_char_repeat,
+<span class="lineNum">     174 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_set_repeat,
+<span class="lineNum">     175 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_long_set_repeat,
+<span class="lineNum">     176 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_backstep,
+<span class="lineNum">     177 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_assert_backref,
+<span class="lineNum">     178 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_toggle_case,
+<span class="lineNum">     179 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_recursion,
+<span class="lineNum">     180 </span>            :    };
+<span class="lineNum">     181 </span>            : 
+<span class="lineNum">     182 </span><span class="lineNoCov">          0 :    push_recursion_stopper();</span>
+<span class="lineNum">     183 </span><span class="lineNoCov">          0 :    do{</span>
+<span class="lineNum">     184 </span><span class="lineNoCov">          0 :       while(pstate)</span>
+<span class="lineNum">     185 </span>            :       {
+<span class="lineNum">     186 </span><span class="lineNoCov">          0 :          matcher_proc_type proc = s_match_vtable[pstate-&gt;type];</span>
+<span class="lineNum">     187 </span><span class="lineNoCov">          0 :          ++state_count;</span>
+<span class="lineNum">     188 </span><span class="lineNoCov">          0 :          if(!(this-&gt;*proc)())</span>
+<span class="lineNum">     189 </span>            :          {
+<span class="lineNum">     190 </span><span class="lineNoCov">          0 :             if(state_count &gt; max_state_count)</span>
+<span class="lineNum">     191 </span><span class="lineNoCov">          0 :                raise_error(traits_inst, regex_constants::error_complexity);</span>
+<span class="lineNum">     192 </span><span class="lineNoCov">          0 :             if((m_match_flags &amp; match_partial) &amp;&amp; (position == last) &amp;&amp; (position != search_base))</span>
+<span class="lineNum">     193 </span><span class="lineNoCov">          0 :                m_has_partial_match = true;</span>
+<span class="lineNum">     194 </span><span class="lineNoCov">          0 :             bool successful_unwind = unwind(false);</span>
+<span class="lineNum">     195 </span><span class="lineNoCov">          0 :             if((m_match_flags &amp; match_partial) &amp;&amp; (position == last) &amp;&amp; (position != search_base))</span>
+<span class="lineNum">     196 </span><span class="lineNoCov">          0 :                m_has_partial_match = true;</span>
+<span class="lineNum">     197 </span><span class="lineNoCov">          0 :             if(false == successful_unwind)</span>
+<span class="lineNum">     198 </span><span class="lineNoCov">          0 :                return m_recursive_result;</span>
+<span class="lineNum">     199 </span>            :          }
+<span class="lineNum">     200 </span>            :       }
+<span class="lineNum">     201 </span>            :    }while(unwind(true));
+<span class="lineNum">     202 </span><span class="lineNoCov">          0 :    return m_recursive_result;</span>
+<span class="lineNum">     203 </span>            : }
+<a name="204"><span class="lineNum">     204 </span>            : </a>
+<span class="lineNum">     205 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     206 </span><span class="lineNoCov">          0 : void perl_matcher&lt;BidiIterator, Allocator, traits&gt;::extend_stack()</span>
+<span class="lineNum">     207 </span>            : {
+<span class="lineNum">     208 </span><span class="lineNoCov">          0 :    if(used_block_count)</span>
+<span class="lineNum">     209 </span>            :    {
+<span class="lineNum">     210 </span><span class="lineNoCov">          0 :       --used_block_count;</span>
+<span class="lineNum">     211 </span>            :       saved_state* stack_base;
+<span class="lineNum">     212 </span>            :       saved_state* backup_state;
+<span class="lineNum">     213 </span><span class="lineNoCov">          0 :       stack_base = static_cast&lt;saved_state*&gt;(get_mem_block());</span>
+<span class="lineNum">     214 </span><span class="lineNoCov">          0 :       backup_state = reinterpret_cast&lt;saved_state*&gt;(reinterpret_cast&lt;char*&gt;(stack_base)+BOOST_REGEX_BLOCKSIZE);</span>
+<span class="lineNum">     215 </span><span class="lineNoCov">          0 :       saved_extra_block* block = static_cast&lt;saved_extra_block*&gt;(backup_state);</span>
+<span class="lineNum">     216 </span><span class="lineNoCov">          0 :       --block;</span>
+<span class="lineNum">     217 </span><span class="lineNoCov">          0 :       (void) new (block) saved_extra_block(m_stack_base, m_backup_state);</span>
+<span class="lineNum">     218 </span><span class="lineNoCov">          0 :       m_stack_base = stack_base;</span>
+<span class="lineNum">     219 </span><span class="lineNoCov">          0 :       m_backup_state = block;</span>
+<span class="lineNum">     220 </span>            :    }
+<span class="lineNum">     221 </span>            :    else
+<span class="lineNum">     222 </span><span class="lineNoCov">          0 :       raise_error(traits_inst, regex_constants::error_stack);</span>
+<span class="lineNum">     223 </span><span class="lineNoCov">          0 : }</span>
+<a name="224"><span class="lineNum">     224 </span>            : </a>
+<span class="lineNum">     225 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     226 </span><span class="lineNoCov">          0 : inline void perl_matcher&lt;BidiIterator, Allocator, traits&gt;::push_matched_paren(int index, const sub_match&lt;BidiIterator&gt;&amp; sub)</span>
+<span class="lineNum">     227 </span>            : {
+<span class="lineNum">     228 </span>            :    //BOOST_ASSERT(index);
+<span class="lineNum">     229 </span><span class="lineNoCov">          0 :    saved_matched_paren&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_matched_paren&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">     230 </span><span class="lineNoCov">          0 :    --pmp;</span>
+<span class="lineNum">     231 </span><span class="lineNoCov">          0 :    if(pmp &lt; m_stack_base)</span>
+<span class="lineNum">     232 </span>            :    {
+<span class="lineNum">     233 </span><span class="lineNoCov">          0 :       extend_stack();</span>
+<span class="lineNum">     234 </span><span class="lineNoCov">          0 :       pmp = static_cast&lt;saved_matched_paren&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">     235 </span><span class="lineNoCov">          0 :       --pmp;</span>
+<span class="lineNum">     236 </span>            :    }
+<span class="lineNum">     237 </span><span class="lineNoCov">          0 :    (void) new (pmp)saved_matched_paren&lt;BidiIterator&gt;(index, sub);</span>
+<span class="lineNum">     238 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">     239 </span><span class="lineNoCov">          0 : }</span>
+<a name="240"><span class="lineNum">     240 </span>            : </a>
+<span class="lineNum">     241 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     242 </span><span class="lineNoCov">          0 : inline void perl_matcher&lt;BidiIterator, Allocator, traits&gt;::push_recursion_stopper()</span>
+<span class="lineNum">     243 </span>            : {
+<span class="lineNum">     244 </span><span class="lineNoCov">          0 :    saved_state* pmp = m_backup_state;</span>
+<span class="lineNum">     245 </span><span class="lineNoCov">          0 :    --pmp;</span>
+<span class="lineNum">     246 </span><span class="lineNoCov">          0 :    if(pmp &lt; m_stack_base)</span>
+<span class="lineNum">     247 </span>            :    {
+<span class="lineNum">     248 </span><span class="lineNoCov">          0 :       extend_stack();</span>
+<span class="lineNum">     249 </span><span class="lineNoCov">          0 :       pmp = m_backup_state;</span>
+<span class="lineNum">     250 </span><span class="lineNoCov">          0 :       --pmp;</span>
+<span class="lineNum">     251 </span>            :    }
+<span class="lineNum">     252 </span><span class="lineNoCov">          0 :    (void) new (pmp)saved_state(saved_type_recurse);</span>
+<span class="lineNum">     253 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">     254 </span><span class="lineNoCov">          0 : }</span>
+<a name="255"><span class="lineNum">     255 </span>            : </a>
+<span class="lineNum">     256 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     257 </span><span class="lineNoCov">          0 : inline void perl_matcher&lt;BidiIterator, Allocator, traits&gt;::push_assertion(const re_syntax_base* ps, bool positive)</span>
+<span class="lineNum">     258 </span>            : {
+<span class="lineNum">     259 </span><span class="lineNoCov">          0 :    saved_assertion&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_assertion&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">     260 </span><span class="lineNoCov">          0 :    --pmp;</span>
+<span class="lineNum">     261 </span><span class="lineNoCov">          0 :    if(pmp &lt; m_stack_base)</span>
+<span class="lineNum">     262 </span>            :    {
+<span class="lineNum">     263 </span><span class="lineNoCov">          0 :       extend_stack();</span>
+<span class="lineNum">     264 </span><span class="lineNoCov">          0 :       pmp = static_cast&lt;saved_assertion&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">     265 </span><span class="lineNoCov">          0 :       --pmp;</span>
+<span class="lineNum">     266 </span>            :    }
+<span class="lineNum">     267 </span><span class="lineNoCov">          0 :    (void) new (pmp)saved_assertion&lt;BidiIterator&gt;(positive, ps, position);</span>
+<span class="lineNum">     268 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">     269 </span><span class="lineNoCov">          0 : }</span>
+<a name="270"><span class="lineNum">     270 </span>            : </a>
+<span class="lineNum">     271 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     272 </span><span class="lineNoCov">          0 : inline void perl_matcher&lt;BidiIterator, Allocator, traits&gt;::push_alt(const re_syntax_base* ps)</span>
+<span class="lineNum">     273 </span>            : {
+<span class="lineNum">     274 </span><span class="lineNoCov">          0 :    saved_position&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_position&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">     275 </span><span class="lineNoCov">          0 :    --pmp;</span>
+<span class="lineNum">     276 </span><span class="lineNoCov">          0 :    if(pmp &lt; m_stack_base)</span>
+<span class="lineNum">     277 </span>            :    {
+<span class="lineNum">     278 </span><span class="lineNoCov">          0 :       extend_stack();</span>
+<span class="lineNum">     279 </span><span class="lineNoCov">          0 :       pmp = static_cast&lt;saved_position&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">     280 </span><span class="lineNoCov">          0 :       --pmp;</span>
+<span class="lineNum">     281 </span>            :    }
+<span class="lineNum">     282 </span><span class="lineNoCov">          0 :    (void) new (pmp)saved_position&lt;BidiIterator&gt;(ps, position, saved_state_alt);</span>
+<span class="lineNum">     283 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">     284 </span><span class="lineNoCov">          0 : }</span>
+<a name="285"><span class="lineNum">     285 </span>            : </a>
+<span class="lineNum">     286 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     287 </span><span class="lineNoCov">          0 : inline void perl_matcher&lt;BidiIterator, Allocator, traits&gt;::push_non_greedy_repeat(const re_syntax_base* ps)</span>
+<span class="lineNum">     288 </span>            : {
+<span class="lineNum">     289 </span><span class="lineNoCov">          0 :    saved_position&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_position&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">     290 </span><span class="lineNoCov">          0 :    --pmp;</span>
+<span class="lineNum">     291 </span><span class="lineNoCov">          0 :    if(pmp &lt; m_stack_base)</span>
+<span class="lineNum">     292 </span>            :    {
+<span class="lineNum">     293 </span><span class="lineNoCov">          0 :       extend_stack();</span>
+<span class="lineNum">     294 </span><span class="lineNoCov">          0 :       pmp = static_cast&lt;saved_position&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">     295 </span><span class="lineNoCov">          0 :       --pmp;</span>
+<span class="lineNum">     296 </span>            :    }
+<span class="lineNum">     297 </span><span class="lineNoCov">          0 :    (void) new (pmp)saved_position&lt;BidiIterator&gt;(ps, position, saved_state_non_greedy_long_repeat);</span>
+<span class="lineNum">     298 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">     299 </span><span class="lineNoCov">          0 : }</span>
+<a name="300"><span class="lineNum">     300 </span>            : </a>
+<span class="lineNum">     301 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     302 </span><span class="lineNoCov">          0 : inline void perl_matcher&lt;BidiIterator, Allocator, traits&gt;::push_repeater_count(int i, repeater_count&lt;BidiIterator&gt;** s)</span>
+<span class="lineNum">     303 </span>            : {
+<span class="lineNum">     304 </span><span class="lineNoCov">          0 :    saved_repeater&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_repeater&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">     305 </span><span class="lineNoCov">          0 :    --pmp;</span>
+<span class="lineNum">     306 </span><span class="lineNoCov">          0 :    if(pmp &lt; m_stack_base)</span>
+<span class="lineNum">     307 </span>            :    {
+<span class="lineNum">     308 </span><span class="lineNoCov">          0 :       extend_stack();</span>
+<span class="lineNum">     309 </span><span class="lineNoCov">          0 :       pmp = static_cast&lt;saved_repeater&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">     310 </span><span class="lineNoCov">          0 :       --pmp;</span>
+<span class="lineNum">     311 </span>            :    }
+<span class="lineNum">     312 </span><span class="lineNoCov">          0 :    (void) new (pmp)saved_repeater&lt;BidiIterator&gt;(i, s, position);</span>
+<span class="lineNum">     313 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">     314 </span><span class="lineNoCov">          0 : }</span>
+<a name="315"><span class="lineNum">     315 </span>            : </a>
+<span class="lineNum">     316 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     317 </span><span class="lineNoCov">          0 : inline void perl_matcher&lt;BidiIterator, Allocator, traits&gt;::push_single_repeat(std::size_t c, const re_repeat* r, BidiIterator last_position, int state_id)</span>
+<span class="lineNum">     318 </span>            : {
+<span class="lineNum">     319 </span><span class="lineNoCov">          0 :    saved_single_repeat&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_single_repeat&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">     320 </span><span class="lineNoCov">          0 :    --pmp;</span>
+<span class="lineNum">     321 </span><span class="lineNoCov">          0 :    if(pmp &lt; m_stack_base)</span>
+<span class="lineNum">     322 </span>            :    {
+<span class="lineNum">     323 </span><span class="lineNoCov">          0 :       extend_stack();</span>
+<span class="lineNum">     324 </span><span class="lineNoCov">          0 :       pmp = static_cast&lt;saved_single_repeat&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">     325 </span><span class="lineNoCov">          0 :       --pmp;</span>
+<span class="lineNum">     326 </span>            :    }
+<span class="lineNum">     327 </span><span class="lineNoCov">          0 :    (void) new (pmp)saved_single_repeat&lt;BidiIterator&gt;(c, r, last_position, state_id);</span>
+<span class="lineNum">     328 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">     329 </span><span class="lineNoCov">          0 : }</span>
+<a name="330"><span class="lineNum">     330 </span>            : </a>
+<span class="lineNum">     331 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     332 </span><span class="lineNoCov">          0 : inline void perl_matcher&lt;BidiIterator, Allocator, traits&gt;::push_recursion(int idx, const re_syntax_base* p, results_type* presults)</span>
+<span class="lineNum">     333 </span>            : {
+<span class="lineNum">     334 </span><span class="lineNoCov">          0 :    saved_recursion&lt;results_type&gt;* pmp = static_cast&lt;saved_recursion&lt;results_type&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">     335 </span><span class="lineNoCov">          0 :    --pmp;</span>
+<span class="lineNum">     336 </span><span class="lineNoCov">          0 :    if(pmp &lt; m_stack_base)</span>
+<span class="lineNum">     337 </span>            :    {
+<span class="lineNum">     338 </span><span class="lineNoCov">          0 :       extend_stack();</span>
+<span class="lineNum">     339 </span><span class="lineNoCov">          0 :       pmp = static_cast&lt;saved_recursion&lt;results_type&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">     340 </span><span class="lineNoCov">          0 :       --pmp;</span>
+<span class="lineNum">     341 </span>            :    }
+<span class="lineNum">     342 </span><span class="lineNoCov">          0 :    (void) new (pmp)saved_recursion&lt;results_type&gt;(idx, p, presults);</span>
+<span class="lineNum">     343 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">     344 </span><span class="lineNoCov">          0 : }</span>
+<a name="345"><span class="lineNum">     345 </span>            : </a>
+<span class="lineNum">     346 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     347 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_startmark()</span>
+<span class="lineNum">     348 </span>            : {
+<span class="lineNum">     349 </span><span class="lineNoCov">          0 :    int index = static_cast&lt;const re_brace*&gt;(pstate)-&gt;index;</span>
+<span class="lineNum">     350 </span><span class="lineNoCov">          0 :    icase = static_cast&lt;const re_brace*&gt;(pstate)-&gt;icase;</span>
+<span class="lineNum">     351 </span><span class="lineNoCov">          0 :    switch(index)</span>
+<span class="lineNum">     352 </span>            :    {
+<span class="lineNum">     353 </span>            :    case 0:
+<span class="lineNum">     354 </span><span class="lineNoCov">          0 :       pstate = pstate-&gt;next.p;</span>
+<span class="lineNum">     355 </span><span class="lineNoCov">          0 :       break;</span>
+<span class="lineNum">     356 </span>            :    case -1:
+<span class="lineNum">     357 </span>            :    case -2:
+<span class="lineNum">     358 </span>            :       {
+<span class="lineNum">     359 </span>            :          // forward lookahead assert:
+<span class="lineNum">     360 </span><span class="lineNoCov">          0 :          const re_syntax_base* next_pstate = static_cast&lt;const re_jump*&gt;(pstate-&gt;next.p)-&gt;alt.p-&gt;next.p;</span>
+<span class="lineNum">     361 </span><span class="lineNoCov">          0 :          pstate = pstate-&gt;next.p-&gt;next.p;</span>
+<span class="lineNum">     362 </span><span class="lineNoCov">          0 :          push_assertion(next_pstate, index == -1);</span>
+<span class="lineNum">     363 </span><span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     364 </span>            :       }
+<span class="lineNum">     365 </span>            :    case -3:
+<span class="lineNum">     366 </span>            :       {
+<span class="lineNum">     367 </span>            :          // independent sub-expression, currently this is always recursive:
+<span class="lineNum">     368 </span><span class="lineNoCov">          0 :          bool old_independent = m_independent;</span>
+<span class="lineNum">     369 </span><span class="lineNoCov">          0 :          m_independent = true;</span>
+<span class="lineNum">     370 </span><span class="lineNoCov">          0 :          const re_syntax_base* next_pstate = static_cast&lt;const re_jump*&gt;(pstate-&gt;next.p)-&gt;alt.p-&gt;next.p;</span>
+<span class="lineNum">     371 </span><span class="lineNoCov">          0 :          pstate = pstate-&gt;next.p-&gt;next.p;</span>
+<span class="lineNum">     372 </span><span class="lineNoCov">          0 :          bool r = match_all_states();</span>
+<span class="lineNum">     373 </span><span class="lineNoCov">          0 :          pstate = next_pstate;</span>
+<span class="lineNum">     374 </span><span class="lineNoCov">          0 :          m_independent = old_independent;</span>
+<span class="lineNum">     375 </span>            : #ifdef BOOST_REGEX_MATCH_EXTRA
+<span class="lineNum">     376 </span>            :          if(r &amp;&amp; (m_match_flags &amp; match_extra))
+<span class="lineNum">     377 </span>            :          {
+<span class="lineNum">     378 </span>            :             //
+<span class="lineNum">     379 </span>            :             // our captures have been stored in *m_presult
+<span class="lineNum">     380 </span>            :             // we need to unpack them, and insert them
+<span class="lineNum">     381 </span>            :             // back in the right order when we unwind the stack:
+<span class="lineNum">     382 </span>            :             //
+<span class="lineNum">     383 </span>            :             match_results&lt;BidiIterator, Allocator&gt; temp_match(*m_presult);
+<span class="lineNum">     384 </span>            :             unsigned i;
+<span class="lineNum">     385 </span>            :             for(i = 0; i &lt; temp_match.size(); ++i)
+<span class="lineNum">     386 </span>            :                (*m_presult)[i].get_captures().clear();
+<span class="lineNum">     387 </span>            :             // match everything else:
+<span class="lineNum">     388 </span>            :             r = match_all_states();
+<span class="lineNum">     389 </span>            :             // now place the stored captures back:
+<span class="lineNum">     390 </span>            :             for(i = 0; i &lt; temp_match.size(); ++i)
+<span class="lineNum">     391 </span>            :             {
+<span class="lineNum">     392 </span>            :                typedef typename sub_match&lt;BidiIterator&gt;::capture_sequence_type seq;
+<span class="lineNum">     393 </span>            :                seq&amp; s1 = (*m_presult)[i].get_captures();
+<span class="lineNum">     394 </span>            :                const seq&amp; s2 = temp_match[i].captures();
+<span class="lineNum">     395 </span>            :                s1.insert(
+<span class="lineNum">     396 </span>            :                   s1.end(), 
+<span class="lineNum">     397 </span>            :                   s2.begin(), 
+<span class="lineNum">     398 </span>            :                   s2.end());
+<span class="lineNum">     399 </span>            :             }
+<span class="lineNum">     400 </span>            :          }
+<span class="lineNum">     401 </span>            : #endif
+<span class="lineNum">     402 </span><span class="lineNoCov">          0 :          return r;</span>
+<span class="lineNum">     403 </span>            :       }
+<span class="lineNum">     404 </span>            :    case -4:
+<span class="lineNum">     405 </span>            :       {
+<span class="lineNum">     406 </span>            :       // conditional expression:
+<span class="lineNum">     407 </span><span class="lineNoCov">          0 :       const re_alt* alt = static_cast&lt;const re_alt*&gt;(pstate-&gt;next.p);</span>
+<span class="lineNum">     408 </span><span class="lineNoCov">          0 :       BOOST_ASSERT(alt-&gt;type == syntax_element_alt);</span>
+<span class="lineNum">     409 </span><span class="lineNoCov">          0 :       pstate = alt-&gt;next.p;</span>
+<span class="lineNum">     410 </span><span class="lineNoCov">          0 :       if(pstate-&gt;type == syntax_element_assert_backref)</span>
+<span class="lineNum">     411 </span>            :       {
+<span class="lineNum">     412 </span><span class="lineNoCov">          0 :          if(!match_assert_backref())</span>
+<span class="lineNum">     413 </span><span class="lineNoCov">          0 :             pstate = alt-&gt;alt.p;</span>
+<span class="lineNum">     414 </span><span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     415 </span>            :       }
+<span class="lineNum">     416 </span>            :       else
+<span class="lineNum">     417 </span>            :       {
+<span class="lineNum">     418 </span>            :          // zero width assertion, have to match this recursively:
+<span class="lineNum">     419 </span><span class="lineNoCov">          0 :          BOOST_ASSERT(pstate-&gt;type == syntax_element_startmark);</span>
+<span class="lineNum">     420 </span><span class="lineNoCov">          0 :          bool negated = static_cast&lt;const re_brace*&gt;(pstate)-&gt;index == -2;</span>
+<span class="lineNum">     421 </span><span class="lineNoCov">          0 :          BidiIterator saved_position = position;</span>
+<span class="lineNum">     422 </span><span class="lineNoCov">          0 :          const re_syntax_base* next_pstate = static_cast&lt;const re_jump*&gt;(pstate-&gt;next.p)-&gt;alt.p-&gt;next.p;</span>
+<span class="lineNum">     423 </span><span class="lineNoCov">          0 :          pstate = pstate-&gt;next.p-&gt;next.p;</span>
+<span class="lineNum">     424 </span><span class="lineNoCov">          0 :          bool r = match_all_states();</span>
+<span class="lineNum">     425 </span><span class="lineNoCov">          0 :          position = saved_position;</span>
+<span class="lineNum">     426 </span><span class="lineNoCov">          0 :          if(negated)</span>
+<span class="lineNum">     427 </span><span class="lineNoCov">          0 :             r = !r;</span>
+<span class="lineNum">     428 </span><span class="lineNoCov">          0 :          if(r)</span>
+<span class="lineNum">     429 </span><span class="lineNoCov">          0 :             pstate = next_pstate;</span>
+<span class="lineNum">     430 </span>            :          else
+<span class="lineNum">     431 </span><span class="lineNoCov">          0 :             pstate = alt-&gt;alt.p;</span>
+<span class="lineNum">     432 </span>            :          break;
+<span class="lineNum">     433 </span>            :       }
+<span class="lineNum">     434 </span>            :       }
+<span class="lineNum">     435 </span>            :    case -5:
+<span class="lineNum">     436 </span>            :       {
+<span class="lineNum">     437 </span><span class="lineNoCov">          0 :          push_matched_paren(0, (*m_presult)[0]);</span>
+<span class="lineNum">     438 </span><span class="lineNoCov">          0 :          m_presult-&gt;set_first(position, 0, true);</span>
+<span class="lineNum">     439 </span><span class="lineNoCov">          0 :          pstate = pstate-&gt;next.p;</span>
+<span class="lineNum">     440 </span><span class="lineNoCov">          0 :          break;</span>
+<span class="lineNum">     441 </span>            :       }
+<span class="lineNum">     442 </span>            :    default:
+<span class="lineNum">     443 </span>            :    {
+<span class="lineNum">     444 </span><span class="lineNoCov">          0 :       BOOST_ASSERT(index &gt; 0);</span>
+<span class="lineNum">     445 </span><span class="lineNoCov">          0 :       if((m_match_flags &amp; match_nosubs) == 0)</span>
+<span class="lineNum">     446 </span>            :       {
+<span class="lineNum">     447 </span><span class="lineNoCov">          0 :          push_matched_paren(index, (*m_presult)[index]);</span>
+<span class="lineNum">     448 </span><span class="lineNoCov">          0 :          m_presult-&gt;set_first(position, index);</span>
+<span class="lineNum">     449 </span>            :       }
+<span class="lineNum">     450 </span><span class="lineNoCov">          0 :       pstate = pstate-&gt;next.p;</span>
+<span class="lineNum">     451 </span><span class="lineNoCov">          0 :       break;</span>
+<span class="lineNum">     452 </span>            :    }
+<span class="lineNum">     453 </span>            :    }
+<span class="lineNum">     454 </span><span class="lineNoCov">          0 :    return true;</span>
+<span class="lineNum">     455 </span>            : }
+<a name="456"><span class="lineNum">     456 </span>            : </a>
+<span class="lineNum">     457 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     458 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_alt()</span>
+<span class="lineNum">     459 </span>            : {
+<span class="lineNum">     460 </span>            :    bool take_first, take_second;
+<span class="lineNum">     461 </span><span class="lineNoCov">          0 :    const re_alt* jmp = static_cast&lt;const re_alt*&gt;(pstate);</span>
+<span class="lineNum">     462 </span>            : 
+<span class="lineNum">     463 </span>            :    // find out which of these two alternatives we need to take:
+<span class="lineNum">     464 </span><span class="lineNoCov">          0 :    if(position == last)</span>
+<span class="lineNum">     465 </span>            :    {
+<span class="lineNum">     466 </span><span class="lineNoCov">          0 :       take_first = jmp-&gt;can_be_null &amp; mask_take;</span>
+<span class="lineNum">     467 </span><span class="lineNoCov">          0 :       take_second = jmp-&gt;can_be_null &amp; mask_skip;</span>
+<span class="lineNum">     468 </span>            :    }
+<span class="lineNum">     469 </span>            :    else
+<span class="lineNum">     470 </span>            :    {
+<span class="lineNum">     471 </span><span class="lineNoCov">          0 :       take_first = can_start(*position, jmp-&gt;_map, (unsigned char)mask_take);</span>
+<span class="lineNum">     472 </span><span class="lineNoCov">          0 :       take_second = can_start(*position, jmp-&gt;_map, (unsigned char)mask_skip);</span>
+<span class="lineNum">     473 </span>            :   }
+<span class="lineNum">     474 </span>            : 
+<span class="lineNum">     475 </span><span class="lineNoCov">          0 :    if(take_first)</span>
+<span class="lineNum">     476 </span>            :    {
+<span class="lineNum">     477 </span>            :       // we can take the first alternative,
+<span class="lineNum">     478 </span>            :       // see if we need to push next alternative:
+<span class="lineNum">     479 </span><span class="lineNoCov">          0 :       if(take_second)</span>
+<span class="lineNum">     480 </span>            :       {
+<span class="lineNum">     481 </span><span class="lineNoCov">          0 :          push_alt(jmp-&gt;alt.p);</span>
+<span class="lineNum">     482 </span>            :       }
+<span class="lineNum">     483 </span><span class="lineNoCov">          0 :       pstate = pstate-&gt;next.p;</span>
+<span class="lineNum">     484 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">     485 </span>            :    }
+<span class="lineNum">     486 </span><span class="lineNoCov">          0 :    if(take_second)</span>
+<span class="lineNum">     487 </span>            :    {
+<span class="lineNum">     488 </span><span class="lineNoCov">          0 :       pstate = jmp-&gt;alt.p;</span>
+<span class="lineNum">     489 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">     490 </span>            :    }
+<span class="lineNum">     491 </span><span class="lineNoCov">          0 :    return false;  // neither option is possible</span>
+<span class="lineNum">     492 </span>            : }
+<a name="493"><span class="lineNum">     493 </span>            : </a>
+<span class="lineNum">     494 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     495 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_rep()</span>
+<span class="lineNum">     496 </span>            : {
+<span class="lineNum">     497 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     498 </span>            : #pragma warning(push)
+<span class="lineNum">     499 </span>            : #pragma warning(disable:4127 4244)
+<span class="lineNum">     500 </span>            : #endif
+<span class="lineNum">     501 </span>            : #ifdef __BORLANDC__
+<span class="lineNum">     502 </span>            : #pragma option push -w-8008 -w-8066 -w-8004
+<span class="lineNum">     503 </span>            : #endif
+<span class="lineNum">     504 </span><span class="lineNoCov">          0 :    const re_repeat* rep = static_cast&lt;const re_repeat*&gt;(pstate);</span>
+<span class="lineNum">     505 </span>            : 
+<span class="lineNum">     506 </span>            :    // find out which of these two alternatives we need to take:
+<span class="lineNum">     507 </span>            :    bool take_first, take_second;
+<span class="lineNum">     508 </span><span class="lineNoCov">          0 :    if(position == last)</span>
+<span class="lineNum">     509 </span>            :    {
+<span class="lineNum">     510 </span><span class="lineNoCov">          0 :       take_first = rep-&gt;can_be_null &amp; mask_take;</span>
+<span class="lineNum">     511 </span><span class="lineNoCov">          0 :       take_second = rep-&gt;can_be_null &amp; mask_skip;</span>
+<span class="lineNum">     512 </span>            :    }
+<span class="lineNum">     513 </span>            :    else
+<span class="lineNum">     514 </span>            :    {
+<span class="lineNum">     515 </span><span class="lineNoCov">          0 :       take_first = can_start(*position, rep-&gt;_map, (unsigned char)mask_take);</span>
+<span class="lineNum">     516 </span><span class="lineNoCov">          0 :       take_second = can_start(*position, rep-&gt;_map, (unsigned char)mask_skip);</span>
+<span class="lineNum">     517 </span>            :    }
+<span class="lineNum">     518 </span>            : 
+<span class="lineNum">     519 </span><span class="lineNoCov">          0 :    if((m_backup_state-&gt;state_id != saved_state_repeater_count) </span>
+<span class="lineNum">     520 </span>            :       || (static_cast&lt;saved_repeater&lt;BidiIterator&gt;*&gt;(m_backup_state)-&gt;count.get_id() != rep-&gt;state_id)
+<span class="lineNum">     521 </span>            :       || (next_count-&gt;get_id() != rep-&gt;state_id))
+<span class="lineNum">     522 </span>            :    {
+<span class="lineNum">     523 </span>            :       // we're moving to a different repeat from the last
+<span class="lineNum">     524 </span>            :       // one, so set up a counter object:
+<span class="lineNum">     525 </span><span class="lineNoCov">          0 :       push_repeater_count(rep-&gt;state_id, &amp;next_count);</span>
+<span class="lineNum">     526 </span>            :    }
+<span class="lineNum">     527 </span>            :    //
+<span class="lineNum">     528 </span>            :    // If we've had at least one repeat already, and the last one 
+<span class="lineNum">     529 </span>            :    // matched the NULL string then set the repeat count to
+<span class="lineNum">     530 </span>            :    // maximum:
+<span class="lineNum">     531 </span>            :    //
+<span class="lineNum">     532 </span><span class="lineNoCov">          0 :    next_count-&gt;check_null_repeat(position, rep-&gt;max);</span>
+<span class="lineNum">     533 </span>            : 
+<span class="lineNum">     534 </span><span class="lineNoCov">          0 :    if(next_count-&gt;get_count() &lt; rep-&gt;min)</span>
+<span class="lineNum">     535 </span>            :    {
+<span class="lineNum">     536 </span>            :       // we must take the repeat:
+<span class="lineNum">     537 </span><span class="lineNoCov">          0 :       if(take_first)</span>
+<span class="lineNum">     538 </span>            :       {
+<span class="lineNum">     539 </span>            :          // increase the counter:
+<span class="lineNum">     540 </span><span class="lineNoCov">          0 :          ++(*next_count);</span>
+<span class="lineNum">     541 </span><span class="lineNoCov">          0 :          pstate = rep-&gt;next.p;</span>
+<span class="lineNum">     542 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">     543 </span>            :       }
+<span class="lineNum">     544 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">     545 </span>            :    }
+<span class="lineNum">     546 </span>            : 
+<span class="lineNum">     547 </span><span class="lineNoCov">          0 :    bool greedy = (rep-&gt;greedy) &amp;&amp; (!(m_match_flags &amp; regex_constants::match_any) || m_independent);   </span>
+<span class="lineNum">     548 </span><span class="lineNoCov">          0 :    if(greedy)</span>
+<span class="lineNum">     549 </span>            :    {
+<span class="lineNum">     550 </span>            :       // try and take the repeat if we can:
+<span class="lineNum">     551 </span><span class="lineNoCov">          0 :       if((next_count-&gt;get_count() &lt; rep-&gt;max) &amp;&amp; take_first)</span>
+<span class="lineNum">     552 </span>            :       {
+<span class="lineNum">     553 </span><span class="lineNoCov">          0 :          if(take_second)</span>
+<span class="lineNum">     554 </span>            :          {
+<span class="lineNum">     555 </span>            :             // store position in case we fail:
+<span class="lineNum">     556 </span><span class="lineNoCov">          0 :             push_alt(rep-&gt;alt.p);</span>
+<span class="lineNum">     557 </span>            :          }
+<span class="lineNum">     558 </span>            :          // increase the counter:
+<span class="lineNum">     559 </span><span class="lineNoCov">          0 :          ++(*next_count);</span>
+<span class="lineNum">     560 </span><span class="lineNoCov">          0 :          pstate = rep-&gt;next.p;</span>
+<span class="lineNum">     561 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">     562 </span>            :       }
+<span class="lineNum">     563 </span><span class="lineNoCov">          0 :       else if(take_second)</span>
+<span class="lineNum">     564 </span>            :       {
+<span class="lineNum">     565 </span><span class="lineNoCov">          0 :          pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">     566 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">     567 </span>            :       }
+<span class="lineNum">     568 </span><span class="lineNoCov">          0 :       return false; // can't take anything, fail...</span>
+<span class="lineNum">     569 </span>            :    }
+<span class="lineNum">     570 </span>            :    else // non-greedy
+<span class="lineNum">     571 </span>            :    {
+<span class="lineNum">     572 </span>            :       // try and skip the repeat if we can:
+<span class="lineNum">     573 </span><span class="lineNoCov">          0 :       if(take_second)</span>
+<span class="lineNum">     574 </span>            :       {
+<span class="lineNum">     575 </span><span class="lineNoCov">          0 :          if((next_count-&gt;get_count() &lt; rep-&gt;max) &amp;&amp; take_first)</span>
+<span class="lineNum">     576 </span>            :          {
+<span class="lineNum">     577 </span>            :             // store position in case we fail:
+<span class="lineNum">     578 </span><span class="lineNoCov">          0 :             push_non_greedy_repeat(rep-&gt;next.p);</span>
+<span class="lineNum">     579 </span>            :          }
+<span class="lineNum">     580 </span><span class="lineNoCov">          0 :          pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">     581 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">     582 </span>            :       }
+<span class="lineNum">     583 </span><span class="lineNoCov">          0 :       if((next_count-&gt;get_count() &lt; rep-&gt;max) &amp;&amp; take_first)</span>
+<span class="lineNum">     584 </span>            :       {
+<span class="lineNum">     585 </span>            :          // increase the counter:
+<span class="lineNum">     586 </span><span class="lineNoCov">          0 :          ++(*next_count);</span>
+<span class="lineNum">     587 </span><span class="lineNoCov">          0 :          pstate = rep-&gt;next.p;</span>
+<span class="lineNum">     588 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">     589 </span>            :       }
+<span class="lineNum">     590 </span>            :    }
+<span class="lineNum">     591 </span><span class="lineNoCov">          0 :    return false;</span>
+<span class="lineNum">     592 </span>            : #ifdef __BORLANDC__
+<span class="lineNum">     593 </span>            : #pragma option pop
+<span class="lineNum">     594 </span>            : #endif
+<span class="lineNum">     595 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     596 </span>            : #pragma warning(pop)
+<span class="lineNum">     597 </span>            : #endif
+<span class="lineNum">     598 </span>            : }
+<a name="599"><span class="lineNum">     599 </span>            : </a>
+<span class="lineNum">     600 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     601 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_dot_repeat_slow()</span>
+<span class="lineNum">     602 </span>            : {
+<span class="lineNum">     603 </span><span class="lineNoCov">          0 :    unsigned count = 0;</span>
+<span class="lineNum">     604 </span><span class="lineNoCov">          0 :    const re_repeat* rep = static_cast&lt;const re_repeat*&gt;(pstate);</span>
+<span class="lineNum">     605 </span><span class="lineNoCov">          0 :    re_syntax_base* psingle = rep-&gt;next.p;</span>
+<span class="lineNum">     606 </span>            :    // match compulsary repeats first:
+<span class="lineNum">     607 </span><span class="lineNoCov">          0 :    while(count &lt; rep-&gt;min)</span>
+<span class="lineNum">     608 </span>            :    {
+<span class="lineNum">     609 </span><span class="lineNoCov">          0 :       pstate = psingle;</span>
+<span class="lineNum">     610 </span><span class="lineNoCov">          0 :       if(!match_wild())</span>
+<span class="lineNum">     611 </span><span class="lineNoCov">          0 :          return false;</span>
+<span class="lineNum">     612 </span><span class="lineNoCov">          0 :       ++count;</span>
+<span class="lineNum">     613 </span>            :    }
+<span class="lineNum">     614 </span><span class="lineNoCov">          0 :    bool greedy = (rep-&gt;greedy) &amp;&amp; (!(m_match_flags &amp; regex_constants::match_any) || m_independent);   </span>
+<span class="lineNum">     615 </span><span class="lineNoCov">          0 :    if(greedy)</span>
+<span class="lineNum">     616 </span>            :    {
+<span class="lineNum">     617 </span>            :       // repeat for as long as we can:
+<span class="lineNum">     618 </span><span class="lineNoCov">          0 :       while(count &lt; rep-&gt;max)</span>
+<span class="lineNum">     619 </span>            :       {
+<span class="lineNum">     620 </span><span class="lineNoCov">          0 :          pstate = psingle;</span>
+<span class="lineNum">     621 </span><span class="lineNoCov">          0 :          if(!match_wild())</span>
+<span class="lineNum">     622 </span><span class="lineNoCov">          0 :             break;</span>
+<span class="lineNum">     623 </span><span class="lineNoCov">          0 :          ++count;</span>
+<span class="lineNum">     624 </span>            :       }
+<span class="lineNum">     625 </span>            :       // remember where we got to if this is a leading repeat:
+<span class="lineNum">     626 </span><span class="lineNoCov">          0 :       if((rep-&gt;leading) &amp;&amp; (count &lt; rep-&gt;max))</span>
+<span class="lineNum">     627 </span><span class="lineNoCov">          0 :          restart = position;</span>
+<span class="lineNum">     628 </span>            :       // push backtrack info if available:
+<span class="lineNum">     629 </span><span class="lineNoCov">          0 :       if(count - rep-&gt;min)</span>
+<span class="lineNum">     630 </span><span class="lineNoCov">          0 :          push_single_repeat(count, rep, position, saved_state_greedy_single_repeat);</span>
+<span class="lineNum">     631 </span>            :       // jump to next state:
+<span class="lineNum">     632 </span><span class="lineNoCov">          0 :       pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">     633 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">     634 </span>            :    }
+<span class="lineNum">     635 </span>            :    else
+<span class="lineNum">     636 </span>            :    {
+<span class="lineNum">     637 </span>            :       // non-greedy, push state and return true if we can skip:
+<span class="lineNum">     638 </span><span class="lineNoCov">          0 :       if(count &lt; rep-&gt;max)</span>
+<span class="lineNum">     639 </span><span class="lineNoCov">          0 :          push_single_repeat(count, rep, position, saved_state_rep_slow_dot);</span>
+<span class="lineNum">     640 </span><span class="lineNoCov">          0 :       pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">     641 </span><span class="lineNoCov">          0 :       return (position == last) ? (rep-&gt;can_be_null &amp; mask_skip) : can_start(*position, rep-&gt;_map, mask_skip);</span>
+<span class="lineNum">     642 </span>            :    }
+<span class="lineNum">     643 </span>            : }
+<a name="644"><span class="lineNum">     644 </span>            : </a>
+<span class="lineNum">     645 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     646 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_dot_repeat_fast()</span>
+<span class="lineNum">     647 </span>            : {
+<span class="lineNum">     648 </span><span class="lineNoCov">          0 :    if(m_match_flags &amp; match_not_dot_null)</span>
+<span class="lineNum">     649 </span><span class="lineNoCov">          0 :       return match_dot_repeat_slow();</span>
+<span class="lineNum">     650 </span><span class="lineNoCov">          0 :    if((static_cast&lt;const re_dot*&gt;(pstate-&gt;next.p)-&gt;mask &amp; match_any_mask) == 0)</span>
+<span class="lineNum">     651 </span><span class="lineNoCov">          0 :       return match_dot_repeat_slow();</span>
+<span class="lineNum">     652 </span>            : 
+<span class="lineNum">     653 </span><span class="lineNoCov">          0 :    const re_repeat* rep = static_cast&lt;const re_repeat*&gt;(pstate);</span>
+<span class="lineNum">     654 </span><span class="lineNoCov">          0 :    bool greedy = (rep-&gt;greedy) &amp;&amp; (!(m_match_flags &amp; regex_constants::match_any) || m_independent);   </span>
+<span class="lineNum">     655 </span><span class="lineNoCov">          0 :    unsigned count = static_cast&lt;unsigned&gt;((std::min)(static_cast&lt;unsigned&gt;(::boost::re_detail::distance(position, last)), static_cast&lt;unsigned&gt;(greedy ? rep-&gt;max : rep-&gt;min)));</span>
+<span class="lineNum">     656 </span><span class="lineNoCov">          0 :    if(rep-&gt;min &gt; count)</span>
+<span class="lineNum">     657 </span>            :    {
+<span class="lineNum">     658 </span><span class="lineNoCov">          0 :       position = last;</span>
+<span class="lineNum">     659 </span><span class="lineNoCov">          0 :       return false;  // not enough text left to match</span>
+<span class="lineNum">     660 </span>            :    }
+<span class="lineNum">     661 </span><span class="lineNoCov">          0 :    std::advance(position, count);</span>
+<span class="lineNum">     662 </span>            : 
+<span class="lineNum">     663 </span><span class="lineNoCov">          0 :    if(greedy)</span>
+<span class="lineNum">     664 </span>            :    {
+<span class="lineNum">     665 </span><span class="lineNoCov">          0 :       if((rep-&gt;leading) &amp;&amp; (count &lt; rep-&gt;max))</span>
+<span class="lineNum">     666 </span><span class="lineNoCov">          0 :          restart = position;</span>
+<span class="lineNum">     667 </span>            :       // push backtrack info if available:
+<span class="lineNum">     668 </span><span class="lineNoCov">          0 :       if(count - rep-&gt;min)</span>
+<span class="lineNum">     669 </span><span class="lineNoCov">          0 :          push_single_repeat(count, rep, position, saved_state_greedy_single_repeat);</span>
+<span class="lineNum">     670 </span>            :       // jump to next state:
+<span class="lineNum">     671 </span><span class="lineNoCov">          0 :       pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">     672 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">     673 </span>            :    }
+<span class="lineNum">     674 </span>            :    else
+<span class="lineNum">     675 </span>            :    {
+<span class="lineNum">     676 </span>            :       // non-greedy, push state and return true if we can skip:
+<span class="lineNum">     677 </span><span class="lineNoCov">          0 :       if(count &lt; rep-&gt;max)</span>
+<span class="lineNum">     678 </span><span class="lineNoCov">          0 :          push_single_repeat(count, rep, position, saved_state_rep_fast_dot);</span>
+<span class="lineNum">     679 </span><span class="lineNoCov">          0 :       pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">     680 </span><span class="lineNoCov">          0 :       return (position == last) ? (rep-&gt;can_be_null &amp; mask_skip) : can_start(*position, rep-&gt;_map, mask_skip);</span>
+<span class="lineNum">     681 </span>            :    }
+<span class="lineNum">     682 </span>            : }
+<a name="683"><span class="lineNum">     683 </span>            : </a>
+<span class="lineNum">     684 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     685 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_char_repeat()</span>
+<span class="lineNum">     686 </span>            : {
+<span class="lineNum">     687 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     688 </span>            : #pragma warning(push)
+<span class="lineNum">     689 </span>            : #pragma warning(disable:4127)
+<span class="lineNum">     690 </span>            : #endif
+<span class="lineNum">     691 </span>            : #ifdef __BORLANDC__
+<span class="lineNum">     692 </span>            : #pragma option push -w-8008 -w-8066 -w-8004
+<span class="lineNum">     693 </span>            : #endif
+<span class="lineNum">     694 </span><span class="lineNoCov">          0 :    const re_repeat* rep = static_cast&lt;const re_repeat*&gt;(pstate);</span>
+<span class="lineNum">     695 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(1 == static_cast&lt;const re_literal*&gt;(rep-&gt;next.p)-&gt;length);</span>
+<span class="lineNum">     696 </span><span class="lineNoCov">          0 :    const char_type what = *reinterpret_cast&lt;const char_type*&gt;(static_cast&lt;const re_literal*&gt;(rep-&gt;next.p) + 1);</span>
+<span class="lineNum">     697 </span><span class="lineNoCov">          0 :    std::size_t count = 0;</span>
+<span class="lineNum">     698 </span>            :    //
+<span class="lineNum">     699 </span>            :    // start by working out how much we can skip:
+<span class="lineNum">     700 </span>            :    //
+<span class="lineNum">     701 </span><span class="lineNoCov">          0 :    bool greedy = (rep-&gt;greedy) &amp;&amp; (!(m_match_flags &amp; regex_constants::match_any) || m_independent);   </span>
+<span class="lineNum">     702 </span><span class="lineNoCov">          0 :    std::size_t desired = greedy ? rep-&gt;max : rep-&gt;min;</span>
+<span class="lineNum">     703 </span>            :    if(::boost::is_random_access_iterator&lt;BidiIterator&gt;::value)
+<span class="lineNum">     704 </span>            :    {
+<span class="lineNum">     705 </span><span class="lineNoCov">          0 :       BidiIterator end = position;</span>
+<span class="lineNum">     706 </span>            :       // Move end forward by &quot;desired&quot;, preferably without using distance or advance if we can
+<span class="lineNum">     707 </span>            :       // as these can be slow for some iterator types.
+<span class="lineNum">     708 </span><span class="lineNoCov">          0 :       std::size_t len = (desired == (std::numeric_limits&lt;std::size_t&gt;::max)()) ? 0u : ::boost::re_detail::distance(position, last);</span>
+<span class="lineNum">     709 </span><span class="lineNoCov">          0 :       if(desired &gt;= len)</span>
+<span class="lineNum">     710 </span><span class="lineNoCov">          0 :          end = last;</span>
+<span class="lineNum">     711 </span>            :       else
+<span class="lineNum">     712 </span><span class="lineNoCov">          0 :          std::advance(end, desired);</span>
+<span class="lineNum">     713 </span><span class="lineNoCov">          0 :       BidiIterator origin(position);</span>
+<span class="lineNum">     714 </span><span class="lineNoCov">          0 :       while((position != end) &amp;&amp; (traits_inst.translate(*position, icase) == what))</span>
+<span class="lineNum">     715 </span>            :       {
+<span class="lineNum">     716 </span><span class="lineNoCov">          0 :          ++position;</span>
+<span class="lineNum">     717 </span>            :       }
+<span class="lineNum">     718 </span><span class="lineNoCov">          0 :       count = (unsigned)::boost::re_detail::distance(origin, position);</span>
+<span class="lineNum">     719 </span>            :    }
+<span class="lineNum">     720 </span>            :    else
+<span class="lineNum">     721 </span>            :    {
+<span class="lineNum">     722 </span>            :       while((count &lt; desired) &amp;&amp; (position != last) &amp;&amp; (traits_inst.translate(*position, icase) == what))
+<span class="lineNum">     723 </span>            :       {
+<span class="lineNum">     724 </span>            :          ++position;
+<span class="lineNum">     725 </span>            :          ++count;
+<span class="lineNum">     726 </span>            :       }
+<span class="lineNum">     727 </span>            :    }
+<span class="lineNum">     728 </span>            : 
+<span class="lineNum">     729 </span><span class="lineNoCov">          0 :    if(count &lt; rep-&gt;min)</span>
+<span class="lineNum">     730 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">     731 </span>            : 
+<span class="lineNum">     732 </span><span class="lineNoCov">          0 :    if(greedy)</span>
+<span class="lineNum">     733 </span>            :    {
+<span class="lineNum">     734 </span><span class="lineNoCov">          0 :       if((rep-&gt;leading) &amp;&amp; (count &lt; rep-&gt;max))</span>
+<span class="lineNum">     735 </span><span class="lineNoCov">          0 :          restart = position;</span>
+<span class="lineNum">     736 </span>            :       // push backtrack info if available:
+<span class="lineNum">     737 </span><span class="lineNoCov">          0 :       if(count - rep-&gt;min)</span>
+<span class="lineNum">     738 </span><span class="lineNoCov">          0 :          push_single_repeat(count, rep, position, saved_state_greedy_single_repeat);</span>
+<span class="lineNum">     739 </span>            :       // jump to next state:
+<span class="lineNum">     740 </span><span class="lineNoCov">          0 :       pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">     741 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">     742 </span>            :    }
+<span class="lineNum">     743 </span>            :    else
+<span class="lineNum">     744 </span>            :    {
+<span class="lineNum">     745 </span>            :       // non-greedy, push state and return true if we can skip:
+<span class="lineNum">     746 </span><span class="lineNoCov">          0 :       if(count &lt; rep-&gt;max)</span>
+<span class="lineNum">     747 </span><span class="lineNoCov">          0 :          push_single_repeat(count, rep, position, saved_state_rep_char);</span>
+<span class="lineNum">     748 </span><span class="lineNoCov">          0 :       pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">     749 </span><span class="lineNoCov">          0 :       return (position == last) ? (rep-&gt;can_be_null &amp; mask_skip) : can_start(*position, rep-&gt;_map, mask_skip);</span>
+<span class="lineNum">     750 </span>            :    }
+<span class="lineNum">     751 </span>            : #ifdef __BORLANDC__
+<span class="lineNum">     752 </span>            : #pragma option pop
+<span class="lineNum">     753 </span>            : #endif
+<span class="lineNum">     754 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     755 </span>            : #pragma warning(pop)
+<span class="lineNum">     756 </span>            : #endif
+<span class="lineNum">     757 </span>            : }
+<a name="758"><span class="lineNum">     758 </span>            : </a>
+<span class="lineNum">     759 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     760 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_set_repeat()</span>
+<span class="lineNum">     761 </span>            : {
+<span class="lineNum">     762 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     763 </span>            : #pragma warning(push)
+<span class="lineNum">     764 </span>            : #pragma warning(disable:4127)
+<span class="lineNum">     765 </span>            : #endif
+<span class="lineNum">     766 </span>            : #ifdef __BORLANDC__
+<span class="lineNum">     767 </span>            : #pragma option push -w-8008 -w-8066 -w-8004
+<span class="lineNum">     768 </span>            : #endif
+<span class="lineNum">     769 </span><span class="lineNoCov">          0 :    const re_repeat* rep = static_cast&lt;const re_repeat*&gt;(pstate);</span>
+<span class="lineNum">     770 </span><span class="lineNoCov">          0 :    const unsigned char* map = static_cast&lt;const re_set*&gt;(rep-&gt;next.p)-&gt;_map;</span>
+<span class="lineNum">     771 </span><span class="lineNoCov">          0 :    std::size_t count = 0;</span>
+<span class="lineNum">     772 </span>            :    //
+<span class="lineNum">     773 </span>            :    // start by working out how much we can skip:
+<span class="lineNum">     774 </span>            :    //
+<span class="lineNum">     775 </span><span class="lineNoCov">          0 :    bool greedy = (rep-&gt;greedy) &amp;&amp; (!(m_match_flags &amp; regex_constants::match_any) || m_independent);   </span>
+<span class="lineNum">     776 </span><span class="lineNoCov">          0 :    std::size_t desired = greedy ? rep-&gt;max : rep-&gt;min;</span>
+<span class="lineNum">     777 </span>            :    if(::boost::is_random_access_iterator&lt;BidiIterator&gt;::value)
+<span class="lineNum">     778 </span>            :    {
+<span class="lineNum">     779 </span><span class="lineNoCov">          0 :       BidiIterator end = position;</span>
+<span class="lineNum">     780 </span>            :       // Move end forward by &quot;desired&quot;, preferably without using distance or advance if we can
+<span class="lineNum">     781 </span>            :       // as these can be slow for some iterator types.
+<span class="lineNum">     782 </span><span class="lineNoCov">          0 :       std::size_t len = (desired == (std::numeric_limits&lt;std::size_t&gt;::max)()) ? 0u : ::boost::re_detail::distance(position, last);</span>
+<span class="lineNum">     783 </span><span class="lineNoCov">          0 :       if(desired &gt;= len)</span>
+<span class="lineNum">     784 </span><span class="lineNoCov">          0 :          end = last;</span>
+<span class="lineNum">     785 </span>            :       else
+<span class="lineNum">     786 </span><span class="lineNoCov">          0 :          std::advance(end, desired);</span>
+<span class="lineNum">     787 </span><span class="lineNoCov">          0 :       BidiIterator origin(position);</span>
+<span class="lineNum">     788 </span><span class="lineNoCov">          0 :       while((position != end) &amp;&amp; map[static_cast&lt;unsigned char&gt;(traits_inst.translate(*position, icase))])</span>
+<span class="lineNum">     789 </span>            :       {
+<span class="lineNum">     790 </span><span class="lineNoCov">          0 :          ++position;</span>
+<span class="lineNum">     791 </span>            :       }
+<span class="lineNum">     792 </span><span class="lineNoCov">          0 :       count = (unsigned)::boost::re_detail::distance(origin, position);</span>
+<span class="lineNum">     793 </span>            :    }
+<span class="lineNum">     794 </span>            :    else
+<span class="lineNum">     795 </span>            :    {
+<span class="lineNum">     796 </span>            :       while((count &lt; desired) &amp;&amp; (position != last) &amp;&amp; map[static_cast&lt;unsigned char&gt;(traits_inst.translate(*position, icase))])
+<span class="lineNum">     797 </span>            :       {
+<span class="lineNum">     798 </span>            :          ++position;
+<span class="lineNum">     799 </span>            :          ++count;
+<span class="lineNum">     800 </span>            :       }
+<span class="lineNum">     801 </span>            :    }
+<span class="lineNum">     802 </span>            : 
+<span class="lineNum">     803 </span><span class="lineNoCov">          0 :    if(count &lt; rep-&gt;min)</span>
+<span class="lineNum">     804 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">     805 </span>            : 
+<span class="lineNum">     806 </span><span class="lineNoCov">          0 :    if(greedy)</span>
+<span class="lineNum">     807 </span>            :    {
+<span class="lineNum">     808 </span><span class="lineNoCov">          0 :       if((rep-&gt;leading) &amp;&amp; (count &lt; rep-&gt;max))</span>
+<span class="lineNum">     809 </span><span class="lineNoCov">          0 :          restart = position;</span>
+<span class="lineNum">     810 </span>            :       // push backtrack info if available:
+<span class="lineNum">     811 </span><span class="lineNoCov">          0 :       if(count - rep-&gt;min)</span>
+<span class="lineNum">     812 </span><span class="lineNoCov">          0 :          push_single_repeat(count, rep, position, saved_state_greedy_single_repeat);</span>
+<span class="lineNum">     813 </span>            :       // jump to next state:
+<span class="lineNum">     814 </span><span class="lineNoCov">          0 :       pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">     815 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">     816 </span>            :    }
+<span class="lineNum">     817 </span>            :    else
+<span class="lineNum">     818 </span>            :    {
+<span class="lineNum">     819 </span>            :       // non-greedy, push state and return true if we can skip:
+<span class="lineNum">     820 </span><span class="lineNoCov">          0 :       if(count &lt; rep-&gt;max)</span>
+<span class="lineNum">     821 </span><span class="lineNoCov">          0 :          push_single_repeat(count, rep, position, saved_state_rep_short_set);</span>
+<span class="lineNum">     822 </span><span class="lineNoCov">          0 :       pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">     823 </span><span class="lineNoCov">          0 :       return (position == last) ? (rep-&gt;can_be_null &amp; mask_skip) : can_start(*position, rep-&gt;_map, mask_skip);</span>
+<span class="lineNum">     824 </span>            :    }
+<span class="lineNum">     825 </span>            : #ifdef __BORLANDC__
+<span class="lineNum">     826 </span>            : #pragma option pop
+<span class="lineNum">     827 </span>            : #endif
+<span class="lineNum">     828 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     829 </span>            : #pragma warning(pop)
+<span class="lineNum">     830 </span>            : #endif
+<span class="lineNum">     831 </span>            : }
+<a name="832"><span class="lineNum">     832 </span>            : </a>
+<span class="lineNum">     833 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     834 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_long_set_repeat()</span>
+<span class="lineNum">     835 </span>            : {
+<span class="lineNum">     836 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     837 </span>            : #pragma warning(push)
+<span class="lineNum">     838 </span>            : #pragma warning(disable:4127)
+<span class="lineNum">     839 </span>            : #endif
+<span class="lineNum">     840 </span>            : #ifdef __BORLANDC__
+<span class="lineNum">     841 </span>            : #pragma option push -w-8008 -w-8066 -w-8004
+<span class="lineNum">     842 </span>            : #endif
+<span class="lineNum">     843 </span>            :    typedef typename traits::char_class_type m_type;
+<span class="lineNum">     844 </span><span class="lineNoCov">          0 :    const re_repeat* rep = static_cast&lt;const re_repeat*&gt;(pstate);</span>
+<span class="lineNum">     845 </span><span class="lineNoCov">          0 :    const re_set_long&lt;m_type&gt;* set = static_cast&lt;const re_set_long&lt;m_type&gt;*&gt;(pstate-&gt;next.p);</span>
+<span class="lineNum">     846 </span><span class="lineNoCov">          0 :    std::size_t count = 0;</span>
+<span class="lineNum">     847 </span>            :    //
+<span class="lineNum">     848 </span>            :    // start by working out how much we can skip:
+<span class="lineNum">     849 </span>            :    //
+<span class="lineNum">     850 </span><span class="lineNoCov">          0 :    bool greedy = (rep-&gt;greedy) &amp;&amp; (!(m_match_flags &amp; regex_constants::match_any) || m_independent);   </span>
+<span class="lineNum">     851 </span><span class="lineNoCov">          0 :    std::size_t desired = greedy ? rep-&gt;max : rep-&gt;min;</span>
+<span class="lineNum">     852 </span>            :    if(::boost::is_random_access_iterator&lt;BidiIterator&gt;::value)
+<span class="lineNum">     853 </span>            :    {
+<span class="lineNum">     854 </span><span class="lineNoCov">          0 :       BidiIterator end = position;</span>
+<span class="lineNum">     855 </span>            :       // Move end forward by &quot;desired&quot;, preferably without using distance or advance if we can
+<span class="lineNum">     856 </span>            :       // as these can be slow for some iterator types.
+<span class="lineNum">     857 </span><span class="lineNoCov">          0 :       std::size_t len = (desired == (std::numeric_limits&lt;std::size_t&gt;::max)()) ? 0u : ::boost::re_detail::distance(position, last);</span>
+<span class="lineNum">     858 </span><span class="lineNoCov">          0 :       if(desired &gt;= len)</span>
+<span class="lineNum">     859 </span><span class="lineNoCov">          0 :          end = last;</span>
+<span class="lineNum">     860 </span>            :       else
+<span class="lineNum">     861 </span><span class="lineNoCov">          0 :          std::advance(end, desired);</span>
+<span class="lineNum">     862 </span><span class="lineNoCov">          0 :       BidiIterator origin(position);</span>
+<span class="lineNum">     863 </span><span class="lineNoCov">          0 :       while((position != end) &amp;&amp; (position != re_is_set_member(position, last, set, re.get_data(), icase)))</span>
+<span class="lineNum">     864 </span>            :       {
+<span class="lineNum">     865 </span><span class="lineNoCov">          0 :          ++position;</span>
+<span class="lineNum">     866 </span>            :       }
+<span class="lineNum">     867 </span><span class="lineNoCov">          0 :       count = (unsigned)::boost::re_detail::distance(origin, position);</span>
+<span class="lineNum">     868 </span>            :    }
+<span class="lineNum">     869 </span>            :    else
+<span class="lineNum">     870 </span>            :    {
+<span class="lineNum">     871 </span>            :       while((count &lt; desired) &amp;&amp; (position != last) &amp;&amp; (position != re_is_set_member(position, last, set, re.get_data(), icase)))
+<span class="lineNum">     872 </span>            :       {
+<span class="lineNum">     873 </span>            :          ++position;
+<span class="lineNum">     874 </span>            :          ++count;
+<span class="lineNum">     875 </span>            :       }
+<span class="lineNum">     876 </span>            :    }
+<span class="lineNum">     877 </span>            : 
+<span class="lineNum">     878 </span><span class="lineNoCov">          0 :    if(count &lt; rep-&gt;min)</span>
+<span class="lineNum">     879 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">     880 </span>            : 
+<span class="lineNum">     881 </span><span class="lineNoCov">          0 :    if(greedy)</span>
+<span class="lineNum">     882 </span>            :    {
+<span class="lineNum">     883 </span><span class="lineNoCov">          0 :       if((rep-&gt;leading) &amp;&amp; (count &lt; rep-&gt;max))</span>
+<span class="lineNum">     884 </span><span class="lineNoCov">          0 :          restart = position;</span>
+<span class="lineNum">     885 </span>            :       // push backtrack info if available:
+<span class="lineNum">     886 </span><span class="lineNoCov">          0 :       if(count - rep-&gt;min)</span>
+<span class="lineNum">     887 </span><span class="lineNoCov">          0 :          push_single_repeat(count, rep, position, saved_state_greedy_single_repeat);</span>
+<span class="lineNum">     888 </span>            :       // jump to next state:
+<span class="lineNum">     889 </span><span class="lineNoCov">          0 :       pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">     890 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">     891 </span>            :    }
+<span class="lineNum">     892 </span>            :    else
+<span class="lineNum">     893 </span>            :    {
+<span class="lineNum">     894 </span>            :       // non-greedy, push state and return true if we can skip:
+<span class="lineNum">     895 </span><span class="lineNoCov">          0 :       if(count &lt; rep-&gt;max)</span>
+<span class="lineNum">     896 </span><span class="lineNoCov">          0 :          push_single_repeat(count, rep, position, saved_state_rep_long_set);</span>
+<span class="lineNum">     897 </span><span class="lineNoCov">          0 :       pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">     898 </span><span class="lineNoCov">          0 :       return (position == last) ? (rep-&gt;can_be_null &amp; mask_skip) : can_start(*position, rep-&gt;_map, mask_skip);</span>
+<span class="lineNum">     899 </span>            :    }
+<span class="lineNum">     900 </span>            : #ifdef __BORLANDC__
+<span class="lineNum">     901 </span>            : #pragma option pop
+<span class="lineNum">     902 </span>            : #endif
+<span class="lineNum">     903 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">     904 </span>            : #pragma warning(pop)
+<span class="lineNum">     905 </span>            : #endif
+<span class="lineNum">     906 </span>            : }
+<a name="907"><span class="lineNum">     907 </span>            : </a>
+<span class="lineNum">     908 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     909 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_recursion()</span>
+<span class="lineNum">     910 </span>            : {
+<span class="lineNum">     911 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(pstate-&gt;type == syntax_element_recurse);</span>
+<span class="lineNum">     912 </span>            :    //
+<span class="lineNum">     913 </span>            :    // Backup call stack:
+<span class="lineNum">     914 </span>            :    //
+<span class="lineNum">     915 </span><span class="lineNoCov">          0 :    push_recursion_pop();</span>
+<span class="lineNum">     916 </span>            :    //
+<span class="lineNum">     917 </span>            :    // Set new call stack:
+<span class="lineNum">     918 </span>            :    //
+<span class="lineNum">     919 </span><span class="lineNoCov">          0 :    if(recursion_stack.capacity() == 0)</span>
+<span class="lineNum">     920 </span>            :    {
+<span class="lineNum">     921 </span><span class="lineNoCov">          0 :       recursion_stack.reserve(50);</span>
+<span class="lineNum">     922 </span>            :    }
+<span class="lineNum">     923 </span><span class="lineNoCov">          0 :    recursion_stack.push_back(recursion_info&lt;results_type&gt;());</span>
+<span class="lineNum">     924 </span><span class="lineNoCov">          0 :    recursion_stack.back().preturn_address = pstate-&gt;next.p;</span>
+<span class="lineNum">     925 </span><span class="lineNoCov">          0 :    recursion_stack.back().results = *m_presult;</span>
+<span class="lineNum">     926 </span><span class="lineNoCov">          0 :    if(static_cast&lt;const re_recurse*&gt;(pstate)-&gt;state_id &gt; 0)</span>
+<span class="lineNum">     927 </span>            :    {
+<span class="lineNum">     928 </span><span class="lineNoCov">          0 :       push_repeater_count(static_cast&lt;const re_recurse*&gt;(pstate)-&gt;state_id, &amp;next_count);</span>
+<span class="lineNum">     929 </span>            :    }
+<span class="lineNum">     930 </span><span class="lineNoCov">          0 :    pstate = static_cast&lt;const re_jump*&gt;(pstate)-&gt;alt.p;</span>
+<span class="lineNum">     931 </span><span class="lineNoCov">          0 :    recursion_stack.back().idx = static_cast&lt;const re_brace*&gt;(pstate)-&gt;index;</span>
+<span class="lineNum">     932 </span>            : 
+<span class="lineNum">     933 </span><span class="lineNoCov">          0 :    return true;</span>
+<span class="lineNum">     934 </span>            : }
+<a name="935"><span class="lineNum">     935 </span>            : </a>
+<span class="lineNum">     936 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     937 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_endmark()</span>
+<span class="lineNum">     938 </span>            : {
+<span class="lineNum">     939 </span><span class="lineNoCov">          0 :    int index = static_cast&lt;const re_brace*&gt;(pstate)-&gt;index;</span>
+<span class="lineNum">     940 </span><span class="lineNoCov">          0 :    icase = static_cast&lt;const re_brace*&gt;(pstate)-&gt;icase;</span>
+<span class="lineNum">     941 </span><span class="lineNoCov">          0 :    if(index &gt; 0)</span>
+<span class="lineNum">     942 </span>            :    {
+<span class="lineNum">     943 </span><span class="lineNoCov">          0 :       if((m_match_flags &amp; match_nosubs) == 0)</span>
+<span class="lineNum">     944 </span>            :       {
+<span class="lineNum">     945 </span><span class="lineNoCov">          0 :          m_presult-&gt;set_second(position, index);</span>
+<span class="lineNum">     946 </span>            :       }
+<span class="lineNum">     947 </span><span class="lineNoCov">          0 :       if(!recursion_stack.empty())</span>
+<span class="lineNum">     948 </span>            :       {
+<span class="lineNum">     949 </span><span class="lineNoCov">          0 :          if(index == recursion_stack.back().idx)</span>
+<span class="lineNum">     950 </span>            :          {
+<span class="lineNum">     951 </span><span class="lineNoCov">          0 :             pstate = recursion_stack.back().preturn_address;</span>
+<span class="lineNum">     952 </span><span class="lineNoCov">          0 :             *m_presult = recursion_stack.back().results;</span>
+<span class="lineNum">     953 </span><span class="lineNoCov">          0 :             push_recursion(recursion_stack.back().idx, recursion_stack.back().preturn_address, &amp;recursion_stack.back().results);</span>
+<span class="lineNum">     954 </span><span class="lineNoCov">          0 :             recursion_stack.pop_back();</span>
+<span class="lineNum">     955 </span>            :          }
+<span class="lineNum">     956 </span>            :       }
+<span class="lineNum">     957 </span>            :    }
+<span class="lineNum">     958 </span><span class="lineNoCov">          0 :    else if((index &lt; 0) &amp;&amp; (index != -4))</span>
+<span class="lineNum">     959 </span>            :    {
+<span class="lineNum">     960 </span>            :       // matched forward lookahead:
+<span class="lineNum">     961 </span><span class="lineNoCov">          0 :       pstate = 0;</span>
+<span class="lineNum">     962 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">     963 </span>            :    }
+<span class="lineNum">     964 </span><span class="lineNoCov">          0 :    pstate = pstate-&gt;next.p;</span>
+<span class="lineNum">     965 </span><span class="lineNoCov">          0 :    return true;</span>
+<span class="lineNum">     966 </span>            : }
+<a name="967"><span class="lineNum">     967 </span>            : </a>
+<span class="lineNum">     968 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">     969 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::match_match()</span>
+<span class="lineNum">     970 </span>            : {
+<span class="lineNum">     971 </span><span class="lineNoCov">          0 :    if(!recursion_stack.empty())</span>
+<span class="lineNum">     972 </span>            :    {
+<span class="lineNum">     973 </span><span class="lineNoCov">          0 :       BOOST_ASSERT(0 == recursion_stack.back().idx);</span>
+<span class="lineNum">     974 </span><span class="lineNoCov">          0 :       pstate = recursion_stack.back().preturn_address;</span>
+<span class="lineNum">     975 </span><span class="lineNoCov">          0 :       *m_presult = recursion_stack.back().results;</span>
+<span class="lineNum">     976 </span><span class="lineNoCov">          0 :       push_recursion(recursion_stack.back().idx, recursion_stack.back().preturn_address, &amp;recursion_stack.back().results);</span>
+<span class="lineNum">     977 </span><span class="lineNoCov">          0 :       recursion_stack.pop_back();</span>
+<span class="lineNum">     978 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">     979 </span>            :    }
+<span class="lineNum">     980 </span><span class="lineNoCov">          0 :    if((m_match_flags &amp; match_not_null) &amp;&amp; (position == (*m_presult)[0].first))</span>
+<span class="lineNum">     981 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">     982 </span><span class="lineNoCov">          0 :    if((m_match_flags &amp; match_all) &amp;&amp; (position != last))</span>
+<span class="lineNum">     983 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">     984 </span><span class="lineNoCov">          0 :    if((m_match_flags &amp; regex_constants::match_not_initial_null) &amp;&amp; (position == search_base))</span>
+<span class="lineNum">     985 </span><span class="lineNoCov">          0 :       return false;</span>
+<span class="lineNum">     986 </span><span class="lineNoCov">          0 :    m_presult-&gt;set_second(position);</span>
+<span class="lineNum">     987 </span><span class="lineNoCov">          0 :    pstate = 0;</span>
+<span class="lineNum">     988 </span><span class="lineNoCov">          0 :    m_has_found_match = true;</span>
+<span class="lineNum">     989 </span><span class="lineNoCov">          0 :    if((m_match_flags &amp; match_posix) == match_posix)</span>
+<span class="lineNum">     990 </span>            :    {
+<span class="lineNum">     991 </span><span class="lineNoCov">          0 :       m_result.maybe_assign(*m_presult);</span>
+<span class="lineNum">     992 </span><span class="lineNoCov">          0 :       if((m_match_flags &amp; match_any) == 0)</span>
+<span class="lineNum">     993 </span><span class="lineNoCov">          0 :          return false;</span>
+<span class="lineNum">     994 </span>            :    }
+<span class="lineNum">     995 </span>            : #ifdef BOOST_REGEX_MATCH_EXTRA
+<span class="lineNum">     996 </span>            :    if(match_extra &amp; m_match_flags)
+<span class="lineNum">     997 </span>            :    {
+<span class="lineNum">     998 </span>            :       for(unsigned i = 0; i &lt; m_presult-&gt;size(); ++i)
+<span class="lineNum">     999 </span>            :          if((*m_presult)[i].matched)
+<span class="lineNum">    1000 </span>            :             ((*m_presult)[i]).get_captures().push_back((*m_presult)[i]);
+<span class="lineNum">    1001 </span>            :    }
+<span class="lineNum">    1002 </span>            : #endif
+<span class="lineNum">    1003 </span><span class="lineNoCov">          0 :    return true;</span>
+<span class="lineNum">    1004 </span>            : }
+<span class="lineNum">    1005 </span>            : 
+<span class="lineNum">    1006 </span>            : /****************************************************************************
+<span class="lineNum">    1007 </span>            : 
+<span class="lineNum">    1008 </span>            : Unwind and associated proceedures follow, these perform what normal stack
+<span class="lineNum">    1009 </span>            : unwinding does in the recursive implementation.
+<span class="lineNum">    1010 </span>            : 
+<span class="lineNum">    1011 </span>            : ****************************************************************************/
+<a name="1012"><span class="lineNum">    1012 </span>            : </a>
+<span class="lineNum">    1013 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1014 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind(bool have_match)</span>
+<span class="lineNum">    1015 </span>            : {
+<span class="lineNum">    1016 </span>            :    static unwind_proc_type const s_unwind_table[18] = 
+<span class="lineNum">    1017 </span>            :    {
+<span class="lineNum">    1018 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_end,
+<span class="lineNum">    1019 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_paren,
+<span class="lineNum">    1020 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_recursion_stopper,
+<span class="lineNum">    1021 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_assertion,
+<span class="lineNum">    1022 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_alt,
+<span class="lineNum">    1023 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_repeater_counter,
+<span class="lineNum">    1024 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_extra_block,
+<span class="lineNum">    1025 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_greedy_single_repeat,
+<span class="lineNum">    1026 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_slow_dot_repeat,
+<span class="lineNum">    1027 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_fast_dot_repeat,
+<span class="lineNum">    1028 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_char_repeat,
+<span class="lineNum">    1029 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_short_set_repeat,
+<span class="lineNum">    1030 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_long_set_repeat,
+<span class="lineNum">    1031 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_non_greedy_repeat,
+<span class="lineNum">    1032 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_recursion,
+<span class="lineNum">    1033 </span>            :       &amp;perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_recursion_pop,
+<span class="lineNum">    1034 </span>            :    };
+<span class="lineNum">    1035 </span>            : 
+<span class="lineNum">    1036 </span><span class="lineNoCov">          0 :    m_recursive_result = have_match;</span>
+<span class="lineNum">    1037 </span>            :    unwind_proc_type unwinder;
+<span class="lineNum">    1038 </span>            :    bool cont;
+<span class="lineNum">    1039 </span>            :    //
+<span class="lineNum">    1040 </span>            :    // keep unwinding our stack until we have something to do:
+<span class="lineNum">    1041 </span>            :    //
+<span class="lineNum">    1042 </span><span class="lineNoCov">          0 :    do</span>
+<span class="lineNum">    1043 </span>            :    {
+<span class="lineNum">    1044 </span><span class="lineNoCov">          0 :       unwinder = s_unwind_table[m_backup_state-&gt;state_id];</span>
+<span class="lineNum">    1045 </span><span class="lineNoCov">          0 :       cont = (this-&gt;*unwinder)(m_recursive_result);</span>
+<span class="lineNum">    1046 </span>            :    }while(cont);
+<span class="lineNum">    1047 </span>            :    //
+<span class="lineNum">    1048 </span>            :    // return true if we have more states to try:
+<span class="lineNum">    1049 </span>            :    //
+<span class="lineNum">    1050 </span><span class="lineNoCov">          0 :    return pstate ? true : false;</span>
+<span class="lineNum">    1051 </span>            : }
+<a name="1052"><span class="lineNum">    1052 </span>            : </a>
+<span class="lineNum">    1053 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1054 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_end(bool)</span>
+<span class="lineNum">    1055 </span>            : {
+<span class="lineNum">    1056 </span><span class="lineNoCov">          0 :    pstate = 0;   // nothing left to search</span>
+<span class="lineNum">    1057 </span><span class="lineNoCov">          0 :    return false; // end of stack nothing more to search</span>
+<span class="lineNum">    1058 </span>            : }
+<a name="1059"><span class="lineNum">    1059 </span>            : </a>
+<span class="lineNum">    1060 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1061 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_paren(bool have_match)</span>
+<span class="lineNum">    1062 </span>            : {
+<span class="lineNum">    1063 </span><span class="lineNoCov">          0 :    saved_matched_paren&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_matched_paren&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">    1064 </span>            :    // restore previous values if no match was found:
+<span class="lineNum">    1065 </span><span class="lineNoCov">          0 :    if(have_match == false)</span>
+<span class="lineNum">    1066 </span>            :    {
+<span class="lineNum">    1067 </span><span class="lineNoCov">          0 :       m_presult-&gt;set_first(pmp-&gt;sub.first, pmp-&gt;index, pmp-&gt;index == 0);</span>
+<span class="lineNum">    1068 </span><span class="lineNoCov">          0 :       m_presult-&gt;set_second(pmp-&gt;sub.second, pmp-&gt;index, pmp-&gt;sub.matched, pmp-&gt;index == 0);</span>
+<span class="lineNum">    1069 </span>            :    }
+<span class="lineNum">    1070 </span>            : #ifdef BOOST_REGEX_MATCH_EXTRA
+<span class="lineNum">    1071 </span>            :    //
+<span class="lineNum">    1072 </span>            :    // we have a match, push the capture information onto the stack:
+<span class="lineNum">    1073 </span>            :    //
+<span class="lineNum">    1074 </span>            :    else if(pmp-&gt;sub.matched &amp;&amp; (match_extra &amp; m_match_flags))
+<span class="lineNum">    1075 </span>            :       ((*m_presult)[pmp-&gt;index]).get_captures().push_back(pmp-&gt;sub);
+<span class="lineNum">    1076 </span>            : #endif
+<span class="lineNum">    1077 </span>            :    // unwind stack:
+<span class="lineNum">    1078 </span><span class="lineNoCov">          0 :    m_backup_state = pmp+1;</span>
+<span class="lineNum">    1079 </span><span class="lineNoCov">          0 :    boost::re_detail::inplace_destroy(pmp);</span>
+<span class="lineNum">    1080 </span><span class="lineNoCov">          0 :    return true; // keep looking</span>
+<span class="lineNum">    1081 </span>            : }
+<a name="1082"><span class="lineNum">    1082 </span>            : </a>
+<span class="lineNum">    1083 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1084 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_recursion_stopper(bool)</span>
+<span class="lineNum">    1085 </span>            : {
+<span class="lineNum">    1086 </span><span class="lineNoCov">          0 :    boost::re_detail::inplace_destroy(m_backup_state++);</span>
+<span class="lineNum">    1087 </span><span class="lineNoCov">          0 :    pstate = 0;   // nothing left to search</span>
+<span class="lineNum">    1088 </span><span class="lineNoCov">          0 :    return false; // end of stack nothing more to search</span>
+<span class="lineNum">    1089 </span>            : }
+<a name="1090"><span class="lineNum">    1090 </span>            : </a>
+<span class="lineNum">    1091 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1092 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_assertion(bool r)</span>
+<span class="lineNum">    1093 </span>            : {
+<span class="lineNum">    1094 </span><span class="lineNoCov">          0 :    saved_assertion&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_assertion&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">    1095 </span><span class="lineNoCov">          0 :    pstate = pmp-&gt;pstate;</span>
+<span class="lineNum">    1096 </span><span class="lineNoCov">          0 :    position = pmp-&gt;position;</span>
+<span class="lineNum">    1097 </span><span class="lineNoCov">          0 :    bool result = (r == pmp-&gt;positive);</span>
+<span class="lineNum">    1098 </span><span class="lineNoCov">          0 :    m_recursive_result = pmp-&gt;positive ? r : !r;</span>
+<span class="lineNum">    1099 </span><span class="lineNoCov">          0 :    boost::re_detail::inplace_destroy(pmp++);</span>
+<span class="lineNum">    1100 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">    1101 </span><span class="lineNoCov">          0 :    return !result; // return false if the assertion was matched to stop search.</span>
+<span class="lineNum">    1102 </span>            : }
+<a name="1103"><span class="lineNum">    1103 </span>            : </a>
+<span class="lineNum">    1104 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1105 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_alt(bool r)</span>
+<span class="lineNum">    1106 </span>            : {
+<span class="lineNum">    1107 </span><span class="lineNoCov">          0 :    saved_position&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_position&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">    1108 </span><span class="lineNoCov">          0 :    if(!r)</span>
+<span class="lineNum">    1109 </span>            :    {
+<span class="lineNum">    1110 </span><span class="lineNoCov">          0 :       pstate = pmp-&gt;pstate;</span>
+<span class="lineNum">    1111 </span><span class="lineNoCov">          0 :       position = pmp-&gt;position;</span>
+<span class="lineNum">    1112 </span>            :    }
+<span class="lineNum">    1113 </span><span class="lineNoCov">          0 :    boost::re_detail::inplace_destroy(pmp++);</span>
+<span class="lineNum">    1114 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">    1115 </span><span class="lineNoCov">          0 :    return r; </span>
+<span class="lineNum">    1116 </span>            : }
+<a name="1117"><span class="lineNum">    1117 </span>            : </a>
+<span class="lineNum">    1118 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1119 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_repeater_counter(bool)</span>
+<span class="lineNum">    1120 </span>            : {
+<span class="lineNum">    1121 </span><span class="lineNoCov">          0 :    saved_repeater&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_repeater&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">    1122 </span><span class="lineNoCov">          0 :    boost::re_detail::inplace_destroy(pmp++);</span>
+<span class="lineNum">    1123 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">    1124 </span><span class="lineNoCov">          0 :    return true; // keep looking</span>
+<span class="lineNum">    1125 </span>            : }
+<a name="1126"><span class="lineNum">    1126 </span>            : </a>
+<span class="lineNum">    1127 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1128 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_extra_block(bool)</span>
+<span class="lineNum">    1129 </span>            : {
+<span class="lineNum">    1130 </span><span class="lineNoCov">          0 :    saved_extra_block* pmp = static_cast&lt;saved_extra_block*&gt;(m_backup_state);</span>
+<span class="lineNum">    1131 </span><span class="lineNoCov">          0 :    void* condemmed = m_stack_base;</span>
+<span class="lineNum">    1132 </span><span class="lineNoCov">          0 :    m_stack_base = pmp-&gt;base;</span>
+<span class="lineNum">    1133 </span><span class="lineNoCov">          0 :    m_backup_state = pmp-&gt;end;</span>
+<span class="lineNum">    1134 </span><span class="lineNoCov">          0 :    boost::re_detail::inplace_destroy(pmp);</span>
+<span class="lineNum">    1135 </span><span class="lineNoCov">          0 :    put_mem_block(condemmed);</span>
+<span class="lineNum">    1136 </span><span class="lineNoCov">          0 :    return true; // keep looking</span>
+<span class="lineNum">    1137 </span>            : }
+<a name="1138"><span class="lineNum">    1138 </span>            : </a>
+<span class="lineNum">    1139 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1140 </span><span class="lineNoCov">          0 : inline void perl_matcher&lt;BidiIterator, Allocator, traits&gt;::destroy_single_repeat()</span>
+<span class="lineNum">    1141 </span>            : {
+<span class="lineNum">    1142 </span><span class="lineNoCov">          0 :    saved_single_repeat&lt;BidiIterator&gt;* p = static_cast&lt;saved_single_repeat&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">    1143 </span><span class="lineNoCov">          0 :    boost::re_detail::inplace_destroy(p++);</span>
+<span class="lineNum">    1144 </span><span class="lineNoCov">          0 :    m_backup_state = p;</span>
+<span class="lineNum">    1145 </span><span class="lineNoCov">          0 : }</span>
+<a name="1146"><span class="lineNum">    1146 </span>            : </a>
+<span class="lineNum">    1147 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1148 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_greedy_single_repeat(bool r)</span>
+<span class="lineNum">    1149 </span>            : {
+<span class="lineNum">    1150 </span><span class="lineNoCov">          0 :    saved_single_repeat&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_single_repeat&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">    1151 </span>            : 
+<span class="lineNum">    1152 </span>            :    // if we have a match, just discard this state:
+<span class="lineNum">    1153 </span><span class="lineNoCov">          0 :    if(r) </span>
+<span class="lineNum">    1154 </span>            :    {
+<span class="lineNum">    1155 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1156 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">    1157 </span>            :    }
+<span class="lineNum">    1158 </span>            : 
+<span class="lineNum">    1159 </span><span class="lineNoCov">          0 :    const re_repeat* rep = pmp-&gt;rep;</span>
+<span class="lineNum">    1160 </span><span class="lineNoCov">          0 :    std::size_t count = pmp-&gt;count;</span>
+<span class="lineNum">    1161 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;next.p != 0);</span>
+<span class="lineNum">    1162 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;alt.p != 0);</span>
+<span class="lineNum">    1163 </span>            : 
+<span class="lineNum">    1164 </span><span class="lineNoCov">          0 :    count -= rep-&gt;min;</span>
+<span class="lineNum">    1165 </span>            :    
+<span class="lineNum">    1166 </span><span class="lineNoCov">          0 :    if((m_match_flags &amp; match_partial) &amp;&amp; (position == last))</span>
+<span class="lineNum">    1167 </span><span class="lineNoCov">          0 :       m_has_partial_match = true;</span>
+<span class="lineNum">    1168 </span>            : 
+<span class="lineNum">    1169 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(count);</span>
+<span class="lineNum">    1170 </span><span class="lineNoCov">          0 :    position = pmp-&gt;last_position;</span>
+<span class="lineNum">    1171 </span>            : 
+<span class="lineNum">    1172 </span>            :    // backtrack till we can skip out:
+<span class="lineNum">    1173 </span><span class="lineNoCov">          0 :    do</span>
+<span class="lineNum">    1174 </span>            :    {
+<span class="lineNum">    1175 </span><span class="lineNoCov">          0 :       --position;</span>
+<span class="lineNum">    1176 </span><span class="lineNoCov">          0 :       --count;</span>
+<span class="lineNum">    1177 </span><span class="lineNoCov">          0 :       ++state_count;</span>
+<span class="lineNum">    1178 </span>            :    }while(count &amp;&amp; !can_start(*position, rep-&gt;_map, mask_skip));
+<span class="lineNum">    1179 </span>            : 
+<span class="lineNum">    1180 </span>            :    // if we've hit base, destroy this state:
+<span class="lineNum">    1181 </span><span class="lineNoCov">          0 :    if(count == 0)</span>
+<span class="lineNum">    1182 </span>            :    {
+<span class="lineNum">    1183 </span><span class="lineNoCov">          0 :          destroy_single_repeat();</span>
+<span class="lineNum">    1184 </span><span class="lineNoCov">          0 :          if(!can_start(*position, rep-&gt;_map, mask_skip))</span>
+<span class="lineNum">    1185 </span><span class="lineNoCov">          0 :             return true;</span>
+<span class="lineNum">    1186 </span>            :    }
+<span class="lineNum">    1187 </span>            :    else
+<span class="lineNum">    1188 </span>            :    {
+<span class="lineNum">    1189 </span><span class="lineNoCov">          0 :       pmp-&gt;count = count + rep-&gt;min;</span>
+<span class="lineNum">    1190 </span><span class="lineNoCov">          0 :       pmp-&gt;last_position = position;</span>
+<span class="lineNum">    1191 </span>            :    }
+<span class="lineNum">    1192 </span><span class="lineNoCov">          0 :    pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">    1193 </span><span class="lineNoCov">          0 :    return false;</span>
+<span class="lineNum">    1194 </span>            : }
+<a name="1195"><span class="lineNum">    1195 </span>            : </a>
+<span class="lineNum">    1196 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1197 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_slow_dot_repeat(bool r)</span>
+<span class="lineNum">    1198 </span>            : {
+<span class="lineNum">    1199 </span><span class="lineNoCov">          0 :    saved_single_repeat&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_single_repeat&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">    1200 </span>            : 
+<span class="lineNum">    1201 </span>            :    // if we have a match, just discard this state:
+<span class="lineNum">    1202 </span><span class="lineNoCov">          0 :    if(r) </span>
+<span class="lineNum">    1203 </span>            :    {
+<span class="lineNum">    1204 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1205 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">    1206 </span>            :    }
+<span class="lineNum">    1207 </span>            : 
+<span class="lineNum">    1208 </span><span class="lineNoCov">          0 :    const re_repeat* rep = pmp-&gt;rep;</span>
+<span class="lineNum">    1209 </span><span class="lineNoCov">          0 :    std::size_t count = pmp-&gt;count;</span>
+<span class="lineNum">    1210 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;type == syntax_element_dot_rep);</span>
+<span class="lineNum">    1211 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;next.p != 0);</span>
+<span class="lineNum">    1212 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;alt.p != 0);</span>
+<span class="lineNum">    1213 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;next.p-&gt;type == syntax_element_wild);</span>
+<span class="lineNum">    1214 </span>            : 
+<span class="lineNum">    1215 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(count &lt; rep-&gt;max);</span>
+<span class="lineNum">    1216 </span><span class="lineNoCov">          0 :    pstate = rep-&gt;next.p;</span>
+<span class="lineNum">    1217 </span><span class="lineNoCov">          0 :    position = pmp-&gt;last_position;</span>
+<span class="lineNum">    1218 </span>            : 
+<span class="lineNum">    1219 </span><span class="lineNoCov">          0 :    if(position != last)</span>
+<span class="lineNum">    1220 </span>            :    {
+<span class="lineNum">    1221 </span>            :       // wind forward until we can skip out of the repeat:
+<span class="lineNum">    1222 </span><span class="lineNoCov">          0 :       do</span>
+<span class="lineNum">    1223 </span>            :       {
+<span class="lineNum">    1224 </span><span class="lineNoCov">          0 :          if(!match_wild())</span>
+<span class="lineNum">    1225 </span>            :          {
+<span class="lineNum">    1226 </span>            :             // failed repeat match, discard this state and look for another:
+<span class="lineNum">    1227 </span><span class="lineNoCov">          0 :             destroy_single_repeat();</span>
+<span class="lineNum">    1228 </span><span class="lineNoCov">          0 :             return true;</span>
+<span class="lineNum">    1229 </span>            :          }
+<span class="lineNum">    1230 </span><span class="lineNoCov">          0 :          ++count;</span>
+<span class="lineNum">    1231 </span><span class="lineNoCov">          0 :          ++state_count;</span>
+<span class="lineNum">    1232 </span><span class="lineNoCov">          0 :          pstate = rep-&gt;next.p;</span>
+<span class="lineNum">    1233 </span>            :       }while((count &lt; rep-&gt;max) &amp;&amp; (position != last) &amp;&amp; !can_start(*position, rep-&gt;_map, mask_skip));
+<span class="lineNum">    1234 </span>            :    }   
+<span class="lineNum">    1235 </span><span class="lineNoCov">          0 :    if(position == last)</span>
+<span class="lineNum">    1236 </span>            :    {
+<span class="lineNum">    1237 </span>            :       // can't repeat any more, remove the pushed state: 
+<span class="lineNum">    1238 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1239 </span><span class="lineNoCov">          0 :       if((m_match_flags &amp; match_partial) &amp;&amp; (position == last) &amp;&amp; (position != search_base))</span>
+<span class="lineNum">    1240 </span><span class="lineNoCov">          0 :          m_has_partial_match = true;</span>
+<span class="lineNum">    1241 </span><span class="lineNoCov">          0 :       if(0 == (rep-&gt;can_be_null &amp; mask_skip))</span>
+<span class="lineNum">    1242 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">    1243 </span>            :    }
+<span class="lineNum">    1244 </span><span class="lineNoCov">          0 :    else if(count == rep-&gt;max)</span>
+<span class="lineNum">    1245 </span>            :    {
+<span class="lineNum">    1246 </span>            :       // can't repeat any more, remove the pushed state: 
+<span class="lineNum">    1247 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1248 </span><span class="lineNoCov">          0 :       if(!can_start(*position, rep-&gt;_map, mask_skip))</span>
+<span class="lineNum">    1249 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">    1250 </span>            :    }
+<span class="lineNum">    1251 </span>            :    else
+<span class="lineNum">    1252 </span>            :    {
+<span class="lineNum">    1253 </span><span class="lineNoCov">          0 :       pmp-&gt;count = count;</span>
+<span class="lineNum">    1254 </span><span class="lineNoCov">          0 :       pmp-&gt;last_position = position;</span>
+<span class="lineNum">    1255 </span>            :    }
+<span class="lineNum">    1256 </span><span class="lineNoCov">          0 :    pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">    1257 </span><span class="lineNoCov">          0 :    return false;</span>
+<span class="lineNum">    1258 </span>            : }
+<a name="1259"><span class="lineNum">    1259 </span>            : </a>
+<span class="lineNum">    1260 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1261 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_fast_dot_repeat(bool r)</span>
+<span class="lineNum">    1262 </span>            : {
+<span class="lineNum">    1263 </span><span class="lineNoCov">          0 :    saved_single_repeat&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_single_repeat&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">    1264 </span>            : 
+<span class="lineNum">    1265 </span>            :    // if we have a match, just discard this state:
+<span class="lineNum">    1266 </span><span class="lineNoCov">          0 :    if(r) </span>
+<span class="lineNum">    1267 </span>            :    {
+<span class="lineNum">    1268 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1269 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">    1270 </span>            :    }
+<span class="lineNum">    1271 </span>            : 
+<span class="lineNum">    1272 </span><span class="lineNoCov">          0 :    const re_repeat* rep = pmp-&gt;rep;</span>
+<span class="lineNum">    1273 </span><span class="lineNoCov">          0 :    std::size_t count = pmp-&gt;count;</span>
+<span class="lineNum">    1274 </span>            : 
+<span class="lineNum">    1275 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(count &lt; rep-&gt;max);</span>
+<span class="lineNum">    1276 </span><span class="lineNoCov">          0 :    position = pmp-&gt;last_position;</span>
+<span class="lineNum">    1277 </span><span class="lineNoCov">          0 :    if(position != last)</span>
+<span class="lineNum">    1278 </span>            :    {
+<span class="lineNum">    1279 </span>            : 
+<span class="lineNum">    1280 </span>            :       // wind forward until we can skip out of the repeat:
+<span class="lineNum">    1281 </span><span class="lineNoCov">          0 :       do</span>
+<span class="lineNum">    1282 </span>            :       {
+<span class="lineNum">    1283 </span><span class="lineNoCov">          0 :          ++position;</span>
+<span class="lineNum">    1284 </span><span class="lineNoCov">          0 :          ++count;</span>
+<span class="lineNum">    1285 </span><span class="lineNoCov">          0 :          ++state_count;</span>
+<span class="lineNum">    1286 </span>            :       }while((count &lt; rep-&gt;max) &amp;&amp; (position != last) &amp;&amp; !can_start(*position, rep-&gt;_map, mask_skip));
+<span class="lineNum">    1287 </span>            :    }
+<span class="lineNum">    1288 </span>            : 
+<span class="lineNum">    1289 </span>            :    // remember where we got to if this is a leading repeat:
+<span class="lineNum">    1290 </span><span class="lineNoCov">          0 :    if((rep-&gt;leading) &amp;&amp; (count &lt; rep-&gt;max))</span>
+<span class="lineNum">    1291 </span><span class="lineNoCov">          0 :       restart = position;</span>
+<span class="lineNum">    1292 </span><span class="lineNoCov">          0 :    if(position == last)</span>
+<span class="lineNum">    1293 </span>            :    {
+<span class="lineNum">    1294 </span>            :       // can't repeat any more, remove the pushed state: 
+<span class="lineNum">    1295 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1296 </span><span class="lineNoCov">          0 :       if((m_match_flags &amp; match_partial) &amp;&amp; (position == last) &amp;&amp; (position != search_base))</span>
+<span class="lineNum">    1297 </span><span class="lineNoCov">          0 :          m_has_partial_match = true;</span>
+<span class="lineNum">    1298 </span><span class="lineNoCov">          0 :       if(0 == (rep-&gt;can_be_null &amp; mask_skip))</span>
+<span class="lineNum">    1299 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">    1300 </span>            :    }
+<span class="lineNum">    1301 </span><span class="lineNoCov">          0 :    else if(count == rep-&gt;max)</span>
+<span class="lineNum">    1302 </span>            :    {
+<span class="lineNum">    1303 </span>            :       // can't repeat any more, remove the pushed state: 
+<span class="lineNum">    1304 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1305 </span><span class="lineNoCov">          0 :       if(!can_start(*position, rep-&gt;_map, mask_skip))</span>
+<span class="lineNum">    1306 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">    1307 </span>            :    }
+<span class="lineNum">    1308 </span>            :    else
+<span class="lineNum">    1309 </span>            :    {
+<span class="lineNum">    1310 </span><span class="lineNoCov">          0 :       pmp-&gt;count = count;</span>
+<span class="lineNum">    1311 </span><span class="lineNoCov">          0 :       pmp-&gt;last_position = position;</span>
+<span class="lineNum">    1312 </span>            :    }
+<span class="lineNum">    1313 </span><span class="lineNoCov">          0 :    pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">    1314 </span><span class="lineNoCov">          0 :    return false;</span>
+<span class="lineNum">    1315 </span>            : }
+<a name="1316"><span class="lineNum">    1316 </span>            : </a>
+<span class="lineNum">    1317 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1318 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_char_repeat(bool r)</span>
+<span class="lineNum">    1319 </span>            : {
+<span class="lineNum">    1320 </span><span class="lineNoCov">          0 :    saved_single_repeat&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_single_repeat&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">    1321 </span>            : 
+<span class="lineNum">    1322 </span>            :    // if we have a match, just discard this state:
+<span class="lineNum">    1323 </span><span class="lineNoCov">          0 :    if(r) </span>
+<span class="lineNum">    1324 </span>            :    {
+<span class="lineNum">    1325 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1326 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">    1327 </span>            :    }
+<span class="lineNum">    1328 </span>            : 
+<span class="lineNum">    1329 </span><span class="lineNoCov">          0 :    const re_repeat* rep = pmp-&gt;rep;</span>
+<span class="lineNum">    1330 </span><span class="lineNoCov">          0 :    std::size_t count = pmp-&gt;count;</span>
+<span class="lineNum">    1331 </span><span class="lineNoCov">          0 :    pstate = rep-&gt;next.p;</span>
+<span class="lineNum">    1332 </span><span class="lineNoCov">          0 :    const char_type what = *reinterpret_cast&lt;const char_type*&gt;(static_cast&lt;const re_literal*&gt;(pstate) + 1);</span>
+<span class="lineNum">    1333 </span><span class="lineNoCov">          0 :    position = pmp-&gt;last_position;</span>
+<span class="lineNum">    1334 </span>            : 
+<span class="lineNum">    1335 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;type == syntax_element_char_rep);</span>
+<span class="lineNum">    1336 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;next.p != 0);</span>
+<span class="lineNum">    1337 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;alt.p != 0);</span>
+<span class="lineNum">    1338 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;next.p-&gt;type == syntax_element_literal);</span>
+<span class="lineNum">    1339 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(count &lt; rep-&gt;max);</span>
+<span class="lineNum">    1340 </span>            : 
+<span class="lineNum">    1341 </span><span class="lineNoCov">          0 :    if(position != last)</span>
+<span class="lineNum">    1342 </span>            :    {
+<span class="lineNum">    1343 </span>            :       // wind forward until we can skip out of the repeat:
+<span class="lineNum">    1344 </span><span class="lineNoCov">          0 :       do</span>
+<span class="lineNum">    1345 </span>            :       {
+<span class="lineNum">    1346 </span><span class="lineNoCov">          0 :          if(traits_inst.translate(*position, icase) != what)</span>
+<span class="lineNum">    1347 </span>            :          {
+<span class="lineNum">    1348 </span>            :             // failed repeat match, discard this state and look for another:
+<span class="lineNum">    1349 </span><span class="lineNoCov">          0 :             destroy_single_repeat();</span>
+<span class="lineNum">    1350 </span><span class="lineNoCov">          0 :             return true;</span>
+<span class="lineNum">    1351 </span>            :          }
+<span class="lineNum">    1352 </span><span class="lineNoCov">          0 :          ++count;</span>
+<span class="lineNum">    1353 </span><span class="lineNoCov">          0 :          ++ position;</span>
+<span class="lineNum">    1354 </span><span class="lineNoCov">          0 :          ++state_count;</span>
+<span class="lineNum">    1355 </span><span class="lineNoCov">          0 :          pstate = rep-&gt;next.p;</span>
+<span class="lineNum">    1356 </span>            :       }while((count &lt; rep-&gt;max) &amp;&amp; (position != last) &amp;&amp; !can_start(*position, rep-&gt;_map, mask_skip));
+<span class="lineNum">    1357 </span>            :    }   
+<span class="lineNum">    1358 </span>            :    // remember where we got to if this is a leading repeat:
+<span class="lineNum">    1359 </span><span class="lineNoCov">          0 :    if((rep-&gt;leading) &amp;&amp; (count &lt; rep-&gt;max))</span>
+<span class="lineNum">    1360 </span><span class="lineNoCov">          0 :       restart = position;</span>
+<span class="lineNum">    1361 </span><span class="lineNoCov">          0 :    if(position == last)</span>
+<span class="lineNum">    1362 </span>            :    {
+<span class="lineNum">    1363 </span>            :       // can't repeat any more, remove the pushed state: 
+<span class="lineNum">    1364 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1365 </span><span class="lineNoCov">          0 :       if((m_match_flags &amp; match_partial) &amp;&amp; (position == last) &amp;&amp; (position != search_base))</span>
+<span class="lineNum">    1366 </span><span class="lineNoCov">          0 :          m_has_partial_match = true;</span>
+<span class="lineNum">    1367 </span><span class="lineNoCov">          0 :       if(0 == (rep-&gt;can_be_null &amp; mask_skip))</span>
+<span class="lineNum">    1368 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">    1369 </span>            :    }
+<span class="lineNum">    1370 </span><span class="lineNoCov">          0 :    else if(count == rep-&gt;max)</span>
+<span class="lineNum">    1371 </span>            :    {
+<span class="lineNum">    1372 </span>            :       // can't repeat any more, remove the pushed state: 
+<span class="lineNum">    1373 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1374 </span><span class="lineNoCov">          0 :       if(!can_start(*position, rep-&gt;_map, mask_skip))</span>
+<span class="lineNum">    1375 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">    1376 </span>            :    }
+<span class="lineNum">    1377 </span>            :    else
+<span class="lineNum">    1378 </span>            :    {
+<span class="lineNum">    1379 </span><span class="lineNoCov">          0 :       pmp-&gt;count = count;</span>
+<span class="lineNum">    1380 </span><span class="lineNoCov">          0 :       pmp-&gt;last_position = position;</span>
+<span class="lineNum">    1381 </span>            :    }
+<span class="lineNum">    1382 </span><span class="lineNoCov">          0 :    pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">    1383 </span><span class="lineNoCov">          0 :    return false;</span>
+<span class="lineNum">    1384 </span>            : }
+<a name="1385"><span class="lineNum">    1385 </span>            : </a>
+<span class="lineNum">    1386 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1387 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_short_set_repeat(bool r)</span>
+<span class="lineNum">    1388 </span>            : {
+<span class="lineNum">    1389 </span><span class="lineNoCov">          0 :    saved_single_repeat&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_single_repeat&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">    1390 </span>            : 
+<span class="lineNum">    1391 </span>            :    // if we have a match, just discard this state:
+<span class="lineNum">    1392 </span><span class="lineNoCov">          0 :    if(r) </span>
+<span class="lineNum">    1393 </span>            :    {
+<span class="lineNum">    1394 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1395 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">    1396 </span>            :    }
+<span class="lineNum">    1397 </span>            : 
+<span class="lineNum">    1398 </span><span class="lineNoCov">          0 :    const re_repeat* rep = pmp-&gt;rep;</span>
+<span class="lineNum">    1399 </span><span class="lineNoCov">          0 :    std::size_t count = pmp-&gt;count;</span>
+<span class="lineNum">    1400 </span><span class="lineNoCov">          0 :    pstate = rep-&gt;next.p;</span>
+<span class="lineNum">    1401 </span><span class="lineNoCov">          0 :    const unsigned char* map = static_cast&lt;const re_set*&gt;(rep-&gt;next.p)-&gt;_map;</span>
+<span class="lineNum">    1402 </span><span class="lineNoCov">          0 :    position = pmp-&gt;last_position;</span>
+<span class="lineNum">    1403 </span>            : 
+<span class="lineNum">    1404 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;type == syntax_element_short_set_rep);</span>
+<span class="lineNum">    1405 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;next.p != 0);</span>
+<span class="lineNum">    1406 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;alt.p != 0);</span>
+<span class="lineNum">    1407 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;next.p-&gt;type == syntax_element_set);</span>
+<span class="lineNum">    1408 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(count &lt; rep-&gt;max);</span>
+<span class="lineNum">    1409 </span>            :    
+<span class="lineNum">    1410 </span><span class="lineNoCov">          0 :    if(position != last)</span>
+<span class="lineNum">    1411 </span>            :    {
+<span class="lineNum">    1412 </span>            :       // wind forward until we can skip out of the repeat:
+<span class="lineNum">    1413 </span><span class="lineNoCov">          0 :       do</span>
+<span class="lineNum">    1414 </span>            :       {
+<span class="lineNum">    1415 </span><span class="lineNoCov">          0 :          if(!map[static_cast&lt;unsigned char&gt;(traits_inst.translate(*position, icase))])</span>
+<span class="lineNum">    1416 </span>            :          {
+<span class="lineNum">    1417 </span>            :             // failed repeat match, discard this state and look for another:
+<span class="lineNum">    1418 </span><span class="lineNoCov">          0 :             destroy_single_repeat();</span>
+<span class="lineNum">    1419 </span><span class="lineNoCov">          0 :             return true;</span>
+<span class="lineNum">    1420 </span>            :          }
+<span class="lineNum">    1421 </span><span class="lineNoCov">          0 :          ++count;</span>
+<span class="lineNum">    1422 </span><span class="lineNoCov">          0 :          ++ position;</span>
+<span class="lineNum">    1423 </span><span class="lineNoCov">          0 :          ++state_count;</span>
+<span class="lineNum">    1424 </span><span class="lineNoCov">          0 :          pstate = rep-&gt;next.p;</span>
+<span class="lineNum">    1425 </span>            :       }while((count &lt; rep-&gt;max) &amp;&amp; (position != last) &amp;&amp; !can_start(*position, rep-&gt;_map, mask_skip));
+<span class="lineNum">    1426 </span>            :    }   
+<span class="lineNum">    1427 </span>            :    // remember where we got to if this is a leading repeat:
+<span class="lineNum">    1428 </span><span class="lineNoCov">          0 :    if((rep-&gt;leading) &amp;&amp; (count &lt; rep-&gt;max))</span>
+<span class="lineNum">    1429 </span><span class="lineNoCov">          0 :       restart = position;</span>
+<span class="lineNum">    1430 </span><span class="lineNoCov">          0 :    if(position == last)</span>
+<span class="lineNum">    1431 </span>            :    {
+<span class="lineNum">    1432 </span>            :       // can't repeat any more, remove the pushed state: 
+<span class="lineNum">    1433 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1434 </span><span class="lineNoCov">          0 :       if((m_match_flags &amp; match_partial) &amp;&amp; (position == last) &amp;&amp; (position != search_base))</span>
+<span class="lineNum">    1435 </span><span class="lineNoCov">          0 :          m_has_partial_match = true;</span>
+<span class="lineNum">    1436 </span><span class="lineNoCov">          0 :       if(0 == (rep-&gt;can_be_null &amp; mask_skip))</span>
+<span class="lineNum">    1437 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">    1438 </span>            :    }
+<span class="lineNum">    1439 </span><span class="lineNoCov">          0 :    else if(count == rep-&gt;max)</span>
+<span class="lineNum">    1440 </span>            :    {
+<span class="lineNum">    1441 </span>            :       // can't repeat any more, remove the pushed state: 
+<span class="lineNum">    1442 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1443 </span><span class="lineNoCov">          0 :       if(!can_start(*position, rep-&gt;_map, mask_skip))</span>
+<span class="lineNum">    1444 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">    1445 </span>            :    }
+<span class="lineNum">    1446 </span>            :    else
+<span class="lineNum">    1447 </span>            :    {
+<span class="lineNum">    1448 </span><span class="lineNoCov">          0 :       pmp-&gt;count = count;</span>
+<span class="lineNum">    1449 </span><span class="lineNoCov">          0 :       pmp-&gt;last_position = position;</span>
+<span class="lineNum">    1450 </span>            :    }
+<span class="lineNum">    1451 </span><span class="lineNoCov">          0 :    pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">    1452 </span><span class="lineNoCov">          0 :    return false;</span>
+<span class="lineNum">    1453 </span>            : }
+<a name="1454"><span class="lineNum">    1454 </span>            : </a>
+<span class="lineNum">    1455 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1456 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_long_set_repeat(bool r)</span>
+<span class="lineNum">    1457 </span>            : {
+<span class="lineNum">    1458 </span>            :    typedef typename traits::char_class_type m_type;
+<span class="lineNum">    1459 </span><span class="lineNoCov">          0 :    saved_single_repeat&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_single_repeat&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">    1460 </span>            : 
+<span class="lineNum">    1461 </span>            :    // if we have a match, just discard this state:
+<span class="lineNum">    1462 </span><span class="lineNoCov">          0 :    if(r)</span>
+<span class="lineNum">    1463 </span>            :    {
+<span class="lineNum">    1464 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1465 </span><span class="lineNoCov">          0 :       return true;</span>
+<span class="lineNum">    1466 </span>            :    }
+<span class="lineNum">    1467 </span>            : 
+<span class="lineNum">    1468 </span><span class="lineNoCov">          0 :    const re_repeat* rep = pmp-&gt;rep;</span>
+<span class="lineNum">    1469 </span><span class="lineNoCov">          0 :    std::size_t count = pmp-&gt;count;</span>
+<span class="lineNum">    1470 </span><span class="lineNoCov">          0 :    pstate = rep-&gt;next.p;</span>
+<span class="lineNum">    1471 </span><span class="lineNoCov">          0 :    const re_set_long&lt;m_type&gt;* set = static_cast&lt;const re_set_long&lt;m_type&gt;*&gt;(pstate);</span>
+<span class="lineNum">    1472 </span><span class="lineNoCov">          0 :    position = pmp-&gt;last_position;</span>
+<span class="lineNum">    1473 </span>            : 
+<span class="lineNum">    1474 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;type == syntax_element_long_set_rep);</span>
+<span class="lineNum">    1475 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;next.p != 0);</span>
+<span class="lineNum">    1476 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;alt.p != 0);</span>
+<span class="lineNum">    1477 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(rep-&gt;next.p-&gt;type == syntax_element_long_set);</span>
+<span class="lineNum">    1478 </span><span class="lineNoCov">          0 :    BOOST_ASSERT(count &lt; rep-&gt;max);</span>
+<span class="lineNum">    1479 </span>            : 
+<span class="lineNum">    1480 </span><span class="lineNoCov">          0 :    if(position != last)</span>
+<span class="lineNum">    1481 </span>            :    {
+<span class="lineNum">    1482 </span>            :       // wind forward until we can skip out of the repeat:
+<span class="lineNum">    1483 </span><span class="lineNoCov">          0 :       do</span>
+<span class="lineNum">    1484 </span>            :       {
+<span class="lineNum">    1485 </span><span class="lineNoCov">          0 :          if(position == re_is_set_member(position, last, set, re.get_data(), icase))</span>
+<span class="lineNum">    1486 </span>            :          {
+<span class="lineNum">    1487 </span>            :             // failed repeat match, discard this state and look for another:
+<span class="lineNum">    1488 </span><span class="lineNoCov">          0 :             destroy_single_repeat();</span>
+<span class="lineNum">    1489 </span><span class="lineNoCov">          0 :             return true;</span>
+<span class="lineNum">    1490 </span>            :          }
+<span class="lineNum">    1491 </span><span class="lineNoCov">          0 :          ++position;</span>
+<span class="lineNum">    1492 </span><span class="lineNoCov">          0 :          ++count;</span>
+<span class="lineNum">    1493 </span><span class="lineNoCov">          0 :          ++state_count;</span>
+<span class="lineNum">    1494 </span><span class="lineNoCov">          0 :          pstate = rep-&gt;next.p;</span>
+<span class="lineNum">    1495 </span>            :       }while((count &lt; rep-&gt;max) &amp;&amp; (position != last) &amp;&amp; !can_start(*position, rep-&gt;_map, mask_skip));
+<span class="lineNum">    1496 </span>            :    }   
+<span class="lineNum">    1497 </span>            :    // remember where we got to if this is a leading repeat:
+<span class="lineNum">    1498 </span><span class="lineNoCov">          0 :    if((rep-&gt;leading) &amp;&amp; (count &lt; rep-&gt;max))</span>
+<span class="lineNum">    1499 </span><span class="lineNoCov">          0 :       restart = position;</span>
+<span class="lineNum">    1500 </span><span class="lineNoCov">          0 :    if(position == last)</span>
+<span class="lineNum">    1501 </span>            :    {
+<span class="lineNum">    1502 </span>            :       // can't repeat any more, remove the pushed state:
+<span class="lineNum">    1503 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1504 </span><span class="lineNoCov">          0 :       if((m_match_flags &amp; match_partial) &amp;&amp; (position == last) &amp;&amp; (position != search_base))</span>
+<span class="lineNum">    1505 </span><span class="lineNoCov">          0 :          m_has_partial_match = true;</span>
+<span class="lineNum">    1506 </span><span class="lineNoCov">          0 :       if(0 == (rep-&gt;can_be_null &amp; mask_skip))</span>
+<span class="lineNum">    1507 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">    1508 </span>            :    }
+<span class="lineNum">    1509 </span><span class="lineNoCov">          0 :    else if(count == rep-&gt;max)</span>
+<span class="lineNum">    1510 </span>            :    {
+<span class="lineNum">    1511 </span>            :       // can't repeat any more, remove the pushed state: 
+<span class="lineNum">    1512 </span><span class="lineNoCov">          0 :       destroy_single_repeat();</span>
+<span class="lineNum">    1513 </span><span class="lineNoCov">          0 :       if(!can_start(*position, rep-&gt;_map, mask_skip))</span>
+<span class="lineNum">    1514 </span><span class="lineNoCov">          0 :          return true;</span>
+<span class="lineNum">    1515 </span>            :    }
+<span class="lineNum">    1516 </span>            :    else
+<span class="lineNum">    1517 </span>            :    {
+<span class="lineNum">    1518 </span><span class="lineNoCov">          0 :       pmp-&gt;count = count;</span>
+<span class="lineNum">    1519 </span><span class="lineNoCov">          0 :       pmp-&gt;last_position = position;</span>
+<span class="lineNum">    1520 </span>            :    }
+<span class="lineNum">    1521 </span><span class="lineNoCov">          0 :    pstate = rep-&gt;alt.p;</span>
+<span class="lineNum">    1522 </span><span class="lineNoCov">          0 :    return false;</span>
+<span class="lineNum">    1523 </span>            : }
+<a name="1524"><span class="lineNum">    1524 </span>            : </a>
+<span class="lineNum">    1525 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1526 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_non_greedy_repeat(bool r)</span>
+<span class="lineNum">    1527 </span>            : {
+<span class="lineNum">    1528 </span><span class="lineNoCov">          0 :    saved_position&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_position&lt;BidiIterator&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">    1529 </span><span class="lineNoCov">          0 :    if(!r)</span>
+<span class="lineNum">    1530 </span>            :    {
+<span class="lineNum">    1531 </span><span class="lineNoCov">          0 :       position = pmp-&gt;position;</span>
+<span class="lineNum">    1532 </span><span class="lineNoCov">          0 :       pstate = pmp-&gt;pstate;</span>
+<span class="lineNum">    1533 </span><span class="lineNoCov">          0 :       ++(*next_count);</span>
+<span class="lineNum">    1534 </span>            :    }
+<span class="lineNum">    1535 </span><span class="lineNoCov">          0 :    boost::re_detail::inplace_destroy(pmp++);</span>
+<span class="lineNum">    1536 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">    1537 </span><span class="lineNoCov">          0 :    return r;</span>
+<span class="lineNum">    1538 </span>            : }
+<a name="1539"><span class="lineNum">    1539 </span>            : </a>
+<span class="lineNum">    1540 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1541 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_recursion(bool r)</span>
+<span class="lineNum">    1542 </span>            : {
+<span class="lineNum">    1543 </span><span class="lineNoCov">          0 :    saved_recursion&lt;results_type&gt;* pmp = static_cast&lt;saved_recursion&lt;results_type&gt;*&gt;(m_backup_state);</span>
+<span class="lineNum">    1544 </span><span class="lineNoCov">          0 :    if(!r)</span>
+<span class="lineNum">    1545 </span>            :    {
+<span class="lineNum">    1546 </span><span class="lineNoCov">          0 :       recursion_stack.push_back(recursion_info&lt;results_type&gt;());</span>
+<span class="lineNum">    1547 </span><span class="lineNoCov">          0 :       recursion_stack.back().idx = pmp-&gt;recursion_id;</span>
+<span class="lineNum">    1548 </span><span class="lineNoCov">          0 :       recursion_stack.back().preturn_address = pmp-&gt;preturn_address;</span>
+<span class="lineNum">    1549 </span><span class="lineNoCov">          0 :       recursion_stack.back().results = pmp-&gt;results;</span>
+<span class="lineNum">    1550 </span>            :    }
+<span class="lineNum">    1551 </span><span class="lineNoCov">          0 :    boost::re_detail::inplace_destroy(pmp++);</span>
+<span class="lineNum">    1552 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">    1553 </span><span class="lineNoCov">          0 :    return true;</span>
+<span class="lineNum">    1554 </span>            : }
+<a name="1555"><span class="lineNum">    1555 </span>            : </a>
+<span class="lineNum">    1556 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1557 </span><span class="lineNoCov">          0 : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_recursion_pop(bool r)</span>
+<span class="lineNum">    1558 </span>            : {
+<span class="lineNum">    1559 </span><span class="lineNoCov">          0 :    saved_state* pmp = static_cast&lt;saved_state*&gt;(m_backup_state);</span>
+<span class="lineNum">    1560 </span><span class="lineNoCov">          0 :    if(!r)</span>
+<span class="lineNum">    1561 </span>            :    {
+<span class="lineNum">    1562 </span><span class="lineNoCov">          0 :       recursion_stack.pop_back();</span>
+<span class="lineNum">    1563 </span>            :    }
+<span class="lineNum">    1564 </span><span class="lineNoCov">          0 :    boost::re_detail::inplace_destroy(pmp++);</span>
+<span class="lineNum">    1565 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">    1566 </span><span class="lineNoCov">          0 :    return true;</span>
+<span class="lineNum">    1567 </span>            : }
+<a name="1568"><span class="lineNum">    1568 </span>            : </a>
+<span class="lineNum">    1569 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1570 </span><span class="lineNoCov">          0 : void perl_matcher&lt;BidiIterator, Allocator, traits&gt;::push_recursion_pop()</span>
+<span class="lineNum">    1571 </span>            : {
+<span class="lineNum">    1572 </span><span class="lineNoCov">          0 :    saved_state* pmp = static_cast&lt;saved_state*&gt;(m_backup_state);</span>
+<span class="lineNum">    1573 </span><span class="lineNoCov">          0 :    --pmp;</span>
+<span class="lineNum">    1574 </span><span class="lineNoCov">          0 :    if(pmp &lt; m_stack_base)</span>
+<span class="lineNum">    1575 </span>            :    {
+<span class="lineNum">    1576 </span><span class="lineNoCov">          0 :       extend_stack();</span>
+<span class="lineNum">    1577 </span><span class="lineNoCov">          0 :       pmp = static_cast&lt;saved_state*&gt;(m_backup_state);</span>
+<span class="lineNum">    1578 </span><span class="lineNoCov">          0 :       --pmp;</span>
+<span class="lineNum">    1579 </span>            :    }
+<span class="lineNum">    1580 </span><span class="lineNoCov">          0 :    (void) new (pmp)saved_state(15);</span>
+<span class="lineNum">    1581 </span><span class="lineNoCov">          0 :    m_backup_state = pmp;</span>
+<span class="lineNum">    1582 </span><span class="lineNoCov">          0 : }</span>
+<span class="lineNum">    1583 </span>            : /*
+<span class="lineNum">    1584 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1585 </span>            : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_parenthesis_pop(bool r)
+<span class="lineNum">    1586 </span>            : {
+<span class="lineNum">    1587 </span>            :    saved_state* pmp = static_cast&lt;saved_state*&gt;(m_backup_state);
+<span class="lineNum">    1588 </span>            :    if(!r)
+<span class="lineNum">    1589 </span>            :    {
+<span class="lineNum">    1590 </span>            :       --parenthesis_stack_position;
+<span class="lineNum">    1591 </span>            :    }
+<span class="lineNum">    1592 </span>            :    boost::re_detail::inplace_destroy(pmp++);
+<span class="lineNum">    1593 </span>            :    m_backup_state = pmp;
+<span class="lineNum">    1594 </span>            :    return true;
+<span class="lineNum">    1595 </span>            : }
+<span class="lineNum">    1596 </span>            : 
+<span class="lineNum">    1597 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1598 </span>            : void perl_matcher&lt;BidiIterator, Allocator, traits&gt;::push_parenthesis_pop()
+<span class="lineNum">    1599 </span>            : {
+<span class="lineNum">    1600 </span>            :    saved_state* pmp = static_cast&lt;saved_state*&gt;(m_backup_state);
+<span class="lineNum">    1601 </span>            :    --pmp;
+<span class="lineNum">    1602 </span>            :    if(pmp &lt; m_stack_base)
+<span class="lineNum">    1603 </span>            :    {
+<span class="lineNum">    1604 </span>            :       extend_stack();
+<span class="lineNum">    1605 </span>            :       pmp = static_cast&lt;saved_state*&gt;(m_backup_state);
+<span class="lineNum">    1606 </span>            :       --pmp;
+<span class="lineNum">    1607 </span>            :    }
+<span class="lineNum">    1608 </span>            :    (void) new (pmp)saved_state(16);
+<span class="lineNum">    1609 </span>            :    m_backup_state = pmp;
+<span class="lineNum">    1610 </span>            : }
+<span class="lineNum">    1611 </span>            : 
+<span class="lineNum">    1612 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1613 </span>            : bool perl_matcher&lt;BidiIterator, Allocator, traits&gt;::unwind_parenthesis_push(bool r)
+<span class="lineNum">    1614 </span>            : {
+<span class="lineNum">    1615 </span>            :    saved_position&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_position&lt;BidiIterator&gt;*&gt;(m_backup_state);
+<span class="lineNum">    1616 </span>            :    if(!r)
+<span class="lineNum">    1617 </span>            :    {
+<span class="lineNum">    1618 </span>            :       parenthesis_stack[parenthesis_stack_position++] = pmp-&gt;position;
+<span class="lineNum">    1619 </span>            :    }
+<span class="lineNum">    1620 </span>            :    boost::re_detail::inplace_destroy(pmp++);
+<span class="lineNum">    1621 </span>            :    m_backup_state = pmp;
+<span class="lineNum">    1622 </span>            :    return true;
+<span class="lineNum">    1623 </span>            : }
+<span class="lineNum">    1624 </span>            : 
+<span class="lineNum">    1625 </span>            : template &lt;class BidiIterator, class Allocator, class traits&gt;
+<span class="lineNum">    1626 </span>            : inline void perl_matcher&lt;BidiIterator, Allocator, traits&gt;::push_parenthesis_push(BidiIterator p)
+<span class="lineNum">    1627 </span>            : {
+<span class="lineNum">    1628 </span>            :    saved_position&lt;BidiIterator&gt;* pmp = static_cast&lt;saved_position&lt;BidiIterator&gt;*&gt;(m_backup_state);
+<span class="lineNum">    1629 </span>            :    --pmp;
+<span class="lineNum">    1630 </span>            :    if(pmp &lt; m_stack_base)
+<span class="lineNum">    1631 </span>            :    {
+<span class="lineNum">    1632 </span>            :       extend_stack();
+<span class="lineNum">    1633 </span>            :       pmp = static_cast&lt;saved_position&lt;BidiIterator&gt;*&gt;(m_backup_state);
+<span class="lineNum">    1634 </span>            :       --pmp;
+<span class="lineNum">    1635 </span>            :    }
+<span class="lineNum">    1636 </span>            :    (void) new (pmp)saved_position&lt;BidiIterator&gt;(0, p, 17);
+<span class="lineNum">    1637 </span>            :    m_backup_state = pmp;
+<span class="lineNum">    1638 </span>            : }
+<span class="lineNum">    1639 </span>            : */
+<span class="lineNum">    1640 </span>            : } // namespace re_detail
+<span class="lineNum">    1641 </span>            : } // namespace boost
+<span class="lineNum">    1642 </span>            : 
+<span class="lineNum">    1643 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">    1644 </span>            : #  pragma warning(pop)
+<span class="lineNum">    1645 </span>            : #endif
+<span class="lineNum">    1646 </span>            : 
+<span class="lineNum">    1647 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">    1648 </span>            : #pragma warning(push)
+<span class="lineNum">    1649 </span>            : #pragma warning(disable: 4103)
+<span class="lineNum">    1650 </span>            : #endif
+<span class="lineNum">    1651 </span>            : #ifdef BOOST_HAS_ABI_HEADERS
+<span class="lineNum">    1652 </span>            : #  include BOOST_ABI_SUFFIX
+<span class="lineNum">    1653 </span>            : #endif
+<span class="lineNum">    1654 </span>            : #ifdef BOOST_MSVC
+<span class="lineNum">    1655 </span>            : #pragma warning(pop)
+<span class="lineNum">    1656 </span>            : #endif
+<span class="lineNum">    1657 </span>            : 
+<span class="lineNum">    1658 </span>            : #endif
+<span class="lineNum">    1659 </span>            : 
+<span class="lineNum">    1660 </span>            : 
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
