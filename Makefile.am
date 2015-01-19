@@ -30,7 +30,8 @@ test_kman_SOURCES = $(shared_SOURCES) \
 										tests/test_msa.cpp \
 										tests/test_scoring_matrix.cpp \
 										tests/test_seq_data.cpp \
-										tests/test_profile.cpp
+										tests/test_profile.cpp \
+										tests/test_feature_scores.cpp
 
 									
 
