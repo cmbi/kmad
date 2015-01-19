@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(test_create_profile)
   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
 
   profile::ProfileMap p = profile::create_profile(sequences);
-  BOOST_CHECK_EQUAL(p.size(), 20);
+  BOOST_CHECK_EQUAL(p.size(), 23);
   BOOST_CHECK_EQUAL(p['A'][0], 4);
   BOOST_CHECK_EQUAL(p['A'][1], 0);
   BOOST_CHECK_EQUAL(p['A'][2], 1);
@@ -73,28 +73,38 @@ BOOST_AUTO_TEST_CASE(test_create_score_profile)
   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
 
   profile::ProfileMap p = profile::create_score_profile(sequences);
+  for (auto feat_it = p.begin(); feat_it != p.end(); ++feat_it) {
+    std::cout << feat_it->first << ": ";
+    for (auto& item : feat_it->second) {
+      std::cout << item << " ";
+    }
+    std::cout << std::endl;
+  }
 
-   
-  profile::ProfileMap expected_score_profile = {{'A', {3.0, -1.0, 0.0, -1.0}}, 
-                                       {'R', {-1.0, -0.8, 0.2, -1.2}},
-                                       {'N', {-2.0, -1.6, -0.4, -2.4}},
-                                       {'D', {-2.2, -2.0, 0.6, -3.4}},
-                                       {'C', {-0.2, -1.6, -3.0, -1.4}},
-                                       {'Q', {-0.8, 0.4, 1.2, -1.4}},
-                                       {'E', {-1.2, -0.6, 3.0, -2.2}},
-                                       {'G', {-0.6, -2.8, -1.6, -3.6}},
-                                       {'H', {-2.0, -1.6, -0.6, -2.6}},
-                                       {'I', {-0.6, 0.2, -2.6, 1.0}},
-                                       {'L', {-0.4, 1.0, -2.4, 2.8}},
-                                       {'K', {-1.0, -0.6, 1.4, -0.6}},
-                                       {'M', {0.2, 3.6, -1.6, 1.4}},
-                                       {'F', {-1.6, -0.6, -2.8, -0.6}},
-                                       {'P', {-1.2, -1.8, -1.0, -2.6}},
-                                       {'S', {0.6, -0.8, 0.2, -1.6}},
-                                       {'T', {-0.2, -1.0, -0.8, -1.0}},
-                                       {'W', {-2.6, -1.4, -3.0, -2.2}},
-                                       {'Y', {-1.8, -1.2, -2.0, -1.2}}, 
-                                       {'V', {0.2, 0.4, -1.6, 0.4}}};
+  profile::ProfileMap expected_score_profile; 
+  expected_score_profile = {{'A', { 3.0, -1.0,  0.0, -1.0}}, 
+                            {'R', {-1.0, -0.8,  0.2, -1.2}},
+                            {'N', {-2.0, -1.6, -0.4, -2.4}},
+                            {'D', {-2.2, -2.0,  0.6, -3.4}},
+                            {'C', {-0.2, -1.6, -3.0, -1.4}},
+                            {'Q', {-0.8,  0.4,  1.2, -1.4}},
+                            {'E', {-1.2, -0.6,  3.0, -2.2}},
+                            {'G', {-0.6, -2.8, -1.6, -3.6}},
+                            {'H', {-2.0, -1.6, -0.6, -2.6}},
+                            {'I', {-0.6,  0.2, -2.6,  1.0}},
+                            {'L', {-0.4,  1.0, -2.4,  2.8}},
+                            {'K', {-1.0, -0.6,  1.4, -0.6}},
+                            {'M', { 0.2,  3.6, -1.6,  1.4}},
+                            {'F', {-1.6, -0.6, -2.8, -0.6}},
+                            {'P', {-1.2, -1.8, -1.0, -2.6}},
+                            {'S', { 0.6, -0.8,  0.2, -1.6}},
+                            {'T', {-0.2, -1.0, -0.8, -1.0}},
+                            {'W', {-2.6, -1.4, -3.0, -2.2}},
+                            {'Y', {-1.8, -1.2, -2.0, -1.2}}, 
+                            {'V', { 0.2,  0.4, -1.6,  0.4}},
+                            {'B', {-2.1, -1.8,  0.1, -2.9}},
+                            {'Z', {-1.0, -0.1,  2.1, -1.7}},
+                            {'X', {-0.77, -0.69, -0.84, -1.17}}};
 
   BOOST_CHECK_EQUAL(p.size(), expected_score_profile.size());
   for (auto& aa: ALPHABET){

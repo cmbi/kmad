@@ -18,11 +18,13 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
   fasta::Sequence s1;
   // AKLCAKL
   s1 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
-                                 "CAAAAAAAAAAAAAKAAAAAA"
+                                 "SAAAZAA"
+                                 "YAAAAAAAAAAAAAKAAAAAA"
                                  "LAAAAAA", codon_length);
   fasta::Sequence s2;
   // AKLAKL
   s2 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
+                                 "YAAAZAA"
                                  "AAAAAAAKAAAAAALAAAAAA"
                                  "RAAAAAA", codon_length);
   FeatureNamesList feature_list = {"ptm_phosph0", "ptm_phosph1",
@@ -53,6 +55,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
   bool one_round = false;
   seq_data::SequenceData sequence_data;
   sequence_data.sequences = sequences;
+  sequence_data.feature_list = feature_list;
   std::vector<fasta::SequenceList> alignment;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
@@ -60,21 +63,25 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
   fasta::Sequence e_s1;
   // AKLCAKL
   e_s1 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
-                                   "CAAAAAAAAAAAAAKAAAAAA"
+                                   "SAAAZAA"
+                                   "YAAAAAAAAAAAAAKAAAAAA"
                                    "LAAAAAA", codon_length);
   fasta::Sequence e_s2;
   // AKLAKL
   e_s2 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
+                                   "YAAAZAA"
                                    "-AAAAAAAAAAAAAKAAAAAA"
                                    "LAAAAAA", codon_length);
   fasta::Sequence e_s1_lower;
   // AKLCAKL
   e_s1_lower = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
-                                         "CAAAAAAAAAAAAAKAAAAAA"
+                                         "SAAAZAA"
+                                         "YAAAAAAAAAAAAAKAAAAAA"
                                          "LAAAAAA", codon_length);
   fasta::Sequence e_s2_lower;
   // AKLAKL
   e_s2_lower = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
+                                         "YAAAZAA"
                                          "-AAAAAAAAAAAAAKAAAAAA"
                                          "lAAAAAA", codon_length);
   std::vector<fasta::SequenceList> expected_alignment = {{e_s1, e_s2},

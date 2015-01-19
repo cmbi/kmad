@@ -49,7 +49,7 @@ profile::ProfileMap profile::create_score_profile(
   }
   for (unsigned i = 0; i < p['A'].size(); ++i) {
     std::vector<double> score_column(ALPHABET.size(), 0); 
-    for (auto &prob: p){
+    for (auto &prob: p) {
       std::vector<double> sbst_column = SIM_SCORES.at(prob.first);
       for (size_t k = 0; k < sbst_column.size(); ++k) {
         score_column[k] += sbst_column[k] * prob.second[i];

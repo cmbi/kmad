@@ -16,8 +16,8 @@ std::vector<fasta::SequenceList> msa::run_msa(
     int codon_length, bool one_round)
 {
       FeatureScores f_profile(sequence_data.feature_list, domain_modifier,
-                                ptm_modifier, motif_modifier,
-                                sequence_data.probabilities);
+                              ptm_modifier, motif_modifier,
+                              sequence_data.probabilities);
       // query_seq_list - the profile are built only based on the first
       // sequence
       fasta::SequenceList query_seq_list = {sequence_data.sequences[0]};
