@@ -5,8 +5,7 @@ shared_LDADD	=	$(BOOST_FILESYSTEM_LIB) \
 								$(BOOST_REGEX_LIB) \
 								$(BOOST_SYSTEM_LIB) \
 								$(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
-								-lconfig++ \
-								-lgcov
+								-lconfig++
 
 shared_SOURCES	=	src/fasta.cpp \
 									src/feature_scores.cpp \

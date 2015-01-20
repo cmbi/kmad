@@ -14,16 +14,6 @@ BOOST_AUTO_TEST_SUITE(test_feature_scores)
 
 BOOST_AUTO_TEST_CASE(test_update_scores)
 {
-  // fasta::Sequence s1 = fasta::make_sequence(
-  //     "d", "AAAAdaaMAAAAAAEAaaAAALAAAAAA", 7);
-  // fasta::Sequence s2 = fasta::make_sequence(
-  //     "d", "AAAAdaaEAAAZAAEAaaZAAKAAAZAA", 7);
-  // fasta::Sequence s3 = fasta::make_sequence(
-  //     "d", "AAAAZaaMAAAZAAEAacZAALAaaZaa", 7);
-  // fasta::Sequence s4 = fasta::make_sequence(
-  //     "d", "MAAAZabMAAAZAAKAaaZAALAAAAaa", 7);
-  // fasta::Sequence s5 = fasta::make_sequence(
-  //     "d", "AAAAAacMAAAZAAAAAAAAALAAAAAA", 7);
   FeatureNamesList feature_list = {"ptm_phosph0", "ptm_phosph1",
                                    "ptm_phosph2", "ptm_phosph3",
                                    "ptm_phosphP", "ptm_acet0",
@@ -148,6 +138,19 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
       BOOST_CHECK(std::abs(p[feat][i] - expected_scores[feat][i]) < 0.001);
     }
   }
+  feature_list = {"ptm_phosph9", "motif_aa", "domain_aa"};
+  f_profile = FeatureScores(feature_list, 4, 10, 3, probs);
+  // SEQUENCE S1
+  r1_1 = fasta::Residue ("AAAAdaa", std::vector<std::string>({"ptm_phosph9",
+                                                              "motif_aa"}));
+  r1_2 = fasta::Residue ("MAAAAAA", std::vector<std::string>({}));
+  r1_3 = fasta::Residue ("EAaadaa", std::vector<std::string>({"domain_aa"}));
+  r1_4 = fasta::Residue ("LAAAAAA", std::vector<std::string>({}));
+  s1 = fasta::make_sequence({r1_1, r1_2, r1_3, r1_4});
+  sequences = {s1};
+  BOOST_CHECK_THROW(f_profile.update_scores(sequences, s_map),
+                    std::invalid_argument);
+
 }
 
 BOOST_AUTO_TEST_SUITE_END()
