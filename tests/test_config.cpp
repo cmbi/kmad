@@ -5,10 +5,13 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/auto_unit_test.hpp>
 
-#include <map>
-#include <vector>
 #include <algorithm>
+#include <iostream>
+#include <map>
 #include <string>
+#include <vector>
+
+namespace lcg = libconfig;
 
 
 BOOST_AUTO_TEST_SUITE(test_kman_suite)
@@ -43,6 +46,17 @@ BOOST_AUTO_TEST_CASE(test_config)
                                 expected_int_list.end(),
                                 result_int_list.begin(),
                                 result_int_list.end());
+  filename = "tests/test_nonexistent.cfg";
+
+  BOOST_CHECK_THROW(f_config::ConfParser::parse_conf_file(filename), 
+                    lcg::FileIOException);
+  filename = "tests/test_conf_file_wrongformat.cfg";
+  BOOST_CHECK_THROW(f_config::ConfParser::parse_conf_file(filename), 
+                    lcg::ParseException);
+  filename = "tests/test_conf_file_settingnotfound.cfg";
+  BOOST_CHECK_THROW(f_config::ConfParser::parse_conf_file(filename), 
+                    lcg::SettingNotFoundException);
+
 }
 
 

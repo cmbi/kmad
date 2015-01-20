@@ -37,12 +37,12 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2015-01-19</td>
+            <td class="headerValue">2015-01-20</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">100</td>
+            <td class="headerCovTableEntry">101</td>
             <td class="headerCovTableEntry">157</td>
-            <td class="headerCovTableEntryLo">63.7 %</td>
+            <td class="headerCovTableEntryLo">64.3 %</td>
           </tr>
           <tr><td><img src="../../../../../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -787,7 +787,7 @@
 <span class="lineNum">     725 </span><span class="lineCov">      52964 :       _GLIBCXX_CONSTEXPR __normal_iterator() : _M_current(_Iterator()) { }</span>
 <a name="726"><span class="lineNum">     726 </span>            : </a>
 <span class="lineNum">     727 </span>            :       explicit
-<span class="lineNum">     728 </span><span class="lineCov">     115092 :       __normal_iterator(const _Iterator&amp; __i) : _M_current(__i) { }</span>
+<span class="lineNum">     728 </span><span class="lineCov">     115185 :       __normal_iterator(const _Iterator&amp; __i) : _M_current(__i) { }</span>
 <span class="lineNum">     729 </span>            : 
 <span class="lineNum">     730 </span>            :       // Allow iterator to const_iterator conversion
 <span class="lineNum">     731 </span>            :       template&lt;typename _Iter&gt;
@@ -799,18 +799,18 @@
 <span class="lineNum">     737 </span>            : 
 <a name="738"><span class="lineNum">     738 </span>            :       // Forward iterator requirements</a>
 <span class="lineNum">     739 </span>            :       reference
-<span class="lineNum">     740 </span><span class="lineCov">      68488 :       operator*() const</span>
-<span class="lineNum">     741 </span><span class="lineCov">      68488 :       { return *_M_current; }</span>
+<span class="lineNum">     740 </span><span class="lineCov">      68539 :       operator*() const</span>
+<span class="lineNum">     741 </span><span class="lineCov">      68539 :       { return *_M_current; }</span>
 <a name="742"><span class="lineNum">     742 </span>            : </a>
 <span class="lineNum">     743 </span>            :       pointer
 <span class="lineNum">     744 </span><span class="lineNoCov">          0 :       operator-&gt;() const</span>
 <span class="lineNum">     745 </span><span class="lineNoCov">          0 :       { return _M_current; }</span>
 <a name="746"><span class="lineNum">     746 </span>            : </a>
 <span class="lineNum">     747 </span>            :       __normal_iterator&amp;
-<span class="lineNum">     748 </span><span class="lineCov">      68420 :       operator++()</span>
+<span class="lineNum">     748 </span><span class="lineCov">      68470 :       operator++()</span>
 <span class="lineNum">     749 </span>            :       {
-<span class="lineNum">     750 </span><span class="lineCov">      68420 :         ++_M_current;</span>
-<span class="lineNum">     751 </span><span class="lineCov">      68420 :         return *this;</span>
+<span class="lineNum">     750 </span><span class="lineCov">      68470 :         ++_M_current;</span>
+<span class="lineNum">     751 </span><span class="lineCov">      68470 :         return *this;</span>
 <span class="lineNum">     752 </span>            :       }
 <span class="lineNum">     753 </span>            : 
 <span class="lineNum">     754 </span>            :       __normal_iterator
@@ -851,8 +851,8 @@
 <span class="lineNum">     789 </span><span class="lineNoCov">          0 :       { return __normal_iterator(_M_current - __n); }</span>
 <a name="790"><span class="lineNum">     790 </span>            : </a>
 <span class="lineNum">     791 </span>            :       const _Iterator&amp;
-<span class="lineNum">     792 </span><span class="lineCov">     252263 :       base() const</span>
-<span class="lineNum">     793 </span><span class="lineCov">     252263 :       { return _M_current; }</span>
+<span class="lineNum">     792 </span><span class="lineCov">     252456 :       base() const</span>
+<span class="lineNum">     793 </span><span class="lineCov">     252456 :       { return _M_current; }</span>
 <span class="lineNum">     794 </span>            :     };
 <span class="lineNum">     795 </span>            : 
 <span class="lineNum">     796 </span>            :   // Note: In what follows, the left- and right-hand-side iterators are
@@ -884,9 +884,9 @@
 <span class="lineNum">     822 </span>            : 
 <a name="823"><span class="lineNum">     823 </span>            :   template&lt;typename _Iterator, typename _Container&gt;</a>
 <span class="lineNum">     824 </span>            :     inline bool
-<span class="lineNum">     825 </span><span class="lineCov">     122410 :     operator!=(const __normal_iterator&lt;_Iterator, _Container&gt;&amp; __lhs,</span>
+<span class="lineNum">     825 </span><span class="lineCov">     122499 :     operator!=(const __normal_iterator&lt;_Iterator, _Container&gt;&amp; __lhs,</span>
 <span class="lineNum">     826 </span>            :                const __normal_iterator&lt;_Iterator, _Container&gt;&amp; __rhs)
-<span class="lineNum">     827 </span><span class="lineCov">     122410 :     { return __lhs.base() != __rhs.base(); }</span>
+<span class="lineNum">     827 </span><span class="lineCov">     122499 :     { return __lhs.base() != __rhs.base(); }</span>
 <span class="lineNum">     828 </span>            : 
 <span class="lineNum">     829 </span>            :   // Random access iterator requirements
 <span class="lineNum">     830 </span>            :   template&lt;typename _IteratorL, typename _IteratorR, typename _Container&gt;

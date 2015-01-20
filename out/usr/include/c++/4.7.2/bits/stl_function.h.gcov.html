@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2015-01-19</td>
+            <td class="headerValue">2015-01-20</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">15</td>
@@ -295,8 +295,8 @@
 <span class="lineNum">     233 </span>            :     struct less : public binary_function&lt;_Tp, _Tp, bool&gt;
 <a name="234"><span class="lineNum">     234 </span>            :     {</a>
 <span class="lineNum">     235 </span>            :       bool
-<span class="lineNum">     236 </span><span class="lineCov">      65565 :       operator()(const _Tp&amp; __x, const _Tp&amp; __y) const</span>
-<span class="lineNum">     237 </span><span class="lineCov">      65565 :       { return __x &lt; __y; }</span>
+<span class="lineNum">     236 </span><span class="lineCov">      65600 :       operator()(const _Tp&amp; __x, const _Tp&amp; __y) const</span>
+<span class="lineNum">     237 </span><span class="lineCov">      65600 :       { return __x &lt; __y; }</span>
 <span class="lineNum">     238 </span>            :     };
 <span class="lineNum">     239 </span>            : 
 <span class="lineNum">     240 </span>            :   /// One of the @link comparison_functors comparison functors@endlink.
@@ -557,12 +557,12 @@
 <span class="lineNum">     495 </span>            : #endif
 <a name="496"><span class="lineNum">     496 </span>            :     {</a>
 <span class="lineNum">     497 </span>            :       typename _Pair::first_type&amp;
-<span class="lineNum">     498 </span><span class="lineCov">       1152 :       operator()(_Pair&amp; __x) const</span>
-<span class="lineNum">     499 </span><span class="lineCov">       1152 :       { return __x.first; }</span>
+<span class="lineNum">     498 </span><span class="lineCov">       1156 :       operator()(_Pair&amp; __x) const</span>
+<span class="lineNum">     499 </span><span class="lineCov">       1156 :       { return __x.first; }</span>
 <a name="500"><span class="lineNum">     500 </span>            : </a>
 <span class="lineNum">     501 </span>            :       const typename _Pair::first_type&amp;
-<span class="lineNum">     502 </span><span class="lineCov">      56608 :       operator()(const _Pair&amp; __x) const</span>
-<span class="lineNum">     503 </span><span class="lineCov">      56608 :       { return __x.first; }</span>
+<span class="lineNum">     502 </span><span class="lineCov">      56635 :       operator()(const _Pair&amp; __x) const</span>
+<span class="lineNum">     503 </span><span class="lineCov">      56635 :       { return __x.first; }</span>
 <span class="lineNum">     504 </span>            : 
 <span class="lineNum">     505 </span>            : #ifdef __GXX_EXPERIMENTAL_CXX0X__
 <a name="506"><span class="lineNum">     506 </span>            :       template&lt;typename _Pair2&gt;</a>

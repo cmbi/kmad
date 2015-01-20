@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2015-01-19</td>
+            <td class="headerValue">2015-01-20</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">46</td>
@@ -394,8 +394,8 @@
 <span class="lineNum">     332 </span>            :       template&lt;typename _Alloc2&gt;
 <a name="333"><span class="lineNum">     333 </span>            :         static typename</a>
 <span class="lineNum">     334 </span>            :         enable_if&lt;!__select_helper&lt;_Alloc2&gt;::value, _Alloc2&gt;::type
-<span class="lineNum">     335 </span><span class="lineCov">      56205 :         _S_select(_Alloc2&amp; __a)</span>
-<span class="lineNum">     336 </span><span class="lineCov">      56205 :         { return __a; }</span>
+<span class="lineNum">     335 </span><span class="lineCov">      56228 :         _S_select(_Alloc2&amp; __a)</span>
+<span class="lineNum">     336 </span><span class="lineCov">      56228 :         { return __a; }</span>
 <span class="lineNum">     337 </span>            : 
 <span class="lineNum">     338 </span>            :     public:
 <span class="lineNum">     339 </span>            : 
@@ -483,8 +483,8 @@
 <span class="lineNum">     421 </span>            :        *  expression is well-formed, otherwise returns @a __rhs
 <a name="422"><span class="lineNum">     422 </span>            :       */</a>
 <span class="lineNum">     423 </span>            :       static _Alloc
-<span class="lineNum">     424 </span><span class="lineCov">      56205 :       select_on_container_copy_construction(const _Alloc&amp; __rhs)</span>
-<span class="lineNum">     425 </span><span class="lineCov">      56205 :       { return _S_select(__rhs); }</span>
+<span class="lineNum">     424 </span><span class="lineCov">      56228 :       select_on_container_copy_construction(const _Alloc&amp; __rhs)</span>
+<span class="lineNum">     425 </span><span class="lineCov">      56228 :       { return _S_select(__rhs); }</span>
 <span class="lineNum">     426 </span>            :     };
 <span class="lineNum">     427 </span>            : 
 <span class="lineNum">     428 </span>            :   template&lt;typename _Alloc&gt;
