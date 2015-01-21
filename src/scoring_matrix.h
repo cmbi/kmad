@@ -37,6 +37,9 @@ public:
       const profile::ProfileMap& profile,
       const FeatureScores& f_profile,
       int codon_length);
+  SingleScoringMatrix get_V_matrix();
+  SingleScoringMatrix get_G_matrix();
+  SingleScoringMatrix get_H_matrix();
 private:
   ///
   /// finds the best score either in the last column or in the last row of the
@@ -48,7 +51,7 @@ private:
   double m_gap_opening;
   double m_gap_extension;
   double m_end_pen;
-  SingleScoringMatrix m_matrix_v,m_matrix_g,m_matrix_h;
+  SingleScoringMatrix m_matrix_v, m_matrix_g, m_matrix_h;
 };
 
 #endif /* SCORINGMATRIX_H */

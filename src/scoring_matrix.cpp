@@ -196,3 +196,18 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
   std::reverse(new_s2.residues.begin(), new_s2.residues.end());
   return {new_s1, new_s2};
 }
+
+
+SingleScoringMatrix ScoringMatrix::get_V_matrix() {
+  return m_matrix_v;
+}
+
+
+SingleScoringMatrix ScoringMatrix::get_G_matrix() {
+  return m_matrix_g;
+}
+
+
+SingleScoringMatrix ScoringMatrix::get_H_matrix() {
+  return m_matrix_h;
+}
