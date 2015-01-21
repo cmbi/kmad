@@ -32,7 +32,7 @@ void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
   assert(m_matrix_v.size() == m_matrix_h.size());
 
   for (unsigned int i = 1; i < m_matrix_v.size(); ++i) {
-    m_matrix_v[i][0] = -10000000; //=== infinity
+    m_matrix_v[i][0] = -10000000; //=== - infinity
     m_matrix_h[i][0] = -10000000;
     m_matrix_g[i][0] = i * m_end_pen;
   }

@@ -130,13 +130,30 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
     BOOST_CHECK_EQUAL_COLLECTIONS(matrix_V[i].begin(), matrix_V[i].end(),
                                   expected_V[i].begin(), expected_V[i].end());
   }
+  SingleScoringMatrix matrix_G = scores.get_G_matrix();
+  SingleScoringMatrix matrix_H = scores.get_H_matrix();
+  for (auto& row : matrix_G) {
+    for (auto& item : row) {
+      std::cout << item << " ";
+    }
+    std::cout << std::endl;
+  }
+  for (auto& row : matrix_H) {
+    for (auto& item : row) {
+      std::cout << item << " ";
+    }
+    std::cout << std::endl;
+  }
+
   // AND THE OTHER WAY ROUND (s2 becomes the profile)
   query_seq_list = {s2};
   profile = profile::create_score_profile(query_seq_list);
+  f_profile.update_scores(query_seq_list, f_set);
   ScoringMatrix scores2(s2.residues.size(), s1.residues.size(), gap_open_pen,
                         end_pen, gap_ext_pen);
   scores2.calculate_scores(s1, profile, f_profile, codon_length);
   matrix_V = scores2.get_V_matrix();
+
   expected_V = {{0, -10000000, -10000000, -10000000, 
                  -10000000, -10000000, -10000000,
                  -10000000, -10000000, -10000000},
@@ -149,10 +166,62 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
     BOOST_CHECK_EQUAL_COLLECTIONS(matrix_V[i].begin(), matrix_V[i].end(),
                                   expected_V[i].begin(), expected_V[i].end());
   }
-  scores2.backtrace_alignment_path(s1, profile, f_profile, codon_length);
-  query_seq_list = {s1};
+}
+BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
+  fasta::Sequence s1;
+  fasta::Sequence s2;
+  int codon_length = 1;
+  s1 = fasta::make_sequence("d", "ASLKSLKPT", codon_length);
+  s2 = fasta::make_sequence("d", "ASLRP", codon_length);
+  fasta::SequenceList query_seq_list = {s1};
+  fasta::SequenceList sequences = {s1, s2};
+  int domain_modifier = 4;
+  int motif_modifier = 3;
+  int ptm_modifier = 10;
+  std::map<std::string, double> probabilities;
+  f_config::FeatureSettingsMap f_set;
+  std::vector<std::string> feature_list;
+  FeatureScores f_profile(feature_list, domain_modifier,
+                          ptm_modifier, motif_modifier,
+                          probabilities);
+  f_profile.update_scores(query_seq_list, f_set);
+  double gap_open_pen = -5;
+  double gap_ext_pen = -1;
+  double end_pen = -1;
+  fasta::Sequence e_s1;
+  fasta::Sequence e_s2;
+  e_s1 = fasta::make_sequence("d", "AAAAAAAAA", codon_length);
+  e_s2 = fasta::make_sequence("d", "A---SLRP-", codon_length);
+  profile::ProfileMap profile = profile::create_score_profile(query_seq_list);
+  ScoringMatrix scores(s1.residues.size(), s2.residues.size(), gap_open_pen,
+                       end_pen, gap_ext_pen);
+  scores.calculate_scores(s2, profile, f_profile, codon_length);
+  fasta::SequenceList result = scores.backtrace_alignment_path(s2, profile,
+                                                               f_profile,
+                                                               codon_length);
+  BOOST_CHECK_EQUAL(e_s1.residues.size(), result[0].residues.size());
+  BOOST_CHECK_EQUAL(e_s2.residues.size(), result[1].residues.size());
+  for (size_t i = 0; i < e_s1.residues.size(); ++i) {
+    BOOST_CHECK_EQUAL(e_s1.residues[i].codon, result[0].residues[i].codon);
+    BOOST_CHECK_EQUAL(e_s2.residues[i].codon, result[1].residues[i].codon);
+  }
+  query_seq_list = {s2};
+  f_profile.update_scores(query_seq_list, f_set);
+  e_s1 = fasta::make_sequence("d", "A---AAAA-", codon_length);
+  e_s2 = fasta::make_sequence("d", "ASLKSLKPT", codon_length);
   profile = profile::create_score_profile(query_seq_list);
-  scores.backtrace_alignment_path(s2, profile, f_profile, codon_length);
+  ScoringMatrix scores2(s2.residues.size(), s1.residues.size(), gap_open_pen,
+                       end_pen, gap_ext_pen);
+  scores2.calculate_scores(s1, profile, f_profile, codon_length);
+  result = scores2.backtrace_alignment_path(s1, profile,
+                                            f_profile,
+                                            codon_length);
+  BOOST_CHECK_EQUAL(e_s1.residues.size(), result[0].residues.size());
+  BOOST_CHECK_EQUAL(e_s2.residues.size(), result[1].residues.size());
+  for (size_t i = 0; i < e_s1.residues.size(); ++i) {
+    BOOST_CHECK_EQUAL(e_s1.residues[i].codon, result[0].residues[i].codon);
+    BOOST_CHECK_EQUAL(e_s2.residues[i].codon, result[1].residues[i].codon);
+  }
 }
 
 BOOST_AUTO_TEST_SUITE_END()
