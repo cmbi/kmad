@@ -33,14 +33,17 @@ void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
 
   for (unsigned int i = 1; i < m_matrix_v.size(); ++i) {
     m_matrix_v[i][0] = -10000000; //=== - infinity
-    m_matrix_h[i][0] = -10000000;
-    m_matrix_g[i][0] = i * m_end_pen;
+    m_matrix_h[i][0] = i * m_end_pen;
+    m_matrix_g[i][0] = -10000000;
   }
   for (unsigned int i = 1; i < m_matrix_v[0].size(); ++i) {
     m_matrix_v[0][i] = -10000000;
-    m_matrix_h[0][i] = i * m_end_pen;
-    m_matrix_g[0][i] = -10000000;
+    m_matrix_h[0][i] = -10000000;
+    m_matrix_g[0][i] = i * m_end_pen;
   }
+  m_matrix_g[0][0] = -10000000;
+  m_matrix_h[0][0] = -10000000;
+
   double score1, score2, score3 = 0;
   for (size_t i = 1; i < m_matrix_v.size(); ++i) {
     for (size_t j = 1; j < m_matrix_v[i].size(); ++j) {
@@ -62,6 +65,8 @@ void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
       score1 = m_matrix_v[i-1][j] + m_gap_opening;
       score2 = m_matrix_g[i-1][j] + m_gap_extension;
       m_matrix_g[i][j] = (score1 > score2) ? score1 : score2;
+      // std::cout << score1 << " " << score2 << " " << m_matrix_g[i][j]
+      //          << std::endl;
       ///H
       score1 = m_matrix_v[i][j-1] + m_gap_opening;
       score2 = m_matrix_h[i][j-1] + m_gap_extension;

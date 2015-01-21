@@ -130,20 +130,6 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
     BOOST_CHECK_EQUAL_COLLECTIONS(matrix_V[i].begin(), matrix_V[i].end(),
                                   expected_V[i].begin(), expected_V[i].end());
   }
-  SingleScoringMatrix matrix_G = scores.get_G_matrix();
-  SingleScoringMatrix matrix_H = scores.get_H_matrix();
-  for (auto& row : matrix_G) {
-    for (auto& item : row) {
-      std::cout << item << " ";
-    }
-    std::cout << std::endl;
-  }
-  for (auto& row : matrix_H) {
-    for (auto& item : row) {
-      std::cout << item << " ";
-    }
-    std::cout << std::endl;
-  }
 
   // AND THE OTHER WAY ROUND (s2 becomes the profile)
   query_seq_list = {s2};
@@ -165,6 +151,26 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
   for (size_t i = 0; i < matrix_V.size(); ++i) {
     BOOST_CHECK_EQUAL_COLLECTIONS(matrix_V[i].begin(), matrix_V[i].end(),
                                   expected_V[i].begin(), expected_V[i].end());
+  }
+  SingleScoringMatrix matrix_G = scores2.get_G_matrix();
+  SingleScoringMatrix matrix_H = scores2.get_H_matrix();
+  for (auto& row : matrix_G) {
+    for (auto& item : row) {
+      std::cout << item << " ";
+    }
+    std::cout << std::endl;
+  }
+  for (auto& row : matrix_H) {
+    for (auto& item : row) {
+      std::cout << item << " ";
+    }
+    std::cout << std::endl;
+  }
+  for (auto& row : matrix_V) {
+    for (auto& item : row) {
+      std::cout << item << " ";
+    }
+    std::cout << std::endl;
   }
 }
 BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
