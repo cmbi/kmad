@@ -38,8 +38,6 @@ public:
       const FeatureScores& f_profile,
       int codon_length);
   SingleScoringMatrix get_V_matrix();
-  SingleScoringMatrix get_H_matrix();
-  SingleScoringMatrix get_G_matrix();
 private:
   ///
   /// finds the best score either in the last column or in the last row of the

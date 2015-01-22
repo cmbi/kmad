@@ -65,8 +65,6 @@ void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
       score3 = m_matrix_g[i-1][j] + m_gap_opening;
       m_matrix_h[i][j] = std::max<double>(score1, std::max<double>(score2,
                                                                    score3));
-      // std::cout << score1 << " " << score2 << " " << m_matrix_g[i][j]
-      //          << std::endl;
       ///H
       score1 = m_matrix_v[i][j-1] + m_gap_opening;
       score2 = m_matrix_g[i][j-1] + m_gap_extension;
@@ -87,18 +85,18 @@ ValueCoords ScoringMatrix::find_best_score() {
   double max_j_val = m_matrix_v[max_i][max_j];
   double real_val;
   double max = m_matrix_v[max_i][max_j];
-  for (int i = 0; i < n ; ++i) {    //finds max score in the last row
+  for (int i = 0; i <= n ; ++i) {    //finds max score in the last row
     // add end gap penalties to the score to calc the 'real' score
     // of the alignment
-    real_val = m_matrix_v[i][m] + m_end_pen * (m_matrix_v.size() - i);
+    real_val = m_matrix_v[i][m] + m_end_pen * (m_matrix_v.size() - i - 1);
     if (real_val > max) {
       max_i_val = real_val;
       max = real_val;
       max_i = i;
     }
   }
-  for (int i = 0; i < m; ++i) {    //finds max score in the last column
-    real_val = m_matrix_v[n][i] + m_end_pen * (m_matrix_v[0].size() - i);
+  for (int i = 0; i <= m; ++i) {    //finds max score in the last column
+    real_val = m_matrix_v[n][i] + m_end_pen * (m_matrix_v[0].size() - i - 1);
     // add end gap penalties to the score, to calc the 'real' score
     // of the alignment
     if (real_val > max) {
@@ -214,14 +212,4 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
 
 SingleScoringMatrix ScoringMatrix::get_V_matrix() {
   return m_matrix_v;
-}
-
-
-SingleScoringMatrix ScoringMatrix::get_G_matrix() {
-  return m_matrix_g;
-}
-
-
-SingleScoringMatrix ScoringMatrix::get_H_matrix() {
-  return m_matrix_h;
 }
