@@ -61,12 +61,6 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment)
                        end_pen, gap_ext_pen);
   scores.calculate_scores(s2, profile, f_profile, codon_length);
   SingleScoringMatrix matrix_V = scores.get_V_matrix();
-  for (auto& row : matrix_V) {
-    for (auto& item : row) {
-      std::cout << item << " ";
-    }
-    std::cout << std::endl;
-  }
   fasta::SequenceList alignment;
   alignment = scores.backtrace_alignment_path(s2, 
                                               profile, f_profile,
@@ -82,15 +76,6 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment)
                                    "-AAAAAAAAAAAAAKAAAAAA"
                                    "LAAAAAARAAAAAA", codon_length);
   fasta::SequenceList expected_alignment = {e_s1, e_s2};
-  std::cout << "alignment:" << std::endl;
-  for (auto& res : alignment[0].residues) {
-    std::cout << res.codon;
-  }
-  std::cout << std::endl;
-  for (auto& res : alignment[1].residues) {
-    std::cout << res.codon;
-  }
-  std::cout << std::endl;
   BOOST_CHECK_EQUAL(alignment[0].residues.size(),
                     expected_alignment[0].residues.size());
   BOOST_CHECK_EQUAL(alignment[1].residues.size(),
@@ -167,26 +152,6 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
   for (size_t i = 0; i < matrix_V.size(); ++i) {
     BOOST_CHECK_EQUAL_COLLECTIONS(matrix_V[i].begin(), matrix_V[i].end(),
                                   expected_V[i].begin(), expected_V[i].end());
-  }
-  SingleScoringMatrix matrix_G = scores2.get_G_matrix();
-  SingleScoringMatrix matrix_H = scores2.get_H_matrix();
-  for (auto& row : matrix_G) {
-    for (auto& item : row) {
-      std::cout << item << " ";
-    }
-    std::cout << std::endl;
-  }
-  for (auto& row : matrix_H) {
-    for (auto& item : row) {
-      std::cout << item << " ";
-    }
-    std::cout << std::endl;
-  }
-  for (auto& row : matrix_V) {
-    for (auto& item : row) {
-      std::cout << item << " ";
-    }
-    std::cout << std::endl;
   }
 }
 BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {

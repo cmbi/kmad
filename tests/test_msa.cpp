@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
                                  "YAAAAAAAAAAAAAKAAAAAA"
                                  "LAAAAAA", codon_length);
   fasta::Sequence s2;
-  // AKLAKL
+  // AKLAKLR
   s2 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
                                  "YAAAZAA"
                                  "AAAAAAAKAAAAAALAAAAAA"
@@ -49,9 +49,9 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
   int domain_modifier = 4;
   int motif_modifier = 3;
   int ptm_modifier = 10;
-  double gap_open_pen = 5;
-  double gap_ext_pen = 1;
-  double end_pen = 1;
+  double gap_open_pen = -5;
+  double gap_ext_pen = -1;
+  double end_pen = -1;
   bool one_round = false;
   seq_data::SequenceData sequence_data;
   sequence_data.sequences = sequences;
@@ -87,7 +87,6 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
   std::vector<fasta::SequenceList> expected_alignment = {{e_s1, e_s2},
                                                          {e_s1_lower,
                                                           e_s2_lower}};
-
   BOOST_CHECK_EQUAL(alignment[0][0].residues.size(),
                     expected_alignment[0][0].residues.size());
   BOOST_CHECK_EQUAL(alignment[0][1].residues.size(),
@@ -145,9 +144,9 @@ BOOST_AUTO_TEST_CASE(test_set_identities)
                                    "ptm_Oglyc1", "ptm_Oglyc2",
                                    "ptm_Oglyc3"}; 
   f_config::FeatureSettingsMap f_set;
-  double gap_open_pen = 5;
-  double gap_ext_pen = 1;
-  double end_pen = 1;
+  double gap_open_pen = -5;
+  double gap_ext_pen = -1;
+  double end_pen = -1;
   int domain_modifier = 4;
   int motif_modifier = 3;
   int ptm_modifier = 10;
