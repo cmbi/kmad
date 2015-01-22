@@ -14,7 +14,7 @@
 
 BOOST_AUTO_TEST_SUITE(test_scoring_matrix)
 
-BOOST_AUTO_TEST_CASE(test_backtrace_algorithm_path)
+BOOST_AUTO_TEST_CASE(test_backtrace_alignment)
 {
   int codon_length = 7;
   fasta::Sequence s1;
@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_algorithm_path)
                                  "CAAAAAAAAAAAAAKAAAAAA"
                                  "LAAAAAA", codon_length);
   fasta::Sequence s2;
-  // AKLAKL
+  // AKLAKLR
   s2 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
                                  "AAAAAAAKAAAAAALAAAAAA"
                                  "RAAAAAA", codon_length);
@@ -60,17 +60,18 @@ BOOST_AUTO_TEST_CASE(test_backtrace_algorithm_path)
   ScoringMatrix scores(s1.residues.size(), s2.residues.size(), gap_open_pen,
                        end_pen, gap_ext_pen);
   scores.calculate_scores(s2, profile, f_profile, codon_length);
+  SingleScoringMatrix matrix_V = scores.get_V_matrix();
   fasta::SequenceList alignment;
   alignment = scores.backtrace_alignment_path(s2, 
                                               profile, f_profile,
                                               codon_length);
   fasta::Sequence e_s1;
-  // AKLCAKL
+  // AKLCAKL-
   e_s1 = fasta::make_sequence("d", "AAAAAAAAAAAAAAAAAAAAA"
                                    "AAAAAAAAAAAAAAAAAAAAA"
                                    "AAAAAAA-AAAAAA", codon_length);
   fasta::Sequence e_s2;
-  // AKLAKL
+  // AKL-AKLR
   e_s2 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
                                    "-AAAAAAAAAAAAAKAAAAAA"
                                    "LAAAAAARAAAAAA", codon_length);
@@ -129,20 +130,6 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
   for (size_t i = 0; i < matrix_V.size(); ++i) {
     BOOST_CHECK_EQUAL_COLLECTIONS(matrix_V[i].begin(), matrix_V[i].end(),
                                   expected_V[i].begin(), expected_V[i].end());
-  }
-  SingleScoringMatrix matrix_G = scores.get_G_matrix();
-  SingleScoringMatrix matrix_H = scores.get_H_matrix();
-  for (auto& row : matrix_G) {
-    for (auto& item : row) {
-      std::cout << item << " ";
-    }
-    std::cout << std::endl;
-  }
-  for (auto& row : matrix_H) {
-    for (auto& item : row) {
-      std::cout << item << " ";
-    }
-    std::cout << std::endl;
   }
 
   // AND THE OTHER WAY ROUND (s2 becomes the profile)
