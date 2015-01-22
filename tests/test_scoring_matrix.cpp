@@ -136,9 +136,9 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   }
   gap_ext_pen = -0.1;
   end_pen = -0.01;
-  gap_open_pen = -0.1;
-  s1 = fasta::make_sequence("d", "DD", codon_length);
-  s2 = fasta::make_sequence("d", "WW", codon_length);
+  gap_open_pen = -1;
+  s1 = fasta::make_sequence("d", "RRRDDRR", codon_length);
+  s2 = fasta::make_sequence("d", "RRRWWRR", codon_length);
   query_seq_list = {s1};
   f_profile.update_scores(query_seq_list, f_set);
   profile = profile::create_score_profile(query_seq_list);
@@ -148,23 +148,27 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   result = scores3.backtrace_alignment_path(s2, profile,
                                             f_profile,
                                             codon_length);
-  SingleScoringMatrix vmat = scores3.get_V_matrix();
-  for (auto& row : vmat) {
-    for (auto& item : row) {
-      std::cout << item << " ";
-    }
-    std::cout << std::endl;
+  e_s1 = fasta::make_sequence("d", "AAAAA--AA", codon_length);
+  e_s2 = fasta::make_sequence("d", "RRR--WWRR", codon_length);
+  for (size_t i = 0; i < e_s1.residues.size(); ++i) {
+    BOOST_CHECK_EQUAL(e_s1.residues[i].codon, result[0].residues[i].codon);
+    BOOST_CHECK_EQUAL(e_s2.residues[i].codon, result[1].residues[i].codon);
   }
-
-  for (auto& res : result[0].residues) {
-    std::cout << res.codon;
+  query_seq_list = {s2};
+  f_profile.update_scores(query_seq_list, f_set);
+  profile = profile::create_score_profile(query_seq_list);
+  scores3 = ScoringMatrix(s2.residues.size(), s1.residues.size(), gap_open_pen,
+                          end_pen, gap_ext_pen);
+  scores3.calculate_scores(s1, profile, f_profile, codon_length);
+  result = scores3.backtrace_alignment_path(s1, profile,
+                                            f_profile,
+                                            codon_length);
+  e_s1 = fasta::make_sequence("d", "AAAAA--AA", codon_length);
+  e_s2 = fasta::make_sequence("d", "RRR--DDRR", codon_length);
+  for (size_t i = 0; i < e_s1.residues.size(); ++i) {
+    BOOST_CHECK_EQUAL(e_s1.residues[i].codon, result[0].residues[i].codon);
+    BOOST_CHECK_EQUAL(e_s2.residues[i].codon, result[1].residues[i].codon);
   }
-  std::cout << std::endl;
-  for (auto& res : result[1].residues) {
-    std::cout << res.codon;
-  }
-  std::cout << std::endl;
-
 
 }
 
