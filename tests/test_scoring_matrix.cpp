@@ -169,6 +169,56 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
     BOOST_CHECK_EQUAL(e_s1.residues[i].codon, result[0].residues[i].codon);
     BOOST_CHECK_EQUAL(e_s2.residues[i].codon, result[1].residues[i].codon);
   }
+  codon_length = 7;
+  feature_list = {"ptm_phosph0", "ptm_phosph1",
+                  "ptm_phosph2", "ptm_phosph3",
+                  "ptm_phosphP", "ptm_acet0",
+                  "ptm_acet1", "ptm_acet2",
+                  "ptm_acet3", "ptm_Nglyc0",
+                  "ptm_Nglyc1", "ptm_Nglyc2",
+                  "ptm_Nglyc3", "ptm_amid0",
+                  "ptm_amid1", "ptm_amid2",
+                  "ptm_amid3", "ptm_hydroxy0",
+                  "ptm_hydroxy1", "ptm_hydroxy2",
+                  "ptm_hydroxy3", "ptm_methyl0",
+                  "ptm_methyl1", "ptm_methyl2",
+                  "ptm_methyl3", "ptm_Oglyc0",
+                  "ptm_Oglyc1", "ptm_Oglyc2",
+                  "ptm_Oglyc3", "motif_aa"};
+  s1 = fasta::make_sequence("d", "TAAAZAATAAAZAARAAAAAARAAAAAARAAAAAADAAAAAA"
+                                 "DAAAAAARAAAAAARAAAAAA", codon_length);
+  s2 = fasta::make_sequence("d", "RAAAZAARAAAAaaRAAAAAAWAAAAAAWAAAAAARAAAAAA"
+                                 "RAAAAAA", codon_length);
+  query_seq_list = {s1};
+  f_profile = FeatureScores(feature_list, domain_modifier,
+                            ptm_modifier, motif_modifier,
+                            probabilities);
+  f_profile.update_scores(query_seq_list, f_set);
+  profile = profile::create_score_profile(query_seq_list);
+  scores3 = ScoringMatrix(s1.residues.size(), s2.residues.size(), gap_open_pen,
+                          end_pen, gap_ext_pen);
+  scores3.calculate_scores(s2, profile, f_profile, codon_length);
+  result = scores3.backtrace_alignment_path(s2, profile,
+                                            f_profile,
+                                            codon_length);
+  e_s1 = fasta::make_sequence("d", "AAAAAAAAAAAAAAAAAAAAAAAAAAAA-AAAAAA"
+                                   "-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                                   "AAAAAAA", codon_length);
+  e_s2 = fasta::make_sequence("d", "-AAAAAARAAAZAARAAAAaaRAAAAAAWAAAAAA"
+                                   "WAAAAAARAAAAAA-AAAAAA-AAAAAARAAAAAA"
+                                   "-AAAAAA", codon_length);
+  for (size_t i = 0; i < e_s1.residues.size(); ++i) {
+    BOOST_CHECK_EQUAL(e_s1.residues[i].codon, result[0].residues[i].codon);
+    BOOST_CHECK_EQUAL(e_s2.residues[i].codon, result[1].residues[i].codon);
+  }
+  for (auto& res : result[0].residues) {
+    std::cout << res.codon;
+  }
+  std::cout << std::endl;
+  for (auto& res : result[1].residues) {
+    std::cout << res.codon;
+  }
+  std::cout << std::endl;
 
 }
 
