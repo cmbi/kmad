@@ -211,14 +211,6 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
     BOOST_CHECK_EQUAL(e_s1.residues[i].codon, result[0].residues[i].codon);
     BOOST_CHECK_EQUAL(e_s2.residues[i].codon, result[1].residues[i].codon);
   }
-  for (auto& res : result[0].residues) {
-    std::cout << res.codon;
-  }
-  std::cout << std::endl;
-  for (auto& res : result[1].residues) {
-    std::cout << res.codon;
-  }
-  std::cout << std::endl;
 
 }
 

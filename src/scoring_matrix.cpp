@@ -1,3 +1,4 @@
+#include "compare_doubles.h"
 #include "feature_scores.h"
 #include "profile.h"
 #include "scoring_matrix.h"
@@ -169,10 +170,13 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
       double final_score = profile_score + feature_score;
       if (m_matrix_v[i][j] != m_matrix_v[i-1][j-1] + final_score) {
         if (i > 0 && j > 0
-            && m_matrix_v[i][j] == m_matrix_g[i-1][j-1] + final_score) {
+            && compare_doubles::is_equal(m_matrix_v[i][j],
+                                         m_matrix_g[i-1][j-1] + final_score)) {
           current_matrix = "G";
         } else if (i > 0 && j > 0
-                   && m_matrix_v[i][j] == m_matrix_h[i-1][j-1] + final_score) {
+                   && compare_doubles::is_equal(m_matrix_v[i][j],
+                                                m_matrix_h[i-1][j-1]
+                                                + final_score)) {
           current_matrix = "H";
         }
       }
@@ -181,20 +185,26 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
     } else if (j > 0 && current_matrix == "G") {  //gap in seq2
       new_res1 = gap_residue;
       new_res2 = sequence.residues[j - 1];
-      if (m_matrix_g[i][j] == m_matrix_v[i][j - 1] + m_gap_opening) {
+      if (compare_doubles::is_equal(m_matrix_g[i][j],
+                                    m_matrix_v[i][j - 1] + m_gap_opening)) {
         current_matrix = "V";
       }
-      else if (m_matrix_g[i][j] == m_matrix_h[i][j - 1] + m_gap_opening) {
+      else if (compare_doubles::is_equal(m_matrix_g[i][j],
+                                         m_matrix_h[i][j - 1]
+                                         + m_gap_opening)) {
         current_matrix = "H";
       }
       --j;
     } else if (i > 0 && current_matrix == "H") {  //gap in profile
       new_res1 = profile_sequence.residues[i - 1];
       new_res2 = gap_residue;
-      if (m_matrix_h[i][j] == m_matrix_v[i - 1][j] + m_gap_opening) {
+      if (compare_doubles::is_equal(m_matrix_h[i][j],
+                                    m_matrix_v[i - 1][j] + m_gap_opening)) {
         current_matrix = "V";
       }
-      else if (m_matrix_h[i][j] == m_matrix_g[i - 1][j] + m_gap_opening) {
+      else if (compare_doubles::is_equal(m_matrix_h[i][j],
+                                         m_matrix_g[i - 1][j]
+                                         + m_gap_opening)) {
         current_matrix = "G";
       }
       --i;

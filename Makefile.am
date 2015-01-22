@@ -7,7 +7,8 @@ shared_LDADD	=	$(BOOST_FILESYSTEM_LIB) \
 								$(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
 								-lconfig++
 
-shared_SOURCES	=	src/fasta.cpp \
+shared_SOURCES	=	src/compare_doubles.cpp \
+									src/fasta.cpp \
 									src/feature_scores.cpp \
 									src/f_config.cpp \
 									src/outfile.cpp \
