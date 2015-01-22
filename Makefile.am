@@ -26,11 +26,11 @@ kman_LDADD = $(shared_LDADD)
 test_kman_SOURCES = $(shared_SOURCES) \
 										tests/test_config.cpp \
 										tests/test_fasta.cpp \
-										tests/test_msa.cpp \
-										tests/test_scoring_matrix.cpp \
 										tests/test_seq_data.cpp \
 										tests/test_profile.cpp \
-										tests/test_feature_scores.cpp
+										tests/test_feature_scores.cpp \
+										tests/test_scoring_matrix.cpp \
+										tests/test_msa.cpp
 
 									
 

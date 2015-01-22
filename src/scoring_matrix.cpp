@@ -41,8 +41,6 @@ void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
     m_matrix_h[0][i] = -10000000;
     m_matrix_g[0][i] = i * m_end_pen;
   }
-  m_matrix_g[0][0] = -10000000;
-  m_matrix_h[0][0] = -10000000;
 
   double score1, score2, score3 = 0;
   for (size_t i = 1; i < m_matrix_v.size(); ++i) {
@@ -63,14 +61,18 @@ void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
         std::max<double>(score2, score3)) + profile_score + feature_score;
       ///G
       score1 = m_matrix_v[i-1][j] + m_gap_opening;
-      score2 = m_matrix_g[i-1][j] + m_gap_extension;
-      m_matrix_g[i][j] = (score1 > score2) ? score1 : score2;
+      score2 = m_matrix_h[i-1][j] + m_gap_extension;
+      score3 = m_matrix_g[i-1][j] + m_gap_opening;
+      m_matrix_h[i][j] = std::max<double>(score1, std::max<double>(score2,
+                                                                   score3));
       // std::cout << score1 << " " << score2 << " " << m_matrix_g[i][j]
       //          << std::endl;
       ///H
       score1 = m_matrix_v[i][j-1] + m_gap_opening;
-      score2 = m_matrix_h[i][j-1] + m_gap_extension;
-      m_matrix_h[i][j] = (score1 > score2) ? score1 : score2;
+      score2 = m_matrix_g[i][j-1] + m_gap_extension;
+      score3 = m_matrix_h[i][j-1] + m_gap_opening;
+      m_matrix_g[i][j] = std::max<double>(score1, std::max<double>(score2,
+                                                                   score3));
     }
   }
 }
@@ -169,28 +171,35 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
       double final_score = profile_score + feature_score;
       if (m_matrix_v[i][j] != m_matrix_v[i-1][j-1] + final_score) {
         if (i > 0 && j > 0
-            && m_matrix_v[i][j] == m_matrix_g[i-1][j-1]+final_score) {
+            && m_matrix_v[i][j] == m_matrix_g[i-1][j-1] + final_score) {
           current_matrix = "G";
         } else if (i > 0 && j > 0
-                   && m_matrix_v[i][j] == m_matrix_h[i-1][j-1]+final_score) {
+                   && m_matrix_v[i][j] == m_matrix_h[i-1][j-1] + final_score) {
           current_matrix = "H";
         }
       }
       --i;
       --j;
-    } else if (i > 0 && current_matrix == "G") {  //gap in seq2
-      new_res1 = profile_sequence.residues[i - 1];
-      new_res2 = gap_residue;
-      if (m_matrix_g[i][j] == m_matrix_v[i-1][j] + m_gap_opening)
-        current_matrix = "V";
-      --i;
-    } else if (j > 0 && current_matrix == "H") {  //gap in profile
+    } else if (j > 0 && current_matrix == "G") {  //gap in seq2
       new_res1 = gap_residue;
       new_res2 = sequence.residues[j - 1];
-      if (m_matrix_h[i][j] == m_matrix_v[i][j - 1] + m_gap_opening) {
+      if (m_matrix_g[i][j] == m_matrix_v[i][j - 1] + m_gap_opening) {
         current_matrix = "V";
       }
+      else if (m_matrix_g[i][j] == m_matrix_h[i][j - 1] + m_gap_opening) {
+        current_matrix = "H";
+      }
       --j;
+    } else if (i > 0 && current_matrix == "H") {  //gap in profile
+      new_res1 = profile_sequence.residues[i - 1];
+      new_res2 = gap_residue;
+      if (m_matrix_h[i][j] == m_matrix_v[i - 1][j] + m_gap_opening) {
+        current_matrix = "V";
+      }
+      else if (m_matrix_h[i][j] == m_matrix_g[i - 1][j] + m_gap_opening) {
+        current_matrix = "G";
+      }
+      --i;
     }
     new_s1.residues.push_back(new_res1);
     new_s2.residues.push_back(new_res2);

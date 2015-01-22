@@ -14,7 +14,7 @@
 
 BOOST_AUTO_TEST_SUITE(test_scoring_matrix)
 
-BOOST_AUTO_TEST_CASE(test_backtrace_algorithm_path)
+BOOST_AUTO_TEST_CASE(test_backtrace_alignment)
 {
   int codon_length = 7;
   fasta::Sequence s1;
@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_algorithm_path)
                                  "CAAAAAAAAAAAAAKAAAAAA"
                                  "LAAAAAA", codon_length);
   fasta::Sequence s2;
-  // AKLAKL
+  // AKLAKLR
   s2 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
                                  "AAAAAAAKAAAAAALAAAAAA"
                                  "RAAAAAA", codon_length);
@@ -60,21 +60,37 @@ BOOST_AUTO_TEST_CASE(test_backtrace_algorithm_path)
   ScoringMatrix scores(s1.residues.size(), s2.residues.size(), gap_open_pen,
                        end_pen, gap_ext_pen);
   scores.calculate_scores(s2, profile, f_profile, codon_length);
+  SingleScoringMatrix matrix_V = scores.get_V_matrix();
+  for (auto& row : matrix_V) {
+    for (auto& item : row) {
+      std::cout << item << " ";
+    }
+    std::cout << std::endl;
+  }
   fasta::SequenceList alignment;
   alignment = scores.backtrace_alignment_path(s2, 
                                               profile, f_profile,
                                               codon_length);
   fasta::Sequence e_s1;
-  // AKLCAKL
+  // AKLCAKL-
   e_s1 = fasta::make_sequence("d", "AAAAAAAAAAAAAAAAAAAAA"
                                    "AAAAAAAAAAAAAAAAAAAAA"
                                    "AAAAAAA-AAAAAA", codon_length);
   fasta::Sequence e_s2;
-  // AKLAKL
+  // AKL-AKLR
   e_s2 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
                                    "-AAAAAAAAAAAAAKAAAAAA"
                                    "LAAAAAARAAAAAA", codon_length);
   fasta::SequenceList expected_alignment = {e_s1, e_s2};
+  std::cout << "alignment:" << std::endl;
+  for (auto& res : alignment[0].residues) {
+    std::cout << res.codon;
+  }
+  std::cout << std::endl;
+  for (auto& res : alignment[1].residues) {
+    std::cout << res.codon;
+  }
+  std::cout << std::endl;
   BOOST_CHECK_EQUAL(alignment[0].residues.size(),
                     expected_alignment[0].residues.size());
   BOOST_CHECK_EQUAL(alignment[1].residues.size(),
