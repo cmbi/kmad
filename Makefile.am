@@ -25,6 +25,7 @@ kman_SOURCES	=	$(shared_SOURCES) \
 kman_LDADD = $(shared_LDADD)
 
 test_kman_SOURCES = $(shared_SOURCES) \
+										tests/test_compare_doubles.cpp \
 										tests/test_config.cpp \
 										tests/test_fasta.cpp \
 										tests/test_seq_data.cpp \

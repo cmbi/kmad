@@ -60,3 +60,5 @@ Session.vim
 *gcda
 coverage.info
 out/
+.coverage
+coverage.sh
