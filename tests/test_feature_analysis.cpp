@@ -14,6 +14,10 @@ BOOST_AUTO_TEST_CASE(test_parse_mapfile) {
         "tests/nonexistent.map"), std::invalid_argument);
   BOOST_CHECK_THROW(feature_analysis::parse_mapfile("tests/wrong_format.map"),
                     std::runtime_error);
+  BOOST_CHECK_THROW(feature_analysis::parse_mapfile("tests/wrong_format2.map"),
+                    std::runtime_error);
+  BOOST_CHECK_THROW(feature_analysis::parse_mapfile("tests/wrong_format3.map"),
+                    std::runtime_error);
   feature_analysis::CodesMap cm = feature_analysis::parse_mapfile(
       "tests/test.map");
   feature_analysis::CodesMap expected_cm = {{"motif_aa",
