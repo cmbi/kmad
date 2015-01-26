@@ -9,6 +9,7 @@ shared_LDADD	=	$(BOOST_FILESYSTEM_LIB) \
 
 shared_SOURCES	=	src/compare_doubles.cpp \
 									src/fasta.cpp \
+									src/feature_analysis.cpp \
 									src/feature_scores.cpp \
 									src/f_config.cpp \
 									src/outfile.cpp \
@@ -30,6 +31,7 @@ test_kman_SOURCES = $(shared_SOURCES) \
 										tests/test_fasta.cpp \
 										tests/test_seq_data.cpp \
 										tests/test_profile.cpp \
+										tests/test_feature_analysis.cpp \
 										tests/test_feature_scores.cpp \
 										tests/test_scoring_matrix.cpp \
 										tests/test_msa.cpp \
