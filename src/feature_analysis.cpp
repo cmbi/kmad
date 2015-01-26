@@ -6,6 +6,7 @@
 #include <fstream>
 
 namespace fs = boost::filesystem;
+
 feature_analysis::CodesMap feature_analysis::parse_mapfile(
     std::string filename) {
   feature_analysis::CodesMap c;
@@ -25,4 +26,20 @@ feature_analysis::CodesMap feature_analysis::parse_mapfile(
   }
   mapfile.close();
   return c;
+}
+
+feature_analysis::ConsensusSequence feature_analysis::analyze_alignment(
+    feature_analysis::CodesMap codes_map,
+    std::vector<fasta::SequenceList> alignment,
+    double conservation_cutoff) {
+  feature_analysis::ConsensusSequence cs;
+  return cs;
+  
+
+}
+
+void feature_analysis::write_consensus_to_file(
+    feature_analysis::ConsensusSequence cons_seq,
+    std::string out_cons_filename) {
+  
 }

@@ -1,5 +1,6 @@
 #include "f_config.h"
 #include "fasta.h"
+#include "feature_analysis.h"
 #include "msa.h"
 #include "outfile.h"
 #include "seq_data.h"
@@ -26,6 +27,9 @@ int main(int argc, char *argv[]) {
     std::string filename;
     std::string output_prefix;
     std::string conf_file;
+    std::string mapfilename;
+    std::string out_cons_filename;
+    double conservation_cutoff;
 
     po::options_description desc("Allowed options");
     desc.add_options()
@@ -57,13 +61,22 @@ int main(int argc, char *argv[]) {
       ("out-encoded",
        po::value<bool>(&out_encoded)->implicit_value(true)
                                     ->default_value(false),
-       "Output alignment with encoded features")
+       "output alignment with encoded features")
       ("end,n",
        po::value<double>(&end_pen)->default_value(-0.1),
        "penalty for gaps at the end (and beginning)")
       ("one-round, r", po::value<bool>(&one_round)->implicit_value(true)
                                                   ->default_value(false),
        "perform only one round of alignments (all against first)")
+      ("out-cons", po::value<std::string>(&out_cons_filename),
+        "feature consensus output file"
+      )
+      ("feat-map", po::value<std::string>(&mapfilename),
+       "feature map file" 
+      )
+      ("feat_cutoff", po::value<double>(&conservation_cutoff)
+          ->default_value(0.5),
+       "conservation cutoff for the feature consensus")
       ("conf",
        po::value<std::string>(&conf_file),
        "configure file");
@@ -121,19 +134,32 @@ int main(int argc, char *argv[]) {
 
     seq_data::SequenceData sequence_data = seq_data::process_fasta_data(
         fasta_data, f_set);
-
+    // perform the alignment
     auto alignment = msa::run_msa(sequence_data, 
                                   f_set, gap_open_pen,
                                   gap_ext_pen, end_pen, domain_modifier, 
                                   motif_modifier, ptm_modifier, codon_length,
                                   one_round);
-
+    // write alignment to file 
     if (out_encoded) {
       outfile::write_encoded_alignment(alignment[1], sequence_data,
                                        output_prefix);
     } else {
       outfile::write_decoded_alignment(alignment[1], sequence_data,
                                        output_prefix);
+    }
+    // analyze features in the alignment
+    if (vm.count("out-cons") != 0) {
+      if (vm.count("feat-map") == 0) {
+        mapfilename = filename.substr(0, filename.size() - 2) + "map";
+      }
+      feature_analysis::CodesMap codes_map = feature_analysis::parse_mapfile(
+          mapfilename);
+      feature_analysis::ConsensusSequence cons_seq;
+      cons_seq = feature_analysis::analyze_alignment(codes_map, alignment,
+                                                     conservation_cutoff);
+      feature_analysis::write_consensus_to_file(cons_seq,
+                                                out_cons_filename);
     }
 
     time_t end = clock();
