@@ -5,7 +5,7 @@
 #include <vector>
 
 namespace feature_analysis {
-  typedef std::map<std::string, std::string> CodesMap;
+  typedef std::map<std::string, std::vector<std::string>> CodesMap;
   
   struct ConsensusResidue {
     std::string amino_acid;
