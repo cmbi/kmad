@@ -57,9 +57,10 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
   sequence_data.sequences = sequences;
   sequence_data.feature_list = feature_list;
   std::vector<fasta::SequenceList> alignment;
+  std::string sbst_mat = "BLOSUM";
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
-                           ptm_modifier, codon_length, one_round);
+                           ptm_modifier, codon_length, one_round, sbst_mat);
   fasta::Sequence e_s1;
   // AKLCAKL
   e_s1 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
@@ -160,8 +161,9 @@ BOOST_AUTO_TEST_CASE(test_set_identities)
   // query_seq_list - the profile are built only based on the first
   // sequence
   fasta::SequenceList query_seq_list = {s1};
+  std::string sbst_mat = "BLOSUM";
   profile::ProfileMap profile = profile::create_score_profile(
-      query_seq_list);
+      query_seq_list, sbst_mat);
   f_profile.update_scores(query_seq_list, f_set);
   std::vector<double> result_identities = msa::set_identities(sequence_data,
                                                               profile,

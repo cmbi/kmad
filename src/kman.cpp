@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
     std::string conf_file;
     std::string mapfilename;
     std::string out_cons_filename;
+    std::string sbst_mat;
     double conservation_cutoff;
 
     po::options_description desc("Allowed options");
@@ -77,6 +78,8 @@ int main(int argc, char *argv[]) {
       ("feat_cutoff", po::value<double>(&conservation_cutoff)
           ->default_value(0.5),
        "conservation cutoff for the feature consensus")
+      ("mat", po::value<std::string>(&sbst_mat)->default_value("DISORDER"),
+       "substitution matrix")
       ("conf",
        po::value<std::string>(&conf_file),
        "configure file");
@@ -139,7 +142,7 @@ int main(int argc, char *argv[]) {
                                   f_set, gap_open_pen,
                                   gap_ext_pen, end_pen, domain_modifier, 
                                   motif_modifier, ptm_modifier, codon_length,
-                                  one_round);
+                                  one_round, sbst_mat);
     // write alignment to file 
     if (out_encoded) {
       outfile::write_encoded_alignment(alignment[1], sequence_data,
