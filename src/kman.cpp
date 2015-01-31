@@ -51,13 +51,13 @@ int main(int argc, char *argv[]) {
        po::value<int>(&codon_length)->implicit_value(7)
                                     ->default_value(1),"codon length")
       ("phosph,p",
-       po::value<int>(&ptm_modifier)->default_value(0),
+       po::value<int>(&ptm_modifier)->default_value(10),
        "score for aligning phosphorylated residues")
       ("domain,d",
-       po::value<int>(&domain_modifier)->default_value(0),
+       po::value<int>(&domain_modifier)->default_value(3),
        "score for aligning domains")
       ("motif,m",
-       po::value<int>(&motif_modifier)->default_value(0),
+       po::value<int>(&motif_modifier)->default_value(3),
                                  "probability multiplier for motifs")
       ("out-encoded",
        po::value<bool>(&out_encoded)->implicit_value(true)
