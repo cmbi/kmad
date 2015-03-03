@@ -172,7 +172,6 @@ BOOST_AUTO_TEST_CASE(test_set_identities)
                                                               end_pen, 
                                                               gap_ext_pen,
                                                               codon_length);
-
   std::vector<double> expected_identities = {1, 0.857};
   BOOST_CHECK_EQUAL(expected_identities.size(), result_identities.size());
   for (size_t i = 0; i < result_identities.size(); ++i) {

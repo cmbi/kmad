@@ -32,7 +32,6 @@ std::vector<fasta::SequenceList> msa::run_msa(
                                        gap_open_pen, end_pen, 
                                        gap_ext_pen, codon_length);
 
-
       std::vector<fasta::SequenceList> alignment;
       int alignments_number = 0;
       double cutoff = 0;
@@ -44,7 +43,8 @@ std::vector<fasta::SequenceList> msa::run_msa(
                                              f_profile, gap_open_pen,
                                              end_pen, gap_ext_pen, cutoff, 
                                              codon_length, identities, 
-                                             alignments_number, f_set);
+                                             alignments_number, f_set,
+                                             alignment);
           if (prev_alignments < alignments_number) {
             f_profile.update_scores(alignment[0], f_set);
             profile = profile::create_score_profile(alignment[0], sbst_mat);
@@ -60,7 +60,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
                                          f_profile, gap_open_pen, 
                                          end_pen, gap_ext_pen, cutoff,
                                          codon_length, identities,
-                                         alignments_number, f_set);
+                                         alignments_number, f_set, alignment);
       return alignment;
 }
 
@@ -178,7 +178,8 @@ std::vector<fasta::SequenceList> msa::perform_msa_round(
     int codon_length,
     const std::vector<double>& identities,
     int& prev_alignments,
-    const f_config::FeatureSettingsMap& f_set)
+    const f_config::FeatureSettingsMap& f_set,
+    std::vector<fasta::SequenceList> previous_alignment)
 {
   std::vector<fasta::SequenceList> alignment = {{sequence_data.sequences[0]}, 
                                                 {sequence_data.sequences[0]}};
@@ -197,6 +198,9 @@ std::vector<fasta::SequenceList> msa::perform_msa_round(
     }
     //update number of performed alignments
     prev_alignments = next_alignments;
+  }
+  else {
+    alignment = previous_alignment;
   }
   return alignment;
 }

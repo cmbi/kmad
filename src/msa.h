@@ -48,7 +48,8 @@ namespace msa {
       int codon_length, 
       const std::vector<double>& identities,
       int& prev_alignments,
-      const f_config::FeatureSettingsMap& f_set);
+      const f_config::FeatureSettingsMap& f_set,
+      std::vector<fasta::SequenceList> previous_alignment);
 
   ///
   /// takes pairwise alignment, removes

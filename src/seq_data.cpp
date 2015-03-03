@@ -18,7 +18,6 @@ seq_data::SequenceData seq_data::process_fasta_data(
       }
     }
   }
-
   s.feature_list = make_feature_list(s.sequences);
   return s;
 }
