@@ -12,9 +12,25 @@ seq_data::SequenceData seq_data::process_fasta_data(
 
   for (auto feat_it = f_set.begin(); feat_it != f_set.end(); ++feat_it) {
     for (auto& seq : feat_it->second.positions) {
-      for (auto& pos : seq.positions) {
-        s.sequences[seq.seq_no].residues[pos].features.push_back(
-            feat_it->first);
+      if ((signed)s.sequences.size() > seq.seq_no && seq.seq_no >= 0) {
+        for (auto& pos : seq.positions) {
+          if ((signed)s.sequences[seq.seq_no].residues.size() > pos && pos >= 0) {
+            s.sequences[seq.seq_no].residues[pos].features.push_back(
+                feat_it->first);
+          }
+          else {
+            std::cout << "Warning: feature positions should be in range: 1 - "
+                          << "sequence length, feature " << feat_it->first
+                          << " cannot be annotated at position " << pos + 1
+                          << " in sequence " << seq.seq_no + 1<< std::endl;
+          }
+        }
+      }
+      else {
+        std::cout << "Warning: sequence numbers should be in range: 1 - "
+                      << "number of sequences, feature " << feat_it->first
+                      << " cannot be annotated in sequence "
+                      << seq.seq_no + 1 << std::endl;
       }
     }
   }
