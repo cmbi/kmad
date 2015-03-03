@@ -77,9 +77,13 @@ f_config::RawFeatureSettingsMap f_config::ConfParser::process_config(
       for (int j = 0; j <  positions_set.getLength(); ++j) {
         FeaturePositions feat_pos;
         positions_set[j].lookupValue("seq", feat_pos.seq_no);
+          --feat_pos.seq_no;
         lcg::Setting& single_pos_set = positions_set[j]["pos"];
         for (int k = 0; k < single_pos_set.getLength(); ++k) {
           feat_pos.positions.push_back(single_pos_set[k]);
+        }
+        for (auto& pos : feat_pos.positions) {
+          --pos; 
         }
         feat_set.positions.push_back(feat_pos);
       }
