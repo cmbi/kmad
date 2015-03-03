@@ -9,7 +9,7 @@ namespace {
   static const std::vector<char> ALPHABET = {'A','R','N','D','C','Q','E','G',
                                              'H','I','L','K','M','F','P','S',
                                              'T','W','Y','V'};
-  static const SimilarityScoresMap SIM_SCORES = {
+  static const SimilarityScoresMap BLOSUM = {
     {'A', { 4, -1, -2, -2,  0, -1, -1,  0, -2, -1, -1, -1, -1, -2, -1,  1,  0, -3, -2,  0}},
     {'R', {-1,  5,  0, -2, -3,  1,  0, -2,  0, -3, -2,  2, -1, -3, -2, -1, -1, -3, -2, -3}},
     {'N', {-2,  0,  6,  1, -3,  0,  0,  0,  1, -3, -3,  0, -2, -3, -2,  1,  0, -4, -2, -3}},
@@ -30,10 +30,31 @@ namespace {
     {'W', {-3, -3, -4, -4, -2, -2, -3, -2, -2, -3, -2, -3, -1,  1, -4, -3, -2, 11,  2, -3}},
     {'Y', {-2, -2, -2, -3, -2, -1, -2, -3,  2, -1, -1, -2, -1,  3, -3, -2, -2,  2,  7, -1}},
     {'V', { 0, -3, -3, -3, -1, -2, -2, -3, -3,  3,  1, -2,  1, -1, -2, -2,  0, -3, -1,  4}}};
+  static const SimilarityScoresMap DISORDER = {
+    {'A', { 9,  1,  2,  2,  1,  3,  2,  2,  1,  1,  1,  2,  0,  0,  3,  3,  4, -1,  0,  3}},
+    {'R', { 1, 10,  1,  0,  1,  3,  1,  2,  3,  0,  0,  5, -1, -2,  0,  1,  1,  2, -1,  0}},
+    {'N', { 2,  1, 11,  4,  1,  3,  2,  2,  3,  0, -1,  3, -1, -1,  1,  4,  3, -2,  1,  0}},
+    {'D', { 2,  0,  4, 10, -2,  2,  5,  2,  2, -1, -2,  1, -2, -2,  1,  2,  2, -3, -1,  0}},
+    {'C', { 1,  1,  1, -2, 17,  0, -3,  1,  0,  0,  0, -1, -2,  1, -1,  2,  1,  3,  2,  1}},
+    {'Q', { 3,  3,  3,  2,  0, 11,  4,  0,  4,  0,  1,  3,  0, -1,  2,  2,  2,  1,  0,  1}},
+    {'E', { 2,  1,  2,  5, -3,  4,  9,  1,  1, -1, -1,  3, -1, -2,  0,  1,  1, -2, -2,  0}},
+    {'G', { 2,  2,  2,  2,  1,  0,  1, 10,  0, -2, -2,  0, -2, -2,  0,  2,  1,  0, -2,  0}},
+    {'H', { 1,  3,  3,  2,  0,  4,  1,  0, 13,  0,  0,  1, -1,  2,  1,  1,  1,  1,  4,  0}},
+    {'I', { 1,  0,  0, -1,  0,  0, -1, -2,  0, 12,  5,  0,  4,  4,  0,  0,  2,  1,  2,  7}},
+    {'L', { 1,  0, -1, -2,  0,  1, -1, -2,  0,  5, 10, -1,  4,  5,  1,  0,  1,  2,  2,  4}},
+    {'K', { 2,  5,  3,  1, -1,  3,  3,  0,  1,  0, -1, 10, -1, -2,  0,  1,  2, -2, -1,  0}},
+    {'M', { 0, -1, -1, -2, -2,  0, -1, -2, -1,  4,  4, -1, 13,  2, -2, -1,  1,  0,  0,  3}},
+    {'F', { 0, -2, -1, -2,  1, -1, -2, -2,  2,  4,  5, -2,  2, 13, -1,  0,  0,  6,  8,  3}},
+    {'P', { 3,  0,  1,  1, -1,  2,  0,  0,  1,  0,  1,  0, -2, -1, 11,  2,  2, -1, -2,  1}},
+    {'S', { 3,  1,  4,  2,  2,  2,  1,  2,  1,  0,  0,  1, -1,  0,  2,  9,  4, -1,  0,  1}},
+    {'T', { 4,  1,  3,  2,  1,  2,  1,  1,  1,  2,  1,  2,  1,  0,  2,  4, 10, -2,  0,  3}},
+    {'W', {-1,  2, -2, -3,  3,  1, -2,  0,  1,  1,  2, -2,  0,  6, -1, -1, -2, 18,  6,  0}},
+    {'Y', { 0, -1,  1, -1,  2,  0, -2, -2,  4,  2,  2, -1,  0,  8, -2,  0,  0,  6, 14,  1}}, 
+    {'V', { 3,  0,  0,  0,  1,  1,  0,  0,  0,  7,  4,  0,  3,  3,  1,  1,  3,  0,  1, 11}}};
 }
 
 profile::ProfileMap profile::create_score_profile(
-    const fasta::SequenceList& sequences) {
+    const fasta::SequenceList& sequences, const std::string& sbst_mat) {
   profile::ProfileMap p = create_profile(sequences);
 
   // Convert the profile occurrences to probabilities.
@@ -44,10 +65,16 @@ profile::ProfileMap profile::create_score_profile(
       ++i;
     }
   }
+  const SimilarityScoresMap* sim_scores;
+  if (sbst_mat == "BLOSUM") {
+    sim_scores = &BLOSUM;
+  } else {
+    sim_scores = &DISORDER;
+  }
   for (unsigned i = 0; i < p['A'].size(); ++i) {
     std::vector<double> score_column(ALPHABET.size(), 0); 
     for (auto &prob: p) {
-      std::vector<double> sbst_column = SIM_SCORES.at(prob.first);
+      std::vector<double> sbst_column = sim_scores->at(prob.first);
       for (size_t k = 0; k < sbst_column.size(); ++k) {
         score_column[k] += sbst_column[k] * prob.second[i];
       }

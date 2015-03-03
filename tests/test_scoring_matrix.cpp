@@ -22,7 +22,9 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
   s2 = fasta::make_sequence("d", "ASLRP", codon_length);
   fasta::SequenceList query_seq_list = {s1};
   fasta::SequenceList sequences = {s1, s2};
-  profile::ProfileMap profile = profile::create_score_profile(query_seq_list);
+  std::string sbst_mat = "BLOSUM";
+  profile::ProfileMap profile = profile::create_score_profile(query_seq_list,
+                                                              sbst_mat);
   int domain_modifier = 4;
   int motif_modifier = 3;
   int ptm_modifier = 10;
@@ -59,7 +61,7 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
 
   // AND THE OTHER WAY ROUND (s2 becomes the profile)
   query_seq_list = {s2};
-  profile = profile::create_score_profile(query_seq_list);
+  profile = profile::create_score_profile(query_seq_list, sbst_mat);
   f_profile.update_scores(query_seq_list, f_set);
   ScoringMatrix scores2(s2.residues.size(), s1.residues.size(), gap_open_pen,
                         end_pen, gap_ext_pen);
@@ -104,7 +106,9 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   fasta::Sequence e_s2;
   e_s1 = fasta::make_sequence("d", "AAAAAAAAA", codon_length);
   e_s2 = fasta::make_sequence("d", "A---SLRP-", codon_length);
-  profile::ProfileMap profile = profile::create_score_profile(query_seq_list);
+  std::string sbst_mat = "BLOSUM";
+  profile::ProfileMap profile = profile::create_score_profile(query_seq_list,
+                                                              sbst_mat);
   ScoringMatrix scores(s1.residues.size(), s2.residues.size(), gap_open_pen,
                        end_pen, gap_ext_pen);
   scores.calculate_scores(s2, profile, f_profile, codon_length);
@@ -121,7 +125,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   f_profile.update_scores(query_seq_list, f_set);
   e_s1 = fasta::make_sequence("d", "A---AAAA-", codon_length);
   e_s2 = fasta::make_sequence("d", "ASLKSLKPT", codon_length);
-  profile = profile::create_score_profile(query_seq_list);
+  profile = profile::create_score_profile(query_seq_list, sbst_mat);
   ScoringMatrix scores2(s2.residues.size(), s1.residues.size(), gap_open_pen,
                         end_pen, gap_ext_pen);
   scores2.calculate_scores(s1, profile, f_profile, codon_length);
@@ -141,7 +145,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   s2 = fasta::make_sequence("d", "RRRWWRR", codon_length);
   query_seq_list = {s1};
   f_profile.update_scores(query_seq_list, f_set);
-  profile = profile::create_score_profile(query_seq_list);
+  profile = profile::create_score_profile(query_seq_list, sbst_mat);
   ScoringMatrix scores3(s1.residues.size(), s2.residues.size(), gap_open_pen,
                         end_pen, gap_ext_pen);
   scores3.calculate_scores(s2, profile, f_profile, codon_length);
@@ -156,7 +160,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   }
   query_seq_list = {s2};
   f_profile.update_scores(query_seq_list, f_set);
-  profile = profile::create_score_profile(query_seq_list);
+  profile = profile::create_score_profile(query_seq_list, sbst_mat);
   scores3 = ScoringMatrix(s2.residues.size(), s1.residues.size(), gap_open_pen,
                           end_pen, gap_ext_pen);
   scores3.calculate_scores(s1, profile, f_profile, codon_length);
@@ -194,7 +198,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
                             ptm_modifier, motif_modifier,
                             probabilities);
   f_profile.update_scores(query_seq_list, f_set);
-  profile = profile::create_score_profile(query_seq_list);
+  profile = profile::create_score_profile(query_seq_list, sbst_mat);
   scores3 = ScoringMatrix(s1.residues.size(), s2.residues.size(), gap_open_pen,
                           end_pen, gap_ext_pen);
   scores3.calculate_scores(s2, profile, f_profile, codon_length);

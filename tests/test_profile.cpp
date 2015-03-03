@@ -77,8 +77,8 @@ BOOST_AUTO_TEST_CASE(test_create_score_profile)
       "d", "AAAAAAAMAAAAAAAAAAAAALAAAAAA", 7);
 
   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
-
-  profile::ProfileMap p = profile::create_score_profile(sequences);
+  std::string sbst_mat = "BLOSUM";
+  profile::ProfileMap p = profile::create_score_profile(sequences, sbst_mat);
 
   profile::ProfileMap expected_score_profile; 
   expected_score_profile = {{'A', { 3.0, -1.0,  0.0, -1.0}}, 
