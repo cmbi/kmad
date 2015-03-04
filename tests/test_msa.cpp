@@ -58,9 +58,11 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
   sequence_data.feature_list = feature_list;
   std::vector<fasta::SequenceList> alignment;
   std::string sbst_mat = "BLOSUM";
+  bool first_gapped = false;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
-                           ptm_modifier, codon_length, one_round, sbst_mat);
+                           ptm_modifier, codon_length, one_round, sbst_mat,
+                           first_gapped);
   fasta::Sequence e_s1;
   // AKLCAKL
   e_s1 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"

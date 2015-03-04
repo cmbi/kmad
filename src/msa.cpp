@@ -14,7 +14,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
     double end_pen, int domain_modifier,
     int motif_modifier, int ptm_modifier,
     int codon_length, bool one_round,
-    const std::string& sbst_mat)
+    const std::string& sbst_mat, bool first_gapped)
 {
       FeatureScores f_profile(sequence_data.feature_list, domain_modifier,
                               ptm_modifier, motif_modifier,
