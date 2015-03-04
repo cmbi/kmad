@@ -24,6 +24,7 @@ int main(int argc, char *argv[]) {
     double end_pen = 0;
     bool out_encoded = false;
     bool one_round = false;
+    bool first_gapped = false;
     std::string filename;
     std::string output_prefix;
     std::string conf_file;
@@ -80,6 +81,10 @@ int main(int argc, char *argv[]) {
        "conservation cutoff for the feature consensus")
       ("mat", po::value<std::string>(&sbst_mat)->default_value("DISORDER"),
        "substitution matrix")
+      ("gapped", po::value<bool>(&first_gapped)->default_value("False")
+                                               ->implicit_value("True"),
+       "'first sequence with gaps' mode"
+       )
       ("conf",
        po::value<std::string>(&conf_file),
        "configure file");
@@ -166,6 +171,6 @@ int main(int argc, char *argv[]) {
     }
 
     time_t end = clock();
-
+    std::cout << first_gapped << std::endl;
     std::cout << "time: " << double(end - start)/CLOCKS_PER_SEC << std::endl;
 }
