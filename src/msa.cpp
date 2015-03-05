@@ -164,10 +164,10 @@ fasta::SequenceList msa::align_pairwise(const fasta::Sequence& input_sequence,
   alignment = scores.backtrace_alignment_path(input_sequence, 
                                               profile, f_profile,
                                               codon_length);
-  alignment = remove_gaps(alignment);
+  if (!first_gapped) {
+    alignment = remove_gaps(alignment);
+  }
   return alignment;
-  // fasta::SequenceList aligned_sequence = remove_gaps(alignment);
-  // return aligned_sequence;
 }
 
 

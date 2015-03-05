@@ -307,9 +307,14 @@ BOOST_AUTO_TEST_CASE(test_merge_alignments) {
       result_str.push_back(fasta::make_string(seq));
     }
   }
-  for (auto& restr : result_str) {
-    std::cout << restr << std::endl;
-  }
+  std::vector<std::string> expected = {"---A---A-",
+                                       "---A---A-",
+                                       "---ATSSA-",
+                                       "---ATSSA-",
+                                       "TSBA---A-",
+                                       "TSBA---A-"};
+  BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
+                                result_str.begin(), result_str.end());
 }
 
 BOOST_AUTO_TEST_SUITE_END()
