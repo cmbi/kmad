@@ -270,13 +270,23 @@ BOOST_AUTO_TEST_CASE(test_add_alignment) {
   std::vector<fasta::SequenceList> input_multi = {{prof1, prof1},
                                                   {s1, s1}};
   fasta::SequenceList input_pairwise = {prof2, s2};
-  std::vector<fasta::SequenceList> merged_al =
-    msa::add_alignment(input_multi, input_pairwise);
-  for (auto& seqset : merged_al) {
+  std::vector<std::string> expected = {"A---A-",
+                                       "A---A-",
+                                       "AB--AD",
+                                       "AB--AD",
+                                       "ATSSA-",
+                                       "ATSSA-"};
+
+  std::vector<fasta::SequenceList> result = msa::add_alignment(input_multi,
+                                                               input_pairwise);
+  std::vector<std::string> result_str;
+  for (auto& seqset : result) {
     for (auto& seq : seqset) {
-    
+      result_str.push_back(fasta::make_string(seq));
     }
   }
+  BOOST_CHECK_EQUAL_COLLECTIONS(result_str.begin(), result_str.end(),
+                                expected.begin(), expected.end());
 }
 
 BOOST_AUTO_TEST_SUITE_END()
