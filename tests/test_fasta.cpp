@@ -33,6 +33,10 @@ BOOST_AUTO_TEST_CASE(test_make_sequence)
   fasta::Sequence s = fasta::make_sequence("desc", "AaaaaaBbbbbbCccccc", 6);
 
   BOOST_CHECK_EQUAL(s.residues.size(), 3);
+  s = fasta::make_sequence("ALSK", 1);
+  BOOST_CHECK_EQUAL(s.residues.size(), 4);
+  s = fasta::make_sequence("LAAACAAA", 4);
+  BOOST_CHECK_EQUAL(s.residues.size(), 2);
 }
 
 
