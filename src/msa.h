@@ -38,7 +38,7 @@ namespace msa {
   ///
   
   
-  std::vector<fasta::SequenceList> perform_msa_round(
+  std::vector<fasta::SequenceList> perform_msa_round_gapped(
       const seq_data::SequenceData& sequence_data,
       const profile::ProfileMap& profile,
       const FeatureScores& f_profile,
@@ -49,9 +49,20 @@ namespace msa {
       const std::vector<double>& identities,
       int& prev_alignments,
       const f_config::FeatureSettingsMap& f_set,
-      std::vector<fasta::SequenceList> previous_alignment,
-      const bool first_gapped);
+      std::vector<fasta::SequenceList> previous_alignment);
 
+  std::vector<fasta::SequenceList> perform_msa_round_ungapped(
+      const seq_data::SequenceData& sequence_data,
+      const profile::ProfileMap& profile,
+      const FeatureScores& f_profile,
+      double gap_open_pen, double end_pen,
+      double gap_ext_pen, 
+      double identity_cutoff,
+      int codon_length, 
+      const std::vector<double>& identities,
+      int& prev_alignments,
+      const f_config::FeatureSettingsMap& f_set,
+      std::vector<fasta::SequenceList> previous_alignment);
   ///
   /// takes pairwise alignment, removes
   /// characters from the 2nd sequence that match gaps from 1st seq and returns
