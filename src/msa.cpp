@@ -255,17 +255,51 @@ std::vector<fasta::SequenceList> msa::add_alignment(
                                           fasta::SequenceList(2, s));
   int i = 0;
   int j = 0;
-  const std::vector<Residue> *profile1 = &multi_alignment[0][0].residues;
-  const std::vector<Residue> *profile2 = &pairwise_alignment[0].residues;
+  const std::vector<fasta::Residue> *profile1 = &multi_alignment[0][0].residues;
+  const std::vector<fasta::Residue> *profile2 = &pairwise_alignment[0].residues;
   int length1 = profile1->size();
   int length2 = profile2->size();
-  while (i < length1 && j < length2) {
+  int codon_length = profile1->at(0).codon.size();
+  // std::string gap_codon = "-" + std::string(codon_length - 1, 'A');
+
+  fasta::Residue gap_residue("-" + std::string(codon_length - 1, 'A'));
+  while (i < length1 || j < length2)
+  {
     if (i < length1 && j < length2
-        && profile1[i].codon == profile2[i].codon) {
-      for (size_t k = 1; k < multi_alignment.size(); ++k) {
-        // merged[k][0].residues.push_back();
-        // merged[k][1].residues.push_back();
+        && profile1->at(i).codon == profile2->at(j).codon)
+    {
+      for (size_t k = 0; k < multi_alignment.size(); ++k) {
+        merged[k][0].residues.push_back(multi_alignment[k][0].residues[i]);
+        merged[k][1].residues.push_back(multi_alignment[k][0].residues[i]);
       }
+      merged[merged.size() - 1][0].residues.push_back(pairwise_alignment[1].residues[j]);
+      merged[merged.size() - 1][1].residues.push_back(pairwise_alignment[1].residues[j]);
+      ++i;
+      ++j;
+    } else if (i < length1 && profile1->at(i).codon[0] == '-')
+    {
+      merged[0][0].residues.push_back(gap_residue);
+      merged[0][1].residues.push_back(gap_residue);
+      merged[merged.size() - 1][0].residues.push_back(gap_residue);
+      merged[merged.size() - 1][1].residues.push_back(gap_residue);
+      for (size_t k = 1; k < multi_alignment.size(); ++k) {
+        merged[k][0].residues.push_back(multi_alignment[k][0].residues[i]);
+        merged[k][1].residues.push_back(multi_alignment[k][0].residues[i]);
+      }
+      ++i;
+    } else if (j < length2 && profile2->at(i).codon[0] == '-')
+    {
+      merged[0][0].residues.push_back(gap_residue);
+      merged[0][1].residues.push_back(gap_residue);
+      merged[merged.size() - 1][0].residues.push_back(
+          pairwise_alignment[0].residues[j]);
+      merged[merged.size() - 1][1].residues.push_back(
+          pairwise_alignment[0].residues[j]);
+      for (size_t k = 1; k < multi_alignment.size(); ++k) {
+        merged[k][0].residues.push_back(gap_residue);
+        merged[k][1].residues.push_back(gap_residue);
+      }
+      ++j;
     }
   }
   std::cout << i << j << length1 << length2 << std::endl; 

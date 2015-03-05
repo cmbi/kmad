@@ -262,4 +262,13 @@ BOOST_AUTO_TEST_CASE(test_count_alignments) {
   BOOST_CHECK_EQUAL(result, 4);
 }
 
+BOOST_AUTO_TEST_CASE(test_add_alignment) {
+  fasta::Residue res = fasta::make_residue("AAAAAAA");
+  fasta::Sequence s = fasta::make_sequence(
+      std::vector<fasta::Residue>(1, res));
+  fasta::SequenceList input_pairwise(2, s);
+  std::vector<fasta::SequenceList> input_multi(2, input_pairwise);
+  msa::add_alignment(input_multi, input_pairwise);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
