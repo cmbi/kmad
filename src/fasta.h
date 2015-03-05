@@ -42,7 +42,8 @@ namespace fasta {
   Sequence make_sequence(const std::vector<Residue>&);
   Sequence make_sequence(unsigned long sequence_length,
                          const fasta::Residue residue);
-  Sequence make_sequence(std::string sequence_string, int codon_length);
+  Sequence make_sequence(const std::string sequence_string, int codon_length);
+  std::string make_string(const Sequence seq);
   Residue make_residue(const std::string& codon);
 }
 

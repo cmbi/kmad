@@ -39,5 +39,11 @@ BOOST_AUTO_TEST_CASE(test_make_sequence)
   BOOST_CHECK_EQUAL(s.residues.size(), 2);
 }
 
-
+BOOST_AUTO_TEST_CASE(test_make_string)
+{
+  fasta::Sequence s = fasta::make_sequence("LSKAL", 1);
+  std::string string_seq = fasta::make_string(s);
+  std::string expected = "LSKAL";
+  BOOST_CHECK_EQUAL(string_seq, expected);
+}
 BOOST_AUTO_TEST_SUITE_END()

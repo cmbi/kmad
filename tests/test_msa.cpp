@@ -263,12 +263,20 @@ BOOST_AUTO_TEST_CASE(test_count_alignments) {
 }
 
 BOOST_AUTO_TEST_CASE(test_add_alignment) {
-  fasta::Residue res = fasta::make_residue("AAAAAAA");
-  fasta::Sequence s = fasta::make_sequence(
-      std::vector<fasta::Residue>(1, res));
-  fasta::SequenceList input_pairwise(2, s);
-  std::vector<fasta::SequenceList> input_multi(2, input_pairwise);
-  msa::add_alignment(input_multi, input_pairwise);
+  fasta::Sequence prof1 = fasta::make_sequence("A-A-", 1);
+  fasta::Sequence s1 = fasta::make_sequence("ABAD", 1);
+  fasta::Sequence prof2 = fasta::make_sequence("A---A", 1);
+  fasta::Sequence s2 = fasta::make_sequence("ATSSA", 1);
+  std::vector<fasta::SequenceList> input_multi = {{prof1, prof1},
+                                                  {s1, s1}};
+  fasta::SequenceList input_pairwise = {prof2, s2};
+  std::vector<fasta::SequenceList> merged_al =
+    msa::add_alignment(input_multi, input_pairwise);
+  for (auto& seqset : merged_al) {
+    for (auto& seq : seqset) {
+    
+    }
+  }
 }
 
 BOOST_AUTO_TEST_SUITE_END()
