@@ -14,7 +14,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
     double end_pen, int domain_modifier,
     int motif_modifier, int ptm_modifier,
     int codon_length, bool one_round,
-    const std::string& sbst_mat, bool first_gapped)
+    const std::string& sbst_mat, const bool first_gapped)
 {
       FeatureScores f_profile(sequence_data.feature_list, domain_modifier,
                               ptm_modifier, motif_modifier,
@@ -154,7 +154,8 @@ fasta::SequenceList msa::align_pairwise(const fasta::Sequence& input_sequence,
                                         const FeatureScores& f_profile,
                                         double gap_open_pen, double end_pen,
                                         double gap_ext_pen,
-                                        int codon_length, bool first_gapped) {
+                                        int codon_length,
+                                        const bool first_gapped) {
   int profile_length = profile.begin()->second.size();
   ScoringMatrix scores(profile_length, input_sequence.residues.size(),
                        gap_open_pen, end_pen, gap_ext_pen);
@@ -164,8 +165,9 @@ fasta::SequenceList msa::align_pairwise(const fasta::Sequence& input_sequence,
                                               profile, f_profile,
                                               codon_length);
   alignment = remove_gaps(alignment);
-  //  return aligned_sequence;
   return alignment;
+  // fasta::SequenceList aligned_sequence = remove_gaps(alignment);
+  // return aligned_sequence;
 }
 
 
@@ -182,7 +184,7 @@ std::vector<fasta::SequenceList> msa::perform_msa_round(
     int& prev_alignments,
     const f_config::FeatureSettingsMap& f_set,
     std::vector<fasta::SequenceList> previous_alignment,
-    bool first_gapped)
+    const bool first_gapped)
 {
   std::vector<fasta::SequenceList> alignment = {{sequence_data.sequences[0]}, 
                                                 {sequence_data.sequences[0]}};
@@ -208,7 +210,6 @@ std::vector<fasta::SequenceList> msa::perform_msa_round(
   else {
     alignment = previous_alignment;
   }
-
   if (first_gapped) {
     alignment = merge_alignments(alignment);
   }
@@ -302,6 +303,5 @@ std::vector<fasta::SequenceList> msa::add_alignment(
       ++j;
     }
   }
-  std::cout << i << j << length1 << length2 << std::endl; 
   return merged;
 }

@@ -19,7 +19,7 @@ namespace msa {
       double gap_ext_pen, double end_pen,
       int domain_modifier, int motif_modifier,
       int phosph_modifier, int codon_length, bool one_round,
-      const std::string& sbst_mat, bool first_gapped);
+      const std::string& sbst_mat, const bool first_gapped);
 
 
   /// performs the first round of alignments, / all vs query seq (first
@@ -49,7 +49,8 @@ namespace msa {
       const std::vector<double>& identities,
       int& prev_alignments,
       const f_config::FeatureSettingsMap& f_set,
-      std::vector<fasta::SequenceList> previous_alignment, bool gapped);
+      std::vector<fasta::SequenceList> previous_alignment,
+      const bool first_gapped);
 
   ///
   /// takes pairwise alignment, removes
@@ -69,7 +70,7 @@ namespace msa {
                                      const FeatureScores& f_profile,
                                      double gap_open_pen, double end_pen,
                                      double gap_ext_pen, int codon_length,
-                                     bool gapped);
+                                     const bool first_gapped);
 
   ///
   /// calculates identity with the query sequence
