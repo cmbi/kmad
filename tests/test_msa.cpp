@@ -289,4 +289,27 @@ BOOST_AUTO_TEST_CASE(test_add_alignment) {
                                 expected.begin(), expected.end());
 }
 
+BOOST_AUTO_TEST_CASE(test_merge_alignments) {
+  fasta::Sequence prof1 = fasta::make_sequence("A-A-", 1);
+  fasta::Sequence s1 = fasta::make_sequence("ABAD", 1);
+  fasta::Sequence prof2 = fasta::make_sequence("A---A", 1);
+  fasta::Sequence s2 = fasta::make_sequence("ATSSA", 1);
+  fasta::Sequence prof3 = fasta::make_sequence("---AA", 1);
+  fasta::Sequence s3 = fasta::make_sequence("TSBAA", 1);
+  std::vector<fasta::SequenceList> input_alignments = {{prof1, s1},
+                                                       {prof2, s2},
+                                                       {prof3, s3}};
+  std::vector<fasta::SequenceList> result = msa::merge_alignments(
+      input_alignments);
+  std::vector<std::string> result_str;
+  for (auto& seqset : result) {
+    for (auto& seq : seqset) {
+      result_str.push_back(fasta::make_string(seq));
+    }
+  }
+  for (auto& restr : result_str) {
+    std::cout << restr << std::endl;
+  }
+}
+
 BOOST_AUTO_TEST_SUITE_END()

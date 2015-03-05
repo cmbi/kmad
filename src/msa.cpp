@@ -260,8 +260,6 @@ std::vector<fasta::SequenceList> msa::add_alignment(
   int length1 = profile1->size();
   int length2 = profile2->size();
   int codon_length = profile1->at(0).codon.size();
-  // std::string gap_codon = "-" + std::string(codon_length - 1, 'A');
-
   fasta::Residue gap_residue("-" + std::string(codon_length - 1, 'A'));
   while (i < length1 || j < length2)
   {
