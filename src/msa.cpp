@@ -183,8 +183,6 @@ fasta::SequenceList msa::align_pairwise(const fasta::Sequence& input_sequence,
   if (!first_gapped) {
     alignment = remove_gaps(alignment);
   }
-  std::cout << fasta::make_string(alignment[0]) << std::endl;
-  std::cout << fasta::make_string(alignment[1]) << std::endl;
   return alignment;
 }
 
@@ -257,7 +255,7 @@ std::vector<fasta::SequenceList> msa::perform_msa_round_gapped(
     const f_config::FeatureSettingsMap& f_set,
     std::vector<fasta::SequenceList> previous_alignment)
 {
-  std::vector<fasta::SequenceList> alignment;
+  std::vector<fasta::SequenceList> alignment = {{}, {}};
   int next_alignments = count_alignments(identity_cutoff, identities);
   bool first_gapped = true;
   if (next_alignments > prev_alignments) {
@@ -290,15 +288,34 @@ std::vector<fasta::SequenceList> msa::merge_alignments(
     const std::vector<fasta::SequenceList>& pairwise_alignments)
 {
   std::vector<fasta::SequenceList> multi_alignment;
-  multi_alignment.push_back(pairwise_alignments[0]);
-  // count - to omit first element of pairwise_alignments
-  bool first_el = true; 
-  for (auto& pair_al : pairwise_alignments) {
-    if (!first_el) {
-      multi_alignment = add_alignment(multi_alignment, pair_al);
-    } else {
-      first_el = false;
+  multi_alignment.push_back({pairwise_alignments[0][0],
+                             pairwise_alignments[1][0]});
+
+  ///
+  std::cout << "premerge: " << std::endl;
+  for (auto& el : pairwise_alignments) {
+    std::cout << "pstep" << std::endl;
+    for (auto& item : el) {
+      std::cout << fasta::make_string(item) << std::endl;
     }
+  }
+  ///
+
+  // count - to omit first element of pairwise_alignments
+  // for (auto& pair_al : pairwise_alignments) {
+  assert(pairwise_alignments[0].size() == pairwise_alignments[1].size());
+  for (size_t i = 0; i < pairwise_alignments[0].size(); ++i) {
+    fasta::SequenceList pair_al = {pairwise_alignments[0][i],
+                                   pairwise_alignments[1][i]};
+      multi_alignment = add_alignment(multi_alignment, pair_al);
+  }
+  //
+  // TODO: find a function to remove first element from vector
+  // or copy whole vector except for the first element
+  //
+  std::vector<fasta::SequenceList> result;
+  for (size_t i = 1; i < multi_alignment.size(); ++i) {
+    result.push_back(multi_alignment[i]);
   }
   return multi_alignment;
 }
@@ -317,6 +334,7 @@ std::vector<fasta::SequenceList> msa::add_alignment(
   const std::vector<fasta::Residue> *profile2 = &pairwise_alignment[0].residues;
   int length1 = profile1->size();
   int length2 = profile2->size();
+
   int codon_length = profile1->at(0).codon.size();
   fasta::Residue gap_residue("-" + std::string(codon_length - 1, 'A'));
   while (i < length1 || j < length2)
@@ -324,25 +342,17 @@ std::vector<fasta::SequenceList> msa::add_alignment(
     if (i < length1 && j < length2
         && profile1->at(i).codon == profile2->at(j).codon)
     {
-      std::cout << "if1" << std::endl;
       for (size_t k = 0; k < multi_alignment.size(); ++k) {
         merged[k][0].residues.push_back(multi_alignment[k][0].residues[i]);
         merged[k][1].residues.push_back(multi_alignment[k][0].residues[i]);
       }
-      std::cout << "len1: " << merged[merged.size() - 1].size()<< std::endl;
-      std::cout << "len1: " << pairwise_alignment.size()<< std::endl;
-      std::cout << "len1: " << pairwise_alignment[0].residues.size()<< std::endl;
-      std::cout << "j: " << j << std::endl;
       merged[merged.size() - 1][0].residues.push_back(
           pairwise_alignment[1].residues[j]);
-      std::cout << "pair2" << std::endl;
       merged[merged.size() - 1][1].residues.push_back(
           pairwise_alignment[1].residues[j]);
-      std::cout << "pair2" << std::endl;
       ++i;
       ++j;
     } else if (i < length1 && profile1->at(i).codon[0] == '-') {
-      std::cout << "if2" << std::endl;
       merged[0][0].residues.push_back(gap_residue);
       merged[0][1].residues.push_back(gap_residue);
       merged[merged.size() - 1][0].residues.push_back(gap_residue);
@@ -353,7 +363,6 @@ std::vector<fasta::SequenceList> msa::add_alignment(
       }
       ++i;
     } else if (j < length2 && profile2->at(j).codon[0] == '-') {
-      std::cout << "if3" << std::endl;
       merged[0][0].residues.push_back(gap_residue);
       merged[0][1].residues.push_back(gap_residue);
       merged[merged.size() - 1][0].residues.push_back(
