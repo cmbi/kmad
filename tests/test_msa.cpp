@@ -285,6 +285,8 @@ BOOST_AUTO_TEST_CASE(test_add_alignment) {
       result_str.push_back(fasta::make_string(seq));
     }
   }
+  BOOST_CHECK_EQUAL(result.size(), 3);
+  BOOST_CHECK_EQUAL(result[0].size(), 2);
   BOOST_CHECK_EQUAL_COLLECTIONS(result_str.begin(), result_str.end(),
                                 expected.begin(), expected.end());
 }
@@ -306,17 +308,17 @@ BOOST_AUTO_TEST_CASE(test_merge_alignments) {
       result_str.push_back(fasta::make_string(seq));
     }
   }
-  std::vector<std::string> expected = {"---A---A-",
-                                       "---A---A-",
-                                       "---AB--AD",
-                                       "---AB--AD",
-                                       "---ATSSA-",
+
+  std::vector<std::string> expected = {"---AB--AD",
                                        "---ATSSA-",
                                        "TSBA---A-",
+                                       "---AB--AD",
+                                       "---ATSSA-",
                                        "TSBA---A-"};
 
   BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
                                 result_str.begin(), result_str.end());
 }
+
 
 BOOST_AUTO_TEST_SUITE_END()

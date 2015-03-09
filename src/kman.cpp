@@ -149,11 +149,15 @@ int main(int argc, char *argv[]) {
                                   motif_modifier, ptm_modifier, codon_length,
                                   one_round, sbst_mat, first_gapped);
     // write alignment to file 
+    int al_out_index = 1;
+    if (first_gapped) {
+      first_gapped = 0; 
+    }
     if (out_encoded) {
-      outfile::write_encoded_alignment(alignment[1], sequence_data,
+      outfile::write_encoded_alignment(alignment[al_out_index], sequence_data,
                                        output_prefix);
     } else {
-      outfile::write_decoded_alignment(alignment[1], sequence_data,
+      outfile::write_decoded_alignment(alignment[al_out_index], sequence_data,
                                        output_prefix);
     }
     // analyze features in the alignment

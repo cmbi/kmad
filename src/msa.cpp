@@ -288,36 +288,27 @@ std::vector<fasta::SequenceList> msa::merge_alignments(
     const std::vector<fasta::SequenceList>& pairwise_alignments)
 {
   std::vector<fasta::SequenceList> multi_alignment;
-  multi_alignment.push_back({pairwise_alignments[0][0],
-                             pairwise_alignments[1][0]});
+  multi_alignment = {{pairwise_alignments[0][0],
+                      pairwise_alignments[0][0]},
+                     {pairwise_alignments[1][0],
+                      pairwise_alignments[1][0]}};
 
-  ///
-  std::cout << "premerge: " << std::endl;
-  for (auto& el : pairwise_alignments) {
-    std::cout << "pstep" << std::endl;
-    for (auto& item : el) {
-      std::cout << fasta::make_string(item) << std::endl;
-    }
-  }
-  ///
-
-  // count - to omit first element of pairwise_alignments
-  // for (auto& pair_al : pairwise_alignments) {
   assert(pairwise_alignments[0].size() == pairwise_alignments[1].size());
-  for (size_t i = 0; i < pairwise_alignments[0].size(); ++i) {
+  for (size_t i = 1; i < pairwise_alignments[0].size(); ++i) {
     fasta::SequenceList pair_al = {pairwise_alignments[0][i],
                                    pairwise_alignments[1][i]};
-      multi_alignment = add_alignment(multi_alignment, pair_al);
+    multi_alignment = add_alignment(multi_alignment, pair_al);
   }
   //
   // TODO: find a function to remove first element from vector
   // or copy whole vector except for the first element
   //
-  std::vector<fasta::SequenceList> result;
+  std::vector<fasta::SequenceList> result = {{}, {}};
   for (size_t i = 1; i < multi_alignment.size(); ++i) {
-    result.push_back(multi_alignment[i]);
+    result[0].push_back(multi_alignment[i][0]);
+    result[1].push_back(multi_alignment[i][1]);
   }
-  return multi_alignment;
+  return result;
 }
 
 
@@ -326,6 +317,8 @@ std::vector<fasta::SequenceList> msa::add_alignment(
     const fasta::SequenceList& pairwise_alignment)
 {
   fasta::Sequence s;
+  // std::vector<fasta::SequenceList> merged(2,
+  //                                         fasta::SequenceList(multi_alignment.size() + 1, s));
   std::vector<fasta::SequenceList> merged(multi_alignment.size() + 1,
                                           fasta::SequenceList(2, s));
   int i = 0;
@@ -343,9 +336,15 @@ std::vector<fasta::SequenceList> msa::add_alignment(
         && profile1->at(i).codon == profile2->at(j).codon)
     {
       for (size_t k = 0; k < multi_alignment.size(); ++k) {
+        // merged[0][k].residues.push_back(multi_alignment[k][0].residues[i]);
+        // merged[1][k].residues.push_back(multi_alignment[k][0].residues[i]);
         merged[k][0].residues.push_back(multi_alignment[k][0].residues[i]);
         merged[k][1].residues.push_back(multi_alignment[k][0].residues[i]);
       }
+      // merged[0][merged[0].size() - 1].residues.push_back(
+      //     pairwise_alignment[1].residues[j]);
+      // merged[1][merged[1].size() - 1].residues.push_back(
+      //     pairwise_alignment[1].residues[j]);
       merged[merged.size() - 1][0].residues.push_back(
           pairwise_alignment[1].residues[j]);
       merged[merged.size() - 1][1].residues.push_back(
@@ -353,16 +352,28 @@ std::vector<fasta::SequenceList> msa::add_alignment(
       ++i;
       ++j;
     } else if (i < length1 && profile1->at(i).codon[0] == '-') {
+      // merged[0][0].residues.push_back(gap_residue);
+      // merged[1][0].residues.push_back(gap_residue);
+      // merged[0][merged[0].size() - 1].residues.push_back(gap_residue);
+      // merged[1][merged[1].size() - 1].residues.push_back(gap_residue);
       merged[0][0].residues.push_back(gap_residue);
       merged[0][1].residues.push_back(gap_residue);
       merged[merged.size() - 1][0].residues.push_back(gap_residue);
       merged[merged.size() - 1][1].residues.push_back(gap_residue);
       for (size_t k = 1; k < multi_alignment.size(); ++k) {
+        // merged[0][k].residues.push_back(multi_alignment[k][0].residues[i]);
+        // merged[1][k].residues.push_back(multi_alignment[k][0].residues[i]);
         merged[k][0].residues.push_back(multi_alignment[k][0].residues[i]);
         merged[k][1].residues.push_back(multi_alignment[k][0].residues[i]);
       }
       ++i;
     } else if (j < length2 && profile2->at(j).codon[0] == '-') {
+      // merged[0][0].residues.push_back(gap_residue);
+      // merged[1][0].residues.push_back(gap_residue);
+      // merged[0][merged[0].size() - 1].residues.push_back(
+      //     pairwise_alignment[1].residues[j]);
+      // merged[1][merged[1].size() - 1].residues.push_back(
+      //     pairwise_alignment[1].residues[j]);
       merged[0][0].residues.push_back(gap_residue);
       merged[0][1].residues.push_back(gap_residue);
       merged[merged.size() - 1][0].residues.push_back(
@@ -370,6 +381,8 @@ std::vector<fasta::SequenceList> msa::add_alignment(
       merged[merged.size() - 1][1].residues.push_back(
           pairwise_alignment[1].residues[j]);
       for (size_t k = 1; k < multi_alignment.size(); ++k) {
+        // merged[0][k].residues.push_back(gap_residue);
+        // merged[1][k].residues.push_back(gap_residue);
         merged[k][0].residues.push_back(gap_residue);
         merged[k][1].residues.push_back(gap_residue);
       }
