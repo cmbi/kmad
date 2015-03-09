@@ -44,7 +44,6 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
                                    "ptm_Oglyc3"}; 
   std::map<std::string, double> probabilities;
   f_config::FeatureSettingsMap f_set;
-  fasta::SequenceList query_seq_list = {s1};
   fasta::SequenceList sequences = {s1, s2};
   int domain_modifier = 4;
   int motif_modifier = 3;
@@ -115,6 +114,55 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
     BOOST_CHECK_EQUAL(alignment[1][1].residues[i].codon,
                       expected_alignment[1][1].residues[i].codon);
   }
+}
+
+BOOST_AUTO_TEST_CASE(test_run_msa_gapped_mode)
+{
+  f_config::FeatureSettingsMap f_set;
+  fasta::SequenceList sequences;
+  sequences = {fasta::make_sequence("WWTWW", 1),
+               fasta::make_sequence("WTWRW", 1),
+               fasta::make_sequence("WRWTWRW", 1)};
+  int domain_modifier = 0;
+  int motif_modifier = 0;
+  int ptm_modifier = 0;
+  double gap_open_pen = -4;
+  double gap_ext_pen = -4;
+  double end_pen = -4;
+  int codon_length = 1;
+  bool one_round = false;
+  seq_data::SequenceData sequence_data;
+  FeatureNamesList feature_list;
+  std::map<std::string, double> probabilities;
+  sequence_data.sequences = sequences;
+  sequence_data.feature_list = feature_list;
+  std::vector<fasta::SequenceList> alignment;
+  std::string sbst_mat = "BLOSUM";
+  bool first_gapped = true;
+  alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
+                           end_pen, domain_modifier, motif_modifier, 
+                           ptm_modifier, codon_length, one_round, sbst_mat,
+                           first_gapped);
+
+  BOOST_CHECK_EQUAL(alignment.size(), 2);
+  BOOST_CHECK_EQUAL(alignment[0].size(), 3);
+  BOOST_CHECK_EQUAL(alignment[0].size(), alignment[1].size());
+
+  std::vector<std::string> result;
+  for (auto& seqpair : alignment) {
+    for (auto& seq : seqpair) {
+      result.push_back(fasta::make_string(seq));
+    }
+  }
+  std::vector<std::string> expected = {"W-WTW-W",
+                                       "--WTWRW",
+                                       "WRWTWRW",
+                                       "W-WTW-W",
+                                       "--WTWRW",
+                                       "WRWTWRW"};
+
+  BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                expected.begin(), expected.end());
 }
 BOOST_AUTO_TEST_CASE(test_set_identities)
 {
