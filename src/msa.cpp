@@ -5,6 +5,8 @@
 #include "scoring_matrix.h"
 
 #include <boost/filesystem.hpp>
+#include <vector>
+#include <iostream>
 
 
 std::vector<fasta::SequenceList> msa::run_msa(
@@ -288,6 +290,8 @@ std::vector<fasta::SequenceList> msa::merge_alignments(
     const std::vector<fasta::SequenceList>& pairwise_alignments)
 {
   std::vector<fasta::SequenceList> multi_alignment;
+  /// TODO: change it so that changing the format is no longer needed at the
+  /// end of the function
   multi_alignment = {{pairwise_alignments[0][0],
                       pairwise_alignments[0][0]},
                      {pairwise_alignments[1][0],
@@ -299,15 +303,14 @@ std::vector<fasta::SequenceList> msa::merge_alignments(
                                    pairwise_alignments[1][i]};
     multi_alignment = add_alignment(multi_alignment, pair_al);
   }
-  //
-  // TODO: find a function to remove first element from vector
-  // or copy whole vector except for the first element
-  //
+
+
   std::vector<fasta::SequenceList> result = {{}, {}};
   for (size_t i = 1; i < multi_alignment.size(); ++i) {
     result[0].push_back(multi_alignment[i][0]);
     result[1].push_back(multi_alignment[i][1]);
   }
+  result = remove_gapcolumns(result);
   return result;
 }
 
@@ -390,4 +393,34 @@ std::vector<fasta::SequenceList> msa::add_alignment(
     }
   }
   return merged;
+}
+
+
+std::vector<fasta::SequenceList> msa::remove_gapcolumns(
+    std::vector<fasta::SequenceList> alignment) 
+{
+  std::vector<fasta::SequenceList> result = alignment;
+  int erased = 0;
+  for (size_t i = 0; i < alignment[0][0].residues.size(); ++i) {
+    if (alignment[0][0].residues[i].codon[0] == '-') {
+      bool gaps = true;
+      size_t j = 1;
+      while (gaps && j < alignment[0].size()) {
+        if (alignment[0][j].residues[i].codon[0] != '-') {
+          gaps = false;
+        }
+        ++j;
+      }
+      if (gaps) {
+        for (size_t k = 0; k < alignment[0].size(); ++k) {
+          result[0][k].residues.erase(
+              result[0][k].residues.begin() + i - erased);
+          result[1][k].residues.erase(
+              result[1][k].residues.begin() + i - erased);
+        }
+        ++erased;
+      }
+    }
+  }
+  return result;
 }

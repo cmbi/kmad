@@ -111,6 +111,9 @@ namespace msa {
   std::vector<fasta::SequenceList> add_alignment(
       const std::vector<fasta::SequenceList>& multiple_alignment,
       const fasta::SequenceList& pairwise_alignment);
+
+  std::vector<fasta::SequenceList> remove_gapcolumns(
+      std::vector<fasta::SequenceList> alignment);
 }
 
 #endif /* MSA_H */
