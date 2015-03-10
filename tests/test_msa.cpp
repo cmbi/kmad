@@ -356,7 +356,6 @@ BOOST_AUTO_TEST_CASE(test_merge_alignments) {
       result_str.push_back(fasta::make_string(seq));
     }
   }
-
   std::vector<std::string> expected = {"---AB--AD",
                                        "---ATSSA-",
                                        "TSBA---A-",
@@ -364,6 +363,29 @@ BOOST_AUTO_TEST_CASE(test_merge_alignments) {
                                        "---ATSSA-",
                                        "TSBA---A-"};
 
+  BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
+                                result_str.begin(), result_str.end());
+  fasta::Sequence prof4 = fasta::make_sequence("A-A-A-", 1);
+  fasta::Sequence s4 = fasta::make_sequence("ABAD-C", 1);
+  fasta::Sequence prof5 = fasta::make_sequence("A---AA-", 1);
+  fasta::Sequence s5 = fasta::make_sequence("ATSSA-C", 1);
+  fasta::Sequence prof6 = fasta::make_sequence("---AAA", 1);
+  fasta::Sequence s6 = fasta::make_sequence("TSBAA-", 1);
+  input_alignments = {{prof4, prof5, prof6}, {s4, s5, s6}};
+
+  result = msa::merge_alignments(input_alignments);
+  result_str.clear();
+  for (auto& seqset : result) {
+    for (auto& seq : seqset) {
+      result_str.push_back(fasta::make_string(seq));
+    }
+  }
+  expected = {"---AB--ADC",
+              "---ATSSA-C",
+              "TSBA---A--",
+              "---AB--ADC",
+              "---ATSSA-C",
+              "TSBA---A--"};
   BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
                                 result_str.begin(), result_str.end());
 }
