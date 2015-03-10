@@ -19,7 +19,7 @@ namespace msa {
       double gap_ext_pen, double end_pen,
       int domain_modifier, int motif_modifier,
       int phosph_modifier, int codon_length, bool one_round,
-      const std::string& sbst_mat);
+      const std::string& sbst_mat, const bool first_gapped);
 
 
   /// performs the first round of alignments, / all vs query seq (first
@@ -38,7 +38,7 @@ namespace msa {
   ///
   
   
-  std::vector<fasta::SequenceList> perform_msa_round(
+  std::vector<fasta::SequenceList> perform_msa_round_gapped(
       const seq_data::SequenceData& sequence_data,
       const profile::ProfileMap& profile,
       const FeatureScores& f_profile,
@@ -51,6 +51,18 @@ namespace msa {
       const f_config::FeatureSettingsMap& f_set,
       std::vector<fasta::SequenceList> previous_alignment);
 
+  std::vector<fasta::SequenceList> perform_msa_round_ungapped(
+      const seq_data::SequenceData& sequence_data,
+      const profile::ProfileMap& profile,
+      const FeatureScores& f_profile,
+      double gap_open_pen, double end_pen,
+      double gap_ext_pen, 
+      double identity_cutoff,
+      int codon_length, 
+      const std::vector<double>& identities,
+      int& prev_alignments,
+      const f_config::FeatureSettingsMap& f_set,
+      std::vector<fasta::SequenceList> previous_alignment);
   ///
   /// takes pairwise alignment, removes
   /// characters from the 2nd sequence that match gaps from 1st seq and returns
@@ -68,7 +80,8 @@ namespace msa {
                                      const profile::ProfileMap& profile, 
                                      const FeatureScores& f_profile,
                                      double gap_open_pen, double end_pen,
-                                     double gap_ext_pen, int codon_length);
+                                     double gap_ext_pen, int codon_length,
+                                     const bool first_gapped);
 
   ///
   /// calculates identity with the query sequence
@@ -83,6 +96,21 @@ namespace msa {
   ///
   int count_alignments(double identity_cutoff,
                        const std::vector<double>& identities);
+
+  ///
+  /// merges multiple pairwise alignments int one multiple sequence alignment
+  /// output is: [[seq0, seq0], [seq1, seq1]] -> each element of the vector
+  /// consists of two copies of the same aligned sequence (to make it
+  /// analogous to output of non-gapped(no gaps in 1st seq) alignment)
+  ///
+  std::vector<fasta::SequenceList> merge_alignments(
+      const std::vector<fasta::SequenceList>& pairwise_alignments);
+  ///
+  /// adds new sequence from pairwise alignment to a multiple alignment
+  /// 
+  std::vector<fasta::SequenceList> add_alignment(
+      const std::vector<fasta::SequenceList>& multiple_alignment,
+      const fasta::SequenceList& pairwise_alignment);
 }
 
 #endif /* MSA_H */

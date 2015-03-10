@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE(test_config)
   BOOST_CHECK_EQUAL_COLLECTIONS(expected_list.begin(), expected_list.end(),
                                 result_list.begin(), result_list.end());
 
-  std::vector<int> expected_int_list = {2, 3};
+  std::vector<int> expected_int_list = {1, 2};
   std::vector<int> result_int_list;
   result_int_list = test_result[feat_name].positions[0].positions;
   BOOST_CHECK_EQUAL_COLLECTIONS(expected_int_list.begin(),

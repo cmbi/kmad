@@ -113,6 +113,28 @@ fasta::Sequence fasta::make_sequence(unsigned long sequence_length,
   return s;
 }
 
+fasta::Sequence fasta::make_sequence(
+    const std::string sequence_string,
+    int codon_length) {
+  fasta::Sequence s;
+  for (size_t i = 0; i < sequence_string.size(); ++i) {
+    if (i % codon_length == 0) {
+      std::string codon = sequence_string.substr(i, codon_length);
+      fasta::Residue res = fasta::make_residue(codon);
+      s.residues.push_back(res);
+    }
+  }
+  return s;
+}
+
+std::string fasta::make_string(const fasta::Sequence seq) {
+  std::string result;
+  for (auto& residue : seq.residues) {
+    result.push_back(residue.codon[0]);
+  }
+  return result;
+}
+
 fasta::Residue fasta::make_residue(const std::string& codon) {
   std::vector<std::string> features;
   if (codon.size() >= 5 && codon[4] != 'A') {

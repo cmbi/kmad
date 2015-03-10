@@ -24,6 +24,7 @@ int main(int argc, char *argv[]) {
     double end_pen = 0;
     bool out_encoded = false;
     bool one_round = false;
+    bool first_gapped = false;
     std::string filename;
     std::string output_prefix;
     std::string conf_file;
@@ -80,6 +81,10 @@ int main(int argc, char *argv[]) {
        "conservation cutoff for the feature consensus")
       ("mat", po::value<std::string>(&sbst_mat)->default_value("DISORDER"),
        "substitution matrix")
+      ("gapped", po::value<bool>(&first_gapped)->default_value(false)
+                                               ->implicit_value(true),
+       "'first sequence with gaps' mode"
+       )
       ("conf",
        po::value<std::string>(&conf_file),
        "configure file");
@@ -142,13 +147,17 @@ int main(int argc, char *argv[]) {
                                   f_set, gap_open_pen,
                                   gap_ext_pen, end_pen, domain_modifier, 
                                   motif_modifier, ptm_modifier, codon_length,
-                                  one_round, sbst_mat);
+                                  one_round, sbst_mat, first_gapped);
     // write alignment to file 
+    int al_out_index = 1;
+    if (first_gapped) {
+      first_gapped = 0; 
+    }
     if (out_encoded) {
-      outfile::write_encoded_alignment(alignment[1], sequence_data,
+      outfile::write_encoded_alignment(alignment[al_out_index], sequence_data,
                                        output_prefix);
     } else {
-      outfile::write_decoded_alignment(alignment[1], sequence_data,
+      outfile::write_decoded_alignment(alignment[al_out_index], sequence_data,
                                        output_prefix);
     }
     // analyze features in the alignment
@@ -166,6 +175,5 @@ int main(int argc, char *argv[]) {
     }
 
     time_t end = clock();
-
     std::cout << "time: " << double(end - start)/CLOCKS_PER_SEC << std::endl;
 }

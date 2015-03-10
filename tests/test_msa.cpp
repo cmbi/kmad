@@ -44,7 +44,6 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
                                    "ptm_Oglyc3"}; 
   std::map<std::string, double> probabilities;
   f_config::FeatureSettingsMap f_set;
-  fasta::SequenceList query_seq_list = {s1};
   fasta::SequenceList sequences = {s1, s2};
   int domain_modifier = 4;
   int motif_modifier = 3;
@@ -58,9 +57,11 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
   sequence_data.feature_list = feature_list;
   std::vector<fasta::SequenceList> alignment;
   std::string sbst_mat = "BLOSUM";
+  bool first_gapped = false;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
-                           ptm_modifier, codon_length, one_round, sbst_mat);
+                           ptm_modifier, codon_length, one_round, sbst_mat,
+                           first_gapped);
   fasta::Sequence e_s1;
   // AKLCAKL
   e_s1 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
@@ -113,6 +114,55 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
     BOOST_CHECK_EQUAL(alignment[1][1].residues[i].codon,
                       expected_alignment[1][1].residues[i].codon);
   }
+}
+
+BOOST_AUTO_TEST_CASE(test_run_msa_gapped_mode)
+{
+  f_config::FeatureSettingsMap f_set;
+  fasta::SequenceList sequences;
+  sequences = {fasta::make_sequence("WWTWW", 1),
+               fasta::make_sequence("WTWRW", 1),
+               fasta::make_sequence("WRWTWRW", 1)};
+  int domain_modifier = 0;
+  int motif_modifier = 0;
+  int ptm_modifier = 0;
+  double gap_open_pen = -4;
+  double gap_ext_pen = -4;
+  double end_pen = -4;
+  int codon_length = 1;
+  bool one_round = false;
+  seq_data::SequenceData sequence_data;
+  FeatureNamesList feature_list;
+  std::map<std::string, double> probabilities;
+  sequence_data.sequences = sequences;
+  sequence_data.feature_list = feature_list;
+  std::vector<fasta::SequenceList> alignment;
+  std::string sbst_mat = "BLOSUM";
+  bool first_gapped = true;
+  alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
+                           end_pen, domain_modifier, motif_modifier, 
+                           ptm_modifier, codon_length, one_round, sbst_mat,
+                           first_gapped);
+
+  BOOST_CHECK_EQUAL(alignment.size(), 2);
+  BOOST_CHECK_EQUAL(alignment[0].size(), 3);
+  BOOST_CHECK_EQUAL(alignment[0].size(), alignment[1].size());
+
+  std::vector<std::string> result;
+  for (auto& seqpair : alignment) {
+    for (auto& seq : seqpair) {
+      result.push_back(fasta::make_string(seq));
+    }
+  }
+  std::vector<std::string> expected = {"W-WTW-W",
+                                       "--WTWRW",
+                                       "WRWTWRW",
+                                       "W-WTW-W",
+                                       "--WTWRW",
+                                       "WRWTWRW"};
+
+  BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                expected.begin(), expected.end());
 }
 BOOST_AUTO_TEST_CASE(test_set_identities)
 {
@@ -259,5 +309,64 @@ BOOST_AUTO_TEST_CASE(test_count_alignments) {
  int result = msa::count_alignments(cutoff, identities);
   BOOST_CHECK_EQUAL(result, 4);
 }
+
+BOOST_AUTO_TEST_CASE(test_add_alignment) {
+  fasta::Sequence prof1 = fasta::make_sequence("A-A-", 1);
+  fasta::Sequence s1 = fasta::make_sequence("ABAD", 1);
+  fasta::Sequence prof2 = fasta::make_sequence("A---A", 1);
+  fasta::Sequence s2 = fasta::make_sequence("ATSSA", 1);
+  std::vector<fasta::SequenceList> input_multi = {{prof1, prof1},
+                                                  {s1, s1}};
+  fasta::SequenceList input_pairwise = {prof2, s2};
+  std::vector<std::string> expected = {"A---A-",
+                                       "A---A-",
+                                       "AB--AD",
+                                       "AB--AD",
+                                       "ATSSA-",
+                                       "ATSSA-"};
+
+  std::vector<fasta::SequenceList> result = msa::add_alignment(input_multi,
+                                                               input_pairwise);
+  std::vector<std::string> result_str;
+  for (auto& seqset : result) {
+    for (auto& seq : seqset) {
+      result_str.push_back(fasta::make_string(seq));
+    }
+  }
+  BOOST_CHECK_EQUAL(result.size(), 3);
+  BOOST_CHECK_EQUAL(result[0].size(), 2);
+  BOOST_CHECK_EQUAL_COLLECTIONS(result_str.begin(), result_str.end(),
+                                expected.begin(), expected.end());
+}
+
+BOOST_AUTO_TEST_CASE(test_merge_alignments) {
+  fasta::Sequence prof1 = fasta::make_sequence("A-A-", 1);
+  fasta::Sequence s1 = fasta::make_sequence("ABAD", 1);
+  fasta::Sequence prof2 = fasta::make_sequence("A---A", 1);
+  fasta::Sequence s2 = fasta::make_sequence("ATSSA", 1);
+  fasta::Sequence prof3 = fasta::make_sequence("---AA", 1);
+  fasta::Sequence s3 = fasta::make_sequence("TSBAA", 1);
+  std::vector<fasta::SequenceList> input_alignments = {{prof1, prof2, prof3},
+                                                       {s1, s2, s3}};
+  std::vector<fasta::SequenceList> result = msa::merge_alignments(
+      input_alignments);
+  std::vector<std::string> result_str;
+  for (auto& seqset : result) {
+    for (auto& seq : seqset) {
+      result_str.push_back(fasta::make_string(seq));
+    }
+  }
+
+  std::vector<std::string> expected = {"---AB--AD",
+                                       "---ATSSA-",
+                                       "TSBA---A-",
+                                       "---AB--AD",
+                                       "---ATSSA-",
+                                       "TSBA---A-"};
+
+  BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
+                                result_str.begin(), result_str.end());
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
