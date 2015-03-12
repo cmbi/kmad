@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
     bool out_encoded = false;
     bool one_round = false;
     bool first_gapped = false;
+    bool refine = false;
     std::string filename;
     std::string output_prefix;
     std::string conf_file;
@@ -85,6 +86,10 @@ int main(int argc, char *argv[]) {
                                                ->implicit_value(true),
        "'first sequence with gaps' mode"
        )
+      ("refine", po::value<bool>(&refine)->default_value(false)
+                                         ->implicit_value(true),
+       "take alignment as input and refine it"
+      )
       ("conf",
        po::value<std::string>(&conf_file),
        "configure file");
@@ -143,11 +148,17 @@ int main(int argc, char *argv[]) {
     seq_data::SequenceData sequence_data = seq_data::process_fasta_data(
         fasta_data, f_set);
     // perform the alignment
-    auto alignment = msa::run_msa(sequence_data, 
-                                  f_set, gap_open_pen,
-                                  gap_ext_pen, end_pen, domain_modifier, 
-                                  motif_modifier, ptm_modifier, codon_length,
-                                  one_round, sbst_mat, first_gapped);
+    std::vector<fasta::SequenceList> alignment;
+    if (!refine) {
+      alignment = msa::run_msa(sequence_data, 
+                               f_set, gap_open_pen,
+                               gap_ext_pen, end_pen, domain_modifier, 
+                               motif_modifier, ptm_modifier, codon_length,
+                               one_round, sbst_mat, first_gapped);
+    } else {
+      std::cout << "blabla" << refine<< std::endl;
+    }
+
     // write alignment to file 
     int al_out_index = 1;
     if (first_gapped) {
