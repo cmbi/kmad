@@ -15,7 +15,7 @@ namespace seq_data {
   SequenceData process_fasta_data(const fasta::FastaData& fasta_data,
                                   const f_config::FeatureSettingsMap& f_set,
                                   bool gapped);
-  fasta::SequenceList remove_gaps(fasta::SequenceList sequences);
+  fasta::SequenceList remove_gaps(const fasta::SequenceList& sequences);
   FeatureNamesList make_feature_list(const fasta::SequenceList& sequences);
 }
 

@@ -72,9 +72,10 @@ FeatureNamesList seq_data::make_feature_list(
 }
 
 
-fasta::SequenceList seq_data::remove_gaps(fasta::SequenceList sequences) {
+fasta::SequenceList seq_data::remove_gaps(
+    const fasta::SequenceList& sequences) {
   fasta::SequenceList s = sequences;
-  for (auto& seq : sequences) {
+  for (auto& seq : s) {
     seq.residues.clear();
   }
   for (size_t i = 0; i < sequences.size(); ++i) {
@@ -84,5 +85,5 @@ fasta::SequenceList seq_data::remove_gaps(fasta::SequenceList sequences) {
       }
     }
   }
-  return sequences;
+  return s;
 }
