@@ -85,7 +85,8 @@ std::vector<fasta::SequenceList> msa::run_msa(
 
 
 std::vector<fasta::SequenceList> msa::refine_alignment(
-    const seq_data::SequenceData& sequence_data,
+    const seq_data::SequenceData& sequence_data_plain,
+    const seq_data::SequenceData& sequence_data_alignment,
     const f_config::FeatureSettingsMap& f_set,
     double gap_open_pen, double gap_ext_pen,
     double end_pen, int domain_modifier,
@@ -93,21 +94,19 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
     int codon_length, bool one_round,
     const std::string& sbst_mat, const bool first_gapped)
 {
-      FeatureScores f_profile(sequence_data.feature_list, domain_modifier,
-                              ptm_modifier, motif_modifier,
-                              sequence_data.probabilities);
+      FeatureScores f_profile(sequence_data_alignment.feature_list,
+                              domain_modifier, ptm_modifier, motif_modifier,
+                              sequence_data_alignment.probabilities);
       // query_seq_list - the profile are built only based on the first
       // sequence
-      fasta::SequenceList query_seq_list = {sequence_data.sequences};
+      fasta::SequenceList query_seq_list = sequence_data_alignment.sequences;
       profile::ProfileMap profile = profile::create_score_profile(
           query_seq_list, sbst_mat);
       f_profile.update_scores(query_seq_list, f_set);
 
       // first round of the alignment - all vs 1st
-      std::vector<double> identities;
-      identities = msa::set_identities(sequence_data, profile, f_profile,
-                                       gap_open_pen, end_pen, 
-                                       gap_ext_pen, codon_length);
+      std::vector<double> identities(sequence_data_alignment.sequences.size(),
+                                     1.0);
 
       std::vector<fasta::SequenceList> alignment;
       int alignments_number = 0;
@@ -131,7 +130,7 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
       }
       alignments_number = 0;  // to align (again) all sequences to the profile
       cutoff = 0;
-      alignment = perform_msa_round_ptr(sequence_data, profile,
+      alignment = perform_msa_round_ptr(sequence_data_plain, profile,
                                         f_profile, gap_open_pen, 
                                         end_pen, gap_ext_pen, cutoff,
                                         codon_length, identities,

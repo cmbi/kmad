@@ -23,7 +23,8 @@ namespace msa {
 
   // takes alignment (sequence_data) refines it (one round)
   std::vector<fasta::SequenceList> refine_alignment(
-      const seq_data::SequenceData& sequence_data,
+      const seq_data::SequenceData& sequence_data_plain,
+      const seq_data::SequenceData& sequence_data_alignment,
       const f_config::FeatureSettingsMap& f_set,
       double gap_open_pen,
       double gap_ext_pen, double end_pen,
