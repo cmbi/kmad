@@ -97,7 +97,7 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
       FeatureScores f_profile(sequence_data_alignment.feature_list,
                               domain_modifier, ptm_modifier, motif_modifier,
                               sequence_data_alignment.probabilities);
-      // query_seq_list - the profile are built only based on the first
+      // query_seq_list - the profiles are built only based on the first
       // sequence
       fasta::SequenceList query_seq_list = sequence_data_alignment.sequences;
       profile::ProfileMap profile = profile::create_score_profile(
@@ -128,6 +128,15 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
       } else {
         perform_msa_round_ptr = msa::perform_msa_round_ungapped;
       }
+      alignments_number = 0;  // to align (again) all sequences to the profile
+      cutoff = 0;
+      alignment = perform_msa_round_ptr(sequence_data_plain, profile,
+                                        f_profile, gap_open_pen, 
+                                        end_pen, gap_ext_pen, cutoff,
+                                        codon_length, identities,
+                                        alignments_number, f_set, alignment);
+      f_profile.update_scores(alignment[0], f_set);
+      profile = profile::create_score_profile(alignment[0], sbst_mat);
       alignments_number = 0;  // to align (again) all sequences to the profile
       cutoff = 0;
       alignment = perform_msa_round_ptr(sequence_data_plain, profile,

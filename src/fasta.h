@@ -35,7 +35,8 @@ namespace fasta {
   /// parsess a 'fasta' file, returns a Sequences object,
   /// writes motif ids and probabilities to ids and probs
   ///
-  FastaData parse_fasta(std::string filename, int codonLength);
+  FastaData parse_fasta(std::string filename, int codonLength,
+                        bool refine);
 
   Sequence make_sequence(const std::string& description,
                          const std::string& codons, int codon_length);
@@ -45,6 +46,7 @@ namespace fasta {
   Sequence make_sequence(const std::string sequence_string, int codon_length);
   std::string make_string(const Sequence seq);
   Residue make_residue(const std::string& codon);
+  bool check_length(SequenceList sequences);
 }
 
 
