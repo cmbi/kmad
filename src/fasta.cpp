@@ -42,7 +42,8 @@ namespace {
 }
 
 
-fasta::FastaData fasta::parse_fasta(std::string filename, int codon_length) {
+fasta::FastaData fasta::parse_fasta(std::string filename, int codon_length,
+    bool refine) {
   fs::path p(filename);
   if (!fs::exists(p)) {
     throw std::invalid_argument("File not found: " + filename);
@@ -76,6 +77,10 @@ fasta::FastaData fasta::parse_fasta(std::string filename, int codon_length) {
     }
   }
   fastafile.close();
+  if (refine && !check_length(fd.sequences)) {
+        throw std::runtime_error("In the 'refine' mode all sequences should "
+                                 "have the same length");
+  }
 
   return fd;
 }
@@ -147,4 +152,18 @@ fasta::Residue fasta::make_residue(const std::string& codon) {
     features.push_back("domain_" + codon.substr(2, 2));
   }
   return Residue(codon, features);
+}
+
+bool fasta::check_length(fasta::SequenceList sequences) {
+  bool result = true;
+  size_t prev_length = sequences[0].residues.size();
+  size_t i = 1;
+  while (result && i < sequences.size()){
+    size_t length = sequences[i].residues.size();
+    if (length != prev_length) {
+      result = false; 
+    }
+    ++i;
+  }
+  return result;
 }

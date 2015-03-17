@@ -12,16 +12,21 @@ BOOST_AUTO_TEST_SUITE(test_fasta)
 
 BOOST_AUTO_TEST_CASE(test_parse_fasta)
 {
-  fasta::FastaData fd = fasta::parse_fasta("tests/TAU_SPECI.fasta.7c", 7);
+  bool refine = false; 
+  fasta::FastaData fd = fasta::parse_fasta("tests/TAU_SPECI.fasta.7c", 7,
+                                           refine);
 
   BOOST_CHECK_EQUAL(fd.sequences.size(), 19);
   BOOST_CHECK_EQUAL(fd.probabilities.size(), 97);
 
-  BOOST_CHECK_THROW(fasta::parse_fasta("tests/nonexistent.fasta.7c", 7),
+  BOOST_CHECK_THROW(fasta::parse_fasta("tests/nonexistent.fasta.7c", 7,
+                                       refine),
                     std::invalid_argument);
-  BOOST_CHECK_THROW(fasta::parse_fasta("tests/wrong_probs_format.fasta.7c", 7),
+  BOOST_CHECK_THROW(fasta::parse_fasta("tests/wrong_probs_format.fasta.7c", 7,
+                                       refine),
                     std::runtime_error);
-  BOOST_CHECK_THROW(fasta::parse_fasta("tests/invalid_codon.fasta.7c", 7),
+  BOOST_CHECK_THROW(fasta::parse_fasta("tests/invalid_codon.fasta.7c", 7,
+                                       refine),
                     std::runtime_error);
 
 

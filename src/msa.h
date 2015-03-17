@@ -21,6 +21,16 @@ namespace msa {
       int phosph_modifier, int codon_length, bool one_round,
       const std::string& sbst_mat, const bool first_gapped);
 
+  // takes alignment (sequence_data) refines it (one round)
+  std::vector<fasta::SequenceList> refine_alignment(
+      const seq_data::SequenceData& sequence_data_plain,
+      const seq_data::SequenceData& sequence_data_alignment,
+      const f_config::FeatureSettingsMap& f_set,
+      double gap_open_pen,
+      double gap_ext_pen, double end_pen,
+      int domain_modifier, int motif_modifier,
+      int phosph_modifier, int codon_length, bool one_round,
+      const std::string& sbst_mat, const bool first_gapped);
 
   /// performs the first round of alignments, / all vs query seq (first
   /// calculates profile / based only on the query seq, then / aligns all

@@ -5,11 +5,13 @@
 
 seq_data::SequenceData seq_data::process_fasta_data(
     const fasta::FastaData& fasta_data, 
-    const f_config::FeatureSettingsMap& f_set) {
+    const f_config::FeatureSettingsMap& f_set, bool gapped) {
   seq_data::SequenceData s;
   s.probabilities = fasta_data.probabilities;
   s.sequences = fasta_data.sequences;
-
+  if (!gapped) {
+    s.sequences = remove_gaps(s.sequences);
+  }
   for (auto feat_it = f_set.begin(); feat_it != f_set.end(); ++feat_it) {
     for (auto& seq : feat_it->second.positions) {
       if ((signed)s.sequences.size() > seq.seq_no && seq.seq_no >= 0) {
@@ -67,4 +69,21 @@ FeatureNamesList seq_data::make_feature_list(
     }
   }
   return feature_list;
+}
+
+
+fasta::SequenceList seq_data::remove_gaps(
+    const fasta::SequenceList& sequences) {
+  fasta::SequenceList s = sequences;
+  for (auto& seq : s) {
+    seq.residues.clear();
+  }
+  for (size_t i = 0; i < sequences.size(); ++i) {
+    for (size_t j = 0; j < sequences[i].residues.size(); ++j) {
+      if (sequences[i].residues[j].codon[0] != '-') {
+        s[i].residues.push_back(sequences[i].residues[j]);
+      }
+    }
+  }
+  return s;
 }

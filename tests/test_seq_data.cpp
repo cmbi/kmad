@@ -87,8 +87,10 @@ BOOST_AUTO_TEST_CASE(test_seq_data)
                                             "ptm_Oglyc3", "motif_aa",
                                             "USR_feature1", "domain_aa"}; 
 
+  bool gapped = true;
   seq_data::SequenceData test_result = seq_data::process_fasta_data(test_data,
-                                                                    test_map);
+                                                                    test_map,
+                                                                    gapped);
 
   BOOST_CHECK_EQUAL_COLLECTIONS(expected_feature_list.begin(), 
                                 expected_feature_list.end(),
@@ -104,6 +106,33 @@ BOOST_AUTO_TEST_CASE(test_seq_data)
           test_result.sequences[i].residues[j].features.end());
     }
   }
+}
+
+
+BOOST_AUTO_TEST_CASE(test_remove_gaps) {
+  fasta::Sequence s1 = fasta::make_sequence("ABAD-C", 1);
+  fasta::Sequence s2 = fasta::make_sequence("ATSSAC", 1);
+  fasta::Sequence s3 = fasta::make_sequence("--BAA-", 1);
+  fasta::SequenceList s = {s1, s2 , s3};
+  s = seq_data::remove_gaps(s);
+  std::vector<std::string> result;
+  for (auto& seq : s) {
+    result.push_back(fasta::make_string(seq));
+  }
+  std::vector<std::string> expected = {"ABADC", "ATSSAC", "BAA"};
+  BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                expected.begin(), expected.end());
+  s1 = fasta::make_sequence("ABADC", 1);
+  s2 = fasta::make_sequence("ATSSAC", 1);
+  s3 = fasta::make_sequence("BAA", 1);
+  s = {s1, s2, s3};
+  s = seq_data::remove_gaps(s);
+  result.clear();
+  for (auto& seq : s) {
+    result.push_back(fasta::make_string(seq));
+  }
+  BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                expected.begin(), expected.end());
 }
 
 

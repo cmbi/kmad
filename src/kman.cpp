@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
     bool out_encoded = false;
     bool one_round = false;
     bool first_gapped = false;
+    bool refine = false;
     std::string filename;
     std::string output_prefix;
     std::string conf_file;
@@ -85,6 +86,10 @@ int main(int argc, char *argv[]) {
                                                ->implicit_value(true),
        "'first sequence with gaps' mode"
        )
+      ("refine", po::value<bool>(&refine)->default_value(false)
+                                         ->implicit_value(true),
+       "take alignment as input and refine it"
+      )
       ("conf",
        po::value<std::string>(&conf_file),
        "configure file");
@@ -134,30 +139,46 @@ int main(int argc, char *argv[]) {
 
     fasta::FastaData fasta_data;
     try {
-      fasta_data = fasta::parse_fasta(filename, codon_length);
+      fasta_data = fasta::parse_fasta(filename, codon_length, refine);
     } catch(const std::exception& e) {
       std::cerr << "Error: " << e.what() << std::endl;
       std::exit(EXIT_FAILURE);
     }
-
-    seq_data::SequenceData sequence_data = seq_data::process_fasta_data(
-        fasta_data, f_set);
+    bool gapped = false;
+    seq_data::SequenceData sequence_data_plain = seq_data::process_fasta_data(
+        fasta_data, f_set, gapped);
     // perform the alignment
-    auto alignment = msa::run_msa(sequence_data, 
-                                  f_set, gap_open_pen,
-                                  gap_ext_pen, end_pen, domain_modifier, 
-                                  motif_modifier, ptm_modifier, codon_length,
-                                  one_round, sbst_mat, first_gapped);
+    std::vector<fasta::SequenceList> alignment;
+    if (!refine) {
+      alignment = msa::run_msa(sequence_data_plain, 
+                               f_set, gap_open_pen,
+                               gap_ext_pen, end_pen, domain_modifier, 
+                               motif_modifier, ptm_modifier, codon_length,
+                               one_round, sbst_mat, first_gapped);
+    } else {
+      bool gapped = true;
+      seq_data::SequenceData sequence_data_alignment = seq_data::process_fasta_data(
+          fasta_data, f_set, gapped);
+      alignment = msa::refine_alignment(sequence_data_plain, 
+                                        sequence_data_alignment,
+                                        f_set, gap_open_pen,
+                                        gap_ext_pen, end_pen, domain_modifier, 
+                                        motif_modifier, ptm_modifier, codon_length,
+                                        one_round, sbst_mat, first_gapped);
+    }
+
     // write alignment to file 
     int al_out_index = 1;
     if (first_gapped) {
       first_gapped = 0; 
     }
     if (out_encoded) {
-      outfile::write_encoded_alignment(alignment[al_out_index], sequence_data,
+      outfile::write_encoded_alignment(alignment[al_out_index],
+                                       sequence_data_plain,
                                        output_prefix);
     } else {
-      outfile::write_decoded_alignment(alignment[al_out_index], sequence_data,
+      outfile::write_decoded_alignment(alignment[al_out_index],
+                                       sequence_data_plain,
                                        output_prefix);
     }
     // analyze features in the alignment
