@@ -17,8 +17,9 @@ namespace seq_data {
                                   bool gapped);
   fasta::SequenceList remove_gaps(const fasta::SequenceList& sequences);
   FeatureNamesList make_feature_list(const fasta::SequenceList& sequences);
-  void assign_feature_by_pattern(const fasta::SequenceList& sequences,
-                                 std::string pattern);
+  void assign_feature_by_pattern(fasta::SequenceList& sequences,
+                                 const std::string& pattern,
+                                 const std::string& feat_name);
 }
 
 #endif /* SEQDATA_H */

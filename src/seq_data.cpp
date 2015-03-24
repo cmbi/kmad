@@ -1,5 +1,6 @@
 #include "seq_data.h"
 
+#include <boost/regex.hpp>
 #include <algorithm>
 
 
@@ -13,7 +14,8 @@ seq_data::SequenceData seq_data::process_fasta_data(
     s.sequences = remove_gaps(s.sequences);
   }
   for (auto feat_it = f_set.begin(); feat_it != f_set.end(); ++feat_it) {
-    assign_feature_by_pattern(s.sequences, feat_it->second.pattern);
+    assign_feature_by_pattern(s.sequences, feat_it->second.pattern,
+        feat_it->first);
     for (auto& seq : feat_it->second.positions) {
       if ((signed)s.sequences.size() > seq.seq_no && seq.seq_no >= 0) {
         for (auto& pos : seq.positions) {
@@ -89,8 +91,23 @@ fasta::SequenceList seq_data::remove_gaps(
   return s;
 }
 
-void seq_data::assign_feature_by_pattern(const fasta::SequenceList& sequences,
-                                         std::string pattern)
+void seq_data::assign_feature_by_pattern(fasta::SequenceList& sequences,
+                                         const std::string& pattern,
+                                         const std::string& feat_name)
 {
-
+  boost::regex re(pattern);
+  for (size_t i = 0; i < sequences.size(); ++i) {
+    std::string seq = fasta::make_string(sequences[i]);
+    for(auto it = boost::sregex_iterator(seq.begin(), seq.end(), re);
+            it != boost::sregex_iterator();
+                 ++it)
+    {
+      int match_start = it->position();
+      int match_end = match_start + it->str().size();
+      for (int j = match_start; j < match_end; ++j) {
+        sequences[i].residues[j].features.push_back(feat_name);
+      }
+    }
+  }
 }
+

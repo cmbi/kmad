@@ -135,5 +135,27 @@ BOOST_AUTO_TEST_CASE(test_remove_gaps) {
                                 expected.begin(), expected.end());
 }
 
+BOOST_AUTO_TEST_CASE(test_assign_feature_by_pattern) {
+  fasta::Sequence s1 = fasta::make_sequence("ABAD-C", 1);
+  fasta::Sequence s2 = fasta::make_sequence("ATSSAC", 1);
+  fasta::Sequence s3 = fasta::make_sequence("--BAA-", 1);
+  fasta::SequenceList s = {s1, s2 , s3};
+  std::string pattern = "BA";
+  std::string feat_name = "testfeat";
+  seq_data::assign_feature_by_pattern(s, pattern, feat_name);
+  for (auto& seq : s) {
+    std::cout << fasta::make_string(seq) << std::endl;
+    for (auto& res : seq.residues) {
+      std::cout << "res: " << res.codon[0] << " ";
+      std::cout << "features: ";
+      for (auto& feat : res.features) {
+        std::cout << feat << " ";
+      }
+      std::cout << std::endl;
+    }
+
+  }
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
