@@ -125,15 +125,32 @@ profile::ProfileMap profile::create_profile(
         assert(p.find('E') != p.end() && p.find('Q') != p.end());
         p['E'][i] += 0.5;
         p['Q'][i] += 0.5;
-      } else if (amino_acid == 'X') {
+      } else if (amino_acid == 'X' || p.find(amino_acid) == p.end()) {
         for (auto& kv: p) {
           kv.second[i] += 0.05;
         }
       } else {
-        assert(p.find(amino_acid) != p.end());
-        p[amino_acid][i] += 1.0;
+          p[amino_acid][i] += 1.0;
       }
     }
   }
   return p;
+}
+
+
+double profile::get_score(const profile::ProfileMap& p, int position,
+                          char aa) {
+  double result = 0;
+  if (p.find(aa) != p.end()) {
+    result = p.at(aa)[position];
+  } else if ( aa == 'B') {
+    result = p.at('D')[position] * 0.5 + p.at('N')[position] * 0.5;
+  } else if ( aa == 'Z') {
+    result = p.at('E')[position] * 0.5 + p.at('Q')[position] * 0.5;
+  } else {
+    for (auto& kv: p) {
+      result += kv.second[position] * 0.05;
+    }
+  }
+  return result;
 }

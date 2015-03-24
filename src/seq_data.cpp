@@ -1,5 +1,6 @@
 #include "seq_data.h"
 
+#include <boost/regex.hpp>
 #include <algorithm>
 
 
@@ -13,6 +14,8 @@ seq_data::SequenceData seq_data::process_fasta_data(
     s.sequences = remove_gaps(s.sequences);
   }
   for (auto feat_it = f_set.begin(); feat_it != f_set.end(); ++feat_it) {
+    assign_feature_by_pattern(s.sequences, feat_it->second.pattern,
+        feat_it->first);
     for (auto& seq : feat_it->second.positions) {
       if ((signed)s.sequences.size() > seq.seq_no && seq.seq_no >= 0) {
         for (auto& pos : seq.positions) {
@@ -86,4 +89,43 @@ fasta::SequenceList seq_data::remove_gaps(
     }
   }
   return s;
+}
+
+void seq_data::assign_feature_by_pattern(fasta::SequenceList& sequences,
+                                         const std::string& pattern,
+                                         const std::string& feat_name)
+{
+  boost::regex re(pattern);
+  for (size_t i = 0; i < sequences.size(); ++i) {
+    std::string seq = fasta::make_string(sequences[i]);
+    std::string seq_nogaps = seq;
+    seq_nogaps.erase(std::remove(seq_nogaps.begin(), seq_nogaps.end(), '-'),
+        seq_nogaps.end());
+    for(auto it = boost::sregex_iterator(seq_nogaps.begin(), seq_nogaps.end(),
+          re);
+            it != boost::sregex_iterator();
+                 ++it)
+    {
+      int match_start = find_real_pos(seq, it->position());
+      int match_end = find_real_pos(seq, match_start + it->str().size());
+      for (int j = match_start; j < match_end; ++j) {
+        if (sequences[i].residues[j].codon[0] != '-') {
+          sequences[i].residues[j].features.push_back(feat_name);
+        }
+      }
+    }
+  }
+}
+
+
+int seq_data::find_real_pos(const std::string& sequence, int position) {
+  int pos = 0;
+  size_t i = 0;
+  while (i < sequence.size() && pos < position) {
+    if (sequence[i] != '-') {
+      ++pos;
+    }
+    ++i;
+  }
+  return i;
 }

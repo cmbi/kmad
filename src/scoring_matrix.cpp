@@ -47,8 +47,10 @@ void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
   for (size_t i = 1; i < m_matrix_v.size(); ++i) {
     for (size_t j = 1; j < m_matrix_v[i].size(); ++j) {
       ///V
-      double profile_score = 
-        profile.at(sequence.residues[j - 1].codon[0])[i - 1];
+      // double profile_score = 
+      //   profile.at(sequence.residues[j - 1].codon[0])[i - 1];
+      double profile_score = profile::get_score(profile, i - 1,
+          sequence.residues[j - 1].codon[0]);
       double feature_score = 0;
       for (auto& feat_name : sequence.residues[j - 1].features) {
         feature_score += f_profile.get_score(feat_name, i - 1); 
@@ -161,8 +163,10 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
     if (i > 0 && j > 0 && current_matrix == "V") {  //match/mismatch
       new_res1 = profile_sequence.residues[i - 1];
       new_res2 = sequence.residues[j - 1];
-      double profile_score = profile.at(
-          sequence.residues[j - 1].codon[0])[i - 1];
+      // double profile_score = profile.at(
+      //     sequence.residues[j - 1].codon[0])[i - 1];
+      double profile_score = profile::get_score(profile, i - 1,
+          sequence.residues[j - 1].codon[0]);
       double feature_score = 0;
       for (auto& feat_name : sequence.residues[j - 1].features) {
         feature_score += f_profile.get_score(feat_name, i - 1); 

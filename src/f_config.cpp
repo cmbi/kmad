@@ -47,6 +47,7 @@ f_config::RawFeatureSettingsMap f_config::ConfParser::process_config(
                                                     feat_set.subtract_score);
       if (!(found_add_score || found_sbtrct_score))
         continue;
+      feature.lookupValue("pattern", feat_set.pattern);
 
       //lcg::Setting& add_features_set = cnfg.lookup(name + ".add_features");
       lcg::Setting& add_features_set = feature["add_features"];
@@ -107,6 +108,7 @@ f_config::FeatureSettingsMap f_config::ConfParser::process_settings(
      processed_settings.add_score = feat_it->second.add_score;
      processed_settings.subtract_score = feat_it->second.subtract_score;
      processed_settings.positions = feat_it->second.positions;
+     processed_settings.pattern = feat_it->second.pattern;
 
      for (auto& feat_name : feat_it->second.add_features) {
        if (raw_map.find(feat_name) != raw_map.end()) {

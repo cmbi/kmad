@@ -390,5 +390,60 @@ BOOST_AUTO_TEST_CASE(test_merge_alignments) {
                                 result_str.begin(), result_str.end());
 }
 
+BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
+  fasta::Sequence s1 = fasta::make_sequence("WFQIANWFQWFQLAN", 1);
+  fasta::Sequence s2 = fasta::make_sequence("WFQLANWFQWF", 1);
+  fasta::SequenceList s = {s1, s2};
+  f_config::FeatureSettingsMap f_set;
+  bool gapped = false;
+  fasta::FastaData fasta_data;
+  fasta_data.sequences = s;
+  seq_data::SequenceData sequence_data = seq_data::process_fasta_data(
+      fasta_data, f_set, gapped);
+  int domain_modifier = 4;
+  int motif_modifier = 3;
+  int ptm_modifier = 10;
+  double gap_open_pen = -5;
+  double gap_ext_pen = -1;
+  double end_pen = -1;
+  bool one_round = false;
+  int codon_length = 7; 
+  std::string sbst_mat = "BLOSUM";
+  auto alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
+                                end_pen, domain_modifier, motif_modifier, 
+                                ptm_modifier, codon_length, one_round, sbst_mat,
+                                gapped);
+  std::vector<std::string> expected = {"WFQIANWFQWFQLAN",
+                                       "WFQLANWFQWF----",
+                                       "WFQIANWFQWFQLAN",
+                                       "WFQLANWFQWF----"};
+  std::vector<std::string> result;
+  for (auto& item : alignment) {
+    for (auto& seq : item) {
+      result.push_back(fasta::make_string(seq));
+    }
+  }
+  BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
+                                result.begin(), result.end());
+  f_set = f_config::ConfParser::parse_conf_file("tests/test_conffile_pattern.cfg");
+  sequence_data = seq_data::process_fasta_data(fasta_data, f_set, gapped);
+  alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
+                                end_pen, domain_modifier, motif_modifier, 
+                                ptm_modifier, codon_length, one_round, sbst_mat,
+                                gapped);
+  result.clear();
+  for (auto& item : alignment) {
+    for (auto& seq : item) {
+      result.push_back(fasta::make_string(seq));
+    }
+  }
+  expected = {"WFQIANWFQWFQLAN",
+              "---------WFQLAN",
+              "WFQIANWFQWFQLAN",
+              "---------WFQLAn"};
+  BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
+                                result.begin(), result.end());
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

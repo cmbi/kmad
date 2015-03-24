@@ -48,6 +48,10 @@ BOOST_AUTO_TEST_CASE(test_config)
                                 result_int_list.end());
   filename = "tests/test_nonexistent.cfg";
 
+  std::string result_pattern = test_result[feat_name].pattern;
+  std::string pattern = "KR.";
+  BOOST_CHECK_EQUAL(result_pattern, pattern);
+
   BOOST_CHECK_THROW(f_config::ConfParser::parse_conf_file(filename), 
                     lcg::FileIOException);
   filename = "tests/test_conf_file_wrongformat.cfg";

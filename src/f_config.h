@@ -18,6 +18,7 @@ namespace f_config
     std::string tag;
     int add_score;
     int subtract_score;
+    std::string pattern;
     FeatureNamesList add_features;
     FeatureNamesList add_tags;
     FeatureNamesList add_exceptions;
@@ -30,6 +31,7 @@ namespace f_config
   struct FeatureSettings {
     int add_score;
     int subtract_score;
+    std::string pattern;
     FeatureNamesList add_features;
     FeatureNamesList subtract_features;
     std::vector<FeaturePositions> positions;
