@@ -13,6 +13,7 @@ seq_data::SequenceData seq_data::process_fasta_data(
     s.sequences = remove_gaps(s.sequences);
   }
   for (auto feat_it = f_set.begin(); feat_it != f_set.end(); ++feat_it) {
+    assign_feature_by_pattern(s.sequences, feat_it->second.pattern);
     for (auto& seq : feat_it->second.positions) {
       if ((signed)s.sequences.size() > seq.seq_no && seq.seq_no >= 0) {
         for (auto& pos : seq.positions) {
@@ -86,4 +87,10 @@ fasta::SequenceList seq_data::remove_gaps(
     }
   }
   return s;
+}
+
+void seq_data::assign_feature_by_pattern(const fasta::SequenceList& sequences,
+                                         std::string pattern)
+{
+
 }
