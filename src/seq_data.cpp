@@ -98,16 +98,34 @@ void seq_data::assign_feature_by_pattern(fasta::SequenceList& sequences,
   boost::regex re(pattern);
   for (size_t i = 0; i < sequences.size(); ++i) {
     std::string seq = fasta::make_string(sequences[i]);
-    for(auto it = boost::sregex_iterator(seq.begin(), seq.end(), re);
+    std::string seq_nogaps = seq;
+    seq_nogaps.erase(std::remove(seq_nogaps.begin(), seq_nogaps.end(), '-'),
+        seq_nogaps.end());
+    for(auto it = boost::sregex_iterator(seq_nogaps.begin(), seq_nogaps.end(),
+          re);
             it != boost::sregex_iterator();
                  ++it)
     {
-      int match_start = it->position();
-      int match_end = match_start + it->str().size();
+      int match_start = find_real_pos(seq, it->position());
+      int match_end = find_real_pos(seq, match_start + it->str().size());
       for (int j = match_start; j < match_end; ++j) {
-        sequences[i].residues[j].features.push_back(feat_name);
+        if (sequences[i].residues[j].codon[0] != '-') {
+          sequences[i].residues[j].features.push_back(feat_name);
+        }
       }
     }
   }
 }
 
+
+int seq_data::find_real_pos(const std::string& sequence, int position) {
+  int pos = 0;
+  size_t i = 0;
+  while (i < sequence.size() && pos < position) {
+    if (sequence[i] != '-') {
+      ++pos;
+    }
+    ++i;
+  }
+  return i;
+}

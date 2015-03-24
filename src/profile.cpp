@@ -129,9 +129,8 @@ profile::ProfileMap profile::create_profile(
         for (auto& kv: p) {
           kv.second[i] += 0.05;
         }
-      } else {
-        assert(p.find(amino_acid) != p.end());
-        p[amino_acid][i] += 1.0;
+      } else if (p.find(amino_acid) != p.end()) {
+          p[amino_acid][i] += 1.0;
       }
     }
   }

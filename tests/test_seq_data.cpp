@@ -136,24 +136,25 @@ BOOST_AUTO_TEST_CASE(test_remove_gaps) {
 }
 
 BOOST_AUTO_TEST_CASE(test_assign_feature_by_pattern) {
-  fasta::Sequence s1 = fasta::make_sequence("ABAD-C", 1);
-  fasta::Sequence s2 = fasta::make_sequence("ATSSAC", 1);
-  fasta::Sequence s3 = fasta::make_sequence("--BAA-", 1);
+  fasta::Sequence s1 = fasta::make_sequence("ABADB-C", 1);
+  fasta::Sequence s2 = fasta::make_sequence("ATSS-AC", 1);
+  fasta::Sequence s3 = fasta::make_sequence("--B-AA-", 1);
   fasta::SequenceList s = {s1, s2 , s3};
+  fasta::SequenceList e = {s1, s2 , s3};
   std::string pattern = "BA";
   std::string feat_name = "testfeat";
+  e[0].residues[1].features.push_back(feat_name);
+  e[0].residues[2].features.push_back(feat_name);
+  e[2].residues[2].features.push_back(feat_name);
+  e[2].residues[4].features.push_back(feat_name);
   seq_data::assign_feature_by_pattern(s, pattern, feat_name);
-  for (auto& seq : s) {
-    std::cout << fasta::make_string(seq) << std::endl;
-    for (auto& res : seq.residues) {
-      std::cout << "res: " << res.codon[0] << " ";
-      std::cout << "features: ";
-      for (auto& feat : res.features) {
-        std::cout << feat << " ";
-      }
-      std::cout << std::endl;
+  for (size_t i = 0; i < s.size(); ++i) {
+    for (size_t j = 0; j < s[i].residues.size(); ++j) {
+      BOOST_CHECK_EQUAL_COLLECTIONS(s[i].residues[j].features.begin(),
+                                    s[i].residues[j].features.end(),
+                                    e[i].residues[j].features.begin(),
+                                    e[i].residues[j].features.end());
     }
-
   }
 }
 

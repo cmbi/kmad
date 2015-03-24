@@ -20,6 +20,7 @@ namespace seq_data {
   void assign_feature_by_pattern(fasta::SequenceList& sequences,
                                  const std::string& pattern,
                                  const std::string& feat_name);
+  int find_real_pos(const std::string& sequence, int position);
 }
 
 #endif /* SEQDATA_H */
