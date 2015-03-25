@@ -1,22 +1,24 @@
-#include "types.h"
+#ifndef F_CONFIG_H
+#define F_CONFIG_H
 
-#include <iostream>
 #include <libconfig.h++>
+#include <map>
+#include <vector>
 
-
+typedef std::vector<std::string> FeatureNamesList;
 namespace f_config
 {
   struct FeaturePositions
   {
-    int seq;
+    int seq_no;
     std::vector<int> positions;
   };
 
-  struct FeatureSettings
-  {
+  struct RawFeatureSettings {
     std::string tag;
     int add_score;
     int subtract_score;
+    std::string pattern;
     FeatureNamesList add_features;
     FeatureNamesList add_tags;
     FeatureNamesList add_exceptions;
@@ -26,13 +28,29 @@ namespace f_config
     std::vector<FeaturePositions> positions;
   };
 
-  typedef std::map<std::string, FeatureSettings> UsrFeatureMap;
+  struct FeatureSettings {
+    int add_score;
+    int subtract_score;
+    std::string pattern;
+    FeatureNamesList add_features;
+    FeatureNamesList subtract_features;
+    std::vector<FeaturePositions> positions;
+  };
+
+  typedef std::map<std::string, RawFeatureSettings> RawFeatureSettingsMap;
+  typedef std::map<std::string, FeatureSettings> FeatureSettingsMap;
 
   class ConfParser
   {
     public:
-      static UsrFeatureMap parse_conf_file(const std::string& filename);
+      static FeatureSettingsMap parse_conf_file(
+          const std::string& filename);
     private:
-      static UsrFeatureMap process_config(const libconfig::Config& cnfg);
+      static RawFeatureSettingsMap process_config(
+          const libconfig::Config& cnfg);
+      static FeatureSettingsMap process_settings(
+          const RawFeatureSettingsMap raw_feat_set);
   };
 }
+
+#endif /* F_CONFIG_H */

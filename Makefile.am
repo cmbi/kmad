@@ -7,35 +7,37 @@ shared_LDADD	=	$(BOOST_FILESYSTEM_LIB) \
 								$(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
 								-lconfig++
 
+shared_SOURCES	=	src/compare_doubles.cpp \
+									src/fasta.cpp \
+									src/feature_analysis.cpp \
+									src/feature_scores.cpp \
+									src/f_config.cpp \
+									src/outfile.cpp \
+									src/profile.cpp \
+									src/scoring_matrix.cpp \
+									src/seq_data.cpp \
+									src/msa.cpp
 
-kman_SOURCES	=	src/kman.cpp \
-								src/fasta.cpp \
-								src/features_profile.cpp \
-								src/f_config.cpp \
-								src/profile.cpp \
-								src/residue.cpp \
-								src/scoring_matrix.cpp \
-								src/sequences.cpp \
-								src/txtproc.cpp \
-								src/vec_util.cpp \
-								src/substitution_matrix.cpp \
-								src/msa.cpp
+
+kman_SOURCES	=	$(shared_SOURCES) \
+								src/kman.cpp
 
 
 kman_LDADD = $(shared_LDADD)
 
-test_kman_SOURCES = tests/test_config.cpp \
-										src/fasta.cpp \
-										src/features_profile.cpp \
-										src/f_config.cpp \
-										src/profile.cpp \
-										src/residue.cpp \
-										src/scoring_matrix.cpp \
-										src/sequences.cpp \
-										src/txtproc.cpp \
-										src/vec_util.cpp \
-										src/substitution_matrix.cpp \
-										src/msa.cpp
+test_kman_SOURCES = $(shared_SOURCES) \
+										tests/test_compare_doubles.cpp \
+										tests/test_config.cpp \
+										tests/test_fasta.cpp \
+										tests/test_seq_data.cpp \
+										tests/test_profile.cpp \
+										tests/test_feature_analysis.cpp \
+										tests/test_feature_scores.cpp \
+										tests/test_scoring_matrix.cpp \
+										tests/test_msa.cpp \
+										tests/test_outfile.cpp 
+
+									
 
 test_kman_LDADD	=	$(shared_LDADD)
 
@@ -54,5 +56,3 @@ cppcheck:
 								--suppress=missingIncludeSystem src
 check:	cppcheck
 endif
-
-

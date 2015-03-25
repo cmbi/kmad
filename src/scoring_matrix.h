@@ -1,20 +1,15 @@
 #ifndef SCORINGMATRIX_H
 #define SCORINGMATRIX_H
 
-#include "types.h"
-#include <iostream>
-#include <string>
-#include <vector>
 
-class Residue;
-class Profile;
-class FeaturesProfile;
+#include "fasta.h"
+
 
 typedef std::vector<double> ScoringMatrixRow;
 typedef std::vector<ScoringMatrixRow> SingleScoringMatrix;
 typedef std::vector<int> ValueCoords;
 
-class ScoringMatrix{
+class ScoringMatrix {
 public:
   ///
   /// Constructor; creates scoring matrices for the two sequences
@@ -25,33 +20,36 @@ public:
   /// @param extensionPenalty gap extension penalty
   /// @param endPenalty penalty for gaps at the beginning and the end
   ///
-  ScoringMatrix(int s1_size, int s2_size, double gap_open_pen, double end_pen,
+  ScoringMatrix(int profile_length, int sequence_length,
+                double gap_open_pen, double end_pen,
                 double gap_ext_pen);
   ///
   /// Fills in the scoring matrices m_matrix_v, m_matrix_g, m_matrix_h
   ///
-  void CalculateScores(ResidueSequence s2, Profile& prf,
-                       FeaturesProfile& feat_prf, int codon_length);
+  void calculate_scores(const fasta::Sequence& sequence,
+                        const profile::ProfileMap& profile,
+                        const FeatureScores& f_profile, int codon_length);
   ///
   /// traces back the alignment path in the scoring matrices
   ///
-  void PerformNWAlignment(SequenceList& result, ResidueSequence s2,
-                          Profile& prf, FeaturesProfile& feat_prf,
-                          int codon_length);
+  fasta::SequenceList backtrace_alignment_path(
+      const fasta::Sequence& sequence, 
+      const profile::ProfileMap& profile,
+      const FeatureScores& f_profile,
+      int codon_length);
+  SingleScoringMatrix get_V_matrix();
 private:
   ///
   /// finds the best score either in the last column or in the last row of the
   /// V matrix (takes the end gap penaltie into account)
   ///
-  ValueCoords FindBestScore();
+  ValueCoords find_best_score();
   int m_i_length;
   int m_j_length;
   double m_gap_opening;
   double m_gap_extension;
   double m_end_pen;
-  double m_gap_opening_horizontal;
-  double m_gap_extension_horizontal;
-  SingleScoringMatrix m_matrix_v,m_matrix_g,m_matrix_h;
+  SingleScoringMatrix m_matrix_v, m_matrix_g, m_matrix_h;
 };
 
 #endif /* SCORINGMATRIX_H */

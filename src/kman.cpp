@@ -1,19 +1,14 @@
 #include "f_config.h"
 #include "fasta.h"
-#include "features_profile.h"
+#include "feature_analysis.h"
 #include "msa.h"
-#include "profile.h"
-#include "residue.h"
-#include "scoring_matrix.h"
-#include "sequences.h"
-#include "txtproc.h"
-#include "vec_util.h"
+#include "outfile.h"
+#include "seq_data.h"
 
 #include <boost/program_options.hpp>
 #include <ctime>
 #include <iostream>
 #include <stdexcept>
-#include <string>
 
 
 namespace po = boost::program_options;
@@ -21,16 +16,23 @@ namespace po = boost::program_options;
 
 int main(int argc, char *argv[]) {
     int codon_length = 0;
-    int phosph_score = 0;
-    int domain_score = 0;
-    int motif_score = 0;
+    int ptm_modifier = 0;
+    int domain_modifier = 0;
+    int motif_modifier = 0;
     double gap_ext_pen = 0;
     double gap_open_pen;
     double end_pen = 0;
     bool out_encoded = false;
+    bool one_round = false;
+    bool first_gapped = false;
+    bool refine = false;
     std::string filename;
     std::string output_prefix;
     std::string conf_file;
+    std::string mapfilename;
+    std::string out_cons_filename;
+    std::string sbst_mat;
+    double conservation_cutoff;
 
     po::options_description desc("Allowed options");
     desc.add_options()
@@ -51,21 +53,43 @@ int main(int argc, char *argv[]) {
        po::value<int>(&codon_length)->implicit_value(7)
                                     ->default_value(1),"codon length")
       ("phosph,p",
-       po::value<int>(&phosph_score)->default_value(0),
+       po::value<int>(&ptm_modifier)->default_value(10),
        "score for aligning phosphorylated residues")
       ("domain,d",
-       po::value<int>(&domain_score)->default_value(0),
+       po::value<int>(&domain_modifier)->default_value(3),
        "score for aligning domains")
       ("motif,m",
-       po::value<int>(&motif_score)->default_value(0),
+       po::value<int>(&motif_modifier)->default_value(3),
                                  "probability multiplier for motifs")
       ("out-encoded",
        po::value<bool>(&out_encoded)->implicit_value(true)
                                     ->default_value(false),
-       "Output alignment with encoded features")
+       "output alignment with encoded features")
       ("end,n",
        po::value<double>(&end_pen)->default_value(-0.1),
        "penalty for gaps at the end (and beginning)")
+      ("one-round, r", po::value<bool>(&one_round)->implicit_value(true)
+                                                  ->default_value(false),
+       "perform only one round of alignments (all against first)")
+      ("out-cons", po::value<std::string>(&out_cons_filename),
+        "feature consensus output file"
+      )
+      ("feat-map", po::value<std::string>(&mapfilename),
+       "feature map file" 
+      )
+      ("feat_cutoff", po::value<double>(&conservation_cutoff)
+          ->default_value(0.5),
+       "conservation cutoff for the feature consensus")
+      ("mat", po::value<std::string>(&sbst_mat)->default_value("DISORDER"),
+       "substitution matrix")
+      ("gapped", po::value<bool>(&first_gapped)->default_value(false)
+                                               ->implicit_value(true),
+       "'first sequence with gaps' mode"
+       )
+      ("refine", po::value<bool>(&refine)->default_value(false)
+                                         ->implicit_value(true),
+       "take alignment as input and refine it"
+      )
       ("conf",
        po::value<std::string>(&conf_file),
        "configure file");
@@ -100,42 +124,77 @@ int main(int argc, char *argv[]) {
       std::cout << "End gap penalty value (-n) cannot be a positive number"
                 << std::endl;
       std::exit(EXIT_FAILURE);
-    } else if (phosph_score < 0 || domain_score < 0 || motif_score < 0) {
+    } else if (ptm_modifier < 0 || domain_modifier < 0 || motif_modifier < 0) {
       std::cout << "Scores for aligning features cannot be negative"
                 << std::endl;
       std::exit(EXIT_FAILURE);
     }
+    
+    f_config::FeatureSettingsMap f_set;
+    if (vm.count("conf") == 1) {
+      f_set = f_config::ConfParser::parse_conf_file(conf_file);
+    }
 
     time_t start = clock();
 
-    IDsList motifs_ids;
-    ProbsList motifs_probs;
-    Sequences sequences;
+    fasta::FastaData fasta_data;
     try {
-      sequences = fasta::parse_fasta(filename, codon_length, &motifs_ids,
-                                       &motifs_probs);
+      fasta_data = fasta::parse_fasta(filename, codon_length, refine);
     } catch(const std::exception& e) {
-      std::cout << "Exception: " << e.what() << "\n";
+      std::cerr << "Error: " << e.what() << std::endl;
       std::exit(EXIT_FAILURE);
     }
-
-    // TODO: Load the config settings into a variable and do something with
-    //       it.
-    f_config::ConfParser::parse_conf_file(conf_file);
-
-    StringSequences seq_names = sequences.get_names();
-    StringSequences alignment = msa::run_msa(
-        sequences, gap_open_pen, gap_ext_pen, end_pen, domain_score,
-        motif_score, phosph_score, codon_length, motifs_ids, motifs_probs);
-
-    if (out_encoded) {
-      txtproc::WriteAlignmentToFile(alignment, seq_names, output_prefix);
+    bool gapped = false;
+    seq_data::SequenceData sequence_data_plain = seq_data::process_fasta_data(
+        fasta_data, f_set, gapped);
+    // perform the alignment
+    std::vector<fasta::SequenceList> alignment;
+    if (!refine) {
+      alignment = msa::run_msa(sequence_data_plain, 
+                               f_set, gap_open_pen,
+                               gap_ext_pen, end_pen, domain_modifier, 
+                               motif_modifier, ptm_modifier, codon_length,
+                               one_round, sbst_mat, first_gapped);
     } else {
-      txtproc::WriteAlignmentWithoutCodeToFile(alignment, seq_names,
-                                               output_prefix, codon_length);
+      bool gapped = true;
+      seq_data::SequenceData sequence_data_alignment = seq_data::process_fasta_data(
+          fasta_data, f_set, gapped);
+      alignment = msa::refine_alignment(sequence_data_plain, 
+                                        sequence_data_alignment,
+                                        f_set, gap_open_pen,
+                                        gap_ext_pen, end_pen, domain_modifier, 
+                                        motif_modifier, ptm_modifier, codon_length,
+                                        one_round, sbst_mat, first_gapped);
+    }
+
+    // write alignment to file 
+    int al_out_index = 1;
+    if (first_gapped) {
+      first_gapped = 0; 
+    }
+    if (out_encoded) {
+      outfile::write_encoded_alignment(alignment[al_out_index],
+                                       sequence_data_plain,
+                                       output_prefix);
+    } else {
+      outfile::write_decoded_alignment(alignment[al_out_index],
+                                       sequence_data_plain,
+                                       output_prefix);
+    }
+    // analyze features in the alignment
+    if (vm.count("out-cons") != 0) {
+      if (vm.count("feat-map") == 0) {
+        mapfilename = filename.substr(0, filename.size() - 2) + "map";
+      }
+      feature_analysis::CodesMap codes_map = feature_analysis::parse_mapfile(
+          mapfilename);
+      feature_analysis::ConsensusSequence cons_seq;
+      cons_seq = feature_analysis::analyze_alignment(codes_map, alignment,
+                                                     conservation_cutoff);
+      feature_analysis::write_consensus_to_file(cons_seq,
+                                                out_cons_filename);
     }
 
     time_t end = clock();
-
     std::cout << "time: " << double(end - start)/CLOCKS_PER_SEC << std::endl;
 }

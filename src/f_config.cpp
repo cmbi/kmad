@@ -1,15 +1,11 @@
 #include "f_config.h"
-#include "types.h"
 
+#include <algorithm>
 #include <iostream>
-#include <iomanip>
-#include <cstdlib>
-#include <stdexcept>
-
 
 namespace lcg = libconfig;
 
-f_config::UsrFeatureMap f_config::ConfParser::parse_conf_file(
+f_config::FeatureSettingsMap f_config::ConfParser::parse_conf_file(
     const std::string& filename) {
   lcg::Config cnfg;
   try
@@ -25,21 +21,21 @@ f_config::UsrFeatureMap f_config::ConfParser::parse_conf_file(
               << " - " << pex.getError() << std::endl;
     throw;
   }
-
-  return process_config(cnfg);
+  f_config::RawFeatureSettingsMap raw_map = process_config(cnfg);
+  return process_settings(raw_map);
 }
 
 
-f_config::UsrFeatureMap f_config::ConfParser::process_config(
+f_config::RawFeatureSettingsMap f_config::ConfParser::process_config(
     const lcg::Config& cnfg) {
-  f_config::UsrFeatureMap feat_config;
+  f_config::RawFeatureSettingsMap feat_config;
   try
   {
     const lcg::Setting& root  = cnfg.getRoot();
     const lcg::Setting& features = root["feature_settings"]["usr_features"];
     int count = features.getLength();
     for (int i = 0; i < count; ++i) {
-      FeatureSettings feat_set;
+      RawFeatureSettings feat_set;
       const lcg::Setting& feature = features[i];
       std::string name;
       if (!feature.lookupValue("name", name))
@@ -51,6 +47,7 @@ f_config::UsrFeatureMap f_config::ConfParser::process_config(
                                                     feat_set.subtract_score);
       if (!(found_add_score || found_sbtrct_score))
         continue;
+      feature.lookupValue("pattern", feat_set.pattern);
 
       //lcg::Setting& add_features_set = cnfg.lookup(name + ".add_features");
       lcg::Setting& add_features_set = feature["add_features"];
@@ -80,10 +77,14 @@ f_config::UsrFeatureMap f_config::ConfParser::process_config(
       lcg::Setting& positions_set = feature["positions"];
       for (int j = 0; j <  positions_set.getLength(); ++j) {
         FeaturePositions feat_pos;
-        positions_set[j].lookupValue("seq", feat_pos.seq);
+        positions_set[j].lookupValue("seq", feat_pos.seq_no);
+          --feat_pos.seq_no;
         lcg::Setting& single_pos_set = positions_set[j]["pos"];
         for (int k = 0; k < single_pos_set.getLength(); ++k) {
           feat_pos.positions.push_back(single_pos_set[k]);
+        }
+        for (auto& pos : feat_pos.positions) {
+          --pos; 
         }
         feat_set.positions.push_back(feat_pos);
       }
@@ -96,4 +97,67 @@ f_config::UsrFeatureMap f_config::ConfParser::process_config(
     throw;
   }
   return feat_config;
+}
+
+
+f_config::FeatureSettingsMap f_config::ConfParser::process_settings(
+    const f_config::RawFeatureSettingsMap raw_map) {
+  f_config::FeatureSettingsMap processed_map;
+  for (auto feat_it = raw_map.begin(); feat_it != raw_map.end(); ++feat_it) {
+     FeatureSettings processed_settings; 
+     processed_settings.add_score = feat_it->second.add_score;
+     processed_settings.subtract_score = feat_it->second.subtract_score;
+     processed_settings.positions = feat_it->second.positions;
+     processed_settings.pattern = feat_it->second.pattern;
+
+     for (auto& feat_name : feat_it->second.add_features) {
+       if (raw_map.find(feat_name) != raw_map.end()) {
+         processed_settings.add_features.push_back("USR_"+ feat_name);
+       }
+     }
+
+     for (auto& feat_name : feat_it->second.subtract_features) {
+       if (raw_map.find(feat_name) != raw_map.end()) {
+         processed_settings.subtract_features.push_back("USR_"+ feat_name);
+       }
+     }
+
+     for (auto& feat_tag : feat_it->second.add_tags) {
+       for (auto feat_it_j = raw_map.begin(); feat_it_j != raw_map.end();
+            ++feat_it_j) {
+         if (feat_it_j->second.tag == feat_tag
+             && std::find(feat_it->second.add_exceptions.begin(),
+                          feat_it->second.add_exceptions.end(), 
+                          feat_it_j->first) 
+                == feat_it->second.add_exceptions.end()
+             && std::find(processed_settings.add_features.begin(), 
+                          processed_settings.add_features.end(),
+                          "USR_" + feat_it_j->first) 
+                == processed_settings.add_features.end()) {
+           processed_settings.add_features.push_back(
+               "USR_" + feat_it_j->first);
+         }
+       }
+     }
+
+     for (auto& feat_tag : feat_it->second.subtract_tags) {
+       for (auto feat_it_j = raw_map.begin(); feat_it_j != raw_map.end();
+            ++feat_it_j) {
+         if (feat_it_j->second.tag == feat_tag
+             && std::find(feat_it->second.subtract_exceptions.begin(),
+                          feat_it->second.subtract_exceptions.end(),
+                          feat_it_j->first) 
+                == feat_it->second.subtract_exceptions.end()
+             && std::find(processed_settings.subtract_features.begin(), 
+                          processed_settings.subtract_features.end(),
+                          "USR_" + feat_it_j->first) 
+                == processed_settings.subtract_features.end()) {
+           processed_settings.subtract_features.push_back(
+               "USR_" + feat_it_j->first);
+         }
+       }
+     }
+     processed_map["USR_" + feat_it->first] = processed_settings;
+  }
+  return processed_map;
 }
