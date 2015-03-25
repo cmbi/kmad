@@ -50,6 +50,8 @@ AM_CPPFLAGS	=	-std=c++11 \
 							$(BOOST_CPPFLAGS) \
 							-Isrc/
 
+AUTOMAKE_OPTIONS = foreign
+
 if HAVE_CPPCHECK
 cppcheck:
 		$(CPPCHECK) --quiet --std=c++11 --enable=all \

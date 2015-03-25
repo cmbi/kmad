@@ -34,11 +34,6 @@ std::vector<fasta::SequenceList> msa::run_msa(
                                        gap_open_pen, end_pen, 
                                        gap_ext_pen, codon_length);
      
-      std::cout << "identities"  << std::endl;
-      for (auto& item : identities) {
-        std::cout << item << std::endl;
-      }
-
       std::vector<fasta::SequenceList> alignment;
       int alignments_number = 0;
       double cutoff = 0;
