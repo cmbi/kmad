@@ -33,6 +33,11 @@ std::vector<fasta::SequenceList> msa::run_msa(
       identities = msa::set_identities(sequence_data, profile, f_profile,
                                        gap_open_pen, end_pen, 
                                        gap_ext_pen, codon_length);
+     
+      std::cout << "identities"  << std::endl;
+      for (auto& item : identities) {
+        std::cout << item << std::endl;
+      }
 
       std::vector<fasta::SequenceList> alignment;
       int alignments_number = 0;
@@ -274,7 +279,7 @@ std::vector<fasta::SequenceList> msa::perform_msa_round_ungapped(
   if (next_alignments > prev_alignments) {
     fasta::SequenceList aligned_seq;
     for (size_t i = 1; i < sequence_data.sequences.size(); ++i) {
-      if (identities[i] > identity_cutoff) {
+      if (identities[i] >= identity_cutoff) {
         // NW alignment of the ith seq against the profile
         aligned_seq = msa::align_pairwise(sequence_data.sequences[i],
                                           profile, f_profile, gap_open_pen,
@@ -300,7 +305,7 @@ int msa::count_alignments(double identity_cutoff,
                           const std::vector<double>& identities) {
   int count = 0;
   for (auto& item: identities) {
-    if (item > identity_cutoff) {
+    if (item >= identity_cutoff) {
       ++count;
     }
   }
@@ -327,7 +332,7 @@ std::vector<fasta::SequenceList> msa::perform_msa_round_gapped(
   if (next_alignments > prev_alignments) {
     fasta::SequenceList aligned_seq;
     for (size_t i = 0; i < sequence_data.sequences.size(); ++i) {
-      if (identities[i] > identity_cutoff) {
+      if (identities[i] >= identity_cutoff) {
         // NW alignment of the ith seq against the profile
         aligned_seq = msa::align_pairwise(sequence_data.sequences[i],
                                           profile, f_profile, gap_open_pen,
