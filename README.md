@@ -1,17 +1,26 @@
 # Installation
-
-KMAN can be compiled and installed from the kman directory:
+1. KMAD
+KMAD can be compiled and installed from the kman directory:
   `./configure; make ; sudo make install`
-
+2. ELM update script
 To be able to use the python script to update the elm (scripts/update_elm.py)
 database you need to run first:
    `pip install -r requirements.txt` 
+3. convert script 
+To be able to annotate predicted phosphorylations you will need to install
+NetPhos. You can download it here:
+http://www.cbs.dtu.dk/services/NetPhos/
+Install it according to the provided instructions - make sure you can run it
+simply by calling `netphos`.
+The script for converting the input will run anyway without NetPhos, only you
+won't have the predicted phosphorylations.
+
 
 # Running
 
 The simplest alignment of fasta sequences can be performed with the command:
 
-  `kman -i input.fasta -o output_prefix`
+  `kmad -i input.fasta -o output_prefix`
 
 To perform alignment with features you need to first create a `.7c` file with
   `convert.py input_filename output_filename`.
@@ -20,7 +29,7 @@ The convert.py script is in the 'scripts' directory.
 KMAN command for aligning with features is:
 (you have to use the '-c 7' flag when running on the '.7c' input)
 
-  `kman -i input.7c -o output_prefix -p 10 -d 3 -m 3 -c 7`
+  `kmad -i input.7c -o output_prefix -p 10 -d 3 -m 3 -c 7`
 
 For more detailed information try `kman --help`
 
