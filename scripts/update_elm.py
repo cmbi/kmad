@@ -1,7 +1,6 @@
 import os
 import re
 import requests
-import sys
 import urllib2
 
 from lxml import html
@@ -22,7 +21,8 @@ from lxml import html
 
 
 def get_motif_go_terms(elm_id):
-    page = requests.get("http://elm.eu.org/elms/elmPages/{}.html".format(elm_id))
+    page = requests.get("http://elm.eu.org/elms/elmPages/{}.html".format(
+        elm_id))
     tree = html.fromstring(page.text)
     go_terms = []
     for i in tree.get_element_by_id('ElmDetailGoterms').iterlinks():
@@ -97,7 +97,7 @@ def update_elmdb(output_filename):
         prob = lineI[13]
         motif_go_terms = get_motif_go_terms(elm_id)
         go_terms_extended = extend_go_terms(go_terms_list, motif_go_terms,
-                                                go_families)
+                                            go_families)
         outtext += "{} {} {} {}\n".format(elm_id, pattern,
                                           prob, ' '.join(go_terms_extended))
     out = open(output_filename, 'w')
@@ -105,12 +105,8 @@ def update_elmdb(output_filename):
     out.close()
 
 
-def main():
+if __name__ == '__main__':
     script_dir = os.path.dirname(os.path.realpath(__file__))
     src_dir = '/'.join(script_dir.split('/')[:-1])
     output_filename = src_dir + '/data/' + 'elm_complete.txt'
     update_elmdb(output_filename)
-
-
-if __name__ == '__main__':
-    sys.exit(main())

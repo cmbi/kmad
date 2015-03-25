@@ -20,7 +20,7 @@ won't have the predicted phosphorylations.
 
 The simplest alignment of fasta sequences can be performed with the command:
 
-  `kmad -i input.fasta -o output_prefix`
+  `kmad -i input.fasta -o output_prefix -c 1`
 
 To perform alignment with features you need to first create a `.7c` file with
   `convert.py input_filename output_filename`.
@@ -29,9 +29,16 @@ The convert.py script is in the 'scripts' directory.
 KMAN command for aligning with features is:
 (you have to use the '-c 7' flag when running on the '.7c' input)
 
-  `kmad -i input.7c -o output_prefix -p 10 -d 3 -m 3 -c 7`
+  `kmad -i input.7c -o output_prefix -p 10 -d 3 -m 3`
 
 For more detailed information try `kman --help`
+
+For the user defined features you need to provide a configuration file. 
+If you run it on a fasta file
+  `kman -i input_filename.fasta -o output_filename --conf config_filename -c 1`
+If you run it on a '.7c' file:
+  `kman -i input_filename.fasta -o output_filename --conf config_filename`
+An example of a conf file is in the root directory (conf_file_example.cfg)
 
 To update the elm database (which you don't need to run very often)
 simply execute:

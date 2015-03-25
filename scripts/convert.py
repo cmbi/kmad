@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 import argparse
 import logging
 import math
@@ -258,7 +257,8 @@ def search_elm(uniprotID, sequence, slims_all_classes, seq_go_terms):
         pass
     try:
         # now get predicted motifs
-        req = urllib2.Request("http://elm.eu.org/start_search/"+uniprotID+".csv")
+        req = urllib2.Request("http://elm.eu.org/start_search/"
+                              + uniprotID + ".csv")
         response = urllib2.urlopen(req)
         features = response.read()
         features = features.splitlines()
@@ -384,13 +384,14 @@ def encode_slims(seq, slims, slim_codes):
     return seq
 
 
-
-# code: "012345" 0 - aa; 1 - nothing yet; 2 - domain, 3 - phosph; 4,5 - motif
-# argument 'results' -> list([domains,
-#                             phosphorylations,
-#                             methods,
-#                             low complexity regions])
 def sevenCharactersCode(results, myseq, domain_codes, slim_codes):
+    """
+    code: "012345" 0 - aa; 1 - nothing yet; 2 - domain, 3 - phosph; 4,5 - motif
+    argument 'results' -> list([domains,
+                                phosphorylations,
+                                methods,
+                                low complexity regions])
+    """
     newseq = ""
     # first encode sequence with no features
     for i in myseq:
@@ -488,25 +489,23 @@ def convert_to_7chars(filename, outname, ELM_DB):
     out.close()
 
 
-def main():
+if __name__ == "__main__":
     logging.basicConfig(level=logging.WARNING)
     log = logging.getLogger('convert')
     script_dir = os.path.dirname(os.path.realpath(__file__))
     src_dir = '/'.join(script_dir.split('/')[:-1])
     ELM_DB = src_dir + '/data/' + 'elm_complete.txt'
-    if not os.path.exists(ELM_DB):
-        try:
-            raise Exception("ELM directory not found (path: {})".format(ELM_DB))
-        except Exception, err:
-            log.exception(err)
-            sys.exit(3)
     parser = argparse.ArgumentParser(description='Convert fasta to a KMAD'
                                                  + ' compatible format')
     parser.add_argument('input_filename')
     parser.add_argument('output_filename')
+    parser.add_argument('elm_db', nargs='?', default=ELM_DB)
     args = parser.parse_args()
-    convert_to_7chars(args.input_filename, args.output_filename, ELM_DB)
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+    if not os.path.exists(args.elm_db):
+        try:
+            raise Exception("ELM directory not found (path: {})".format(
+                args.elm_db))
+        except Exception, err:
+            log.exception(err)
+            sys.exit(3)
+    convert_to_7chars(args.input_filename, args.output_filename, args.elm_db)

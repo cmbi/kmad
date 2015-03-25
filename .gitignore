@@ -44,7 +44,6 @@ kman
 test_kman
 
 .DS_Store
-README
 
 # vim
 [._]*.s[a-w][a-z]
@@ -62,3 +61,6 @@ coverage.info
 out/
 .coverage
 coverage.sh
+
+# rope
+.ropeproject
