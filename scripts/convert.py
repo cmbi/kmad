@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 import argparse
 import logging
 import math
@@ -13,8 +14,6 @@ import urllib2
 
 from operator import itemgetter
 import xml.etree.ElementTree as ET
-
-
 
 
 def create_numbering():
