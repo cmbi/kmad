@@ -1,4 +1,4 @@
-bin_PROGRAMS	=	kman test_kman
+bin_PROGRAMS	=	kmad test_kmad
 
 shared_LDADD	=	$(BOOST_FILESYSTEM_LIB) \
 								$(BOOST_PROGRAM_OPTIONS_LIB) \
