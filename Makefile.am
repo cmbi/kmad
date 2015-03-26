@@ -19,13 +19,13 @@ shared_SOURCES	=	src/compare_doubles.cpp \
 									src/msa.cpp
 
 
-kman_SOURCES	=	$(shared_SOURCES) \
-								src/kman.cpp
+kmad_SOURCES	=	$(shared_SOURCES) \
+								src/kmad.cpp
 
 
-kman_LDADD = $(shared_LDADD)
+kmad_LDADD = $(shared_LDADD)
 
-test_kman_SOURCES = $(shared_SOURCES) \
+test_kmad_SOURCES = $(shared_SOURCES) \
 										tests/test_compare_doubles.cpp \
 										tests/test_config.cpp \
 										tests/test_fasta.cpp \
@@ -39,7 +39,7 @@ test_kman_SOURCES = $(shared_SOURCES) \
 
 									
 
-test_kman_LDADD	=	$(shared_LDADD)
+test_kmad_LDADD	=	$(shared_LDADD)
 
 
 AM_CPPFLAGS	=	-std=c++11 \

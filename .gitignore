@@ -40,8 +40,8 @@ config.h.in
 *.exe
 *.out
 *.app
-kman
-test_kman
+kmad
+test_kmad
 
 .DS_Store
 
