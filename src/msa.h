@@ -9,9 +9,10 @@
 
 class Sequences;
 
-
 namespace msa {
+  ///
   /// performs the full multiple sequence alignment, returns aligned sequences
+  ///
   std::vector<fasta::SequenceList> run_msa(
       const seq_data::SequenceData& sequence_data,
       const f_config::FeatureSettingsMap& f_set,
@@ -20,8 +21,9 @@ namespace msa {
       int domain_modifier, int motif_modifier,
       int phosph_modifier, int codon_length, bool one_round,
       const std::string& sbst_mat, const bool first_gapped);
-
-  // takes alignment (sequence_data) refines it (one round)
+  ///
+  /// takes alignment (sequence_data) and refines it (two rounds)
+  ///
   std::vector<fasta::SequenceList> refine_alignment(
       const seq_data::SequenceData& sequence_data_plain,
       const seq_data::SequenceData& sequence_data_alignment,
@@ -35,8 +37,6 @@ namespace msa {
   /// performs the first round of alignments, / all vs query seq (first
   /// calculates profile / based only on the query seq, then / aligns all
   /// sequences and calculates / identity of each sequence to the query seq.)
-  
-  
   std::vector<double> set_identities(
       const seq_data::SequenceData& sequence_data,
       const profile::ProfileMap& profile, FeatureScores& f_profile,
@@ -44,10 +44,8 @@ namespace msa {
       int codon_length);
 
   ///
-  /// performs one round of MSA 
+  /// performs one round of MSA with gaps in the first sequence
   ///
-  
-  
   std::vector<fasta::SequenceList> perform_msa_round_gapped(
       const seq_data::SequenceData& sequence_data,
       const profile::ProfileMap& profile,
@@ -61,6 +59,9 @@ namespace msa {
       const f_config::FeatureSettingsMap& f_set,
       std::vector<fasta::SequenceList> previous_alignment);
 
+  ///
+  /// performs one round of MSA without gaps in the first sequence
+  ///
   std::vector<fasta::SequenceList> perform_msa_round_ungapped(
       const seq_data::SequenceData& sequence_data,
       const profile::ProfileMap& profile,
@@ -73,6 +74,7 @@ namespace msa {
       int& prev_alignments,
       const f_config::FeatureSettingsMap& f_set,
       std::vector<fasta::SequenceList> previous_alignment);
+
   ///
   /// takes pairwise alignment, removes
   /// characters from the 2nd sequence that match gaps from 1st seq and returns
@@ -82,9 +84,10 @@ namespace msa {
   /// before and after that
   ///
   fasta::SequenceList remove_gaps(const fasta::SequenceList& alignment);
+
   ///
   /// takes a sequence and profiles, returns an
-  /// alignment of the two, with gaps cut out
+  /// alignment of the two, with or without gaps in the first seq.
   ///
   fasta::SequenceList align_pairwise(const fasta::Sequence& input_sequence, 
                                      const profile::ProfileMap& profile, 
@@ -121,7 +124,10 @@ namespace msa {
   std::vector<fasta::SequenceList> add_alignment(
       const std::vector<fasta::SequenceList>& multiple_alignment,
       const fasta::SequenceList& pairwise_alignment);
-
+  ///
+  /// cleanup function for merge_alignments - removes columns that only contain
+  /// gaps
+  ///
   std::vector<fasta::SequenceList> remove_gapcolumns(
       std::vector<fasta::SequenceList> alignment);
 }

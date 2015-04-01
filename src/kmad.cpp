@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
       std::cout << desc << std::endl;
       std::exit(EXIT_SUCCESS);
     }
-
+    // check if the obligatory parameters are provided
     if (vm.count("input") == 0 ||
         vm.count("gap_penalty") == 0 ||
         vm.count("output") == 0) {
@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
       std::exit(EXIT_FAILURE);
     }
 
-    // Parameter check
+    // check if parameters are sane
     if (codon_length < 1 || codon_length > 10) {
       std::cout << "Codon length ('-c' flag) should be between 1 and 10"
                 << std::endl;
@@ -129,13 +129,12 @@ int main(int argc, char *argv[]) {
                 << std::endl;
       std::exit(EXIT_FAILURE);
     }
-    
+     
     f_config::FeatureSettingsMap f_set;
+    // if the '--conf' option is chosen parse the configuration file
     if (vm.count("conf") == 1) {
       f_set = f_config::ConfParser::parse_conf_file(conf_file);
     }
-
-    time_t start = clock();
 
     fasta::FastaData fasta_data;
     try {
@@ -145,6 +144,7 @@ int main(int argc, char *argv[]) {
       std::exit(EXIT_FAILURE);
     }
     bool gapped = false;
+    // combine data from fasta with data from the config file -> seq_data
     seq_data::SequenceData sequence_data_plain = seq_data::process_fasta_data(
         fasta_data, f_set, gapped);
     // perform the alignment
@@ -194,7 +194,4 @@ int main(int argc, char *argv[]) {
       feature_analysis::write_consensus_to_file(cons_seq,
                                                 out_cons_filename);
     }
-
-    time_t end = clock();
-    std::cout << "time: " << double(end - start)/CLOCKS_PER_SEC << std::endl;
 }

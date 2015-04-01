@@ -49,7 +49,6 @@ f_config::RawFeatureSettingsMap f_config::ConfParser::process_config(
         continue;
       feature.lookupValue("pattern", feat_set.pattern);
 
-      //lcg::Setting& add_features_set = cnfg.lookup(name + ".add_features");
       lcg::Setting& add_features_set = feature["add_features"];
       for (int j = 0; j < add_features_set.getLength(); ++j) {
         feat_set.add_features.push_back(add_features_set[j]);
@@ -109,7 +108,10 @@ f_config::FeatureSettingsMap f_config::ConfParser::process_settings(
      processed_settings.subtract_score = feat_it->second.subtract_score;
      processed_settings.positions = feat_it->second.positions;
      processed_settings.pattern = feat_it->second.pattern;
-
+     ///
+     /// filter out the features from 'add_features' and 'subtract_features'
+     /// that have no settings (are not in keys in the RawFetaureSettings map)
+     ///
      for (auto& feat_name : feat_it->second.add_features) {
        if (raw_map.find(feat_name) != raw_map.end()) {
          processed_settings.add_features.push_back("USR_"+ feat_name);
@@ -121,7 +123,10 @@ f_config::FeatureSettingsMap f_config::ConfParser::process_settings(
          processed_settings.subtract_features.push_back("USR_"+ feat_name);
        }
      }
-
+     ///
+     /// add all features that contain the given tag, unless they are mentioned
+     /// in the exceptions
+     ///
      for (auto& feat_tag : feat_it->second.add_tags) {
        for (auto feat_it_j = raw_map.begin(); feat_it_j != raw_map.end();
             ++feat_it_j) {
@@ -157,6 +162,9 @@ f_config::FeatureSettingsMap f_config::ConfParser::process_settings(
          }
        }
      }
+     ///
+     /// add the feature to the new map 
+     ///
      processed_map["USR_" + feat_it->first] = processed_settings;
   }
   return processed_map;

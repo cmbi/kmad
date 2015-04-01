@@ -22,7 +22,6 @@ shared_SOURCES	=	src/compare_doubles.cpp \
 kmad_SOURCES	=	$(shared_SOURCES) \
 								src/kmad.cpp
 
-
 kmad_LDADD = $(shared_LDADD)
 
 test_kmad_SOURCES = $(shared_SOURCES) \

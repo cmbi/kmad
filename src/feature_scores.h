@@ -10,13 +10,26 @@ typedef std::vector<double> Scores;
 
 class FeatureScores {
   public:
+    ///
+    /// costructor
+    ///
     FeatureScores(const std::vector<std::string> features,
                     int domain_modifier, int ptm_modifier, int motif_modifier,
                     std::map<std::string, double> motif_probabilities);
-    void update_scores(const fasta::SequenceList& sequences,
-                       const f_config::FeatureSettingsMap&
-                       usr_feature_settings);
+    ///
+    /// updates the 'profile-like' feature scores based on an alignment
+    ///
+    void update_scores(
+        const fasta::SequenceList& sequences,
+        const f_config::FeatureSettingsMap& usr_feature_settings);
+
+    ///
+    /// get the complete 'profile-like' matrix of feature scores
+    ///
     std::map<std::string, Scores> get_scores();
+    ///
+    /// get a single score (for a particular feature on a particular position)
+    ///
     double get_score(const std::string& feat_name,
                      unsigned long position) const;
   private:

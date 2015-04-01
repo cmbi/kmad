@@ -5,9 +5,14 @@
 #include <map>
 #include <vector>
 
-
+/// 
+///  Parses a fasta or semi-fasta(encoded) file to a vec of Sequence structs, 
+/// 
 namespace fasta {
 
+  ///
+  /// Holds a single residue codon, and a list of its features
+  ///
   struct Residue {
     Residue(std::string codon, std::vector<std::string> features) 
       : codon(codon),
@@ -18,7 +23,10 @@ namespace fasta {
     std::string codon;
     std::vector<std::string> features;
   };
-
+  ///
+  /// hodls description which is later used as a fasta header and a list of
+  /// residues
+  ///
   struct Sequence {
     std::string description;
     std::vector<Residue> residues;
@@ -26,13 +34,17 @@ namespace fasta {
 
   typedef std::vector<fasta::Sequence> SequenceList;
 
+  ///
+  /// holds all the data from the (semi)fasta file - sequences with their headers
+  /// and a list of motif probabilities
+  ///
   struct FastaData {
     SequenceList sequences;
     std::map<std::string, double> probabilities;
   };
 
   ///
-  /// parsess a 'fasta' file, returns a Sequences object,
+  /// parses a 'fasta' file, returns a Sequences object,
   /// writes motif ids and probabilities to ids and probs
   ///
   FastaData parse_fasta(std::string filename, int codonLength,
@@ -44,8 +56,14 @@ namespace fasta {
   Sequence make_sequence(unsigned long sequence_length,
                          const fasta::Residue residue);
   Sequence make_sequence(const std::string sequence_string, int codon_length);
+  ///
+  /// converts a Sequence struct to a string
+  ///
   std::string make_string(const Sequence seq);
   Residue make_residue(const std::string& codon);
+  ///
+  /// check if all sequence lengths are equal (for the refinement mode)
+  ///
   bool check_length(SequenceList sequences);
 }
 
