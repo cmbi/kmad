@@ -63,4 +63,4 @@ out/
 coverage.sh
 
 # rope
-.ropeproject
+.ropeproject/
