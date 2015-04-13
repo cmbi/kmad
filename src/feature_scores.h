@@ -14,7 +14,7 @@ class FeatureScores {
     /// costructor
     ///
     FeatureScores(const std::vector<std::string> features,
-                    int domain_modifier, int ptm_modifier, int motif_modifier,
+                  double domain_modifier, double ptm_modifier, double motif_modifier,
                     std::map<std::string, double> motif_probabilities);
     ///
     /// updates the 'profile-like' feature scores based on an alignment
@@ -33,9 +33,9 @@ class FeatureScores {
     double get_score(const std::string& feat_name,
                      unsigned long position) const;
   private:
-    int m_domain_modifier;
-    int m_ptm_modifier;
-    int m_motif_modifier;
+    double m_domain_modifier;
+    double m_ptm_modifier;
+    double m_motif_modifier;
     std::vector<std::string> m_features;
     std::map<std::string, double> m_motif_probabilities;
     std::map<std::string, Scores> m_scores;

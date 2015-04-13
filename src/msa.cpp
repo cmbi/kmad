@@ -13,8 +13,8 @@ std::vector<fasta::SequenceList> msa::run_msa(
     const seq_data::SequenceData& sequence_data,
     const f_config::FeatureSettingsMap& f_set,
     double gap_open_pen, double gap_ext_pen,
-    double end_pen, int domain_modifier,
-    int motif_modifier, int ptm_modifier,
+    double end_pen, double domain_modifier,
+    double motif_modifier, double ptm_modifier,
     int codon_length, bool one_round,
     const std::string& sbst_mat, const bool first_gapped)
 {
@@ -93,8 +93,8 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
     const seq_data::SequenceData& sequence_data_alignment,
     const f_config::FeatureSettingsMap& f_set,
     double gap_open_pen, double gap_ext_pen,
-    double end_pen, int domain_modifier,
-    int motif_modifier, int ptm_modifier,
+    double end_pen, double domain_modifier,
+    double motif_modifier, double ptm_modifier,
     int codon_length, bool one_round,
     const std::string& sbst_mat, const bool first_gapped)
 {

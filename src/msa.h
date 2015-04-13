@@ -18,8 +18,8 @@ namespace msa {
       const f_config::FeatureSettingsMap& f_set,
       double gap_open_pen,
       double gap_ext_pen, double end_pen,
-      int domain_modifier, int motif_modifier,
-      int phosph_modifier, int codon_length, bool one_round,
+      double domain_modifier, double motif_modifier,
+      double phosph_modifier, int codon_length, bool one_round,
       const std::string& sbst_mat, const bool first_gapped);
   ///
   /// takes alignment (sequence_data) and refines it (two rounds)
@@ -30,8 +30,8 @@ namespace msa {
       const f_config::FeatureSettingsMap& f_set,
       double gap_open_pen,
       double gap_ext_pen, double end_pen,
-      int domain_modifier, int motif_modifier,
-      int phosph_modifier, int codon_length, bool one_round,
+      double domain_modifier, double motif_modifier,
+      double phosph_modifier, int codon_length, bool one_round,
       const std::string& sbst_mat, const bool first_gapped);
 
   /// performs the first round of alignments, / all vs query seq (first

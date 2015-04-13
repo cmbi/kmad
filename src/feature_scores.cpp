@@ -6,7 +6,7 @@
 
 
 FeatureScores::FeatureScores(std::vector<std::string> features,
-    int domain_modifier, int ptm_modifier, int motif_modifier,
+    double domain_modifier, double ptm_modifier, double motif_modifier,
     std::map<std::string, double> motif_probabilities)
 : m_domain_modifier(domain_modifier),
   m_ptm_modifier(ptm_modifier),
