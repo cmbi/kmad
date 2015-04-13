@@ -167,36 +167,36 @@ def get_annotation_level(uni_features):
     return n
 
 
+def get_ptm_type(line):
+    ptm_found = True
+    ptm = ""
+    if "Phospho" in line and "MOD_RES" in line:
+        ptm = 'phosph'
+    elif "amide" in line and "MOD_RES":
+        ptm = 'amids'
+    elif "CARBOHYD" in line and "O-linked" in line:
+        ptm = 'Oglycs'
+    elif "CARBOHYD" in line and "N-linked" in line:
+        ptm = 'Nglycs'
+    elif "MOD_RES" in line and "acetyl" in line:
+        ptm = 'acetyl'
+    elif "MOD_RES" in line and "hydroxy" in line:
+        ptm = 'hydrox'
+    elif "MOD_RES" in line and "methyl" in line:
+        ptm = 'meth'
+    else:
+        ptm_found = False
+    return ptm, ptm_found
+
+
 # UNIPROT
-def find_phosph_sites(features):
-    ptms_dict = {'phosph': [[], [], [], []],
-                 'Nglycs': [[], [], [], []],
-                 'Oglycs': [[], [], [], []],
-                 'amids': [[], [], [], []],
-                 'hydrox': [[], [], [], []],
-                 'meth': [[], [], [], []],
-                 'acetyl': [[], [], [], []]}
+def find_ptm_sites(features):
+    ptms = ["phosph", "Nglycs", "Oglycs", "amids", "hydrox",
+            "meth", "acetyl"]
+    ptms_dict = {i: [[] for j in range(4)] for i in ptms}
     for i, lineI in enumerate(features):
         if len(lineI.split()) > 3:
-            # first check status (exp, by sim, prb or potential)
-            ptm_found = True
-            # check ptm kind and insert site in the results list
-            if "Phospho" in lineI and "MOD_RES" in lineI:
-                ptm = 'phosph'
-            elif "amide" in lineI and "MOD_RES":
-                ptm = 'amids'
-            elif "CARBOHYD" in lineI and "O-linked" in lineI:
-                ptm = 'Oglycs'
-            elif "CARBOHYD" in lineI and "N-linked" in lineI:
-                ptm = 'Nglycs'
-            elif "MOD_RES" in lineI and "acetyl" in lineI:
-                ptm = 'acetyl'
-            elif "MOD_RES" in lineI and "hydroxy" in lineI:
-                ptm = 'hydrox'
-            elif "MOD_RES" in lineI and "methyl" in lineI:
-                ptm = 'meth'
-            else:
-                ptm_found = False
+            ptm, ptm_found = get_ptm_type(lineI)
             if ptm_found:
                 if len(features) - i < 10:
                     end = len(features)
@@ -239,22 +239,19 @@ def search_elm(uniprotID, sequence, slims_all_classes, seq_go_terms):
     elms_ids = []
     probabilities = []
     # get annotated motifs first
-    try:
-        req = urllib2.Request("http://elm.eu.org/elms/browse_instances.gff"
-                              "?q="+uniprotID)
-        response = urllib2.urlopen(req)
-        features = response.read().splitlines()
+    req = urllib2.Request("http://elm.eu.org/elms/browse_instances.gff"
+                          "?q="+uniprotID)
+    response = urllib2.urlopen(req)
+    features = response.read().splitlines()
 
-        for i in features:
-            if 'sequence_feature' in i:
-                start = int(i.split()[3])
-                end = int(i.split()[4])
-                elm_id = i.split()[8].split('=')[1]
-                limits.append([start, end])
-                probabilities.append(1)
-                elms_ids.append(elm_id)
-    except:
-        pass
+    for i in features:
+        if 'sequence_feature' in i:
+            start = int(i.split()[3])
+            end = int(i.split()[4])
+            elm_id = i.split()[8].split('=')[1]
+            limits.append([start, end])
+            probabilities.append(1)
+            elms_ids.append(elm_id)
     try:
         # now get predicted motifs
         req = urllib2.Request("http://elm.eu.org/start_search/"
@@ -283,7 +280,7 @@ def search_elm(uniprotID, sequence, slims_all_classes, seq_go_terms):
         limits, elms_ids, probabilities = filter_out_overlapping(limits,
                                                                  elms_ids,
                                                                  probabilities)
-    except:
+    except urllib2.HTTPError:
         print "Couldn't find ELM entry for {}".format(uniprotID)
     return [limits, elms_ids, probabilities]
 
@@ -441,7 +438,7 @@ def convert_to_7chars(filename, outname, ELM_DB):
                 os.remove(tmp_filename)
             if check_id(seq_id, seqI):
                 uniprot_txt = get_uniprot_txt(seq_id)
-                uniprot_results = find_phosph_sites(uniprot_txt["features"])
+                uniprot_results = find_ptm_sites(uniprot_txt["features"])
                 # elms - slims coordinates, motifs_ids, probs - probabilities
                 [elm, motifs_ids, probs] = search_elm(seq_id, seqI,
                                                       slims_all_classes,
