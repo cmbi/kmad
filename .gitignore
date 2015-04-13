@@ -27,9 +27,9 @@ Makefile.in
 /compile
 # /configure
 /depcomp
-# /install-sh
+/install-sh
 /missing
-/stamp-h1
+# /stamp-h1
 # /config
 config.log
 config.status
