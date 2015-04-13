@@ -1,10 +1,9 @@
 # Installation
 1. KMAD
 KMAD can be compiled and installed from the kman directory:
-  `./configure; make ; sudo make install`
-2. ELM update script
-To be able to use the python script to update the elm (scripts/update_elm.py)
-database you need to run first:
+  `./configure; make; sudo make install`
+2. ELM update script (scripts/update_elm.py)
+To be able to use the script for updating the ELM database run:
    `pip install -r requirements.txt` 
 3. convert script 
 To be able to annotate predicted phosphorylations you will need to install
@@ -13,7 +12,8 @@ http://www.cbs.dtu.dk/services/NetPhos/
 Install it according to the provided instructions - make sure you can run it
 simply by calling `netphos`.
 The script for converting the input will run anyway without NetPhos, only you
-won't have the predicted phosphorylations.
+won't have the predicted phosphorylations. All the other features will be
+annotated anyway.
 
 
 # Running
