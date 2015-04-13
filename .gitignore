@@ -17,7 +17,7 @@
 
 # http://www.gnu.org/software/automake
 Makefile
-Makefile.in
+# Makefile.in
 .deps/
 .dirstamp
 
