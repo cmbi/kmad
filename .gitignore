@@ -24,6 +24,10 @@ Makefile
 # configure
 config.status
 config.log
+autom4te.cache/
+autom4te.cache/output*
+autom4te.cache/traces*
+
 
 # Executables
 *.exe
