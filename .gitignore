@@ -25,16 +25,16 @@ Makefile
 /autom4te.cache
 /aclocal.m4
 /compile
-# /configure
+/configure
 /depcomp
 /install-sh
 /missing
 /stamp-h1
-# /config
+/config
 config.log
 config.status
-# config.h
-# config.h.in
+config.h
+config.h.in
 
 # Executables
 *.exe
