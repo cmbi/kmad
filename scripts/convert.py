@@ -3,6 +3,7 @@ import argparse
 import logging
 import math
 import os
+import re
 import string
 import subprocess
 import sys
@@ -65,7 +66,7 @@ def run_pfam_scan(filename):
     domain_coords = []
     domain_accessions = []
     with open(filename) as a:
-        fastafile = a.read()
+        fastafile = re.sub('-', '', a.read())
     values = {'seq': fastafile, 'output': 'xml'}
     data = urllib.urlencode(values)
     request = urllib2.Request('http://pfam.xfam.org/search/sequence', data)
@@ -252,36 +253,34 @@ def search_elm(uniprotID, sequence, slims_all_classes, seq_go_terms):
             limits.append([start, end])
             probabilities.append(1)
             elms_ids.append(elm_id)
-    try:
-        # now get predicted motifs
-        req = urllib2.Request("http://elm.eu.org/start_search/"
-                              + uniprotID + ".csv")
-        response = urllib2.urlopen(req)
-        features = response.read()
-        features = features.splitlines()
-        for line in features[1:]:
-            entry = line.split()
-            prob = 1
-            if entry:
-                slim_id = entry[0]
-                try:
-                    slim_go_terms = slims_all_classes[slim_id]["GO"]
-                    if set(seq_go_terms).intersection(set(slim_go_terms)):
-                        if entry[3] == "False":
-                            prob = 1 + 1/math.log(
-                                slims_all_classes[slim_id]["prob"], 10)
-                            if prob > 0:
-                                limits.append([int(entry[1]), int(entry[2])])
-                                elms_ids.append(entry[0])
-                                probabilities.append(prob)
-                except KeyError:
-                    print "Didn't find motif: {}.".format(slim_id) \
-                          + " You should update the ELM db"
-        limits, elms_ids, probabilities = filter_out_overlapping(limits,
-                                                                 elms_ids,
-                                                                 probabilities)
-    except urllib2.HTTPError:
-        print "Couldn't find ELM entry for {}".format(uniprotID)
+    # now get predicted motifs
+    data = urllib.urlencode({'sequence': sequence})
+    url = "http://elm.eu.org/start_search/"
+    req = urllib2.Request(url, data)
+    response = urllib2.urlopen(req)
+    features = response.read()
+    features = features.splitlines()
+    for line in features[1:]:
+        entry = line.split()
+        prob = 1
+        if entry:
+            slim_id = entry[0]
+            try:
+                slim_go_terms = slims_all_classes[slim_id]["GO"]
+                if set(seq_go_terms).intersection(set(slim_go_terms)):
+                    if entry[3] == "False":
+                        prob = 1 + 1/math.log(
+                            slims_all_classes[slim_id]["prob"], 10)
+                        if prob > 0:
+                            limits.append([int(entry[1]), int(entry[2])])
+                            elms_ids.append(entry[0])
+                            probabilities.append(prob)
+            except KeyError:
+                print "Didn't find motif: {}.".format(slim_id) \
+                      + " You should update the ELM db"
+    limits, elms_ids, probabilities = filter_out_overlapping(limits,
+                                                             elms_ids,
+                                                             probabilities)
     return [limits, elms_ids, probabilities]
 
 
@@ -317,7 +316,7 @@ def encode_domains(seq, domains, domain_codes):
         j = 0
         k = 0
         while j < end+1 and k < len(seq):
-            if k % 7 == 2 and j >= start:
+            if k % 7 == 2 and j >= start and seq[k - 2] != '-':
                 seq[k] = domainsCode[0]
                 seq[k+1] = domainsCode[1]
             elif k % 7 == 0 and seq[k] != "-":
@@ -372,7 +371,7 @@ def encode_slims(seq, slims, slim_codes):
             k = 0
             j = 0
             while j < end + 1 and k < len(seq):
-                if k % 7 == 5 and j >= start:
+                if k % 7 == 5 and j >= start and seq[k - 5] != '-':
                     seq[k] = slimsCode[0]
                     seq[k+1] = slimsCode[1]
                 elif k % 7 == 0 and seq[k] != "-":
