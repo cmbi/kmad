@@ -130,6 +130,7 @@ int main(int argc, char *argv[]) {
       std::exit(EXIT_FAILURE);
     }
      
+    std::cout << "codon: "<< codon_length << std::endl;
     f_config::FeatureSettingsMap f_set;
     // if the '--conf' option is chosen parse the configuration file
     if (vm.count("conf") == 1) {

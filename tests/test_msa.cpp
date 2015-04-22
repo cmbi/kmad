@@ -471,7 +471,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
   seq_data::SequenceData sequence_data;
   FeatureNamesList feature_list;
   std::map<std::string, double> probabilities;
-  std::string sbst_mat = "BLOSUM";
+  std::string sbst_mat = "DISORDER";
   bool first_gapped = true;
   sequence_data.feature_list = feature_list;
 
@@ -501,10 +501,10 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
                                        "GDNGEE--AEEA", 
                                        "GDNGEEAEAEEA"};
 
-   // std::cout << "SIAL_HUMAN test:" << std::endl;
-   // for (auto& seq : result) {
-   //  std::cout << seq << std::endl;
-   // }
+   std::cout << "SIAL_HUMAN test:" << std::endl;
+   for (auto& seq : result) {
+    std::cout << seq << std::endl;
+   }
   BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
                                 expected.begin(), expected.end());
 }
