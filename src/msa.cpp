@@ -258,7 +258,6 @@ fasta::SequenceList msa::align_pairwise(const fasta::Sequence& input_sequence,
                                         double gap_ext_pen,
                                         int codon_length,
                                         const bool first_gapped) {
-  std::cout << "pairwise" << std::endl;
   int profile_length = profile.begin()->second.size();
   ScoringMatrix scores(profile_length, input_sequence.residues.size(),
                        gap_open_pen, end_pen, gap_ext_pen);

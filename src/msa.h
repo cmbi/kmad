@@ -7,8 +7,6 @@
 #include "profile.h"
 
 
-class Sequences;
-
 namespace msa {
   ///
   /// performs the full multiple sequence alignment, returns aligned sequences

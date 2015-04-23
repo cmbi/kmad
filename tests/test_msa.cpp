@@ -477,7 +477,6 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
 
   std::vector<fasta::SequenceList> alignment;
   sequence_data.sequences = sequences;
-  std::cout << "this test" << std::endl;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
                            ptm_modifier, codon_length, one_round, sbst_mat,
@@ -501,10 +500,10 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
                                        "GDNGEE--AEEA", 
                                        "GDNGEEAEAEEA"};
 
-   std::cout << "SIAL_HUMAN test:" << std::endl;
-   for (auto& seq : result) {
-    std::cout << seq << std::endl;
-   }
+  //  std::cout << "SIAL_HUMAN test:" << std::endl;
+  //  for (auto& seq : result) {
+  //   std::cout << seq << std::endl;
+  //  }
   BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
                                 expected.begin(), expected.end());
 }
