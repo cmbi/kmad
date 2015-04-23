@@ -93,8 +93,6 @@ fasta::Sequence fasta::make_sequence(const std::string& description,
 {
   fasta::Sequence s;
   s.description = description;
-  std::cout << "codons: " << codons << std::endl;
-  std::cout << "codons size: " << codons.size() << std::endl;
   
   for (unsigned i = 0; i < codons.size(); i += codon_length) {
     boost::regex re("[a-zA-Z0-9-]{" + std::to_string(codon_length) + "}");

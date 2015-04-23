@@ -78,13 +78,17 @@ std::vector<fasta::SequenceList> msa::run_msa(
       }
       // set alignments number to 0 to align (again) 
       // all sequences to the profile
-      alignments_number = 0;
-      cutoff = 0;
-      alignment = perform_msa_round_ptr(sequence_data, profile,
-                                        f_profile, gap_open_pen, 
-                                        end_pen, gap_ext_pen, cutoff,
-                                        codon_length, identities,
-                                        alignments_number, f_set, alignment);
+      for (int i = 0; i < 2; ++i) {
+        alignments_number = 0;
+        cutoff = 0;
+        alignment = perform_msa_round_ptr(sequence_data, profile,
+                                          f_profile, gap_open_pen, 
+                                          end_pen, gap_ext_pen, cutoff,
+                                          codon_length, identities,
+                                          alignments_number, f_set, alignment);
+        f_profile.update_scores(alignment[0], f_set);
+        profile = profile::create_score_profile(alignment[0], sbst_mat);
+      }
       return alignment;
 }
 
@@ -254,6 +258,7 @@ fasta::SequenceList msa::align_pairwise(const fasta::Sequence& input_sequence,
                                         double gap_ext_pen,
                                         int codon_length,
                                         const bool first_gapped) {
+  std::cout << "pairwise" << std::endl;
   int profile_length = profile.begin()->second.size();
   ScoringMatrix scores(profile_length, input_sequence.residues.size(),
                        gap_open_pen, end_pen, gap_ext_pen);
