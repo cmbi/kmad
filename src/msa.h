@@ -101,7 +101,8 @@ namespace msa {
   /// @param alignedSequence sequence aligned to the profile with the gaps cut
   /// out (its length is equal to the profile's length)
   ///
-  double calc_identity(const fasta::Sequence& aligned_sequence, 
+  double calc_identity(const fasta::Sequence& dummy_sequence, 
+                       const fasta::Sequence& aligned_sequence,
                        const fasta::Sequence& query_sequence);
 
   ///
