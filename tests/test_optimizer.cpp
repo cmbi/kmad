@@ -113,12 +113,14 @@ BOOST_AUTO_TEST_CASE(test_filter_move_data)
     optimizer::MoveData(2, 4, 2, 5)};
 
   optimizer::filter_move_data(move_data);
-
-  for (auto& i : move_data) {
-    std::cout << i.seq_number << " "
-              << i.old_position << " "
-              << i.new_position << " "
-              << i.score_gain << std::endl;
+  std::vector<optimizer::MoveData> expected = {
+    optimizer::MoveData(0, 2, 4, 5)};
+  BOOST_CHECK_EQUAL(expected.size(), move_data.size());
+  for (size_t i = 0; i < expected.size(); ++i) {
+    BOOST_CHECK_EQUAL(expected[i].seq_number, move_data[i].seq_number);
+    BOOST_CHECK_EQUAL(expected[i].old_position, move_data[i].old_position);
+    BOOST_CHECK_EQUAL(expected[i].new_position, move_data[i].new_position);
+    BOOST_CHECK_EQUAL(expected[i].score_gain, move_data[i].score_gain);
   }
 }
 
@@ -152,6 +154,55 @@ BOOST_AUTO_TEST_CASE(test_move_residues)
                                        "AA--EAA"};
   BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
                                 result.begin(), result.end());
+}
+
+
+BOOST_AUTO_TEST_CASE(test_optimize_alignment)
+{
+  std::vector<fasta::SequenceList> alignment = {
+    {fasta::make_sequence("AAE--AA", 1),
+     fasta::make_sequence("AAE-EAA", 1),
+     fasta::make_sequence("AA--EAA", 1)},
+    {fasta::make_sequence("AAE--AA", 1),
+     fasta::make_sequence("AAE-EAA", 1),
+     fasta::make_sequence("AA--EAA", 1)}};
+
+  alignment = {
+    {fasta::make_sequence("AA---AA", 1),
+     fasta::make_sequence("AA--DAA", 1),
+     fasta::make_sequence("AAAE-AA", 1)},
+    {fasta::make_sequence("AA---AA", 1),
+     fasta::make_sequence("AA--DAA", 1),
+     fasta::make_sequence("AAAE-AA", 1)}};
+
+  std::string sbst_mat = "BLOSUM";
+  double domain = 0;
+  double motif = 0;
+  double ptm = 0;
+  alignment = optimizer::optimize_alignment(alignment, domain, motif, ptm,
+                                            sbst_mat);
+
+  std::vector<std::string> result;
+  for (auto& item : alignment) {
+    for (auto& seq : item) {
+      result.push_back(fasta::make_string(seq));
+    }
+  }
+
+  std::vector<std::string> expected = {"AA-EAA",
+                                       "AAEEAA",
+                                       "AA-EAA",
+                                       "AA-EAA",
+                                       "AAEEAA",
+                                       "AA-EAA"};
+  for (auto& item : result) {
+    std::cout << item << std::endl;
+  }
+
+  /*
+  BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
+                                result.begin(), result.end());
+  */
 }
 
 
