@@ -44,9 +44,16 @@ namespace optimizer {
   /// takes an alignment and residues to remove; returns an alignment with
   /// removed residues
   ///
-  std::vector<fasta::SequenceList> remove_residues(
+  std::vector<fasta::SequenceList> move_residues(
       const std::vector<fasta::SequenceList>& alignment,
       const std::vector<MoveData>& move_data);
+
+  ///
+  /// 
+  ///
+  void filter_move_data(std::vector<MoveData>& move_data);
+  bool reverse_sort(int i, int j);
+
 
   MoveData single_move_score(
       const std::vector<fasta::SequenceList>& alignment,

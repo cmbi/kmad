@@ -6,7 +6,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/auto_unit_test.hpp>
 
-
+namespace sbst = substitution_matrix;
 BOOST_AUTO_TEST_SUITE(test_optimizer)
 
 BOOST_AUTO_TEST_CASE(test_find_gap_end)
@@ -34,5 +34,125 @@ BOOST_AUTO_TEST_CASE(test_find_gap_start)
   s = fasta::make_sequence("WF---", 1);
   BOOST_CHECK_EQUAL(optimizer::find_gap_start(s, 4), 2);
 }
+
+BOOST_AUTO_TEST_CASE(test_single_move_score)
+{
+  std::vector<fasta::SequenceList> alignment = {{fasta::make_sequence("AAE--AA", 1),
+                                                 fasta::make_sequence("AAE-EAA", 1),
+                                                 fasta::make_sequence("AA--EAA", 1)}};
+  const sbst::SimilarityScoresMap* sim_scores = &sbst::BLOSUM;
+  size_t seq_no = 0;
+  int position = 2;
+  std::string side = "left";
+  optimizer::MoveData m = optimizer::single_move_score(alignment, seq_no,
+                                                       position, side,
+                                                       sim_scores);
+  BOOST_CHECK_EQUAL(m.score_gain, 5);
+  seq_no = 2;
+  position = 4;
+  side = "right";
+  m = optimizer::single_move_score(alignment, seq_no,
+                                   position, side,
+                                   sim_scores);
+
+  BOOST_CHECK_EQUAL(m.score_gain, 5);
+  alignment = {{fasta::make_sequence("AAE--", 1),
+                fasta::make_sequence("AAE-E", 1),
+                fasta::make_sequence("AA--E", 1)}};
+  seq_no = 0;
+  position = 2;
+  side = "left";
+  m = optimizer::single_move_score(alignment, seq_no,
+                                   position, side,
+                                   sim_scores);
+  BOOST_CHECK_EQUAL(m.score_gain, -5);
+
+  alignment = {{fasta::make_sequence("E--AA", 1),
+                fasta::make_sequence("E-EAA", 1),
+                fasta::make_sequence("--EAA", 1)}};
+  seq_no = 2;
+  position = 2;
+  side = "right";
+  m = optimizer::single_move_score(alignment, seq_no,
+                                   position, side,
+                                   sim_scores);
+  BOOST_CHECK_EQUAL(m.score_gain, -5);
+}
+
+
+BOOST_AUTO_TEST_CASE(test_calculate_move_scores) 
+{
+  std::vector<fasta::SequenceList> alignment = {{
+    fasta::make_sequence("AAE--AA", 1),
+    fasta::make_sequence("AAE-EAA", 1),
+    fasta::make_sequence("AA--EAA", 1)}};
+
+  std::string sbst_mat = "BLOSUM";
+  double domain = 0;
+  double ptm = 0;
+  double motif = 0;
+  std::vector<optimizer::MoveData> m = optimizer::calculate_move_scores(
+      alignment, domain, motif, ptm, sbst_mat);
+  std::vector<optimizer::MoveData> expected = {
+    optimizer::MoveData(0, 2, 4, 5),
+    optimizer::MoveData(2, 4, 2, 5)};
+
+  for (size_t i = 0; i < expected.size(); ++i) {
+    BOOST_CHECK_EQUAL(expected[i].seq_number, m[i].seq_number);
+    BOOST_CHECK_EQUAL(expected[i].old_position, m[i].old_position);
+    BOOST_CHECK_EQUAL(expected[i].new_position, m[i].new_position);
+    BOOST_CHECK_EQUAL(expected[i].score_gain, m[i].score_gain);
+  }
+}
+
+
+BOOST_AUTO_TEST_CASE(test_filter_move_data)
+{
+  std::vector<optimizer::MoveData> move_data = {
+    optimizer::MoveData(0, 2, 4, 5),
+    optimizer::MoveData(2, 4, 2, 5)};
+
+  optimizer::filter_move_data(move_data);
+
+  for (auto& i : move_data) {
+    std::cout << i.seq_number << " "
+              << i.old_position << " "
+              << i.new_position << " "
+              << i.score_gain << std::endl;
+  }
+}
+
+
+BOOST_AUTO_TEST_CASE(test_move_residues)
+{
+  std::vector<fasta::SequenceList> alignment = {
+    {fasta::make_sequence("AAE--AA", 1),
+     fasta::make_sequence("AAE-EAA", 1),
+     fasta::make_sequence("AA--EAA", 1)},
+    {fasta::make_sequence("AAE--AA", 1),
+     fasta::make_sequence("AAE-EAA", 1),
+     fasta::make_sequence("AA--EAA", 1)}};
+  std::vector<optimizer::MoveData> move_data = {
+    optimizer::MoveData(0, 2, 4, 5)};
+
+  alignment = optimizer::move_residues(alignment, move_data);
+
+  std::vector<std::string> result;
+  for (auto& item : alignment) {
+    for (auto& seq : item) {
+      result.push_back(fasta::make_string(seq));
+    }
+  }
+
+  std::vector<std::string> expected = {"AA--EAA",
+                                       "AAE-EAA",
+                                       "AA--EAA",
+                                       "AA--EAA",
+                                       "AAE-EAA",
+                                       "AA--EAA"};
+  BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
+                                result.begin(), result.end());
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()
