@@ -9,12 +9,10 @@
 namespace sbst = substitution_matrix;
 
 
-// TODO: test it
 std::vector<fasta::SequenceList> optimizer::optimize_alignment(
     const std::vector<fasta::SequenceList>& alignment,
     double domain_modifier, double motif_modifier, double ptm_modifier,
     const std::string& sbst_mat) {
-
   std::vector<optimizer::MoveData> m = optimizer::calculate_move_scores(
       alignment, domain_modifier, motif_modifier, ptm_modifier, sbst_mat);
   optimizer::filter_move_data(m);
@@ -44,7 +42,8 @@ std::vector<optimizer::MoveData> optimizer::calculate_move_scores(
   for (size_t i  = 0; i < alignment[0].size(); ++i) {
     bool in_gap = false;
     for (size_t j = 0; j < alignment_length; ++j) {
-      if (alignment[0][i].residues[j].codon[0] == '-' && !in_gap) {
+      if (alignment[0][i].residues[j].codon[0] == '-' && !in_gap && j > 0
+            && alignment[0][i].residues[j - 1].codon[0] != '-') {
           in_gap = true;
           side = "left";
           left = optimizer::single_move_score(alignment, i, j - 1, side,

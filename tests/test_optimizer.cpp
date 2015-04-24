@@ -167,13 +167,6 @@ BOOST_AUTO_TEST_CASE(test_optimize_alignment)
      fasta::make_sequence("AAE-EAA", 1),
      fasta::make_sequence("AA--EAA", 1)}};
 
-  alignment = {
-    {fasta::make_sequence("AA---AA", 1),
-     fasta::make_sequence("AA--DAA", 1),
-     fasta::make_sequence("AAAE-AA", 1)},
-    {fasta::make_sequence("AA---AA", 1),
-     fasta::make_sequence("AA--DAA", 1),
-     fasta::make_sequence("AAAE-AA", 1)}};
 
   std::string sbst_mat = "BLOSUM";
   double domain = 0;
@@ -195,14 +188,8 @@ BOOST_AUTO_TEST_CASE(test_optimize_alignment)
                                        "AA-EAA",
                                        "AAEEAA",
                                        "AA-EAA"};
-  for (auto& item : result) {
-    std::cout << item << std::endl;
-  }
-
-  /*
   BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
                                 result.begin(), result.end());
-  */
 }
 
 

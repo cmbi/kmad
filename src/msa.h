@@ -18,7 +18,8 @@ namespace msa {
       double gap_ext_pen, double end_pen,
       double domain_modifier, double motif_modifier,
       double phosph_modifier, int codon_length, bool one_round,
-      const std::string& sbst_mat, const bool first_gapped);
+      const std::string& sbst_mat, const bool first_gapped,
+      const bool optimize);
   ///
   /// takes alignment (sequence_data) and refines it (two rounds)
   ///

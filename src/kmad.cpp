@@ -26,6 +26,7 @@ int main(int argc, char *argv[]) {
     bool one_round = false;
     bool first_gapped = false;
     bool refine = false;
+    bool optimize = false;
     std::string filename;
     std::string output_prefix;
     std::string conf_file;
@@ -90,6 +91,10 @@ int main(int argc, char *argv[]) {
                                          ->implicit_value(true),
        "take alignment as input and refine it"
       )
+      ("opt", po::value<bool>(&optimize)->default_value(false)
+                                        ->implicit_value(true),
+       "run alignment with optimizer"
+       )
       ("conf",
        po::value<std::string>(&conf_file),
        "configure file");
@@ -154,7 +159,7 @@ int main(int argc, char *argv[]) {
                                f_set, gap_open_pen,
                                gap_ext_pen, end_pen, domain_modifier, 
                                motif_modifier, ptm_modifier, codon_length,
-                               one_round, sbst_mat, first_gapped);
+                               one_round, sbst_mat, first_gapped, optimize);
     } else {
       bool gapped = true;
       seq_data::SequenceData sequence_data_alignment = seq_data::process_fasta_data(

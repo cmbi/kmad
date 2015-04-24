@@ -1,6 +1,7 @@
 #include "msa.h"
 
 #include "feature_scores.h"
+#include "optimizer.h"
 #include "profile.h"
 #include "scoring_matrix.h"
 
@@ -16,7 +17,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
     double end_pen, double domain_modifier,
     double motif_modifier, double ptm_modifier,
     int codon_length, bool one_round,
-    const std::string& sbst_mat, const bool first_gapped)
+    const std::string& sbst_mat, const bool first_gapped, const bool optimize)
 {
       FeatureScores f_profile(sequence_data.feature_list, domain_modifier,
                               ptm_modifier, motif_modifier,
@@ -88,6 +89,18 @@ std::vector<fasta::SequenceList> msa::run_msa(
                                           alignments_number, f_set, alignment);
         f_profile.update_scores(alignment[0], f_set);
         profile = profile::create_score_profile(alignment[0], sbst_mat);
+      }
+      if (optimize) {
+        int counter = 0;
+        std::vector<fasta::SequenceList> previous;
+        while (!seq_data::compare_alignments(previous, alignment)
+                && counter < 6) {
+          previous = alignment;
+          alignment = optimizer::optimize_alignment(alignment, domain_modifier,
+              motif_modifier, ptm_modifier, sbst_mat);
+          ++counter;
+          std::cout << "round" << std::endl;
+        }
       }
       return alignment;
 }
