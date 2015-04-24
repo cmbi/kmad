@@ -71,6 +71,15 @@ namespace optimizer {
                            double domain_modifier,
                            double motif_modifier, 
                            double ptm_modifier);
+  
+  double score_ptm(fasta::Residue res1, fasta::Residue res2,
+                   double ptm_modifier);
+
+  double score_motif(fasta::Residue res1, fasta::Residue res2,
+                   double motif_modifier);
+
+  double score_domain(fasta::Residue res1, fasta::Residue res2,
+                      double domain_modifier);
 }
 
 #endif /* OPTIMIZER_H */
