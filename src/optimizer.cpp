@@ -47,11 +47,13 @@ std::vector<optimizer::MoveData> optimizer::calculate_move_scores(
           in_gap = true;
           side = "left";
           left = optimizer::single_move_score(alignment, i, j - 1, side,
-                                              sim_scores);
+                                              sim_scores, domain_modifier,
+                                              motif_modifier, ptm_modifier);
       } else if (in_gap && alignment[0][i].residues[j].codon[0] != '-') {
           side = "right";
           right = optimizer::single_move_score(alignment, i, j, side,
-                                               sim_scores);
+                                               sim_scores, domain_modifier,
+                                               motif_modifier, ptm_modifier);
           in_gap = false;
           optimizer::MoveData winner = (left.score_gain < right.score_gain) ? right : left;
           if (winner.score_gain > 0 ) {
@@ -120,20 +122,36 @@ std::vector<fasta::SequenceList> optimizer::move_residues(
 }
 
 
+double optimizer::get_two_res_score(fasta::Residue res1, fasta::Residue res2,
+  int res1_index, const sbst::SimilarityScoresMap* sim_scores,
+  double domain_modifier, double motif_modifier, double ptm_modifier)
+{ 
+  double result = 0;
+  char aa2 = res2.codon[0];
+  if (sim_scores->find(aa2) != sim_scores->end()) {
+    result += sim_scores->at(aa2)[res1_index];
+  }
+  return result;
+}
+
+
 optimizer::MoveData optimizer::single_move_score(
     const std::vector<fasta::SequenceList>& alignment,
     size_t seq_number, int position, const std::string& side,
-    const sbst::SimilarityScoresMap* sim_scores) {
+    const sbst::SimilarityScoresMap* sim_scores, double domain_modifier,
+    double motif_modifier, double ptm_modifier) {
   double pre_score = 0;
-  char res1 = alignment[0][seq_number].residues[position].codon[0];
-  int index = (std::find(sbst::ALPHABET.begin(), sbst::ALPHABET.end(), res1)
+  fasta::Residue res1 = alignment[0][seq_number].residues[position];
+  char aa1 = res1.codon[0];
+  int index = (std::find(sbst::ALPHABET.begin(), sbst::ALPHABET.end(), aa1)
                - sbst::ALPHABET.begin());
 
   for (size_t i = 0; i < alignment[0].size(); ++i) {
-    char res2 = alignment[0][i].residues[position].codon[0];
-    if (i != seq_number && res2 != '-'
-        && sim_scores->find(res2) != sim_scores->end()) {
-      pre_score += sim_scores->at(res2)[index];
+    fasta::Residue res2 = alignment[0][i].residues[position];
+    if (i != seq_number && res2.codon[0] != '-') {
+      pre_score += get_two_res_score(res1, res2, index, sim_scores,
+                                     domain_modifier, motif_modifier,
+                                     ptm_modifier);
     }
   }
 
@@ -151,10 +169,11 @@ optimizer::MoveData optimizer::single_move_score(
   if (position2 != -1
       && (unsigned)position2 != alignment[0][seq_number].residues.size()) {
     for (size_t i = 0; i < alignment[0].size(); ++i) {
-      char res2 = alignment[0][i].residues[position2].codon[0];
-      if (i != seq_number && res2 != '-'
-          && sim_scores->find(res2) != sim_scores->end()) {
-        post_score += sim_scores->at(res2)[index];
+      fasta::Residue res2 = alignment[0][i].residues[position2];
+      if (i != seq_number && res2.codon[0] != '-') {
+        post_score += get_two_res_score(res1, res2, index, sim_scores,
+                                        domain_modifier, motif_modifier,
+                                        ptm_modifier);
       }
     }
   }

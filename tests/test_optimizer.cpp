@@ -44,16 +44,21 @@ BOOST_AUTO_TEST_CASE(test_single_move_score)
   size_t seq_no = 0;
   int position = 2;
   std::string side = "left";
+  double domain = 0;
+  double ptm = 0;
+  double motif = 0;
+
   optimizer::MoveData m = optimizer::single_move_score(alignment, seq_no,
                                                        position, side,
-                                                       sim_scores);
+                                                       sim_scores, domain,
+                                                       motif, ptm);
   BOOST_CHECK_EQUAL(m.score_gain, 5);
   seq_no = 2;
   position = 4;
   side = "right";
   m = optimizer::single_move_score(alignment, seq_no,
                                    position, side,
-                                   sim_scores);
+                                   sim_scores, domain, motif, ptm);
 
   BOOST_CHECK_EQUAL(m.score_gain, 5);
   alignment = {{fasta::make_sequence("AAE--", 1),
@@ -64,7 +69,7 @@ BOOST_AUTO_TEST_CASE(test_single_move_score)
   side = "left";
   m = optimizer::single_move_score(alignment, seq_no,
                                    position, side,
-                                   sim_scores);
+                                   sim_scores, domain, motif, ptm);
   BOOST_CHECK_EQUAL(m.score_gain, -5);
 
   alignment = {{fasta::make_sequence("E--AA", 1),
@@ -75,7 +80,7 @@ BOOST_AUTO_TEST_CASE(test_single_move_score)
   side = "right";
   m = optimizer::single_move_score(alignment, seq_no,
                                    position, side,
-                                   sim_scores);
+                                   sim_scores, domain, motif, ptm);
   BOOST_CHECK_EQUAL(m.score_gain, -5);
 }
 

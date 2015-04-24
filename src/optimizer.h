@@ -58,10 +58,19 @@ namespace optimizer {
   MoveData single_move_score(
       const std::vector<fasta::SequenceList>& alignment,
       size_t seq_number, int position, const std::string& side,
-      const sbst::SimilarityScoresMap* sim_scores);
+      const sbst::SimilarityScoresMap* sim_scores, double domain_modifier,
+      double motif_modifier, double ptm_modifier);
 
   int find_gap_end(const fasta::Sequence& seq, int start);
   int find_gap_start(const fasta::Sequence& seq, int start);
+
+
+  double get_two_res_score(fasta::Residue res1, fasta::Residue res2,
+                           int res1_index,
+                           const sbst::SimilarityScoresMap* sim_scores,
+                           double domain_modifier,
+                           double motif_modifier, 
+                           double ptm_modifier);
 }
 
 #endif /* OPTIMIZER_H */
