@@ -8,6 +8,14 @@
 
 namespace sbst = substitution_matrix;
 
+namespace {
+  std::map<char, double> ptm_level_map = {{'0', 1},
+                                          {'1', 0.9},
+                                          {'2', 0.8},
+                                          {'3', 0.7},
+                                          {'P', 0.3}};
+}
+
 
 std::vector<fasta::SequenceList> optimizer::optimize_alignment(
     const std::vector<fasta::SequenceList>& alignment,
@@ -47,11 +55,13 @@ std::vector<optimizer::MoveData> optimizer::calculate_move_scores(
           in_gap = true;
           side = "left";
           left = optimizer::single_move_score(alignment, i, j - 1, side,
-                                              sim_scores);
+                                              sim_scores, domain_modifier,
+                                              motif_modifier, ptm_modifier);
       } else if (in_gap && alignment[0][i].residues[j].codon[0] != '-') {
           side = "right";
           right = optimizer::single_move_score(alignment, i, j, side,
-                                               sim_scores);
+                                               sim_scores, domain_modifier,
+                                               motif_modifier, ptm_modifier);
           in_gap = false;
           optimizer::MoveData winner = (left.score_gain < right.score_gain) ? right : left;
           if (winner.score_gain > 0 ) {
@@ -120,20 +130,39 @@ std::vector<fasta::SequenceList> optimizer::move_residues(
 }
 
 
+double optimizer::get_two_res_score(fasta::Residue res1, fasta::Residue res2,
+  int res1_index, const sbst::SimilarityScoresMap* sim_scores,
+  double domain_modifier, double motif_modifier, double ptm_modifier)
+{ 
+  double result = 0;
+  char aa2 = res2.codon[0];
+  if (sim_scores->find(aa2) != sim_scores->end()) {
+    result += sim_scores->at(aa2)[res1_index];
+  }
+  result += optimizer::score_ptm(res1, res2, ptm_modifier);
+  result += optimizer::score_domain(res1, res2, domain_modifier);
+  result += optimizer::score_motif(res1, res2, motif_modifier);
+  return result;
+}
+
+
 optimizer::MoveData optimizer::single_move_score(
     const std::vector<fasta::SequenceList>& alignment,
     size_t seq_number, int position, const std::string& side,
-    const sbst::SimilarityScoresMap* sim_scores) {
+    const sbst::SimilarityScoresMap* sim_scores, double domain_modifier,
+    double motif_modifier, double ptm_modifier) {
   double pre_score = 0;
-  char res1 = alignment[0][seq_number].residues[position].codon[0];
-  int index = (std::find(sbst::ALPHABET.begin(), sbst::ALPHABET.end(), res1)
+  fasta::Residue res1 = alignment[0][seq_number].residues[position];
+  char aa1 = res1.codon[0];
+  int index = (std::find(sbst::ALPHABET.begin(), sbst::ALPHABET.end(), aa1)
                - sbst::ALPHABET.begin());
 
   for (size_t i = 0; i < alignment[0].size(); ++i) {
-    char res2 = alignment[0][i].residues[position].codon[0];
-    if (i != seq_number && res2 != '-'
-        && sim_scores->find(res2) != sim_scores->end()) {
-      pre_score += sim_scores->at(res2)[index];
+    fasta::Residue res2 = alignment[0][i].residues[position];
+    if (i != seq_number && res2.codon[0] != '-') {
+      pre_score += get_two_res_score(res1, res2, index, sim_scores,
+                                     domain_modifier, motif_modifier,
+                                     ptm_modifier);
     }
   }
 
@@ -151,10 +180,11 @@ optimizer::MoveData optimizer::single_move_score(
   if (position2 != -1
       && (unsigned)position2 != alignment[0][seq_number].residues.size()) {
     for (size_t i = 0; i < alignment[0].size(); ++i) {
-      char res2 = alignment[0][i].residues[position2].codon[0];
-      if (i != seq_number && res2 != '-'
-          && sim_scores->find(res2) != sim_scores->end()) {
-        post_score += sim_scores->at(res2)[index];
+      fasta::Residue res2 = alignment[0][i].residues[position2];
+      if (i != seq_number && res2.codon[0] != '-') {
+        post_score += get_two_res_score(res1, res2, index, sim_scores,
+                                        domain_modifier, motif_modifier,
+                                        ptm_modifier);
       }
     }
   }
@@ -187,4 +217,102 @@ int optimizer::find_gap_start(const fasta::Sequence& seq, int gap_end) {
     }
   }
   return gap_start;
+}
+
+
+double optimizer::score_ptm(fasta::Residue res1, fasta::Residue res2,
+                            double ptm_modifier) {
+  double score = 0;
+  std::string ptm_name;
+  std::string ptm_type1;
+  std::string ptm_type2;
+  char ptm_level;
+  bool found1 = false;
+  bool found2 = false;
+  double multiplier1 = 0;
+  double multiplier2 = 0;
+  for (auto& f : res1.features) {
+    if (f.substr(0, 3) == "ptm") {
+      found1 = true; 
+      ptm_name = f;
+      ptm_level = ptm_name.substr(ptm_name.size() - 1, 1)[0];
+      multiplier1 = ptm_level_map[ptm_level];
+      ptm_type1 = ptm_name.substr(0, ptm_name.size() - 1);
+    } 
+  }
+  if (found1) {
+    for (auto& f : res2.features) {
+      if (f.substr(0, 3) == "ptm") {
+        found2 = true; 
+        ptm_name = f;
+        ptm_level = ptm_name.substr(ptm_name.size() - 1, 1)[0];
+        multiplier2 = ptm_level_map[ptm_level];
+        ptm_type2 = ptm_name.substr(0, ptm_name.size() - 1);
+      } 
+    }
+    if (found2 && ptm_type1 == ptm_type2) {
+      score = multiplier1 * multiplier2 * ptm_modifier;
+    }
+  }
+  return score;
+}
+
+
+double optimizer::score_motif(fasta::Residue res1, fasta::Residue res2,
+                              double motif_modifier) {
+  double score = 0;
+  std::string name1;
+  std::string name2;
+  bool found1 = false;
+  bool found2 = false;
+  for (auto& f : res1.features) {
+    if (f.substr(0, 5) == "motif") {
+      name1 = f;
+      found1 = true;
+    }
+  }
+  if (found1) {
+    for (auto& f : res2.features) {
+      if (f.substr(0, 5) == "motif") {
+        name2 = f;
+        found2 = true;
+      }
+    }
+    if (found2 && name1 == name2) {
+      score = motif_modifier;
+    }
+  }
+  return score;
+}
+
+
+double optimizer::score_domain(fasta::Residue res1, fasta::Residue res2,
+                               double domain_modifier) {
+  double score = 0;
+  std::string name1;
+  std::string name2;
+  bool found1 = false;
+  bool found2 = false;
+  for (auto& f : res1.features) {
+    if (f.substr(0, 6) == "domain") {
+      name1 = f;
+      found1 = true;
+    }
+  }
+  if (found1) {
+    for (auto& f : res2.features) {
+      if (f.substr(0, 6) == "domain") {
+        name2 = f;
+        found2 = true;
+      }
+    }
+    if (found2) {
+     if (name1 == name2) {
+      score = domain_modifier;
+     } else {
+      score = - domain_modifier;
+     }
+    }
+  }
+  return score;
 }

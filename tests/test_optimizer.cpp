@@ -44,16 +44,21 @@ BOOST_AUTO_TEST_CASE(test_single_move_score)
   size_t seq_no = 0;
   int position = 2;
   std::string side = "left";
+  double domain = 0;
+  double ptm = 0;
+  double motif = 0;
+
   optimizer::MoveData m = optimizer::single_move_score(alignment, seq_no,
                                                        position, side,
-                                                       sim_scores);
+                                                       sim_scores, domain,
+                                                       motif, ptm);
   BOOST_CHECK_EQUAL(m.score_gain, 5);
   seq_no = 2;
   position = 4;
   side = "right";
   m = optimizer::single_move_score(alignment, seq_no,
                                    position, side,
-                                   sim_scores);
+                                   sim_scores, domain, motif, ptm);
 
   BOOST_CHECK_EQUAL(m.score_gain, 5);
   alignment = {{fasta::make_sequence("AAE--", 1),
@@ -64,7 +69,7 @@ BOOST_AUTO_TEST_CASE(test_single_move_score)
   side = "left";
   m = optimizer::single_move_score(alignment, seq_no,
                                    position, side,
-                                   sim_scores);
+                                   sim_scores, domain, motif, ptm);
   BOOST_CHECK_EQUAL(m.score_gain, -5);
 
   alignment = {{fasta::make_sequence("E--AA", 1),
@@ -75,7 +80,7 @@ BOOST_AUTO_TEST_CASE(test_single_move_score)
   side = "right";
   m = optimizer::single_move_score(alignment, seq_no,
                                    position, side,
-                                   sim_scores);
+                                   sim_scores, domain, motif, ptm);
   BOOST_CHECK_EQUAL(m.score_gain, -5);
 }
 
@@ -190,6 +195,48 @@ BOOST_AUTO_TEST_CASE(test_optimize_alignment)
                                        "AA-EAA"};
   BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
                                 result.begin(), result.end());
+}
+
+BOOST_AUTO_TEST_CASE(test_score_ptm) {
+  fasta::Residue res1("A", {"ptm_phosph0"});
+  fasta::Residue res2("A", {"ptm_acet0"});
+  double ptm_modifier = 10;
+  BOOST_CHECK_EQUAL(optimizer::score_ptm(res1, res2, ptm_modifier), 0);
+  res1 = fasta::Residue("A", {"ptm_phosph0"});
+  res2 = fasta::Residue("A", {"ptm_phosph2"});
+  BOOST_CHECK_EQUAL(optimizer::score_ptm(res1, res2, ptm_modifier), 8);
+  res1 = fasta::Residue("A", {"ptm_phosph0"});
+  res2 = fasta::Residue("A", {});
+  BOOST_CHECK_EQUAL(optimizer::score_ptm(res1, res2, ptm_modifier), 0);
+}
+
+BOOST_AUTO_TEST_CASE(test_score_domain) {
+  fasta::Residue res1("A", {"domain_aa"});
+  fasta::Residue res2("A", {"domain_aa"});
+  double domain_modifier = 10;
+  BOOST_CHECK_EQUAL(optimizer::score_domain(res1, res2, domain_modifier),
+                    domain_modifier);
+  res1 = fasta::Residue("A", {"domain_aa"});
+  res2 = fasta::Residue("A", {"domain_ab"});
+  BOOST_CHECK_EQUAL(optimizer::score_domain(res1, res2, domain_modifier),
+                    - domain_modifier);
+  res1 = fasta::Residue("A", {"domain_aa"});
+  res2 = fasta::Residue("A", {});
+  BOOST_CHECK_EQUAL(optimizer::score_domain(res1, res2, domain_modifier), 0);
+}
+
+BOOST_AUTO_TEST_CASE(test_score_motif) {
+  fasta::Residue res1("A", {"motif_aa"});
+  fasta::Residue res2("A", {"motif_aa"});
+  double motif_modifier = 10;
+  BOOST_CHECK_EQUAL(optimizer::score_motif(res1, res2, motif_modifier),
+                    motif_modifier);
+  res1 = fasta::Residue("A", {"motif_aa"});
+  res2 = fasta::Residue("A", {"motif_ab"});
+  BOOST_CHECK_EQUAL(optimizer::score_motif(res1, res2, motif_modifier), 0);
+  res1 = fasta::Residue("A", {"motif_aa"});
+  res2 = fasta::Residue("A", {});
+  BOOST_CHECK_EQUAL(optimizer::score_motif(res1, res2, motif_modifier), 0);
 }
 
 
