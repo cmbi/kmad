@@ -15,6 +15,7 @@ namespace po = boost::program_options;
 
 
 int main(int argc, char *argv[]) {
+    clock_t begin = clock();
     int codon_length = 0;
     double ptm_modifier = 0;
     double domain_modifier = 0;
@@ -199,4 +200,7 @@ int main(int argc, char *argv[]) {
       feature_analysis::write_consensus_to_file(cons_seq,
                                                 out_cons_filename);
     }
+    clock_t end = clock();
+    double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+    std::cout << elapsed_secs << std::endl;
 }

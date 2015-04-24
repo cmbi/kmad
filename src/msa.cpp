@@ -94,12 +94,11 @@ std::vector<fasta::SequenceList> msa::run_msa(
         int counter = 0;
         std::vector<fasta::SequenceList> previous;
         while (!seq_data::compare_alignments(previous, alignment)
-                && counter < 6) {
+                && counter < 15) {
           previous = alignment;
           alignment = optimizer::optimize_alignment(alignment, domain_modifier,
               motif_modifier, ptm_modifier, sbst_mat);
           ++counter;
-          std::cout << "round" << std::endl;
         }
       }
       return alignment;

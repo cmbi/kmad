@@ -131,7 +131,8 @@ optimizer::MoveData optimizer::single_move_score(
 
   for (size_t i = 0; i < alignment[0].size(); ++i) {
     char res2 = alignment[0][i].residues[position].codon[0];
-    if (i != seq_number && res2 != '-') {
+    if (i != seq_number && res2 != '-'
+        && sim_scores->find(res2) != sim_scores->end()) {
       pre_score += sim_scores->at(res2)[index];
     }
   }
@@ -151,7 +152,8 @@ optimizer::MoveData optimizer::single_move_score(
       && (unsigned)position2 != alignment[0][seq_number].residues.size()) {
     for (size_t i = 0; i < alignment[0].size(); ++i) {
       char res2 = alignment[0][i].residues[position2].codon[0];
-      if (i != seq_number && res2 != '-') {
+      if (i != seq_number && res2 != '-'
+          && sim_scores->find(res2) != sim_scores->end()) {
         post_score += sim_scores->at(res2)[index];
       }
     }
