@@ -110,8 +110,9 @@ am__dirstamp = $(am__leading_dot)dirstamp
 am__objects_1 = src/compare_doubles.$(OBJEXT) src/fasta.$(OBJEXT) \
 	src/feature_analysis.$(OBJEXT) src/feature_scores.$(OBJEXT) \
 	src/f_config.$(OBJEXT) src/outfile.$(OBJEXT) \
-	src/profile.$(OBJEXT) src/scoring_matrix.$(OBJEXT) \
-	src/seq_data.$(OBJEXT) src/msa.$(OBJEXT)
+	src/optimizer.$(OBJEXT) src/profile.$(OBJEXT) \
+	src/scoring_matrix.$(OBJEXT) src/seq_data.$(OBJEXT) \
+	src/msa.$(OBJEXT)
 am_kmad_OBJECTS = $(am__objects_1) src/kmad.$(OBJEXT)
 kmad_OBJECTS = $(am_kmad_OBJECTS)
 am__DEPENDENCIES_1 =
@@ -122,7 +123,8 @@ kmad_DEPENDENCIES = $(am__DEPENDENCIES_2)
 am_test_kmad_OBJECTS = $(am__objects_1) \
 	tests/test_compare_doubles.$(OBJEXT) \
 	tests/test_config.$(OBJEXT) tests/test_fasta.$(OBJEXT) \
-	tests/test_seq_data.$(OBJEXT) tests/test_profile.$(OBJEXT) \
+	tests/test_seq_data.$(OBJEXT) tests/test_optimizer.$(OBJEXT) \
+	tests/test_profile.$(OBJEXT) \
 	tests/test_feature_analysis.$(OBJEXT) \
 	tests/test_feature_scores.$(OBJEXT) \
 	tests/test_scoring_matrix.$(OBJEXT) tests/test_msa.$(OBJEXT) \
@@ -324,6 +326,7 @@ shared_SOURCES = src/compare_doubles.cpp \
 									src/feature_scores.cpp \
 									src/f_config.cpp \
 									src/outfile.cpp \
+									src/optimizer.cpp \
 									src/profile.cpp \
 									src/scoring_matrix.cpp \
 									src/seq_data.cpp \
@@ -338,6 +341,7 @@ test_kmad_SOURCES = $(shared_SOURCES) \
 										tests/test_config.cpp \
 										tests/test_fasta.cpp \
 										tests/test_seq_data.cpp \
+										tests/test_optimizer.cpp \
 										tests/test_profile.cpp \
 										tests/test_feature_analysis.cpp \
 										tests/test_feature_scores.cpp \
@@ -468,6 +472,8 @@ src/f_config.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
 src/outfile.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
+src/optimizer.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
 src/profile.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
 src/scoring_matrix.$(OBJEXT): src/$(am__dirstamp) \
@@ -493,6 +499,8 @@ tests/test_config.$(OBJEXT): tests/$(am__dirstamp) \
 tests/test_fasta.$(OBJEXT): tests/$(am__dirstamp) \
 	tests/$(DEPDIR)/$(am__dirstamp)
 tests/test_seq_data.$(OBJEXT): tests/$(am__dirstamp) \
+	tests/$(DEPDIR)/$(am__dirstamp)
+tests/test_optimizer.$(OBJEXT): tests/$(am__dirstamp) \
 	tests/$(DEPDIR)/$(am__dirstamp)
 tests/test_profile.$(OBJEXT): tests/$(am__dirstamp) \
 	tests/$(DEPDIR)/$(am__dirstamp)
@@ -526,6 +534,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/feature_scores.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/kmad.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/msa.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/optimizer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/outfile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/profile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/scoring_matrix.Po@am__quote@
@@ -536,6 +545,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_feature_analysis.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_feature_scores.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_msa.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_optimizer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_outfile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_profile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_scoring_matrix.Po@am__quote@

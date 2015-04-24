@@ -13,6 +13,7 @@ shared_SOURCES	=	src/compare_doubles.cpp \
 									src/feature_scores.cpp \
 									src/f_config.cpp \
 									src/outfile.cpp \
+									src/optimizer.cpp \
 									src/profile.cpp \
 									src/scoring_matrix.cpp \
 									src/seq_data.cpp \
@@ -29,6 +30,7 @@ test_kmad_SOURCES = $(shared_SOURCES) \
 										tests/test_config.cpp \
 										tests/test_fasta.cpp \
 										tests/test_seq_data.cpp \
+										tests/test_optimizer.cpp \
 										tests/test_profile.cpp \
 										tests/test_feature_analysis.cpp \
 										tests/test_feature_scores.cpp \
