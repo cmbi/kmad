@@ -138,23 +138,27 @@ double optimizer::get_two_res_score(fasta::Residue res1, fasta::Residue res2,
   char aa2 = res2.codon[0];
   if (sim_scores->find(aa2) != sim_scores->end() && res1_index >= 0) {
     result += sim_scores->at(aa2)[res1_index];
-  } else if (aa2 == 'B' && res1_index >= 0) {
-    result += sim_scores->at('D')[res1_index] * 0.5
-              + sim_scores->at('N')[res1_index] * 0.5;
-  } else if (aa2 == 'Z' && res1_index >= 0) {
-    result += sim_scores->at('Q')[res1_index] * 0.5
-              + sim_scores->at('E')[res1_index] * 0.5;
-  } else if (aa2 == 'X' && res1_index >= 0) {
-    for (auto& a : sbst::ALPHABET) {
-      result += sim_scores->at(a)[res1_index];
-    }
-  } else if ((aa2 == 'B' && res2.codon[0] == 'Z')
-             || (aa2 == 'Z' && res2.codon[0] == 'B')) {
-      result += 0.25 * (sim_scores->at('N')[5] + sim_scores->at('N')[6]
-                        + sim_scores->at('D')[5] + sim_scores->at('D')[6]);
-  }
-  // TODO: aa2 == X && res1_index < 0
-  //       res1_index < 0 && aa2 is normal 
+  } 
+  // else if (aa2 == 'B' && res1_index >= 0) {
+  //   result += sim_scores->at('D')[res1_index] * 0.5
+  //             + sim_scores->at('N')[res1_index] * 0.5;
+  // } else if (aa2 == 'Z' && res1_index >= 0) {
+  //   result += sim_scores->at('Q')[res1_index] * 0.5
+  //             + sim_scores->at('E')[res1_index] * 0.5;
+  // } 
+  // else if ((aa2 == 'B' && res1.codon[0] == 'Z')
+  //            || (aa2 == 'Z' && res1.codon[0] == 'B')) {
+  //     result += 0.25 * (sim_scores->at('N')[5] + sim_scores->at('N')[6]
+  //                       + sim_scores->at('D')[5] + sim_scores->at('D')[6]);
+  // } else if (res1.codon[0] == 'Z'
+  //     && sim_scores->find(aa2) != sim_scores->end()) {
+  //   result += sim_scores->at(aa2)[5] * 0.5
+  //             + sim_scores->at(aa2)[6] * 0.5;
+  // } else if  (res1.codon[0] == 'B'
+  //     && sim_scores->find(aa2) != sim_scores->end()) {
+  //   result += sim_scores->at(aa2)[2] * 0.5
+  //             + sim_scores->at(aa2)[3] * 0.5;
+  // }
   result += optimizer::score_ptm(res1, res2, ptm_modifier);
   result += optimizer::score_domain(res1, res2, domain_modifier);
   result += optimizer::score_motif(res1, res2, motif_modifier);
