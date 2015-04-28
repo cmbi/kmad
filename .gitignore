@@ -21,7 +21,8 @@ Makefile
 .deps/
 .dirstamp
 
-# configure
+# automake
+configure
 config.status
 config.log
 autom4te.cache/
