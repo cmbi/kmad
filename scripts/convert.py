@@ -440,16 +440,17 @@ def convert_to_7chars(filename, outname, ELM_DB):
             seqI = seqI.rstrip("\n")
             seq_id = get_id(seqFASTA[i-1]).rstrip('\n')
             header = seqFASTA[i-1].rstrip('\n')
+            ungapped = re.sub('-', '', seqI)
             tmp_filename = tmp_fasta(seq_id, seqI)
             [pfam, domains] = run_pfam_scan(tmp_filename)
             predicted_phosph = run_netphos(tmp_filename)
             if os.path.exists(tmp_filename):        # pragma: no cover
                 os.remove(tmp_filename)
-            if check_id(seq_id, seqI):
+            if check_id(seq_id, ungapped):
                 # uniprot_txt = get_uniprot_txt(seq_id)
                 uniprot_results = find_ptm_sites(uniprot_data["seq_data"][seq_id]["features"])
                 # elms - slims coordinates, motifs_ids, probs - probabilities
-                [elm, motifs_ids, probs] = search_elm(seq_id, seqI,
+                [elm, motifs_ids, probs] = search_elm(seq_id, ungapped,
                                                       slims_all_classes,
                                                       uniprot_data["GO"])
                 motifsDictionary = add_elements_to_dict(motifs_ids,
