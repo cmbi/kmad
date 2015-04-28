@@ -207,6 +207,8 @@ optimizer::MoveData optimizer::single_move_score(
                                         ptm_modifier);
       }
     }
+  } else if (position2 == -1) {
+    post_score = -100;
   }
   optimizer::MoveData m(seq_number, position, position2,
                         post_score - pre_score);
