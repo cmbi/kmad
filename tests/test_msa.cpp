@@ -3,6 +3,7 @@
 #include "fasta.h"
 #include "f_config.h"
 #include "msa.h"
+#include "profile.h"
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/auto_unit_test.hpp>
@@ -58,10 +59,11 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
   std::vector<fasta::SequenceList> alignment;
   std::string sbst_mat = "BLOSUM";
   bool first_gapped = false;
+  bool optimize = false;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
                            ptm_modifier, codon_length, one_round, sbst_mat,
-                           first_gapped);
+                           first_gapped, optimize);
   fasta::Sequence e_s1;
   // AKLCAKL
   e_s1 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
@@ -139,10 +141,11 @@ BOOST_AUTO_TEST_CASE(test_run_msa_gapped_mode)
   std::vector<fasta::SequenceList> alignment;
   std::string sbst_mat = "BLOSUM";
   bool first_gapped = true;
+  bool optimize = false;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
                            ptm_modifier, codon_length, one_round, sbst_mat,
-                           first_gapped);
+                           first_gapped, optimize);
 
   BOOST_CHECK_EQUAL(alignment.size(), 2);
   BOOST_CHECK_EQUAL(alignment[0].size(), 3);
@@ -232,9 +235,15 @@ BOOST_AUTO_TEST_CASE(test_set_identities)
 
 BOOST_AUTO_TEST_CASE(test_calc_identity) {
   int codon_length = 7;
-  fasta::Sequence s1;
-  // AKLDDDDAKL
-  s1 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
+  fasta::Sequence dummy;
+  // -AAAAAAAAA
+  dummy = fasta::make_sequence("d", "-AAAAAAAAAAAAAAAAAAAA"
+                                 "AAAAAAAAAAAAAAAAAAAAA"
+                                 "AAAAAAAAAAAAAAAAAAAAA"
+                                 "AAAAAAA", codon_length);
+  fasta::Sequence query;
+  // KLDDDDAKL
+  query = fasta::make_sequence("d", "KAAAAAALAAAAAA"
                                  "DAAAAAADAAAAAADAAAAAA"
                                  "DAAAAAAAAAAAAAKAAAAAA"
                                  "LAAAAAA", codon_length);
@@ -244,8 +253,8 @@ BOOST_AUTO_TEST_CASE(test_calc_identity) {
                                  "NAAAAAA-AAAAAA-AAAAAA"
                                  "-AAAAAAAAAAAAAKAAAAAA"
                                  "LAAAAAA", codon_length);
-  double result_identity = msa::calc_identity(s1, s2);
-  double expected_identity = 0.6;
+  double result_identity = msa::calc_identity(dummy, s2, query);
+  double expected_identity = 0.5;
   BOOST_CHECK_EQUAL(result_identity, expected_identity);
 
 }
@@ -409,10 +418,11 @@ BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
   bool one_round = false;
   int codon_length = 7; 
   std::string sbst_mat = "BLOSUM";
+  bool optimize = false;
   auto alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                                 end_pen, domain_modifier, motif_modifier, 
                                 ptm_modifier, codon_length, one_round, sbst_mat,
-                                gapped);
+                                gapped, optimize);
   std::vector<std::string> expected = {"WFQIANWFQWFQLAN",
                                        "WFQLANWFQWF----",
                                        "WFQIANWFQWFQLAN",
@@ -430,7 +440,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                                 end_pen, domain_modifier, motif_modifier, 
                                 ptm_modifier, codon_length, one_round, sbst_mat,
-                                gapped);
+                                gapped, optimize);
   result.clear();
   for (auto& item : alignment) {
     for (auto& seq : item) {
@@ -443,6 +453,63 @@ BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
               "---------WFQLAn"};
   BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
                                 result.begin(), result.end());
+}
+
+BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
+  f_config::FeatureSettingsMap f_set;
+  fasta::SequenceList sequences;
+  sequences = {fasta::make_sequence("GDNGEEGEEE", 1),
+                fasta::make_sequence("GDNGEEGDQE", 1),
+                fasta::make_sequence("GDNGEEDGEEE", 1),
+                fasta::make_sequence("GDNGEEAEEA", 1),
+                fasta::make_sequence("GDNGEEAEAEEA", 1)};
+  int domain_modifier = 0;
+  int motif_modifier = 0;
+  int ptm_modifier = 0;
+  double gap_open_pen = -12;
+  double gap_ext_pen = -1;
+  double end_pen = -12;
+  int codon_length = 1;
+  bool one_round = false;
+  seq_data::SequenceData sequence_data;
+  FeatureNamesList feature_list;
+  std::map<std::string, double> probabilities;
+  std::string sbst_mat = "DISORDER";
+  bool first_gapped = true;
+  sequence_data.feature_list = feature_list;
+
+  std::vector<fasta::SequenceList> alignment;
+  sequence_data.sequences = sequences;
+  bool optimize = false;
+  alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
+                           end_pen, domain_modifier, motif_modifier, 
+                           ptm_modifier, codon_length, one_round, sbst_mat,
+                           first_gapped, optimize);
+
+
+  std::vector<std::string> result;
+  for (auto& seqlist : alignment) {
+    for (auto& seq : seqlist) {
+      result.push_back(fasta::make_string(seq));
+    }
+  }
+  std::vector<std::string> expected = {"GDNGEE--GEEE",
+                                       "GDNGEE--GDQE",
+                                       "GDNGEE-DGEEE",
+                                       "GDNGEE--AEEA", 
+                                       "GDNGEEAEAEEA", 
+                                       "GDNGEE--GEEE", 
+                                       "GDNGEE--GDQE", 
+                                       "GDNGEE-DGEEE", 
+                                       "GDNGEE--AEEA", 
+                                       "GDNGEEAEAEEA"};
+
+  //  std::cout << "SIAL_HUMAN test:" << std::endl;
+  //  for (auto& seq : result) {
+  //   std::cout << seq << std::endl;
+  //  }
+  BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                expected.begin(), expected.end());
 }
 
 

@@ -1,6 +1,7 @@
 #include "msa.h"
 
 #include "feature_scores.h"
+#include "optimizer.h"
 #include "profile.h"
 #include "scoring_matrix.h"
 
@@ -16,7 +17,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
     double end_pen, double domain_modifier,
     double motif_modifier, double ptm_modifier,
     int codon_length, bool one_round,
-    const std::string& sbst_mat, const bool first_gapped)
+    const std::string& sbst_mat, const bool first_gapped, const bool optimize)
 {
       FeatureScores f_profile(sequence_data.feature_list, domain_modifier,
                               ptm_modifier, motif_modifier,
@@ -33,6 +34,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
       identities = msa::set_identities(sequence_data, profile, f_profile,
                                        gap_open_pen, end_pen, 
                                        gap_ext_pen, codon_length);
+
      
       std::vector<fasta::SequenceList> alignment;
       int alignments_number = 0;
@@ -77,13 +79,28 @@ std::vector<fasta::SequenceList> msa::run_msa(
       }
       // set alignments number to 0 to align (again) 
       // all sequences to the profile
-      alignments_number = 0;
-      cutoff = 0;
-      alignment = perform_msa_round_ptr(sequence_data, profile,
-                                        f_profile, gap_open_pen, 
-                                        end_pen, gap_ext_pen, cutoff,
-                                        codon_length, identities,
-                                        alignments_number, f_set, alignment);
+      for (int i = 0; i < 2; ++i) {
+        alignments_number = 0;
+        cutoff = 0;
+        alignment = perform_msa_round_ptr(sequence_data, profile,
+                                          f_profile, gap_open_pen, 
+                                          end_pen, gap_ext_pen, cutoff,
+                                          codon_length, identities,
+                                          alignments_number, f_set, alignment);
+        f_profile.update_scores(alignment[0], f_set);
+        profile = profile::create_score_profile(alignment[0], sbst_mat);
+      }
+      if (optimize) {
+        int counter = 0;
+        std::vector<fasta::SequenceList> previous;
+        while (!seq_data::compare_alignments(previous, alignment)
+                && counter < 15) {
+          previous = alignment;
+          alignment = optimizer::optimize_alignment(alignment, domain_modifier,
+              motif_modifier, ptm_modifier, sbst_mat);
+          ++counter;
+        }
+      }
       return alignment;
 }
 
@@ -169,35 +186,43 @@ std::vector<double> msa::set_identities(
   fasta::Sequence aligned_seq_uppercase; 
   //pairwise alignment with lowercase characters where chars were removed
   fasta::Sequence aligned_seq_with_lower; 
-  bool gapped = false;
+  bool gapped = true;
   for (size_t i = 1; i < sequence_data.sequences.size(); ++i) {
-    // aligned_sequence: vector, first element is the aligned sequence only
-    // with uppercase characters, second one is with lowercase where the gaps
+    // aligned_sequence: vector
+    // first element is a dummy polyA sequence to indicate where are the gaps
+    // in the profile,
+    // second one is with lowercase where the gaps
     // were cut out
     fasta::SequenceList aligned_sequence = msa::align_pairwise(
         sequence_data.sequences[i], profile,
         f_profile, gap_open_pen, end_pen, 
         gap_ext_pen, codon_length, gapped);
 
+
     double identity = msa::calc_identity(aligned_sequence[0],
+                                         aligned_sequence[1],
                                          sequence_data.sequences[0]);
     identities.push_back(identity);
   }
   return identities;
 }
 
-double msa::calc_identity(const fasta::Sequence& aligned_sequence,
+double msa::calc_identity(const fasta::Sequence& dummy_sequence,
+                          const fasta::Sequence& aligned_sequence,
                           const fasta::Sequence& query_sequence) {
   double identical_residues = 0;
+  int gap_count = 0;
   // sequences should be aligned (therefore lengths should be equal)
-  assert(aligned_sequence.residues.size() == query_sequence.residues.size());
+  assert(aligned_sequence.residues.size() == dummy_sequence.residues.size());
   for (unsigned i = 0; i < aligned_sequence.residues.size(); ++i) {
-    if (aligned_sequence.residues[i].codon[0] 
-        == query_sequence.residues[i].codon[0]) {
+    if (dummy_sequence.residues[i].codon[0] == '-') {
+      ++gap_count;
+    } else if (aligned_sequence.residues[i].codon[0] 
+        == query_sequence.residues[i - gap_count].codon[0]) {
       ++identical_residues;
-    }
+    } 
   }
-  return identical_residues / double(query_sequence.residues.size());
+  return identical_residues / double(dummy_sequence.residues.size());
 }
 
 
