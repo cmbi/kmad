@@ -81,7 +81,7 @@ BOOST_AUTO_TEST_CASE(test_single_move_score)
   m = optimizer::single_move_score(alignment, seq_no,
                                    position, side,
                                    sim_scores, domain, motif, ptm);
-  BOOST_CHECK_EQUAL(m.score_gain, -5);
+  BOOST_CHECK_EQUAL(m.score_gain, -105);
 }
 
 
