@@ -22,6 +22,9 @@ Makefile
 .dirstamp
 
 # automake
+config.h.in
+config.h
+config/
 configure
 config.status
 config.log
