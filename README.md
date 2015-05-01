@@ -1,8 +1,9 @@
 # Requirements
 To install the software you will need:
+ - g++ (>= 4.8)
  - automake (>= 2.68)
- - boost libraries (>= 1.2)
- - libconfig 
+ - boost libraries (>= 1.48)
+ - libconfig (>= 9) 
  - pip
 
 # Installation
