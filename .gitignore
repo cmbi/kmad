@@ -21,6 +21,7 @@ Makefile
 .deps/
 .dirstamp
 
+# automake
 # configure
 # config.status
 # config.log

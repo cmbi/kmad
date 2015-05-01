@@ -415,6 +415,16 @@ def elm_db(ELM_DB):
         slims_all_classes_pre = a.read()
     return process_slims_all_classes(slims_all_classes_pre.splitlines())
 
+def get_uniprot_data(fastafile):
+    result = dict({"seq_data": dict({}), "GO": set([])})
+    for i in fastafile:
+        if i.startswith('>'):
+            seq_id = get_id(i.rstrip('\n'))
+            seq_data = get_uniprot_txt(seq_id)
+            result["seq_data"][seq_id] = seq_data
+            result["GO"] = result["GO"].union(seq_data["GO"])
+    return result
+
 
 # MAIN
 def convert_to_7chars(filename, outname, ELM_DB):
@@ -424,24 +434,25 @@ def convert_to_7chars(filename, outname, ELM_DB):
     motifsDictionary = dict()
     motifProbsDict = dict()
     newfile = ""
+    uniprot_data = get_uniprot_data(seqFASTA)
     for i, seqI in enumerate(seqFASTA):
         if '>' not in seqI:
             seqI = seqI.rstrip("\n")
             seq_id = get_id(seqFASTA[i-1]).rstrip('\n')
             header = seqFASTA[i-1].rstrip('\n')
-
+            ungapped = re.sub('-', '', seqI)
             tmp_filename = tmp_fasta(seq_id, seqI)
             [pfam, domains] = run_pfam_scan(tmp_filename)
             predicted_phosph = run_netphos(tmp_filename)
             if os.path.exists(tmp_filename):        # pragma: no cover
                 os.remove(tmp_filename)
-            if check_id(seq_id, seqI):
-                uniprot_txt = get_uniprot_txt(seq_id)
-                uniprot_results = find_ptm_sites(uniprot_txt["features"])
+            if check_id(seq_id, ungapped):
+                # uniprot_txt = get_uniprot_txt(seq_id)
+                uniprot_results = find_ptm_sites(uniprot_data["seq_data"][seq_id]["features"])
                 # elms - slims coordinates, motifs_ids, probs - probabilities
-                [elm, motifs_ids, probs] = search_elm(seq_id, seqI,
+                [elm, motifs_ids, probs] = search_elm(seq_id, ungapped,
                                                       slims_all_classes,
-                                                      uniprot_txt["GO"])
+                                                      uniprot_data["GO"])
                 motifsDictionary = add_elements_to_dict(motifs_ids,
                                                         motifsDictionary,
                                                         'slims')

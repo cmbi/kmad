@@ -64,6 +64,7 @@ fasta::FastaData fasta::parse_fasta(std::string filename, int codon_length,
 
       std::string description = line;
       std::getline(fastafile, line);
+      line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
       fd.sequences.push_back(fasta::make_sequence(description, line,
                                                   codon_length));
     } else {
@@ -92,6 +93,7 @@ fasta::Sequence fasta::make_sequence(const std::string& description,
 {
   fasta::Sequence s;
   s.description = description;
+  
   for (unsigned i = 0; i < codons.size(); i += codon_length) {
     boost::regex re("[a-zA-Z0-9-]{" + std::to_string(codon_length) + "}");
     std::string codon = codons.substr(i, codon_length);

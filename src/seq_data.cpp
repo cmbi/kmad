@@ -131,3 +131,28 @@ int seq_data::find_real_pos(const std::string& sequence, int position) {
   }
   return i;
 }
+
+
+bool seq_data::compare_alignments(const std::vector<fasta::SequenceList>& al1,
+    const std::vector<fasta::SequenceList>& al2) {
+  bool result = true;
+  if (al1.size() != al2.size() || al1[0].size() != al2[0].size()) {
+    result = false;
+  }
+  std::vector<std::string> al1_strings;
+  std::vector<std::string> al2_strings;
+  for (auto& item : al1) {
+    for (auto& seq : item) {
+      al1_strings.push_back(fasta::make_string(seq));
+    }
+  }
+  for (auto& item : al2) {
+    for (auto& seq : item) {
+      al2_strings.push_back(fasta::make_string(seq));
+    }
+  }
+  if (al1_strings != al2_strings) {
+    result = false;
+  }
+  return result;
+}

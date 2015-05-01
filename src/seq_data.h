@@ -21,6 +21,9 @@ namespace seq_data {
                                  const std::string& pattern,
                                  const std::string& feat_name);
   int find_real_pos(const std::string& sequence, int position);
+
+  bool compare_alignments(const std::vector<fasta::SequenceList>& al1,
+      const std::vector<fasta::SequenceList>& al2);
 }
 
 #endif /* SEQDATA_H */
