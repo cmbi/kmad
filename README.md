@@ -1,7 +1,8 @@
 # Installation
 1. KMAD
-KMAD can be compiled and installed from the kman directory:
-  `./configure; make; sudo make install`
+KMAD can be compiled and installed from the kman directory (you will need
+the automake package to do this):
+  `autoreconf --install; ./configure; make; sudo make install`
 2. ELM update script (scripts/update_elm.py)
 To be able to use the script for updating the ELM database run:
    `pip install -r requirements.txt` 
