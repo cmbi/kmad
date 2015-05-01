@@ -390,7 +390,25 @@ test_kmad_SOURCES = $(shared_SOURCES) \
 										tests/test_feature_scores.cpp \
 										tests/test_scoring_matrix.cpp \
 										tests/test_msa.cpp \
-										tests/test_outfile.cpp 
+										tests/test_outfile.cpp
+
+EXTRA_DIST = tests/test_conf_file.cfg \
+						 tests/test_conffile_pattern.cfg \
+						 tests/test_conf_file_wrongformat.cfg \
+						 tests/test_conf_file_settingnotfound.cfg \
+						 tests/invalid_codon.fasta.7c \
+						 tests/TAU_SPECI.fasta.7c \
+						 tests/test_expected_feat.7c \
+						 tests/test_expected_nofeat.1c \
+						 tests/test_fasta_feat.7c \
+						 tests/test_fasta_nofeat.1c \
+						 tests/test_out_decoded.fasta_al \
+						 tests/test_out_encoded.fasta_al \
+						 tests/wrong_format.map \
+						 tests/wrong_format2.map \
+						 tests/wrong_format3.map \
+						 tests/wrong_probs_format.fasta.7c \
+						 tests/test.map
 
 test_kmad_LDADD = $(shared_LDADD)
 AM_CPPFLAGS = -std=c++11 \
