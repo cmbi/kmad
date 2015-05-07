@@ -196,7 +196,7 @@ def find_ptm_sites(features):
             "meth", "acetyl"]
     ptms_dict = {i: [[] for j in range(4)] for i in ptms}
     for i, lineI in enumerate(features):
-        if len(lineI.split()) > 3:
+        if len(lineI.split()) > 3 and lineI.split()[3].isdigit():
             ptm, ptm_found = get_ptm_type(lineI)
             if ptm_found:
                 if len(features) - i < 10:
