@@ -417,7 +417,7 @@ AM_CPPFLAGS = -std=c++11 \
 							-Werror \
 							-Wno-reorder \
 							$(BOOST_CPPFLAGS) \
-							-Isrc/
+							-I$(srcdir)src/
 
 AUTOMAKE_OPTIONS = foreign
 all: config.h
@@ -1007,7 +1007,7 @@ uninstall-am: uninstall-binPROGRAMS uninstall-includeHEADERS
 
 @HAVE_CPPCHECK_TRUE@cppcheck:
 @HAVE_CPPCHECK_TRUE@		$(CPPCHECK) --quiet --std=c++11 --enable=all \
-@HAVE_CPPCHECK_TRUE@								--suppress=missingIncludeSystem src
+@HAVE_CPPCHECK_TRUE@								--suppress=missingIncludeSystem $(srcdir)/src
 @HAVE_CPPCHECK_TRUE@check:	cppcheck
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

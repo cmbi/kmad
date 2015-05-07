@@ -326,6 +326,7 @@ def encode_domains(seq, domains, domain_codes):
 
 
 def encode_predicted_phosph(seq, pred_phosph):
+    # predictions are 1 based
     if pred_phosph:
         k = 0
         l = 0

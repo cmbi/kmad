@@ -82,13 +82,13 @@ AM_CPPFLAGS	=	-std=c++11 \
 							-Werror \
 							-Wno-reorder \
 							$(BOOST_CPPFLAGS) \
-							-Isrc/
+							-I$(srcdir)src/
 
 AUTOMAKE_OPTIONS = foreign
 
 if HAVE_CPPCHECK
 cppcheck:
 		$(CPPCHECK) --quiet --std=c++11 --enable=all \
-								--suppress=missingIncludeSystem src
+								--suppress=missingIncludeSystem $(srcdir)/src
 check:	cppcheck
 endif
