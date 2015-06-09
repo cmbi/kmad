@@ -58,7 +58,7 @@ def get_id(sequence):
     if len(sequence.split('|')) >= 3:
         return sequence.split('|')[2].split(' ')[0]
     else:
-        return 'UNKNOWN_ID'
+        return sequence.lstrip('>')
 
 
 # PFAM
