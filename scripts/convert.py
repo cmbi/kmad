@@ -235,7 +235,7 @@ def filter_out_overlapping(lims, ids, probs):
     return new_lims, new_ids, new_probs
 
 
-def search_elm(uniprotID, sequence, slims_all_classes, seq_go_terms):
+def get_annotated_motifs(uniprotID):
     limits = []
     elms_ids = []
     probabilities = []
@@ -253,7 +253,13 @@ def search_elm(uniprotID, sequence, slims_all_classes, seq_go_terms):
             limits.append([start, end])
             probabilities.append(1)
             elms_ids.append(elm_id)
-    # now get predicted motifs
+    return [limits, elms_ids, probabilities]
+
+
+def get_predicted_motifs(sequence, slims_all_classes, seq_go_terms):
+    limits = []
+    elms_ids = []
+    probabilities = []
     data = urllib.urlencode({'sequence': sequence})
     url = "http://elm.eu.org/start_search/"
     req = urllib2.Request(url, data)
@@ -276,11 +282,66 @@ def search_elm(uniprotID, sequence, slims_all_classes, seq_go_terms):
                             elms_ids.append(entry[0])
                             probabilities.append(prob)
             except KeyError:
-                print "Didn't find motif: {}.".format(slim_id) \
-                      + " You should update the ELM db"
+                print "Didn't find motif: {}".format(slim_id)
+    return [limits, elms_ids, probabilities]
+
+
+def search_elm(uniprotID, sequence, slims_all_classes, seq_go_terms):
+    annotated = get_annotated_motifs(uniprotID)
+    predicted = get_predicted_motifs(sequence, slims_all_classes, seq_go_terms)
+    limits = annotated[0] + predicted[0]
+    elms_ids = annotated[1] + predicted[1]
+    probabilities = annotated[2] + predicted[2]
+    # elms_ids.extend(predicted[1])
+    # probabilities.extend(predicted[2])
     limits, elms_ids, probabilities = filter_out_overlapping(limits,
                                                              elms_ids,
                                                              probabilities)
+    # limits = []
+    # elms_ids = []
+    # probabilities = []
+    # # get annotated motifs first
+    # req = urllib2.Request("http://elm.eu.org/elms/browse_instances.gff"
+    #                       "?q="+uniprotID)
+    # response = urllib2.urlopen(req)
+    # features = response.read().splitlines()
+
+    # for i in features:
+    #     if 'sequence_feature' in i:
+    #         start = int(i.split()[3])
+    #         end = int(i.split()[4])
+    #         elm_id = i.split()[8].split('=')[1]
+    #         limits.append([start, end])
+    #         probabilities.append(1)
+    #         elms_ids.append(elm_id)
+    # # now get predicted motifs
+    # data = urllib.urlencode({'sequence': sequence})
+    # url = "http://elm.eu.org/start_search/"
+    # req = urllib2.Request(url, data)
+    # response = urllib2.urlopen(req)
+    # features = response.read()
+    # features = features.splitlines()
+    # for line in features[1:]:
+    #     entry = line.split()
+    #     prob = 1
+    #     if entry:
+    #         slim_id = entry[0]
+    #         try:
+    #             slim_go_terms = slims_all_classes[slim_id]["GO"]
+    #             if set(seq_go_terms).intersection(set(slim_go_terms)):
+    #                 if entry[3] == "False":
+    #                     prob = 1 + 1/math.log(
+    #                         slims_all_classes[slim_id]["prob"], 10)
+    #                     if prob > 0:
+    #                         limits.append([int(entry[1]), int(entry[2])])
+    #                         elms_ids.append(entry[0])
+    #                         probabilities.append(prob)
+    #         except KeyError:
+    #             print "Didn't find motif: {}.".format(slim_id) \
+    #                   + " You should update the ELM db"
+    # limits, elms_ids, probabilities = filter_out_overlapping(limits,
+    #                                                          elms_ids,
+    #                                                          probabilities)
     return [limits, elms_ids, probabilities]
 
 
@@ -415,6 +476,7 @@ def elm_db(ELM_DB):
     with open(ELM_DB) as a:
         slims_all_classes_pre = a.read()
     return process_slims_all_classes(slims_all_classes_pre.splitlines())
+
 
 def get_uniprot_data(fastafile):
     result = dict({"seq_data": dict({}), "GO": set([])})
