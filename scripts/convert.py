@@ -69,33 +69,36 @@ def run_pfam_scan(filename):
         fastafile = re.sub('-', '', a.read())
     values = {'seq': fastafile, 'output': 'xml'}
     data = urllib.urlencode(values)
-    request = urllib2.Request('http://pfam.xfam.org/search/sequence', data)
-    reply = urllib2.urlopen(request).read()
-    pfam_server_error = False
     try:
-        tree = ET.fromstring(reply)
-    except ET.ParseError:
-        pfam_server_error = True
-    if not pfam_server_error:
-        result_url = tree[0][1].text
-        count = 0
-        finished = False
-        while count < 20 and not finished:
-            time.sleep(6)
-            try:
-                request = urllib2.Request(result_url)
-                result = urllib2.urlopen(request).read()
-                root = ET.fromstring(result)
-                if len(root[0]):
-                    for child in root[0][0][0][0]:
-                        for g in child:
-                            domain_accessions += [child.attrib['accession']]
-                            domain_coords += [[int(g.attrib['start']),
-                                               int(g.attrib['end'])]]
-                finished = True
-            except ET.ParseError:
-                pass
-            count += 1
+        request = urllib2.Request('http://pfam.xfam.org/search/sequence', data)
+        reply = urllib2.urlopen(request).read()
+        pfam_server_error = False
+        try:
+            tree = ET.fromstring(reply)
+        except ET.ParseError:
+            pfam_server_error = True
+        if not pfam_server_error:
+            result_url = tree[0][1].text
+            count = 0
+            finished = False
+            while count < 20 and not finished:
+                time.sleep(6)
+                try:
+                    request = urllib2.Request(result_url)
+                    result = urllib2.urlopen(request).read()
+                    root = ET.fromstring(result)
+                    if len(root[0]):
+                        for child in root[0][0][0][0]:
+                            for g in child:
+                                domain_accessions += [child.attrib['accession']]
+                                domain_coords += [[int(g.attrib['start']),
+                                                   int(g.attrib['end'])]]
+                    finished = True
+                except ET.ParseError:
+                    pass
+                count += 1
+    except urllib2.HTTPError:
+        print "pfam scan HTTPError"
     return [domain_coords, domain_accessions]
 
 
