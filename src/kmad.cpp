@@ -170,7 +170,8 @@ int main(int argc, char *argv[]) {
                                         f_set, gap_open_pen,
                                         gap_ext_pen, end_pen, domain_modifier, 
                                         motif_modifier, ptm_modifier, codon_length,
-                                        one_round, sbst_mat, first_gapped);
+                                        one_round, sbst_mat, first_gapped,
+                                        optimize);
     }
 
     // write alignment to file 
