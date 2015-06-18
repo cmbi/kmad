@@ -100,6 +100,15 @@ std::vector<fasta::SequenceList> msa::run_msa(
               motif_modifier, ptm_modifier, sbst_mat);
           ++counter;
         }
+        f_profile.update_scores(alignment[0], f_set);
+        profile = profile::create_score_profile(alignment[0], sbst_mat);
+        alignments_number = 0;
+        cutoff = 0;
+        alignment = perform_msa_round_ptr(sequence_data, profile,
+                                          f_profile, gap_open_pen, 
+                                          end_pen, gap_ext_pen, cutoff,
+                                          codon_length, identities,
+                                          alignments_number, f_set, alignment);
       }
       return alignment;
 }
@@ -113,7 +122,7 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
     double end_pen, double domain_modifier,
     double motif_modifier, double ptm_modifier,
     int codon_length, bool one_round,
-    const std::string& sbst_mat, const bool first_gapped)
+    const std::string& sbst_mat, const bool first_gapped, bool optimize)
 {
       FeatureScores f_profile(sequence_data_alignment.feature_list,
                               domain_modifier, ptm_modifier, motif_modifier,
@@ -170,6 +179,26 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
                                         end_pen, gap_ext_pen, cutoff,
                                         codon_length, identities,
                                         alignments_number, f_set, alignment);
+      if (optimize) {
+        int counter = 0;
+        std::vector<fasta::SequenceList> previous;
+        while (!seq_data::compare_alignments(previous, alignment)
+                && counter < 15) {
+          previous = alignment;
+          alignment = optimizer::optimize_alignment(alignment, domain_modifier,
+              motif_modifier, ptm_modifier, sbst_mat);
+          ++counter;
+        }
+        f_profile.update_scores(alignment[0], f_set);
+        profile = profile::create_score_profile(alignment[0], sbst_mat);
+        alignments_number = 0;
+        cutoff = 0;
+        alignment = perform_msa_round_ptr(sequence_data_plain, profile,
+                                          f_profile, gap_open_pen, 
+                                          end_pen, gap_ext_pen, cutoff,
+                                          codon_length, identities,
+                                          alignments_number, f_set, alignment);
+      }
       return alignment;
 }
 
