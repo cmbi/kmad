@@ -19,7 +19,7 @@ namespace msa {
       double domain_modifier, double motif_modifier,
       double phosph_modifier, int codon_length, bool one_round,
       const std::string& sbst_mat, const bool first_gapped,
-      const bool optimize);
+      const bool optimize, const bool fade_out);
   ///
   /// takes alignment (sequence_data) and refines it (two rounds)
   ///
@@ -32,7 +32,7 @@ namespace msa {
       double domain_modifier, double motif_modifier,
       double phosph_modifier, int codon_length, bool one_round,
       const std::string& sbst_mat, const bool first_gapped,
-      bool optimize);
+      const bool optimize, const bool fade_out);
 
   /// performs the first round of alignments, / all vs query seq (first
   /// calculates profile / based only on the query seq, then / aligns all

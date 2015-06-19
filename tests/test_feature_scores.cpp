@@ -94,7 +94,9 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
   f_config::FeatureSettingsMap s_map; 
   s_map = {{"USR_feature1", settings1},
            {"USR_feature2", settings2}};
-  f_profile.update_scores(sequences, s_map);
+  std::vector<double> identities(sequences.size(), 1.0);
+  bool fade_out = false;
+  f_profile.update_scores(sequences, s_map, identities, fade_out);
   std::map<std::string, Scores> p = f_profile.get_scores();
   std::map<std::string, Scores> expected_scores;
   expected_scores = {{"ptm_phosph0", {5.2, 8, 6, 4}},
@@ -148,7 +150,8 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
   r1_4 = fasta::Residue ("LAAAAAA", std::vector<std::string>({}));
   s1 = fasta::make_sequence({r1_1, r1_2, r1_3, r1_4});
   sequences = {s1};
-  BOOST_CHECK_THROW(f_profile.update_scores(sequences, s_map),
+  BOOST_CHECK_THROW(f_profile.update_scores(sequences, s_map, identities,
+                                            fade_out),
                     std::invalid_argument);
 
 }

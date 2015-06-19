@@ -60,10 +60,11 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
   std::string sbst_mat = "BLOSUM";
   bool first_gapped = false;
   bool optimize = false;
+  bool fade_out = false;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
                            ptm_modifier, codon_length, one_round, sbst_mat,
-                           first_gapped, optimize);
+                           first_gapped, optimize, fade_out);
   fasta::Sequence e_s1;
   // AKLCAKL
   e_s1 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
@@ -142,10 +143,11 @@ BOOST_AUTO_TEST_CASE(test_run_msa_gapped_mode)
   std::string sbst_mat = "BLOSUM";
   bool first_gapped = true;
   bool optimize = false;
+  bool fade_out = false;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
                            ptm_modifier, codon_length, one_round, sbst_mat,
-                           first_gapped, optimize);
+                           first_gapped, optimize, fade_out);
 
   BOOST_CHECK_EQUAL(alignment.size(), 2);
   BOOST_CHECK_EQUAL(alignment[0].size(), 3);
@@ -217,7 +219,9 @@ BOOST_AUTO_TEST_CASE(test_set_identities)
   std::string sbst_mat = "BLOSUM";
   profile::ProfileMap profile = profile::create_score_profile(
       query_seq_list, sbst_mat);
-  f_profile.update_scores(query_seq_list, f_set);
+  bool fade_out = false;
+  std::vector<double> identities(query_seq_list.size(), 1.0);
+  f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
   std::vector<double> result_identities = msa::set_identities(sequence_data,
                                                               profile,
                                                               f_profile,
@@ -419,10 +423,11 @@ BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
   int codon_length = 7; 
   std::string sbst_mat = "BLOSUM";
   bool optimize = false;
+  bool fade_out = false;
   auto alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                                 end_pen, domain_modifier, motif_modifier, 
                                 ptm_modifier, codon_length, one_round, sbst_mat,
-                                gapped, optimize);
+                                gapped, optimize, fade_out);
   std::vector<std::string> expected = {"WFQIANWFQWFQLAN",
                                        "WFQLANWFQWF----",
                                        "WFQIANWFQWFQLAN",
@@ -440,7 +445,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                                 end_pen, domain_modifier, motif_modifier, 
                                 ptm_modifier, codon_length, one_round, sbst_mat,
-                                gapped, optimize);
+                                gapped, optimize, fade_out);
   result.clear();
   for (auto& item : alignment) {
     for (auto& seq : item) {
@@ -481,10 +486,11 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
   std::vector<fasta::SequenceList> alignment;
   sequence_data.sequences = sequences;
   bool optimize = false;
+  bool fade_out = false;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
                            ptm_modifier, codon_length, one_round, sbst_mat,
-                           first_gapped, optimize);
+                           first_gapped, optimize, fade_out);
 
 
   std::vector<std::string> result;

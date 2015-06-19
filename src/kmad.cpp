@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
     bool one_round = false;
     bool first_gapped = false;
     bool refine = false;
+    bool fade_out = false;
     bool optimize = false;
     std::string filename;
     std::string output_prefix;
@@ -96,6 +97,10 @@ int main(int argc, char *argv[]) {
                                         ->implicit_value(true),
        "run alignment with optimizer"
        )
+      ("fade-out", po::value<bool>(&fade_out)->default_value(false)
+                                             ->implicit_value(true),
+       "fade out feature scores with sequence identity"
+       )
       ("conf",
        po::value<std::string>(&conf_file),
        "configure file");
@@ -160,7 +165,8 @@ int main(int argc, char *argv[]) {
                                f_set, gap_open_pen,
                                gap_ext_pen, end_pen, domain_modifier, 
                                motif_modifier, ptm_modifier, codon_length,
-                               one_round, sbst_mat, first_gapped, optimize);
+                               one_round, sbst_mat, first_gapped, optimize,
+                               fade_out);
     } else {
       bool gapped = true;
       seq_data::SequenceData sequence_data_alignment = seq_data::process_fasta_data(
@@ -171,7 +177,7 @@ int main(int argc, char *argv[]) {
                                         gap_ext_pen, end_pen, domain_modifier, 
                                         motif_modifier, ptm_modifier, codon_length,
                                         one_round, sbst_mat, first_gapped,
-                                        optimize);
+                                        optimize, fade_out);
     }
 
     // write alignment to file 
