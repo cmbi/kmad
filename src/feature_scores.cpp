@@ -17,8 +17,10 @@ FeatureScores::FeatureScores(std::vector<std::string> features,
 
 
 void FeatureScores::update_scores(const fasta::SequenceList& sequences, 
-    const f_config::FeatureSettingsMap& f_set) {
-  m_occurences = update_occurences(sequences);
+    const f_config::FeatureSettingsMap& f_set,
+    const std::vector<double>& identities,
+    const bool fade_out) {
+  m_occurences = update_occurences(sequences, identities, fade_out);
   // convert occurences to probabilities
   for (auto& occ: m_occurences) {
     size_t i = 0;
@@ -51,7 +53,8 @@ void FeatureScores::update_scores(const fasta::SequenceList& sequences,
 
 
 std::map<std::string, Occurences> FeatureScores::update_occurences(
-    const fasta::SequenceList& sequences) {
+    const fasta::SequenceList& sequences,
+    const std::vector<double>& identities, const bool fade_out) {
   std::map<std::string, Occurences> p;
   for (auto& f: m_features) {
     p[f] = std::vector<double>(sequences[0].residues.size(), 0);
