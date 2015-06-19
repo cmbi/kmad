@@ -63,7 +63,11 @@ std::map<std::string, Occurences> FeatureScores::update_occurences(
     for (size_t j = 0; j < sequences.size(); ++j) {
       for (auto& f : sequences[j].residues[i].features) {
         assert(p.find(f) != p.end());
-        p[f][i] += 1.0;
+        if (fade_out) {
+          p[f][i] += 0.5 * (1 + identities[j]);
+        } else {
+          p[f][i] += 1.0;
+        }
       }
     }
   }
