@@ -202,15 +202,15 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
               motif_modifier, ptm_modifier, sbst_mat);
           ++counter;
         }
-        f_profile.update_scores(alignment[0], f_set, identities, fade_out);
-        profile = profile::create_score_profile(alignment[0], sbst_mat);
-        alignments_number = 0;
-        cutoff = 0;
-        alignment = perform_msa_round_ptr(sequence_data_plain, profile,
-                                          f_profile, gap_open_pen, 
-                                          end_pen, gap_ext_pen, cutoff,
-                                          codon_length, identities,
-                                          alignments_number, f_set, alignment);
+        // f_profile.update_scores(alignment[0], f_set, identities, fade_out);
+        // profile = profile::create_score_profile(alignment[0], sbst_mat);
+        // alignments_number = 0;
+        // cutoff = 0;
+        // alignment = perform_msa_round_ptr(sequence_data_plain, profile,
+        //                                   f_profile, gap_open_pen, 
+        //                                   end_pen, gap_ext_pen, cutoff,
+        //                                   codon_length, identities,
+        //                                   alignments_number, f_set, alignment);
       }
       return alignment;
 }

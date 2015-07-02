@@ -101,3 +101,21 @@ positions - positions on which the feature is present:
             seq - sequence number (starting at 1); type = integer,
             pos - position numbers (starting at 1); type = list of integers;
             OBLIGATORY
+# Faster annotation
+In case you need to process large amounts of data, you might want to faster
+annotate your sequences. The process will be a little bit faster if you
+use your local copy of swissprot database.
+To be able to do that you need to:
+1. Download swissprot files:
+ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+ftp://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz
+2. Unpack them
+`gunzip filename`
+3. Process the files with scripts from the 'scripts' directory
+(OUT_FASTA_DIR and OUT_TXT_DIR are directories where you want the fasta and txt
+files to be located)
+`PATH_TO_KMAD/scripts/split_swiss_txt.py uniprot_sprot.dat OUT_FASTA_DIR`
+`PATH_TO_KMAD/scripts/split_swiss_fasta.py uniprot_sprot.fasta OUT_TXT_DIR`
+4. Specify the paths to these dirrectories when you run the convert.py script 
+`convert.py input output --swiss_fasta FASTA_DIR --swiss_txt TXT_DIR`
+

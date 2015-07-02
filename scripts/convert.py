@@ -117,35 +117,46 @@ def run_netphos(filename):
     return list(phosphorylations)
 
 
-def check_id(uniprot_id, seq):
+def check_id(uniprot_id, seq, swiss_fasta):
     result = False
-    req = urllib2.Request("http://www.uniprot.org/uniprot/"
-                          + uniprot_id + ".fasta")
-    try:
-        uni_seq = urllib2.urlopen(req).read()
-    except urllib2.HTTPError:
-        print "No entry with ID: {}".format(uniprot_id)
+    path = os.path.join(swiss_fasta, uniprot_id + '.fasta')
+    if os.path.exists(path):
+        with open(path) as a:
+            uni_seq = ''.join(a.read().splitlines()[1:])
     else:
-        uni_seq = ''.join(uni_seq.splitlines()[1:])
-        if uni_seq == seq:
-            result = True
+        req = urllib2.Request("http://www.uniprot.org/uniprot/"
+                              + uniprot_id + ".fasta")
+        try:
+            uni_seq = urllib2.urlopen(req).read()
+        except urllib2.HTTPError:
+            print "No entry with ID: {}".format(uniprot_id)
+        else:
+            uni_seq = ''.join(uni_seq.splitlines()[1:])
+    if uni_seq == seq:
+        result = True
     return result
 
 
-def get_uniprot_txt(uniprot_id):
+def get_uniprot_txt(uniprot_id, swiss_txt):
     features = []
     go_terms = []
-    try:
-        req = urllib2.Request("http://www.uniprot.org/uniprot/{}.txt".format(
-            uniprot_id))
-        uniprot_dat = urllib2.urlopen(req).read().splitlines()
-        for lineI in uniprot_dat:
-            if lineI.startswith('FT'):
-                features += [lineI]
-            elif lineI.startswith('DR   GO;'):
-                go_terms += [lineI.split(';')[1].split(':')[1]]
-    except:
-        print "Couldn't find a uniprot entry for id {}".format(uniprot_id)
+    path = os.path.join(swiss_txt,
+                        uniprot_id + '.txt')
+    if os.path.exists(path):
+        with open(path) as a:
+            uniprot_dat = a.read().splitlines()
+    else:
+        try:
+            req = urllib2.Request("http://www.uniprot.org/uniprot/{}.txt".format(
+                uniprot_id))
+            uniprot_dat = urllib2.urlopen(req).read().splitlines()
+        except urllib2.HTTPError:
+            print "Couldn't find a uniprot entry for id {}".format(uniprot_id)
+    for lineI in uniprot_dat:
+        if lineI.startswith('FT'):
+            features += [lineI]
+        elif lineI.startswith('DR   GO;'):
+            go_terms += [lineI.split(';')[1].split(':')[1]]
     return {"features": features, "GO": go_terms}
 
 
@@ -441,26 +452,26 @@ def elm_db(ELM_DB):
     return process_slims_all_classes(slims_all_classes_pre.splitlines())
 
 
-def get_uniprot_data(fastafile):
+def get_uniprot_data(fastafile, swiss_txt):
     result = dict({"seq_data": dict({}), "GO": set([])})
     for i in fastafile:
         if i.startswith('>'):
             seq_id = get_id(i.rstrip('\n'))
-            seq_data = get_uniprot_txt(seq_id)
+            seq_data = get_uniprot_txt(seq_id, swiss_txt)
             result["seq_data"][seq_id] = seq_data
             result["GO"] = result["GO"].union(seq_data["GO"])
     return result
 
 
 # MAIN
-def convert_to_7chars(filename, outname, ELM_DB):
+def convert_to_7chars(filename, outname, ELM_DB, swiss_fasta, swiss_txt):
     slims_all_classes = elm_db(ELM_DB)
     seqFASTA = read_fasta(filename)
     domainsDictionary = dict()
     motifsDictionary = dict()
     motifProbsDict = dict()
     newfile = ""
-    uniprot_data = get_uniprot_data(seqFASTA)
+    uniprot_data = get_uniprot_data(seqFASTA, swiss_txt)
     for i, seqI in enumerate(seqFASTA):
         if '>' not in seqI:
             seqI = seqI.rstrip("\n")
@@ -473,7 +484,7 @@ def convert_to_7chars(filename, outname, ELM_DB):
             predicted_phosph = run_netphos(tmp_filename)
             if os.path.exists(tmp_filename):        # pragma: no cover
                 os.remove(tmp_filename)
-            if check_id(seq_id, ungapped):
+            if check_id(seq_id, ungapped, swiss_fasta):
                 # uniprot_txt = get_uniprot_txt(seq_id)
                 uniprot_results = find_ptm_sites(uniprot_data["seq_data"][seq_id]["features"])
                 # elms - slims coordinates, motifs_ids, probs - probabilities
@@ -533,7 +544,9 @@ if __name__ == "__main__":
                                                  + ' compatible format')
     parser.add_argument('input_filename')
     parser.add_argument('output_filename')
-    parser.add_argument('elm_db', nargs='?', default=ELM_DB)
+    parser.add_argument('--elm_db', nargs='?', default=ELM_DB)
+    parser.add_argument('--swiss_fasta', nargs='?', default="dummy")
+    parser.add_argument('--swiss_txt', nargs='?', default="dummy")
     args = parser.parse_args()
     if not os.path.exists(args.elm_db):
         try:
@@ -542,4 +555,5 @@ if __name__ == "__main__":
         except Exception, err:
             log.exception(err)
             sys.exit(3)
-    convert_to_7chars(args.input_filename, args.output_filename, args.elm_db)
+    convert_to_7chars(args.input_filename, args.output_filename, args.elm_db,
+                      args.swiss_fasta, args.swiss_txt)
