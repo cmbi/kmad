@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import argparse
 import logging
+import httplib
 import math
 import os
 import re
@@ -120,6 +121,7 @@ def run_netphos(filename):
 def check_id(uniprot_id, seq, swiss_fasta):
     result = False
     path = os.path.join(swiss_fasta, uniprot_id + '.fasta')
+    uni_seq = ''
     if os.path.exists(path):
         with open(path) as a:
             uni_seq = ''.join(a.read().splitlines()[1:])
@@ -128,7 +130,7 @@ def check_id(uniprot_id, seq, swiss_fasta):
                               + uniprot_id + ".fasta")
         try:
             uni_seq = urllib2.urlopen(req).read()
-        except urllib2.HTTPError:
+        except urllib2.HTTPError and httplib.BadStatusLine:
             print "No entry with ID: {}".format(uniprot_id)
         else:
             uni_seq = ''.join(uni_seq.splitlines()[1:])
@@ -142,6 +144,7 @@ def get_uniprot_txt(uniprot_id, swiss_txt):
     go_terms = []
     path = os.path.join(swiss_txt,
                         uniprot_id + '.txt')
+    uniprot_dat = []
     if os.path.exists(path):
         with open(path) as a:
             uniprot_dat = a.read().splitlines()
@@ -150,7 +153,7 @@ def get_uniprot_txt(uniprot_id, swiss_txt):
             req = urllib2.Request("http://www.uniprot.org/uniprot/{}.txt".format(
                 uniprot_id))
             uniprot_dat = urllib2.urlopen(req).read().splitlines()
-        except urllib2.HTTPError:
+        except urllib2.HTTPError and httplib.BadStatusLine:
             print "Couldn't find a uniprot entry for id {}".format(uniprot_id)
     for lineI in uniprot_dat:
         if lineI.startswith('FT'):
@@ -269,7 +272,7 @@ def get_annotated_motifs(uniprotID):
                 limits.append([start, end])
                 probabilities.append(1)
                 elms_ids.append(elm_id)
-    except urllib2.HTTPError:
+    except urllib2.HTTPError and httplib.BadStatusLine:
         print "can't get annotated motifs for {}".format(uniprotID)
     return [limits, elms_ids, probabilities]
 
@@ -302,7 +305,7 @@ def get_predicted_motifs(sequence, slims_all_classes, seq_go_terms):
                                 probabilities.append(prob)
                 except KeyError:
                     print "Didn't find motif: {}".format(slim_id)
-    except urllib2.HTTPError:
+    except urllib2.HTTPError and httplib.BadStatusLine:
         print "can't get predicted motifs"
     return [limits, elms_ids, probabilities]
 
