@@ -80,7 +80,11 @@ std::vector<fasta::SequenceList> msa::run_msa(
       }
       // set alignments number to 0 to align (again) 
       // all sequences to the profile
-      for (int i = 0; i < 2; ++i) {
+      int iterations = 2;
+      if (one_round) {
+        iterations = 1;
+      }
+      for (int i = 0; i < iterations; ++i) {
         alignments_number = 0;
         cutoff = 0;
         alignment = perform_msa_round_ptr(sequence_data, profile,
