@@ -3,7 +3,7 @@ import argparse
 
 
 def split(input_name, output_dir):
-    with open(input) as a:
+    with open(input_name) as a:
         uni_dat = a.read().splitlines()
 
     for lineI in uni_dat:
