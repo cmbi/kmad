@@ -32,7 +32,7 @@ namespace msa {
       double domain_modifier, double motif_modifier,
       double phosph_modifier, int codon_length, bool one_round,
       const std::string& sbst_mat, const bool first_gapped,
-      const bool optimize, const bool fade_out);
+      const bool optimize, const bool fade_out, int refine_seq);
 
   /// performs the first round of alignments, / all vs query seq (first
   /// calculates profile / based only on the query seq, then / aligns all
@@ -48,6 +48,7 @@ namespace msa {
   ///
   std::vector<fasta::SequenceList> perform_msa_round_gapped(
       const seq_data::SequenceData& sequence_data,
+      const seq_data::SequenceData& sequence_data_alignment,
       const profile::ProfileMap& profile,
       const FeatureScores& f_profile,
       double gap_open_pen, double end_pen,
@@ -57,13 +58,14 @@ namespace msa {
       const std::vector<double>& identities,
       int& prev_alignments,
       const f_config::FeatureSettingsMap& f_set,
-      std::vector<fasta::SequenceList> previous_alignment);
+      std::vector<fasta::SequenceList> previous_alignment, int refine_seq);
 
   ///
   /// performs one round of MSA without gaps in the first sequence
   ///
   std::vector<fasta::SequenceList> perform_msa_round_ungapped(
       const seq_data::SequenceData& sequence_data,
+      const seq_data::SequenceData& sequence_data_alignment,
       const profile::ProfileMap& profile,
       const FeatureScores& f_profile,
       double gap_open_pen, double end_pen,
@@ -73,7 +75,7 @@ namespace msa {
       const std::vector<double>& identities,
       int& prev_alignments,
       const f_config::FeatureSettingsMap& f_set,
-      std::vector<fasta::SequenceList> previous_alignment);
+      std::vector<fasta::SequenceList> previous_alignment, int refine_seq);
 
   ///
   /// takes pairwise alignment, removes

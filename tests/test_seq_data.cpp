@@ -84,8 +84,9 @@ BOOST_AUTO_TEST_CASE(test_seq_data)
                                             "ptm_methyl1", "ptm_methyl2",
                                             "ptm_methyl3", "ptm_Oglyc0",
                                             "ptm_Oglyc1", "ptm_Oglyc2",
-                                            "ptm_Oglyc3", "motif_aa",
-                                            "USR_feature1", "domain_aa"}; 
+                                            "ptm_Oglyc3", "ptm_cys_bridge0",
+                                            "motif_aa", "USR_feature1",
+                                            "domain_aa"}; 
 
   bool gapped = true;
   seq_data::SequenceData test_result = seq_data::process_fasta_data(test_data,

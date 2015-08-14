@@ -17,6 +17,7 @@ namespace po = boost::program_options;
 int main(int argc, char *argv[]) {
     clock_t begin = clock();
     int codon_length = 0;
+    int refine_seq = 0;
     double ptm_modifier = 0;
     double domain_modifier = 0;
     double motif_modifier = 0;
@@ -93,6 +94,8 @@ int main(int argc, char *argv[]) {
                                          ->implicit_value(true),
        "take alignment as input and refine it"
       )
+      ("refine_seq", po::value<int>(&refine_seq)->default_value(0)
+       )
       ("opt", po::value<bool>(&optimize)->default_value(false)
                                         ->implicit_value(true),
        "run alignment with optimizer"
@@ -149,7 +152,8 @@ int main(int argc, char *argv[]) {
 
     fasta::FastaData fasta_data;
     try {
-      fasta_data = fasta::parse_fasta(filename, codon_length, refine);
+      fasta_data = fasta::parse_fasta(filename, codon_length, refine,
+          refine_seq);
     } catch(const std::exception& e) {
       std::cerr << "Error: " << e.what() << std::endl;
       std::exit(EXIT_FAILURE);
@@ -171,13 +175,16 @@ int main(int argc, char *argv[]) {
       bool gapped = true;
       seq_data::SequenceData sequence_data_alignment = seq_data::process_fasta_data(
           fasta_data, f_set, gapped);
+      if (refine_seq == 0) {
+        refine_seq = fasta_data.sequences.size();
+      }
       alignment = msa::refine_alignment(sequence_data_plain, 
                                         sequence_data_alignment,
                                         f_set, gap_open_pen,
                                         gap_ext_pen, end_pen, domain_modifier, 
                                         motif_modifier, ptm_modifier, codon_length,
                                         one_round, sbst_mat, first_gapped,
-                                        optimize, fade_out);
+                                        optimize, fade_out, refine_seq);
     }
 
     // write alignment to file 

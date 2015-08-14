@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
                                    "ptm_methyl1", "ptm_methyl2",
                                    "ptm_methyl3", "ptm_Oglyc0",
                                    "ptm_Oglyc1", "ptm_Oglyc2",
-                                   "ptm_Oglyc3"}; 
+                                   "ptm_Oglyc3", "ptm_cys_bridge0"}; 
   std::map<std::string, double> probabilities;
   f_config::FeatureSettingsMap f_set;
   fasta::SequenceList sequences = {s1, s2};
@@ -198,7 +198,7 @@ BOOST_AUTO_TEST_CASE(test_set_identities)
                                    "ptm_methyl1", "ptm_methyl2",
                                    "ptm_methyl3", "ptm_Oglyc0",
                                    "ptm_Oglyc1", "ptm_Oglyc2",
-                                   "ptm_Oglyc3"}; 
+                                   "ptm_Oglyc3", "ptm_cys_bridge0"}; 
   f_config::FeatureSettingsMap f_set;
   double gap_open_pen = -5;
   double gap_ext_pen = -1;
@@ -516,6 +516,74 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
   //  }
   BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
                                 expected.begin(), expected.end());
+}
+
+
+BOOST_AUTO_TEST_CASE(test_run_secondary_structure) {
+  f_config::FeatureSettingsMap f_set;
+  fasta::SequenceList sequences;
+  sequences = {fasta::make_sequence("CAAAsAATAAAAAACAAAAAAWAAAAAA", 7),
+               fasta::make_sequence("CAAAsAAWAAAAAA", 7)};
+  int domain_modifier = 0;
+  int motif_modifier = 0;
+  int ptm_modifier = 50;
+  double gap_open_pen = -12;
+  double gap_ext_pen = -1;
+  double end_pen = -12;
+  int codon_length = 7;
+  bool one_round = false;
+  seq_data::SequenceData sequence_data;
+  FeatureNamesList feature_list = {"ptm_phosph0", "ptm_phosph1",
+                                   "ptm_phosph2", "ptm_phosph3",
+                                   "ptm_phosphP", "ptm_acet0",
+                                   "ptm_acet1", "ptm_acet2",
+                                   "ptm_acet3", "ptm_Nglyc0",
+                                   "ptm_Nglyc1", "ptm_Nglyc2",
+                                   "ptm_Nglyc3", "ptm_amid0",
+                                   "ptm_amid1", "ptm_amid2",
+                                   "ptm_amid3", "ptm_hydroxy0",
+                                   "ptm_hydroxy1", "ptm_hydroxy2",
+                                   "ptm_hydroxy3", "ptm_methyl0",
+                                   "ptm_methyl1", "ptm_methyl2",
+                                   "ptm_methyl3", "ptm_Oglyc0",
+                                   "ptm_Oglyc1", "ptm_Oglyc2",
+                                   "ptm_Oglyc3", "ptm_cys_bridge0"}; 
+  std::map<std::string, double> probabilities;
+  std::string sbst_mat = "DISORDER";
+  bool first_gapped = true;
+  sequence_data.feature_list = feature_list;
+
+  std::vector<fasta::SequenceList> alignment;
+  sequence_data.sequences = sequences;
+  bool optimize = false;
+  bool fade_out = false;
+  alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
+                           end_pen, domain_modifier, motif_modifier, 
+                           ptm_modifier, codon_length, one_round, sbst_mat,
+                           first_gapped, optimize, fade_out);
+
+
+  std::vector<std::string> result;
+  for (auto& seqlist : alignment) {
+    for (auto& seq : seqlist) {
+      result.push_back(fasta::make_string(seq));
+      std::cout << fasta::make_string(seq) << std::endl;
+    }
+  }
+  // std::vector<std::string> expected = {"GDNGEE--GEEE",
+  //                                      "GDNGEEAEAEEA", 
+  //                                      "GDNGEE--GEEE", 
+  //                                      "GDNGEE--GDQE", 
+  //                                      "GDNGEE-DGEEE", 
+  //                                      "GDNGEE--AEEA", 
+  //                                      "GDNGEEAEAEEA"};
+
+  //  std::cout << "SIAL_HUMAN test:" << std::endl;
+  //  for (auto& seq : result) {
+  //   std::cout << seq << std::endl;
+  //  }
+  // BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
+  //                               expected.begin(), expected.end());
 }
 
 

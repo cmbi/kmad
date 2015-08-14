@@ -38,12 +38,13 @@ namespace {
                                               {'a', "ptm_Oglyc1"},
                                               {'b', "ptm_Oglyc2"},
                                               {'c', "ptm_Oglyc3"},
-                                              {'d', "ptm_phosphP"}};
+                                              {'d', "ptm_phosphP"},
+                                              {'s', "ptm_cys_bridge0"}};
 }
 
 
 fasta::FastaData fasta::parse_fasta(std::string filename, int codon_length,
-    bool refine) {
+    bool refine, int refine_seq) {
   fs::path p(filename);
   if (!fs::exists(p)) {
     throw std::invalid_argument("File not found: " + filename);
@@ -78,7 +79,7 @@ fasta::FastaData fasta::parse_fasta(std::string filename, int codon_length,
     }
   }
   fastafile.close();
-  if (refine && !check_length(fd.sequences)) {
+  if (refine && !check_length(fd.sequences, refine_seq)) {
         throw std::runtime_error("In the 'refine' mode all sequences should "
                                  "have the same length");
   }
@@ -156,11 +157,14 @@ fasta::Residue fasta::make_residue(const std::string& codon) {
   return Residue(codon, features);
 }
 
-bool fasta::check_length(fasta::SequenceList sequences) {
+bool fasta::check_length(fasta::SequenceList sequences, int refine_seq) {
+  if (refine_seq == 0) {
+    refine_seq = sequences.size();
+  }
   bool result = true;
   size_t prev_length = sequences[0].residues.size();
-  size_t i = 1;
-  while (result && i < sequences.size()){
+  int i = 1;
+  while (result && i < refine_seq){
     size_t length = sequences[i].residues.size();
     if (length != prev_length) {
       result = false; 

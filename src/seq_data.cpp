@@ -60,7 +60,7 @@ FeatureNamesList seq_data::make_feature_list(
                                    "ptm_methyl1", "ptm_methyl2",
                                    "ptm_methyl3", "ptm_Oglyc0",
                                    "ptm_Oglyc1", "ptm_Oglyc2",
-                                   "ptm_Oglyc3"}; 
+                                   "ptm_Oglyc3", "ptm_cys_bridge0"}; 
   for (auto& seq : sequences) {
     for (auto& res : seq.residues) {
       for (auto& feat_name : res.features) {
