@@ -29,7 +29,9 @@ std::vector<fasta::SequenceList> msa::run_msa(
       profile::ProfileMap profile = profile::create_score_profile(
           query_seq_list, sbst_mat);
       std::vector<double> identities = {1};
-      f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
+      if (!no_feat) {
+        f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
+      }
 
       // Align all sequences vs first to determine the identities
       identities = msa::set_identities(sequence_data, profile, f_profile,
@@ -100,10 +102,10 @@ std::vector<fasta::SequenceList> msa::run_msa(
                                           codon_length, identities,
                                           alignments_number, f_set,
                                           alignment, 0, no_feat);
-        f_profile.update_scores(alignment[0], f_set, identities, fade_out);
         if (!no_feat) {
-          profile = profile::create_score_profile(alignment[0], sbst_mat);
+          f_profile.update_scores(alignment[0], f_set, identities, fade_out);
         }
+        profile = profile::create_score_profile(alignment[0], sbst_mat);
       }
       if (optimize) {
         int counter = 0;
@@ -156,7 +158,6 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
       identities = msa::set_identities(sequence_data_plain, profile_single,
                                        f_profile_single, gap_open_pen, end_pen, 
                                        gap_ext_pen, codon_length, no_feat);
-
       FeatureScores f_profile(sequence_data_alignment.feature_list,
                               domain_modifier, ptm_modifier, motif_modifier,
                               sequence_data_alignment.probabilities);
@@ -169,7 +170,9 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
       // fasta::SequenceList query_seq_list = sequence_data_alignment.sequences;
       profile::ProfileMap profile = profile::create_score_profile(
           query_seq_list, sbst_mat);
-      f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
+      if (!no_feat) {
+        f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
+      }
 
       // Align all sequences vs first to determine the identities
 
