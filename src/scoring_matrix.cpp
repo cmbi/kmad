@@ -7,12 +7,14 @@
 
 
 ScoringMatrix::ScoringMatrix(int s1_size,int s2_size, double pen,
-                             double end_pen, double gap_ext_pen)
+                             double end_pen, double gap_ext_pen,
+                             const bool no_feat)
 : m_i_length(s1_size),
   m_j_length(s2_size),
   m_gap_opening(pen),
   m_gap_extension(gap_ext_pen),
-  m_end_pen(end_pen)
+  m_end_pen(end_pen),
+  m_no_feat(no_feat)
 {
   //creates a row for the scoring matrices of length m_j_length
   //(length of the jth sequence + 1)
@@ -52,8 +54,10 @@ void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
       double profile_score = profile::get_score(profile, i - 1,
           sequence.residues[j - 1].codon[0]);
       double feature_score = 0;
-      for (auto& feat_name : sequence.residues[j - 1].features) {
-        feature_score += f_profile.get_score(feat_name, i - 1); 
+      if (!m_no_feat) {
+        for (auto& feat_name : sequence.residues[j - 1].features) {
+          feature_score += f_profile.get_score(feat_name, i - 1); 
+        }
       }
 
       score1 = m_matrix_v[i-1][j-1];
@@ -168,8 +172,10 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
       double profile_score = profile::get_score(profile, i - 1,
           sequence.residues[j - 1].codon[0]);
       double feature_score = 0;
-      for (auto& feat_name : sequence.residues[j - 1].features) {
-        feature_score += f_profile.get_score(feat_name, i - 1); 
+      if (!m_no_feat) {
+        for (auto& feat_name : sequence.residues[j - 1].features) {
+          feature_score += f_profile.get_score(feat_name, i - 1); 
+        }
       }
       double final_score = profile_score + feature_score;
       if (m_matrix_v[i][j] != m_matrix_v[i-1][j-1] + final_score) {

@@ -15,7 +15,6 @@ namespace po = boost::program_options;
 
 
 int main(int argc, char *argv[]) {
-    clock_t begin = clock();
     int codon_length = 0;
     int refine_seq = 0;
     double ptm_modifier = 0;
@@ -30,6 +29,7 @@ int main(int argc, char *argv[]) {
     bool refine = false;
     bool fade_out = false;
     bool optimize = false;
+    bool no_feat = false;
     std::string filename;
     std::string output_prefix;
     std::string conf_file;
@@ -89,6 +89,10 @@ int main(int argc, char *argv[]) {
       ("gapped", po::value<bool>(&first_gapped)->default_value(false)
                                                ->implicit_value(true),
        "'first sequence with gaps' mode"
+       )
+      ("no-feat", po::value<bool>(&no_feat)->default_value(false)
+                                           ->implicit_value(true),
+       "align without features"
        )
       ("refine", po::value<bool>(&refine)->default_value(false)
                                          ->implicit_value(true),
@@ -170,7 +174,7 @@ int main(int argc, char *argv[]) {
                                gap_ext_pen, end_pen, domain_modifier, 
                                motif_modifier, ptm_modifier, codon_length,
                                one_round, sbst_mat, first_gapped, optimize,
-                               fade_out);
+                               fade_out, no_feat);
     } else {
       bool gapped = true;
       seq_data::SequenceData sequence_data_alignment = seq_data::process_fasta_data(
@@ -184,7 +188,7 @@ int main(int argc, char *argv[]) {
                                         gap_ext_pen, end_pen, domain_modifier, 
                                         motif_modifier, ptm_modifier, codon_length,
                                         one_round, sbst_mat, first_gapped,
-                                        optimize, fade_out, refine_seq);
+                                        optimize, fade_out, refine_seq, no_feat);
     }
 
     // write alignment to file 
@@ -214,7 +218,4 @@ int main(int argc, char *argv[]) {
       feature_analysis::write_consensus_to_file(cons_seq,
                                                 out_cons_filename);
     }
-    clock_t end = clock();
-    double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-    std::cout << elapsed_secs << std::endl;
 }

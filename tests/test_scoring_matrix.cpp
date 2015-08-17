@@ -40,8 +40,9 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
   double gap_open_pen = -5;
   double gap_ext_pen = -1;
   double end_pen = -1;
+  bool no_feat = false;
   ScoringMatrix scores(s1.residues.size(), s2.residues.size(), gap_open_pen,
-                       end_pen, gap_ext_pen);
+                       end_pen, gap_ext_pen, no_feat);
   scores.calculate_scores(s2, profile, f_profile, codon_length);
   SingleScoringMatrix matrix_V = scores.get_V_matrix();
   SingleScoringMatrix expected_V = {{0, -10000000, -10000000, -10000000,
@@ -66,7 +67,7 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
   profile = profile::create_score_profile(query_seq_list, sbst_mat);
   f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
   ScoringMatrix scores2(s2.residues.size(), s1.residues.size(), gap_open_pen,
-                        end_pen, gap_ext_pen);
+                        end_pen, gap_ext_pen, no_feat);
   scores2.calculate_scores(s1, profile, f_profile, codon_length);
   matrix_V = scores2.get_V_matrix();
 
@@ -106,6 +107,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   double gap_open_pen = -5;
   double gap_ext_pen = -1;
   double end_pen = -1;
+  const bool no_feat = false;
   fasta::Sequence e_s1;
   fasta::Sequence e_s2;
   e_s1 = fasta::make_sequence("d", "AAAAAAAAA", codon_length);
@@ -114,7 +116,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   profile::ProfileMap profile = profile::create_score_profile(query_seq_list,
                                                               sbst_mat);
   ScoringMatrix scores(s1.residues.size(), s2.residues.size(), gap_open_pen,
-                       end_pen, gap_ext_pen);
+                       end_pen, gap_ext_pen, no_feat);
   scores.calculate_scores(s2, profile, f_profile, codon_length);
   fasta::SequenceList result = scores.backtrace_alignment_path(s2, profile,
                                                                f_profile,
@@ -131,7 +133,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   e_s2 = fasta::make_sequence("d", "ASLKSLKPT", codon_length);
   profile = profile::create_score_profile(query_seq_list, sbst_mat);
   ScoringMatrix scores2(s2.residues.size(), s1.residues.size(), gap_open_pen,
-                        end_pen, gap_ext_pen);
+                        end_pen, gap_ext_pen, no_feat);
   scores2.calculate_scores(s1, profile, f_profile, codon_length);
   result = scores2.backtrace_alignment_path(s1, profile,
                                             f_profile,
@@ -151,7 +153,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
   profile = profile::create_score_profile(query_seq_list, sbst_mat);
   ScoringMatrix scores3(s1.residues.size(), s2.residues.size(), gap_open_pen,
-                        end_pen, gap_ext_pen);
+                        end_pen, gap_ext_pen, no_feat);
   scores3.calculate_scores(s2, profile, f_profile, codon_length);
   result = scores3.backtrace_alignment_path(s2, profile,
                                             f_profile,
@@ -166,7 +168,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
   profile = profile::create_score_profile(query_seq_list, sbst_mat);
   scores3 = ScoringMatrix(s2.residues.size(), s1.residues.size(), gap_open_pen,
-                          end_pen, gap_ext_pen);
+                         end_pen, gap_ext_pen, no_feat);
   scores3.calculate_scores(s1, profile, f_profile, codon_length);
   result = scores3.backtrace_alignment_path(s1, profile,
                                             f_profile,
@@ -203,8 +205,8 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
                             probabilities);
   f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
   profile = profile::create_score_profile(query_seq_list, sbst_mat);
-  scores3 = ScoringMatrix(s1.residues.size(), s2.residues.size(), gap_open_pen,
-                          end_pen, gap_ext_pen);
+  scores3 = ScoringMatrix(s2.residues.size(), s1.residues.size(), gap_open_pen,
+                         end_pen, gap_ext_pen, no_feat);
   scores3.calculate_scores(s2, profile, f_profile, codon_length);
   result = scores3.backtrace_alignment_path(s2, profile,
                                             f_profile,

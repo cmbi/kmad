@@ -45,6 +45,7 @@ void FeatureScores::update_scores(const fasta::SequenceList& sequences,
       } 
       else if (feat.substr(0,3) == "USR") {
         scores[feat][i] = score_usr_feature(i, feat, f_set.at(feat));
+
       }
     }
   }
@@ -153,8 +154,8 @@ double FeatureScores::score_motif(unsigned long position,
 
 
 double FeatureScores::score_usr_feature(unsigned long position,
-                                          std::string feat_name,
-                                          f_config::FeatureSettings settings) {
+                                         std::string feat_name,
+                                         f_config::FeatureSettings settings) {
   double result = 0;
   // features that add scores
   for (auto& feature : settings.add_features) {
