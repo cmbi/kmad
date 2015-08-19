@@ -194,7 +194,8 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
                   "ptm_methyl1", "ptm_methyl2",
                   "ptm_methyl3", "ptm_Oglyc0",
                   "ptm_Oglyc1", "ptm_Oglyc2",
-                  "ptm_Oglyc3", "motif_aa"};
+                  "ptm_Oglyc3", "ptm_cys_bridge0",
+                  "motif_aa"};
   s1 = fasta::make_sequence("d", "TAAAZAATAAAZAARAAAAAARAAAAAARAAAAAADAAAAAA"
                                  "DAAAAAARAAAAAARAAAAAA", codon_length);
   s2 = fasta::make_sequence("d", "RAAAZAARAAAAaaRAAAAAAWAAAAAAWAAAAAARAAAAAA"
@@ -205,9 +206,10 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
                             probabilities);
   f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
   profile = profile::create_score_profile(query_seq_list, sbst_mat);
-  scores3 = ScoringMatrix(s2.residues.size(), s1.residues.size(), gap_open_pen,
+  scores3 = ScoringMatrix(s1.residues.size(), s2.residues.size(), gap_open_pen,
                          end_pen, gap_ext_pen, no_feat);
-  scores3.calculate_scores(s2, profile, f_profile, codon_length);
+   scores3.calculate_scores(s2, profile, f_profile, codon_length);
+  
   result = scores3.backtrace_alignment_path(s2, profile,
                                             f_profile,
                                             codon_length);
@@ -223,5 +225,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   }
 
 }
+
+
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -28,7 +28,8 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
                                    "ptm_methyl1", "ptm_methyl2",
                                    "ptm_methyl3", "ptm_Oglyc0",
                                    "ptm_Oglyc1", "ptm_Oglyc2",
-                                   "ptm_Oglyc3", "motif_aa", 
+                                   "ptm_Oglyc3", "ptm_cys_bridge0",
+                                   "motif_aa", 
                                    "motif_ab", "motif_ac",
                                    "domain_aa", "domain_ac",
                                    "USR_feature1", "USR_feature2"};
@@ -128,6 +129,7 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
                      {"ptm_Oglyc1", {0, 0, 0, 0}},
                      {"ptm_Oglyc2", {0, 0, 0, 0}},
                      {"ptm_Oglyc3", {0, 0, 0, 0}},
+                     {"ptm_cys_bridge0", {0, 0, 0, 0}},
                      {"motif_aa", {1.8, 0, 0, 1.2}},
                      {"motif_ab", {0.3, 0, 0, 0}},
                      {"motif_ac", {0.48, 0, 0, 0}},
