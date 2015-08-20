@@ -56,6 +56,8 @@ PDB_BLAST = "/home/joanna/data/pdb_seqres.txt"
 PDB_DIR = "/mnt/cmbi4/pdb/flat"
 DSSP_DIR = "/home/joanna/data/dssp/"
 PDBFIND = "/mnt/cmbi4/pdbfinder/PDBFIND.TXT"
+SCRIPT_PATH = os.path.realpath(__file__)
+KMAD = '/'.join(SCRIPT_PATH.split('/')[:-2] + ['kmad'])
 
 
 log_file = "test.log"
@@ -135,7 +137,7 @@ def align(seq1, seq2):
     with tmp_file as f:
         f.write('\n'.join(['>1', seq1, '>2', seq2]))
     positions = {}
-    args = ['/home/joanna/Documents/kmad/kmad', '-i', tmp_file.name,
+    args = [KMAD, '-i', tmp_file.name,
             '-o', tmp_file.name,
             '-g', '-12', '-e', '-1.2', '-n', '-1.2', '-c', '1', '--gapped']
     try:
