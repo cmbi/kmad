@@ -136,7 +136,7 @@ fasta::Sequence fasta::make_sequence(
   }
   return s;
 }
-void fasta::extend_sequence(fasta::Sequence& seq,
+void extend_sequence(fasta::Sequence& seq,
                      const std::string sequence_string,
                      int codon_length) {
   fasta::Sequence tmp_seq = fasta::make_sequence(sequence_string,

@@ -26,16 +26,17 @@ seq_data::SequenceData seq_data::process_fasta_data(
           else {
             std::cout << "Warning: feature positions should be in range: 1 - "
                           << "sequence length, feature " << feat_it->first
-                          << " cannot be annotated at position " << pos + 1
-                          << " in sequence " << seq.seq_no + 1<< std::endl;
+                          << " cannot be annotated at position " << pos
+                          << " in sequence " << seq.seq_no << std::endl;
           }
         }
       }
       else {
         std::cout << "Warning: sequence numbers should be in range: 1 - "
-                      << "number of sequences, feature " << feat_it->first
+                      << "number of sequences (" << s.sequences.size()
+                      << "), feature " << feat_it->first
                       << " cannot be annotated in sequence "
-                      << seq.seq_no + 1 << std::endl;
+                      << seq.seq_no << std::endl;
       }
     }
   }

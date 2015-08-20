@@ -56,6 +56,8 @@ namespace fasta {
   Sequence make_sequence(unsigned long sequence_length,
                          const fasta::Residue residue);
   Sequence make_sequence(const std::string sequence_string, int codon_length);
+  void extend_sequence(Sequence& seq, const std::string sequence_string,
+                           int codon_length);
   ///
   /// converts a Sequence struct to a string
   ///
