@@ -37,6 +37,7 @@ fasta headers:
 
 '''
 import argparse
+import hjson
 import json
 import logging
 import modeller as m
@@ -505,6 +506,24 @@ def make_conf_dict(query_seq, eq_positions, al_score):
     return settings_dict
 
 
+def dict_to_cfg(data_dict):
+    data_h = hjson.dumps(data_dict)
+    text = re.sub('\}', '};', re.sub('\]', ');', re.sub('\[', '(', data_h)))
+    text = text[:-2].lstrip('{')
+    return text
+
+
+def write_conf_file2(query_seq, eq_positions, output_conf, al_score):
+    logging.debug(eq_positions)
+    data_dict = make_conf_dict(query_seq, eq_positions, al_score)
+    logging.debug(data_dict)
+    outtxt = dict_to_cfg(data_dict)
+    out = open(output_conf, 'w')
+    out.write(outtxt)
+    out.close()
+    # os.remove(tmp_name)
+
+
 def write_conf_file(query_seq, eq_positions, output_conf, al_score):
     logging.debug(eq_positions)
     data_dict = make_conf_dict(query_seq, eq_positions, al_score)
@@ -512,7 +531,6 @@ def write_conf_file(query_seq, eq_positions, output_conf, al_score):
     tmp_name = output_conf + 'tmp.json'
     with open(tmp_name, 'w') as outfile:
         json.dump(data_dict, outfile)
-    #     cat full_seq.cfg | jsonlibconfig --target libconfig > full_seq.libconf
     out = open(output_conf, 'w')
     subprocess.call(['jsonlibconfig', '--target', 'libconfig', '--file',
                      tmp_name], stdout=out)
@@ -533,7 +551,8 @@ def structure_alignment_conf(fasta, output_conf, al_score):
                 query_strct_data['positions_map'], strct_data['positions_map'],
                 strct_al)
             eq_positions[i / 2] = eq_seq1_seq2
-    write_conf_file(query_sequence, eq_positions, output_conf, al_score)
+    # write_conf_file(query_sequence, eq_positions, output_conf, al_score)
+    write_conf_file2(query_sequence, eq_positions, output_conf + '_test', al_score)
 
 
 def annotate(fasta_in, output_name, output_conf, al_score):
