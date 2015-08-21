@@ -285,27 +285,8 @@ def get_seq_from_pdb(pdb_id, chain_id):
             break
     return sequence
 
-#     sequence = ""
-#     try:
-#         pdb_path = '/mnt/cmbi4/pdb/flat/pdb' + pdb_id + '.ent'
-#         p = PDB.PDBParser()
-#         structure = p.get_structure('X', pdb_path)
-#         model = structure[0]
-#         chain = model[chain_id]
-#         print chain
-#         ppb = PDB.PPBuilder()
-#         for pp in ppb.build_peptides(chain):
-#             sequence = str(pp.get_sequence())
-#     except:
-#         print "sorry"
-#     return sequence
-
 
 def annotate_secondary_structure(fasta, output_name):
-    # if fasta.endswith('.7c'):
-    #     mode = '7c'
-    #     fasta_encoded = fasta[:]
-    #     fasta = decode(fasta)[:]
     strct_data = []
     for i in range(0, len(fasta), 2):
         entry_id = ""
@@ -333,10 +314,6 @@ def annotate_secondary_structure(fasta, output_name):
                 strct_elements = transfer_data_from_homologue(fasta[i + 1],
                                                               closest_sp)
         strct_data.append(strct_elements)
-    # if mode == '7c':
-    #     out_fasta = add_annotations(fasta_encoded, strct_data)
-    # elif mode == 'fasta':
-    #     out_fasta = encode(fasta, strct_data)
     out_fasta = encode(fasta, strct_data)
 
     out = open(output_name, 'w')
@@ -415,9 +392,9 @@ def mk_strct_al_modeller(strct_data1, strct_data2):
                     pos2 = get_real_position_al(alignment[3], i)
                     result[pos1] = pos2
     except:
-        print 'shit'
-    # sys.stdout.close()
-    # sys.stdout = _stdout
+        print 'Modeller failed'
+    sys.stdout.close()
+    sys.stdout = _stdout
     return result
 
 
@@ -546,13 +523,17 @@ def structure_alignment_conf(fasta, output_conf, al_score):
     for i in range(2, len(fasta)):
         if not fasta[i].startswith('>'):
             strct_data = get_structure_data(fasta[i], pdb_fastas)
-            strct_al = mk_strct_al_modeller(query_strct_data, strct_data)
-            eq_seq1_seq2 = find_equivalent_positions(
-                query_strct_data['positions_map'], strct_data['positions_map'],
-                strct_al)
+            eq_seq1_seq2 = {}
+            if strct_data['id']:
+                strct_al = mk_strct_al_modeller(query_strct_data, strct_data)
+                eq_seq1_seq2 = find_equivalent_positions(
+                    query_strct_data['positions_map'],
+                    strct_data['positions_map'],
+                    strct_al)
             eq_positions[i / 2] = eq_seq1_seq2
     # write_conf_file(query_sequence, eq_positions, output_conf, al_score)
-    write_conf_file2(query_sequence, eq_positions, output_conf + '_test', al_score)
+    write_conf_file2(query_sequence, eq_positions, output_conf + '_test',
+                     al_score)
 
 
 def annotate(fasta_in, output_name, output_conf, al_score):
