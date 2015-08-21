@@ -402,7 +402,7 @@ def mk_strct_al_modeller(strct_data1, strct_data2):
                                                              # if the tree is input
                            feature_weights=weights, # For a multiple sequence alignment only
                                                     # the first feature needs to be non-zero
-                           improve_alignment=True, fit=True, write_fit=write_fit,
+                           improve_alignment=True, fit=True, write_fit=False,
                            write_whole_pdb=whole, output='ALIGNMENT QUALITY')
         if r.qscorepct > 70:
             aln.write(file=tmp_file.name, alignment_format='FASTA')
