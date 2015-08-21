@@ -48,6 +48,7 @@ import subprocess
 import tempfile
 
 from Bio import PDB
+from jsonlibconfig import encoder
 
 
 SWISS_DAT = "/home/joanna/data/swissprot_dat/uniprot_dat/"
@@ -491,10 +492,10 @@ def dict_to_cfg(data_dict):
 
 
 def write_conf_file(query_seq, eq_positions, output_conf, al_score):
-    logging.debug(eq_positions)
     data_dict = make_conf_dict(query_seq, eq_positions, al_score)
-    logging.debug(data_dict)
-    outtxt = dict_to_cfg(data_dict)
+    # outtxt = dict_to_cfg(data_dict)
+    indent = 2
+    outtxt = encoder.dumps(data_dict, indent=indent)
     out = open(output_conf, 'w')
     out.write(outtxt)
     out.close()
