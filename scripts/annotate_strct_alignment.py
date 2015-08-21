@@ -38,7 +38,6 @@ fasta headers:
 '''
 import argparse
 import hjson
-import json
 import logging
 import modeller as m
 import os
@@ -47,7 +46,6 @@ import sys
 import subprocess
 import tempfile
 
-from Bio import PDB
 from jsonlibconfig import encoder
 
 
@@ -68,8 +66,50 @@ if os.path.exists(log_file):
 logging.basicConfig(filename=log_file, level=logging.DEBUG)
 
 
-def get_strct_from_dssp():
-    pass
+def parse_dssp(dssp, chain_id):
+    result = {"seq": "", "strct": {'G': [], 'E': [], 'B': [],
+                                   'I': [], 'T': [], 'H': [],
+                                   'S': [], 'C': []}}
+    in_strct_section = False
+    in_chain = False
+    counter = 0
+    for i in dssp:
+        if i.startswith("  #  RESIDUE AA "):
+            in_strct_section = True
+        elif in_strct_section:
+            if i.split()[2] == chain_id:
+                in_chain = True
+        if in_chain:
+            if i.split()[3].islower():
+                result['seq'] += 'C'
+                result['strct']['C'].append(counter)
+            else:
+                result['seq'] += i.split()[3]
+
+            if i.split()[4] in result['strct'].keys():
+                result['strct'][i.split()[4]].append(counter)
+            counter += 1
+    return result
+
+
+def get_strct_from_dssp(query_seq):
+    strct_elements = {'G': [], 'E': [], 'B': [], 'I': [], 'T': [], 'H': [],
+                      'S': [], 'C': []}
+    blast_result = run_blast(query_seq, PDB_BLAST)
+    if blast_result:
+        chain_id = blast_result[0].split(',')[1].split('_')[1].upper()
+        pdb_id = blast_result[0].split(',')[1].split('_')[0]
+        dssp_path = os.path.join(DSSP_DIR, pdb_id + '.dssp')
+        if os.path.exists(dssp_path):
+            with open(dssp_path) as a:
+                dssp = a.read().splitlines()
+            dssp_data = parse_dssp(dssp, chain_id)
+            equivalent_positions = align(query_seq, dssp_data['seq'])
+            for i in dssp_data['strct']:
+                for j in dssp_data['strct'][i]:
+                    if j in equivalent_positions.keys():
+                        strct_elements[i].append(equivalent_positions[j])
+    return strct_elements
 
 
 def run_blast(sequence, blastdb):
@@ -179,12 +219,6 @@ def transfer_data_from_homologue(sequence, closest_sp):
     return query_strct_elems
 
 
-# based on the dictionary strct_data (with lists of positions of certain 2ndary
-# strct elements) add new annotations to a 7c file
-def add_annotations():
-    pass
-
-
 def change_char(mystring, position, new_char):
     if position < len(mystring) - 1:
         new_string = mystring[:position] + new_char + mystring[position + 1:]
@@ -206,12 +240,9 @@ def encode(fasta, strct_data):
                 newline = ""
                 for j in range(len(lineI)):
                     codon = lineI[j] + 'AAAAAA'
-                    if j in strct_data[i / 2]['H']:
-                        codon = change_char(codon, 1, 'H')
-                    elif j in strct_data[i / 2]['T']:
-                        codon = change_char(codon, 1, 'T')
-                    elif j in strct_data[i / 2]['S']:
-                        codon = change_char(codon, 1, 'S')
+                    for k in strct_data[i / 2].keys():
+                        if k != 'C' and j in strct_data[i / 2][k]:
+                            codon = change_char(codon, 1, k)
                     if j in strct_data[i / 2]['C']:
                         codon = change_char(codon, 4, 's')
                     newline += codon
@@ -287,33 +318,25 @@ def get_seq_from_pdb(pdb_id, chain_id):
     return sequence
 
 
+def merge_dicts(dict1, dict2):
+    dict_tmp = dict1.copy()
+    dict_tmp.update(dict2)
+    return dict_tmp
+
+
 def annotate_secondary_structure(fasta, output_name):
     strct_data = []
     for i in range(0, len(fasta), 2):
-        entry_id = ""
         strct_elements = {'G': [], 'E': [], 'B': [], 'I': [], 'T': [], 'H': [],
-                          'S': [], 'DiSulf': []}
-        found = False
-        if len(fasta[i].split('|')) > 1:
-            entry_id = 'dummy'
-            # entry_id2 = 'dummy'
-            if (len(fasta[i].split('|')) > 2
-                    and len(fasta[i].split('|')[2].split()) > 0):
-                entry_id = fasta[i].split('|')[2].split()[0]
-            # entry_id2 = fasta[i].split('|')[1]
-            sp_path = os.path.join(SWISS_DAT, entry_id + '.dat')
-            # dssp_path = os.path.join(DSSP_DIR, entry_id2 + '.dssp')
-            if os.path.exists(sp_path):
-                strct_elements = get_strct_from_sp(sp_path)
-                found = True
-            # elif os.path.exists(dssp_path):
-            #     strct_elements = get_strct_from_dssp()
-            #     found = True
-        if not found:
-            closest_sp = find_closest_hit(fasta[i + 1])
-            if closest_sp:
-                strct_elements = transfer_data_from_homologue(fasta[i + 1],
-                                                              closest_sp)
+                          'S': [], 'C': []}
+        closest_sp = find_closest_hit(fasta[i + 1])
+        if closest_sp:
+            strct_elements = transfer_data_from_homologue(fasta[i + 1],
+                                                          closest_sp)
+        print strct_elements
+        strct_elements = merge_dicts(strct_elements,
+                                     get_strct_from_dssp(fasta[i + 1]))
+        print strct_elements
         strct_data.append(strct_elements)
     out_fasta = encode(fasta, strct_data)
 
@@ -331,7 +354,6 @@ def get_structure_data(query_seq, pdb_fastas):
               }
     blast_result = run_blast(query_seq, PDB_BLAST)
     if blast_result:
-        id_and_chain = blast_result[0].split(',')[1]
         result['chain_id'] = blast_result[0].split(',')[1].split('_')[1]
         result['id'] = blast_result[0].split(',')[1].split('_')[0]
         result['pdb_seq'] = get_seq_from_pdb(result['id'], result['chain_id'])
@@ -493,7 +515,6 @@ def dict_to_cfg(data_dict):
 
 def write_conf_file(query_seq, eq_positions, output_conf, al_score):
     data_dict = make_conf_dict(query_seq, eq_positions, al_score)
-    # outtxt = dict_to_cfg(data_dict)
     indent = 2
     outtxt = encoder.dumps(data_dict, indent=indent)
     out = open(output_conf, 'w')
@@ -524,7 +545,7 @@ def structure_alignment_conf(fasta, output_conf, al_score):
 def annotate(fasta_in, output_name, output_conf, al_score):
     with open(fasta_in) as a:
         fasta = unwrap(a.read().splitlines())
-    # annotate_secondary_structure(fasta, output_name)
+    annotate_secondary_structure(fasta, output_name)
     structure_alignment_conf(fasta, output_conf, al_score)
 
 

@@ -28,12 +28,13 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
   int domain_modifier = 4;
   int motif_modifier = 3;
   int ptm_modifier = 10;
+  int strct_modifier = 10;
   std::map<std::string, double> probabilities;
   f_config::FeatureSettingsMap f_set;
   std::vector<std::string> feature_list;
   FeatureScores f_profile(feature_list, domain_modifier,
                           ptm_modifier, motif_modifier,
-                          probabilities);
+                          strct_modifier, probabilities);
   std::vector<double> identities(query_seq_list.size(), 1.0);
   bool fade_out = false;
   f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
@@ -95,11 +96,13 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   int domain_modifier = 4;
   int motif_modifier = 3;
   int ptm_modifier = 10;
+  int strct_modifier = 10;
   std::map<std::string, double> probabilities;
   f_config::FeatureSettingsMap f_set;
   std::vector<std::string> feature_list;
   FeatureScores f_profile(feature_list, domain_modifier,
                           ptm_modifier, motif_modifier,
+                          strct_modifier,
                           probabilities);
   std::vector<double> identities(query_seq_list.size(), 1.0);
   bool fade_out = false;
@@ -194,7 +197,11 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
                   "ptm_methyl1", "ptm_methyl2",
                   "ptm_methyl3", "ptm_Oglyc0",
                   "ptm_Oglyc1", "ptm_Oglyc2",
-                  "ptm_Oglyc3", "ptm_cys_bridge0",
+                  "ptm_Oglyc3", "ptm_cys_bridge0", 
+                  "strct_a_helix", "strct_turn",
+                  "strct_b_ladder", "strct_b_bridge",
+                  "strct_310_helix", "strct_pi_helix",
+                  "strct_b_ladder",
                   "motif_aa"};
   s1 = fasta::make_sequence("d", "TAAAZAATAAAZAARAAAAAARAAAAAARAAAAAADAAAAAA"
                                  "DAAAAAARAAAAAARAAAAAA", codon_length);
@@ -203,7 +210,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   query_seq_list = {s1};
   f_profile = FeatureScores(feature_list, domain_modifier,
                             ptm_modifier, motif_modifier,
-                            probabilities);
+                            strct_modifier, probabilities);
   f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
   profile = profile::create_score_profile(query_seq_list, sbst_mat);
   scores3 = ScoringMatrix(s1.residues.size(), s2.residues.size(), gap_open_pen,

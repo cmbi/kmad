@@ -29,7 +29,10 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
                                    "ptm_methyl3", "ptm_Oglyc0",
                                    "ptm_Oglyc1", "ptm_Oglyc2",
                                    "ptm_Oglyc3", "ptm_cys_bridge0",
-                                   "motif_aa", 
+                                   "strct_a_helix", "strct_turn",
+                                   "strct_b_ladder", "strct_b_bridge",
+                                   "strct_310_helix", "strct_pi_helix",
+                                   "strct_b_ladder", "motif_aa", 
                                    "motif_ab", "motif_ac",
                                    "domain_aa", "domain_ac",
                                    "USR_feature1", "USR_feature2"};
@@ -82,7 +85,7 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
                                          {"motif_ab", 0.5},
                                          {"motif_ac", 0.8}};
 
-  FeatureScores f_profile(feature_list, 4, 10, 3, probs);
+  FeatureScores f_profile(feature_list, 4, 10, 3, 0, probs);
   f_config::FeatureSettings settings1;
   settings1.add_score = 1;
   settings1.subtract_score = 0;
@@ -130,6 +133,13 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
                      {"ptm_Oglyc2", {0, 0, 0, 0}},
                      {"ptm_Oglyc3", {0, 0, 0, 0}},
                      {"ptm_cys_bridge0", {0, 0, 0, 0}},
+                     {"strct_a_helix", {0, 0, 0, 0}},
+                     {"strct_turn", {0, 0, 0, 0}},
+                     {"strct_b_ladder", {0, 0, 0, 0}},
+                     {"strct_b_bridge", {0, 0, 0, 0}},
+                     {"strct_310_helix", {0, 0, 0, 0}},
+                     {"strct_pi_helix", {0, 0, 0, 0}},
+                     {"strct_b_ladder", {0, 0, 0, 0}},
                      {"motif_aa", {1.8, 0, 0, 1.2}},
                      {"motif_ab", {0.3, 0, 0, 0}},
                      {"motif_ac", {0.48, 0, 0, 0}},
@@ -143,7 +153,7 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
     }
   }
   feature_list = {"ptm_phosph9", "motif_aa", "domain_aa"};
-  f_profile = FeatureScores(feature_list, 4, 10, 3, probs);
+  f_profile = FeatureScores(feature_list, 4, 10, 3, 0, probs);
   // SEQUENCE S1
   r1_1 = fasta::Residue ("AAAAdaa", std::vector<std::string>({"ptm_phosph9",
                                                               "motif_aa"}));

@@ -85,6 +85,10 @@ BOOST_AUTO_TEST_CASE(test_seq_data)
                                             "ptm_methyl3", "ptm_Oglyc0",
                                             "ptm_Oglyc1", "ptm_Oglyc2",
                                             "ptm_Oglyc3", "ptm_cys_bridge0",
+                                            "strct_a_helix", "strct_turn",
+                                            "strct_b_ladder", "strct_b_bridge",
+                                            "strct_310_helix",
+                                            "strct_pi_helix", "strct_b_ladder",
                                             "motif_aa", "USR_feature1",
                                             "domain_aa"}; 
 

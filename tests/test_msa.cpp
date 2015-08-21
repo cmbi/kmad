@@ -42,13 +42,18 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
                                    "ptm_methyl1", "ptm_methyl2",
                                    "ptm_methyl3", "ptm_Oglyc0",
                                    "ptm_Oglyc1", "ptm_Oglyc2",
-                                   "ptm_Oglyc3", "ptm_cys_bridge0"}; 
+                                   "ptm_Oglyc3", "ptm_cys_bridge0",
+                                   "strct_a_helix", "strct_turn",
+                                   "strct_b_ladder", "strct_b_bridge",
+                                   "strct_310_helix", "strct_pi_helix",
+                                   "strct_b_ladder"}; 
   std::map<std::string, double> probabilities;
   f_config::FeatureSettingsMap f_set;
   fasta::SequenceList sequences = {s1, s2};
   int domain_modifier = 4;
   int motif_modifier = 3;
   int ptm_modifier = 10;
+  int strct_modifier = 0;
   double gap_open_pen = -5;
   double gap_ext_pen = -1;
   double end_pen = -1;
@@ -64,7 +69,8 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
   bool no_feat = false;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
-                           ptm_modifier, codon_length, one_round, sbst_mat,
+                           ptm_modifier, strct_modifier, codon_length,
+                           one_round, sbst_mat,
                            first_gapped, optimize, fade_out, no_feat);
   fasta::Sequence e_s1;
   // AKLCAKL
@@ -130,6 +136,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_gapped_mode)
   int domain_modifier = 0;
   int motif_modifier = 0;
   int ptm_modifier = 0;
+  int strct_modifier = 0;
   double gap_open_pen = -4;
   double gap_ext_pen = -4;
   double end_pen = -4;
@@ -148,7 +155,8 @@ BOOST_AUTO_TEST_CASE(test_run_msa_gapped_mode)
   bool no_feat = false;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
-                           ptm_modifier, codon_length, one_round, sbst_mat,
+                           ptm_modifier, strct_modifier, codon_length,
+                           one_round, sbst_mat,
                            first_gapped, optimize, fade_out, no_feat);
 
   BOOST_CHECK_EQUAL(alignment.size(), 2);
@@ -200,7 +208,11 @@ BOOST_AUTO_TEST_CASE(test_set_identities)
                                    "ptm_methyl1", "ptm_methyl2",
                                    "ptm_methyl3", "ptm_Oglyc0",
                                    "ptm_Oglyc1", "ptm_Oglyc2",
-                                   "ptm_Oglyc3", "ptm_cys_bridge0"}; 
+                                   "ptm_Oglyc3", "ptm_cys_bridge0",
+                                   "strct_a_helix", "strct_turn",
+                                   "strct_b_ladder", "strct_b_bridge",
+                                   "strct_310_helix", "strct_pi_helix",
+                                   "strct_b_ladder"}; 
   f_config::FeatureSettingsMap f_set;
   double gap_open_pen = -5;
   double gap_ext_pen = -1;
@@ -208,12 +220,13 @@ BOOST_AUTO_TEST_CASE(test_set_identities)
   int domain_modifier = 4;
   int motif_modifier = 3;
   int ptm_modifier = 10;
+  int strct_modifier = 0;
   fasta::SequenceList sequences = {s1, s2};
   seq_data::SequenceData sequence_data;
   sequence_data.sequences = sequences;
   sequence_data.feature_list = feature_list;
   FeatureScores f_profile(sequence_data.feature_list, domain_modifier,
-                          ptm_modifier, motif_modifier,
+                          ptm_modifier, motif_modifier, strct_modifier,
                           sequence_data.probabilities);
   // query_seq_list - the profile are built only based on the first
   // sequence
@@ -420,6 +433,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
   int domain_modifier = 4;
   int motif_modifier = 3;
   int ptm_modifier = 10;
+  int strct_modifier = 10;
   double gap_open_pen = -5;
   double gap_ext_pen = -1;
   double end_pen = -1;
@@ -431,7 +445,8 @@ BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
   bool no_feat = false;
   auto alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                                 end_pen, domain_modifier, motif_modifier, 
-                                ptm_modifier, codon_length, one_round, sbst_mat,
+                                ptm_modifier, strct_modifier, codon_length,
+                                one_round, sbst_mat,
                                 gapped, optimize, fade_out, no_feat);
   std::vector<std::string> expected = {"WFQIANWFQWFQLAN",
                                        "WFQLANWFQWF----",
@@ -449,7 +464,8 @@ BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
   sequence_data = seq_data::process_fasta_data(fasta_data, f_set, gapped);
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                                 end_pen, domain_modifier, motif_modifier, 
-                                ptm_modifier, codon_length, one_round, sbst_mat,
+                                ptm_modifier, strct_modifier, codon_length,
+                                one_round, sbst_mat,
                                 gapped, optimize, fade_out, no_feat);
   result.clear();
   for (auto& item : alignment) {
@@ -476,6 +492,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
   int domain_modifier = 0;
   int motif_modifier = 0;
   int ptm_modifier = 0;
+  int strct_modifier = 0;
   double gap_open_pen = -12;
   double gap_ext_pen = -1;
   double end_pen = -12;
@@ -495,7 +512,8 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
   bool no_feat = false;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
-                           ptm_modifier, codon_length, one_round, sbst_mat,
+                           ptm_modifier, strct_modifier, codon_length,
+                           one_round, sbst_mat,
                            first_gapped, optimize, fade_out, no_feat);
 
 
@@ -529,6 +547,7 @@ BOOST_AUTO_TEST_CASE(test_run_secondary_structure) {
   int domain_modifier = 0;
   int motif_modifier = 0;
   int ptm_modifier = 50;
+  int strct_modifier = 0;
   double gap_open_pen = -12;
   double gap_ext_pen = -1;
   double end_pen = -12;
@@ -549,7 +568,11 @@ BOOST_AUTO_TEST_CASE(test_run_secondary_structure) {
                                    "ptm_methyl1", "ptm_methyl2",
                                    "ptm_methyl3", "ptm_Oglyc0",
                                    "ptm_Oglyc1", "ptm_Oglyc2",
-                                   "ptm_Oglyc3", "ptm_cys_bridge0"}; 
+                                   "ptm_Oglyc3", "ptm_cys_bridge0",
+                                   "strct_a_helix", "strct_turn",
+                                   "strct_b_ladder", "strct_b_bridge",
+                                   "strct_310_helix", "strct_pi_helix",
+                                   "strct_b_ladder"}; 
   std::map<std::string, double> probabilities;
   std::string sbst_mat = "DISORDER";
   bool first_gapped = true;
@@ -562,7 +585,8 @@ BOOST_AUTO_TEST_CASE(test_run_secondary_structure) {
   bool no_feat = false;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
-                           ptm_modifier, codon_length, one_round, sbst_mat,
+                           ptm_modifier, strct_modifier, codon_length,
+                           one_round, sbst_mat,
                            first_gapped, optimize, fade_out, no_feat);
 
 

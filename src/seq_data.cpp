@@ -61,7 +61,11 @@ FeatureNamesList seq_data::make_feature_list(
                                    "ptm_methyl1", "ptm_methyl2",
                                    "ptm_methyl3", "ptm_Oglyc0",
                                    "ptm_Oglyc1", "ptm_Oglyc2",
-                                   "ptm_Oglyc3", "ptm_cys_bridge0"}; 
+                                   "ptm_Oglyc3", "ptm_cys_bridge0",
+                                   "strct_a_helix", "strct_turn",
+                                   "strct_b_ladder", "strct_b_bridge",
+                                   "strct_310_helix", "strct_pi_helix",
+                                   "strct_b_ladder"}; 
   for (auto& seq : sequences) {
     for (auto& res : seq.residues) {
       for (auto& feat_name : res.features) {
