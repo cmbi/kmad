@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
     int codon_length = 0;
     int refine_seq = 0;
     double ptm_modifier = 0;
+    double strct_modifier = 0;
     double domain_modifier = 0;
     double motif_modifier = 0;
     double gap_ext_pen = 0;
@@ -59,6 +60,9 @@ int main(int argc, char *argv[]) {
       ("phosph,p",
        po::value<double>(&ptm_modifier)->default_value(10),
        "score for aligning phosphorylated residues")
+      ("strct,s",
+       po::value<double>(&strct_modifier)->default_value(4),
+       "score for aligning secondary structure elements")
       ("domain,d",
        po::value<double>(&domain_modifier)->default_value(3),
        "score for aligning domains")
@@ -142,7 +146,8 @@ int main(int argc, char *argv[]) {
       std::cout << "End gap penalty value (-n) cannot be a positive number"
                 << std::endl;
       std::exit(EXIT_FAILURE);
-    } else if (ptm_modifier < 0 || domain_modifier < 0 || motif_modifier < 0) {
+    } else if (ptm_modifier < 0 || domain_modifier < 0
+        || motif_modifier < 0 || strct_modifier < 0) {
       std::cout << "Scores for aligning features cannot be negative"
                 << std::endl;
       std::exit(EXIT_FAILURE);
@@ -172,7 +177,8 @@ int main(int argc, char *argv[]) {
       alignment = msa::run_msa(sequence_data_plain, 
                                f_set, gap_open_pen,
                                gap_ext_pen, end_pen, domain_modifier, 
-                               motif_modifier, ptm_modifier, codon_length,
+                               motif_modifier, ptm_modifier, strct_modifier,
+                               codon_length,
                                one_round, sbst_mat, first_gapped, optimize,
                                fade_out, no_feat);
     } else {
@@ -186,7 +192,9 @@ int main(int argc, char *argv[]) {
                                         sequence_data_alignment,
                                         f_set, gap_open_pen,
                                         gap_ext_pen, end_pen, domain_modifier, 
-                                        motif_modifier, ptm_modifier, codon_length,
+                                        motif_modifier, ptm_modifier,
+                                        strct_modifier,
+                                        codon_length,
                                         one_round, sbst_mat, first_gapped,
                                         optimize, fade_out, refine_seq, no_feat);
     }

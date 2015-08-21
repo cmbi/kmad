@@ -16,12 +16,13 @@ std::vector<fasta::SequenceList> msa::run_msa(
     double gap_open_pen, double gap_ext_pen,
     double end_pen, double domain_modifier,
     double motif_modifier, double ptm_modifier,
+    double strct_modifier,
     int codon_length, bool one_round,
     const std::string& sbst_mat, const bool first_gapped, const bool optimize,
     const bool fade_out, const bool no_feat)
 {
       FeatureScores f_profile(sequence_data.feature_list, domain_modifier,
-                              ptm_modifier, motif_modifier,
+                              ptm_modifier, motif_modifier, strct_modifier,
                               sequence_data.probabilities);
       // query_seq_list - the profiles are built based only on the first
       // sequence
@@ -142,6 +143,7 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
     double gap_open_pen, double gap_ext_pen,
     double end_pen, double domain_modifier,
     double motif_modifier, double ptm_modifier,
+    double strct_modifier,
     int codon_length, bool one_round,
     const std::string& sbst_mat, const bool first_gapped, const bool optimize,
     const bool fade_out, int refine_seq, const bool no_feat)
@@ -151,7 +153,7 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
           query_seq, sbst_mat);
       FeatureScores f_profile_single(sequence_data_plain.feature_list,
                                      domain_modifier, ptm_modifier,
-                                     motif_modifier,
+                                     motif_modifier, strct_modifier,
                                      sequence_data_plain.probabilities);
       std::vector<double> identities = {1};
       f_profile_single.update_scores(query_seq, f_set, identities, fade_out);
@@ -160,6 +162,7 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
                                        gap_ext_pen, codon_length, no_feat);
       FeatureScores f_profile(sequence_data_alignment.feature_list,
                               domain_modifier, ptm_modifier, motif_modifier,
+                              strct_modifier,
                               sequence_data_alignment.probabilities);
       // query_seq_list - the profiles are built based on all sequences
 

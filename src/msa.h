@@ -17,7 +17,8 @@ namespace msa {
       double gap_open_pen,
       double gap_ext_pen, double end_pen,
       double domain_modifier, double motif_modifier,
-      double phosph_modifier, int codon_length, bool one_round,
+      double ptm_modifier, double strct_modifier, int codon_length,
+      bool one_round,
       const std::string& sbst_mat, const bool first_gapped,
       const bool optimize, const bool fade_oup, const bool no_feat);
   ///
@@ -30,7 +31,8 @@ namespace msa {
       double gap_open_pen,
       double gap_ext_pen, double end_pen,
       double domain_modifier, double motif_modifier,
-      double phosph_modifier, int codon_length, bool one_round,
+      double ptm_modifier, double strct_modifier, int codon_length,
+      bool one_round,
       const std::string& sbst_mat, const bool first_gapped,
       const bool optimize, const bool fade_out, int refine_seq,
       const bool no_feat);

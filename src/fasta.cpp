@@ -10,6 +10,14 @@
 
 namespace fs = boost::filesystem;
 namespace {
+  std::map<char, std::string> strct_code_map = {{'H', "strct_a_helix"},
+                                                {'T', "strct_turn"},
+                                                {'S', "strct_b_ladder"},
+                                                {'B', "strct_b_bridge"},
+                                                {'G', "strct_310_helix"},
+                                                {'I', "strct_pi_helix"},
+                                                {'E', "strct_b_ladder"},
+                                               };
   std::map<char, std::string> ptm_code_map = {{'N', "ptm_phosph0"},
                                               {'O', "ptm_phosph1"},
                                               {'P', "ptm_phosph2"},
@@ -158,6 +166,10 @@ fasta::Residue fasta::make_residue(const std::string& codon) {
   std::vector<std::string> features;
   if (codon.size() >= 5 && codon[4] != 'A') {
     features.push_back(ptm_code_map.at(codon[4]));
+  }
+  if (codon.size() > 1
+      && strct_code_map.find(codon[1]) != strct_code_map.end()) {
+    features.push_back(strct_code_map.at(codon[1]));
   }
   if (codon.size() >= 7 && codon.substr(5, 2) != "AA") {
     features.push_back("motif_" + codon.substr(5, 2));
