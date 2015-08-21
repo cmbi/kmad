@@ -490,7 +490,7 @@ def dict_to_cfg(data_dict):
     return text
 
 
-def write_conf_file2(query_seq, eq_positions, output_conf, al_score):
+def write_conf_file(query_seq, eq_positions, output_conf, al_score):
     logging.debug(eq_positions)
     data_dict = make_conf_dict(query_seq, eq_positions, al_score)
     logging.debug(data_dict)
@@ -498,20 +498,6 @@ def write_conf_file2(query_seq, eq_positions, output_conf, al_score):
     out = open(output_conf, 'w')
     out.write(outtxt)
     out.close()
-    # os.remove(tmp_name)
-
-
-def write_conf_file(query_seq, eq_positions, output_conf, al_score):
-    logging.debug(eq_positions)
-    data_dict = make_conf_dict(query_seq, eq_positions, al_score)
-    logging.debug(data_dict)
-    tmp_name = output_conf + 'tmp.json'
-    with open(tmp_name, 'w') as outfile:
-        json.dump(data_dict, outfile)
-    out = open(output_conf, 'w')
-    subprocess.call(['jsonlibconfig', '--target', 'libconfig', '--file',
-                     tmp_name], stdout=out)
-    os.remove(tmp_name)
 
 
 def structure_alignment_conf(fasta, output_conf, al_score):
@@ -531,9 +517,7 @@ def structure_alignment_conf(fasta, output_conf, al_score):
                     strct_data['positions_map'],
                     strct_al)
             eq_positions[i / 2] = eq_seq1_seq2
-    # write_conf_file(query_sequence, eq_positions, output_conf, al_score)
-    write_conf_file2(query_sequence, eq_positions, output_conf + '_test',
-                     al_score)
+    write_conf_file(query_sequence, eq_positions, output_conf, al_score)
 
 
 def annotate(fasta_in, output_name, output_conf, al_score):
