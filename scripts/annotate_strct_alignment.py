@@ -353,7 +353,7 @@ def mk_strct_al_modeller(strct_data1, strct_data2):
     code2 = 'pdb' + strct_data2['id']
     chain1 = strct_data1['chain_id']
     chain2 = strct_data2['chain_id']
-    env.io.atom_files_directory = ['.', '/mnt/cmbi4/pdb/flat']
+    env.io.atom_files_directory = ['.', PDB_DIR]
     result = {}
     try:
         for (code, chain) in ((code1, chain1), (code2, chain2)):
