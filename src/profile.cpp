@@ -113,9 +113,9 @@ profile::ProfileMap profile::create_profile(
     for (size_t j = 0; j < sequences.size(); ++j) {
       char amino_acid = sequences[j].residues[i].codon[0];
 
-      if (amino_acid == '-') {
-        continue;
-      }
+      // if (amino_acid == '-') {
+      //   continue;
+      // }
 
       if (amino_acid == 'B') {
         assert(p.find('D') != p.end() && p.find('N') != p.end());
@@ -129,7 +129,7 @@ profile::ProfileMap profile::create_profile(
         for (auto& kv: p) {
           kv.second[i] += 0.05;
         }
-      } else {
+      } else if (amino_acid != '-'){
           p[amino_acid][i] += 1.0;
       }
     }
