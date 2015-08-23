@@ -1,0 +1,34 @@
+--- scripts/annotate_strct_alignment.py	2015-08-23 18:58:40.041330424 +0200
++++ /home/joanna/skrypty/annotate_strct_alignment.py	2015-08-23 18:57:39.193803220 +0200
+@@ -49,15 +49,16 @@
+ from jsonlibconfig import encoder
+ 
+ 
+-SWISS_DAT = "/home/joanna/data/swissprot_dat/uniprot_dat/"
+-SWISS_FASTA = "/home/joanna/data/swiss_fasta/uniprot_fasta/"
+-SWISS_BLAST = "/home/joanna/data/uniprot_sprot"
++SWISS_DAT = "/home/joanna/data/uniprot_dat/"
++SWISS_FASTA = "/home/joanna/data/uniprot_fasta/"
++SWISS_BLAST = "/home/joanna/data/uniprot_sprot.fasta"
+ PDB_BLAST = "/home/joanna/data/pdb_seqres.txt"
+-PDB_DIR = "/mnt/cmbi4/pdb/flat"
++PDB_DIR = "/home/joanna/data/pdb/"
+ DSSP_DIR = "/home/joanna/data/dssp/"
+-PDBFIND = "/mnt/cmbi4/pdbfinder/PDBFIND.TXT"
++PDBFIND = "/home/joanna/data/PDBFIND2.TXT"
+ SCRIPT_PATH = os.path.realpath(__file__)
+ KMAD = '/'.join(SCRIPT_PATH.split('/')[:-2] + ['kmad'])
++KMAD = '/home/joanna/cmbi/kmad/kmad'
+ 
+ 
+ log_file = "test.log"
+@@ -129,6 +130,9 @@
+     if os.path.exists(out_blast):
+         with open(out_blast) as a:
+             output = a.read().splitlines()
++        logging.debug(output)
++        if output:
++            logging.debug('output True')
+         os.remove(out_blast)
+     else:
+         output = []
