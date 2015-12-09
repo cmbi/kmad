@@ -259,8 +259,7 @@ def get_annotated_motifs(uniprotID):
     probabilities = []
     # get annotated motifs first
     try:
-        req = urllib2.Request("http://elm.eu.org/elms/browse_instances.gff"
-                              "?q="+uniprotID)
+        req = urllib2.Request("http://elm.eu.org/instances.gff?q="+uniprotID)
         response = urllib2.urlopen(req)
         features = response.read().splitlines()
 
@@ -272,7 +271,7 @@ def get_annotated_motifs(uniprotID):
                 limits.append([start, end])
                 probabilities.append(1)
                 elms_ids.append(elm_id)
-    except urllib2.HTTPError and httplib.BadStatusLine:
+    except (urllib2.HTTPError, httplib.BadStatusLine):
         print "can't get annotated motifs for {}".format(uniprotID)
     return [limits, elms_ids, probabilities]
 
