@@ -8,7 +8,7 @@ To install the software you will need:
 
 # Installation
 1. KMAD
-KMAD can be compiled and installed from the kman directory (you will need
+KMAD can be compiled and installed from the kmad directory (you will need
 the automake package to do this):
   `./configure; make; sudo make install`
 2. ELM update script (scripts/update_elm.py)
@@ -35,18 +35,18 @@ To perform alignment with features you need to first create a `.7c` file with
   `convert.py input_filename output_filename`.
 The convert.py script is in the 'scripts' directory.
 
-KMAN command for aligning with features is:
+KMAD command for aligning with features is:
 (you have to use the '-c 7' flag when running on the '.7c' input)
 
-  `kmad -i input.7c -o output_prefix -p 10 -d 3 -m 3`
+  `kmad -i input.7c -o output_prefix -p 10 -d 3 -m 3 -c 7`
 
-For more detailed information try `kman --help`
+For more detailed information try `kmad --help`
 
 For the user defined features you need to provide a configuration file. 
 If you run it on a fasta file
-  `kman -i input_filename.fasta -o output_filename --conf config_filename -c 1`
+  `kmad -i input_filename.fasta -o output_filename --conf config_filename -c 1`
 If you run it on a '.7c' file:
-  `kman -i input_filename.fasta -o output_filename --conf config_filename`
+  `kmad -i input_filename.fasta -o output_filename --conf config_filename -c 1`
 An example of a conf file is in the root directory (conf_file_example.cfg)
 
 To update the elm database (which you don't need to run very often)
@@ -57,7 +57,7 @@ simply execute:
 
 You can define your own features to be included in the alignment.
 This can be done with a configuration file (--conf flag). An example of 
-a configuration file is provided in the KMAN directory ("conf_file_example").
+a configuration file is provided in the KMAD directory ("conf_file_example").
 
 Description
 
