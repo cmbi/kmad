@@ -3,10 +3,10 @@ To install the software you will need:
  - g++ (>= 4.8)
  - automake (>= 2.68)
  - boost libraries (>= 1.48): boost-filesystem, boost-program-options,
-   boost-test
+   boost-test, boost-regex
   `sudo aptitude install sudo aptitude install libboost1.49-dev 
         libboost-program-options1.49-dev libboost-test1.49-dev
-        libboost-filesystem1.49-dev`
+        libboost-filesystem1.49-dev libboost-regex1.49-dev`
  - libconfig++-dev
     `sudo aptitude install libconfig++-dev`
 
