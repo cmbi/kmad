@@ -22,7 +22,7 @@ public:
   ///
   ScoringMatrix(int profile_length, int sequence_length,
                 double gap_open_pen, double end_pen,
-                double gap_ext_pen);
+                double gap_ext_pen, const bool no_feat);
   ///
   /// Fills in the scoring matrices m_matrix_v, m_matrix_g, m_matrix_h
   ///
@@ -49,6 +49,7 @@ private:
   double m_gap_opening;
   double m_gap_extension;
   double m_end_pen;
+  bool m_no_feat;
   SingleScoringMatrix m_matrix_v, m_matrix_g, m_matrix_h;
 };
 

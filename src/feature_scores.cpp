@@ -7,9 +7,10 @@
 
 FeatureScores::FeatureScores(std::vector<std::string> features,
     double domain_modifier, double ptm_modifier, double motif_modifier,
-    std::map<std::string, double> motif_probabilities)
+    double strct_modifier, std::map<std::string, double> motif_probabilities)
 : m_domain_modifier(domain_modifier),
   m_ptm_modifier(ptm_modifier),
+  m_strct_modifier(strct_modifier),
   m_motif_modifier(motif_modifier),
   m_features(features),
   m_motif_probabilities(motif_probabilities)
@@ -17,8 +18,10 @@ FeatureScores::FeatureScores(std::vector<std::string> features,
 
 
 void FeatureScores::update_scores(const fasta::SequenceList& sequences, 
-    const f_config::FeatureSettingsMap& f_set) {
-  m_occurences = update_occurences(sequences);
+    const f_config::FeatureSettingsMap& f_set,
+    const std::vector<double>& identities,
+    const bool fade_out) {
+  m_occurences = update_occurences(sequences, identities, fade_out);
   // convert occurences to probabilities
   for (auto& occ: m_occurences) {
     size_t i = 0;
@@ -40,9 +43,12 @@ void FeatureScores::update_scores(const fasta::SequenceList& sequences,
         scores[feat][i] = score_domain(i, feat);
       } else if (feat.substr(0,5) == "motif") {
         scores[feat][i] = score_motif(i, feat);
-      } 
+      } else if (feat.substr(0,5) == "strct") {
+        scores[feat][i] = score_strct(i, feat);
+      }
       else if (feat.substr(0,3) == "USR") {
         scores[feat][i] = score_usr_feature(i, feat, f_set.at(feat));
+
       }
     }
   }
@@ -51,7 +57,8 @@ void FeatureScores::update_scores(const fasta::SequenceList& sequences,
 
 
 std::map<std::string, Occurences> FeatureScores::update_occurences(
-    const fasta::SequenceList& sequences) {
+    const fasta::SequenceList& sequences,
+    const std::vector<double>& identities, const bool fade_out) {
   std::map<std::string, Occurences> p;
   for (auto& f: m_features) {
     p[f] = std::vector<double>(sequences[0].residues.size(), 0);
@@ -60,7 +67,11 @@ std::map<std::string, Occurences> FeatureScores::update_occurences(
     for (size_t j = 0; j < sequences.size(); ++j) {
       for (auto& f : sequences[j].residues[i].features) {
         assert(p.find(f) != p.end());
-        p[f][i] += 1.0;
+        if (fade_out) {
+          p[f][i] += 0.5 * (1 + identities[j]);
+        } else {
+          p[f][i] += 1.0;
+        }
       }
     }
   }
@@ -121,6 +132,21 @@ double FeatureScores::score_ptm(unsigned long position,
 }
 
 
+double FeatureScores::score_strct(unsigned long position, 
+                                  std::string strct_name) {
+  double result = 0;
+  for (auto feat_it = m_occurences.begin(); 
+       feat_it != m_occurences.end(); ++feat_it) {
+    if (feat_it->first == strct_name) {
+      result += feat_it->second[position];
+    } else if (feat_it->first.substr(0,5) == "strct") {
+      result -= feat_it->second[position];
+    }
+  }
+  return result * m_strct_modifier;
+}
+
+
 double FeatureScores::score_domain(unsigned long position, 
                                      std::string dom_name) {
   double result = 0;
@@ -146,8 +172,8 @@ double FeatureScores::score_motif(unsigned long position,
 
 
 double FeatureScores::score_usr_feature(unsigned long position,
-                                          std::string feat_name,
-                                          f_config::FeatureSettings settings) {
+                                         std::string feat_name,
+                                         f_config::FeatureSettings settings) {
   double result = 0;
   // features that add scores
   for (auto& feature : settings.add_features) {

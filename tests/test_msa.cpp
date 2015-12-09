@@ -42,13 +42,18 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
                                    "ptm_methyl1", "ptm_methyl2",
                                    "ptm_methyl3", "ptm_Oglyc0",
                                    "ptm_Oglyc1", "ptm_Oglyc2",
-                                   "ptm_Oglyc3"}; 
+                                   "ptm_Oglyc3", "ptm_cys_bridge0",
+                                   "strct_a_helix", "strct_turn",
+                                   "strct_b_ladder", "strct_b_bridge",
+                                   "strct_310_helix", "strct_pi_helix",
+                                   "strct_b_ladder"}; 
   std::map<std::string, double> probabilities;
   f_config::FeatureSettingsMap f_set;
   fasta::SequenceList sequences = {s1, s2};
   int domain_modifier = 4;
   int motif_modifier = 3;
   int ptm_modifier = 10;
+  int strct_modifier = 0;
   double gap_open_pen = -5;
   double gap_ext_pen = -1;
   double end_pen = -1;
@@ -60,10 +65,13 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
   std::string sbst_mat = "BLOSUM";
   bool first_gapped = false;
   bool optimize = false;
+  bool fade_out = false;
+  bool no_feat = false;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
-                           ptm_modifier, codon_length, one_round, sbst_mat,
-                           first_gapped, optimize);
+                           ptm_modifier, strct_modifier, codon_length,
+                           one_round, sbst_mat,
+                           first_gapped, optimize, fade_out, no_feat);
   fasta::Sequence e_s1;
   // AKLCAKL
   e_s1 = fasta::make_sequence("d", "AAAAAAAKAAAAAALAAAAAA"
@@ -128,6 +136,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_gapped_mode)
   int domain_modifier = 0;
   int motif_modifier = 0;
   int ptm_modifier = 0;
+  int strct_modifier = 0;
   double gap_open_pen = -4;
   double gap_ext_pen = -4;
   double end_pen = -4;
@@ -142,10 +151,13 @@ BOOST_AUTO_TEST_CASE(test_run_msa_gapped_mode)
   std::string sbst_mat = "BLOSUM";
   bool first_gapped = true;
   bool optimize = false;
+  bool fade_out = false;
+  bool no_feat = false;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
-                           ptm_modifier, codon_length, one_round, sbst_mat,
-                           first_gapped, optimize);
+                           ptm_modifier, strct_modifier, codon_length,
+                           one_round, sbst_mat,
+                           first_gapped, optimize, fade_out, no_feat);
 
   BOOST_CHECK_EQUAL(alignment.size(), 2);
   BOOST_CHECK_EQUAL(alignment[0].size(), 3);
@@ -196,7 +208,11 @@ BOOST_AUTO_TEST_CASE(test_set_identities)
                                    "ptm_methyl1", "ptm_methyl2",
                                    "ptm_methyl3", "ptm_Oglyc0",
                                    "ptm_Oglyc1", "ptm_Oglyc2",
-                                   "ptm_Oglyc3"}; 
+                                   "ptm_Oglyc3", "ptm_cys_bridge0",
+                                   "strct_a_helix", "strct_turn",
+                                   "strct_b_ladder", "strct_b_bridge",
+                                   "strct_310_helix", "strct_pi_helix",
+                                   "strct_b_ladder"}; 
   f_config::FeatureSettingsMap f_set;
   double gap_open_pen = -5;
   double gap_ext_pen = -1;
@@ -204,12 +220,13 @@ BOOST_AUTO_TEST_CASE(test_set_identities)
   int domain_modifier = 4;
   int motif_modifier = 3;
   int ptm_modifier = 10;
+  int strct_modifier = 0;
   fasta::SequenceList sequences = {s1, s2};
   seq_data::SequenceData sequence_data;
   sequence_data.sequences = sequences;
   sequence_data.feature_list = feature_list;
   FeatureScores f_profile(sequence_data.feature_list, domain_modifier,
-                          ptm_modifier, motif_modifier,
+                          ptm_modifier, motif_modifier, strct_modifier,
                           sequence_data.probabilities);
   // query_seq_list - the profile are built only based on the first
   // sequence
@@ -217,14 +234,18 @@ BOOST_AUTO_TEST_CASE(test_set_identities)
   std::string sbst_mat = "BLOSUM";
   profile::ProfileMap profile = profile::create_score_profile(
       query_seq_list, sbst_mat);
-  f_profile.update_scores(query_seq_list, f_set);
+  bool fade_out = false;
+  bool no_feat = false;
+  std::vector<double> identities(query_seq_list.size(), 1.0);
+  f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
   std::vector<double> result_identities = msa::set_identities(sequence_data,
                                                               profile,
                                                               f_profile,
                                                               gap_open_pen,
                                                               end_pen, 
                                                               gap_ext_pen,
-                                                              codon_length);
+                                                              codon_length,
+                                                              no_feat);
   std::vector<double> expected_identities = {1, 0.857};
   BOOST_CHECK_EQUAL(expected_identities.size(), result_identities.size());
   for (size_t i = 0; i < result_identities.size(); ++i) {
@@ -412,6 +433,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
   int domain_modifier = 4;
   int motif_modifier = 3;
   int ptm_modifier = 10;
+  int strct_modifier = 10;
   double gap_open_pen = -5;
   double gap_ext_pen = -1;
   double end_pen = -1;
@@ -419,10 +441,13 @@ BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
   int codon_length = 7; 
   std::string sbst_mat = "BLOSUM";
   bool optimize = false;
+  bool fade_out = false;
+  bool no_feat = false;
   auto alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                                 end_pen, domain_modifier, motif_modifier, 
-                                ptm_modifier, codon_length, one_round, sbst_mat,
-                                gapped, optimize);
+                                ptm_modifier, strct_modifier, codon_length,
+                                one_round, sbst_mat,
+                                gapped, optimize, fade_out, no_feat);
   std::vector<std::string> expected = {"WFQIANWFQWFQLAN",
                                        "WFQLANWFQWF----",
                                        "WFQIANWFQWFQLAN",
@@ -439,8 +464,9 @@ BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
   sequence_data = seq_data::process_fasta_data(fasta_data, f_set, gapped);
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                                 end_pen, domain_modifier, motif_modifier, 
-                                ptm_modifier, codon_length, one_round, sbst_mat,
-                                gapped, optimize);
+                                ptm_modifier, strct_modifier, codon_length,
+                                one_round, sbst_mat,
+                                gapped, optimize, fade_out, no_feat);
   result.clear();
   for (auto& item : alignment) {
     for (auto& seq : item) {
@@ -466,6 +492,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
   int domain_modifier = 0;
   int motif_modifier = 0;
   int ptm_modifier = 0;
+  int strct_modifier = 0;
   double gap_open_pen = -12;
   double gap_ext_pen = -1;
   double end_pen = -12;
@@ -474,17 +501,20 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
   seq_data::SequenceData sequence_data;
   FeatureNamesList feature_list;
   std::map<std::string, double> probabilities;
-  std::string sbst_mat = "DISORDER";
+  std::string sbst_mat = "BLOSUM";
   bool first_gapped = true;
   sequence_data.feature_list = feature_list;
 
   std::vector<fasta::SequenceList> alignment;
   sequence_data.sequences = sequences;
   bool optimize = false;
+  bool fade_out = false;
+  bool no_feat = false;
   alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
                            end_pen, domain_modifier, motif_modifier, 
-                           ptm_modifier, codon_length, one_round, sbst_mat,
-                           first_gapped, optimize);
+                           ptm_modifier, strct_modifier, codon_length,
+                           one_round, sbst_mat,
+                           first_gapped, optimize, fade_out, no_feat);
 
 
   std::vector<std::string> result;
@@ -504,12 +534,82 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
                                        "GDNGEE--AEEA", 
                                        "GDNGEEAEAEEA"};
 
+  BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
+                                expected.begin(), expected.end());
+}
+
+
+BOOST_AUTO_TEST_CASE(test_run_secondary_structure) {
+  f_config::FeatureSettingsMap f_set;
+  fasta::SequenceList sequences;
+  sequences = {fasta::make_sequence("CAAAsAATAAAAAACAAAAAAWAAAAAA", 7),
+               fasta::make_sequence("CAAAsAAWAAAAAA", 7)};
+  int domain_modifier = 0;
+  int motif_modifier = 0;
+  int ptm_modifier = 50;
+  int strct_modifier = 0;
+  double gap_open_pen = -12;
+  double gap_ext_pen = -1;
+  double end_pen = -12;
+  int codon_length = 7;
+  bool one_round = false;
+  seq_data::SequenceData sequence_data;
+  FeatureNamesList feature_list = {"ptm_phosph0", "ptm_phosph1",
+                                   "ptm_phosph2", "ptm_phosph3",
+                                   "ptm_phosphP", "ptm_acet0",
+                                   "ptm_acet1", "ptm_acet2",
+                                   "ptm_acet3", "ptm_Nglyc0",
+                                   "ptm_Nglyc1", "ptm_Nglyc2",
+                                   "ptm_Nglyc3", "ptm_amid0",
+                                   "ptm_amid1", "ptm_amid2",
+                                   "ptm_amid3", "ptm_hydroxy0",
+                                   "ptm_hydroxy1", "ptm_hydroxy2",
+                                   "ptm_hydroxy3", "ptm_methyl0",
+                                   "ptm_methyl1", "ptm_methyl2",
+                                   "ptm_methyl3", "ptm_Oglyc0",
+                                   "ptm_Oglyc1", "ptm_Oglyc2",
+                                   "ptm_Oglyc3", "ptm_cys_bridge0",
+                                   "strct_a_helix", "strct_turn",
+                                   "strct_b_ladder", "strct_b_bridge",
+                                   "strct_310_helix", "strct_pi_helix",
+                                   "strct_b_ladder"}; 
+  std::map<std::string, double> probabilities;
+  std::string sbst_mat = "DISORDER";
+  bool first_gapped = true;
+  sequence_data.feature_list = feature_list;
+
+  std::vector<fasta::SequenceList> alignment;
+  sequence_data.sequences = sequences;
+  bool optimize = false;
+  bool fade_out = false;
+  bool no_feat = false;
+  alignment = msa::run_msa(sequence_data, f_set, gap_open_pen, gap_ext_pen,
+                           end_pen, domain_modifier, motif_modifier, 
+                           ptm_modifier, strct_modifier, codon_length,
+                           one_round, sbst_mat,
+                           first_gapped, optimize, fade_out, no_feat);
+
+
+  std::vector<std::string> result;
+  for (auto& seqlist : alignment) {
+    for (auto& seq : seqlist) {
+      result.push_back(fasta::make_string(seq));
+    }
+  }
+  // std::vector<std::string> expected = {"GDNGEE--GEEE",
+  //                                      "GDNGEEAEAEEA", 
+  //                                      "GDNGEE--GEEE", 
+  //                                      "GDNGEE--GDQE", 
+  //                                      "GDNGEE-DGEEE", 
+  //                                      "GDNGEE--AEEA", 
+  //                                      "GDNGEEAEAEEA"};
+
   //  std::cout << "SIAL_HUMAN test:" << std::endl;
   //  for (auto& seq : result) {
   //   std::cout << seq << std::endl;
   //  }
-  BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
-                                expected.begin(), expected.end());
+  // BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
+  //                               expected.begin(), expected.end());
 }
 
 

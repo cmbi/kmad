@@ -76,13 +76,6 @@ EXTRA_DIST = tests/test_conf_file.cfg \
 test_kmad_LDADD	=	$(shared_LDADD)
 
 
-AM_CPPFLAGS	=	-std=c++11 \
-							-pedantic \
-							-Wall \
-							-Werror \
-							-Wno-reorder \
-							$(BOOST_CPPFLAGS) \
-							-I$(srcdir)src/
 
 AUTOMAKE_OPTIONS = foreign
 
@@ -91,4 +84,22 @@ cppcheck:
 		$(CPPCHECK) --quiet --std=c++11 --enable=all \
 								--suppress=missingIncludeSystem $(srcdir)/src
 check:	cppcheck
+endif
+if DEBUG
+AM_CPPFLAGS = -g3 -O0 \
+							-std=c++11 \
+							-pedantic \
+							-Wall \
+							-Werror \
+							-Wno-reorder \
+							$(BOOST_CPPFLAGS) \
+							-I$(srcdir)src/
+else
+AM_CPPFLAGS	=	-std=c++11 \
+							-pedantic \
+							-Wall \
+							-Werror \
+							-Wno-reorder \
+							$(BOOST_CPPFLAGS) \
+							-I$(srcdir)src/
 endif

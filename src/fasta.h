@@ -48,7 +48,7 @@ namespace fasta {
   /// writes motif ids and probabilities to ids and probs
   ///
   FastaData parse_fasta(std::string filename, int codonLength,
-                        bool refine);
+                        bool refine, int refine_seq);
 
   Sequence make_sequence(const std::string& description,
                          const std::string& codons, int codon_length);
@@ -56,6 +56,8 @@ namespace fasta {
   Sequence make_sequence(unsigned long sequence_length,
                          const fasta::Residue residue);
   Sequence make_sequence(const std::string sequence_string, int codon_length);
+  void extend_sequence(Sequence& seq, const std::string sequence_string,
+                           int codon_length);
   ///
   /// converts a Sequence struct to a string
   ///
@@ -64,7 +66,7 @@ namespace fasta {
   ///
   /// check if all sequence lengths are equal (for the refinement mode)
   ///
-  bool check_length(SequenceList sequences);
+  bool check_length(SequenceList sequences, int refine_seq);
 }
 
 

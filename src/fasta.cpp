@@ -10,6 +10,14 @@
 
 namespace fs = boost::filesystem;
 namespace {
+  std::map<char, std::string> strct_code_map = {{'H', "strct_a_helix"},
+                                                {'T', "strct_turn"},
+                                                {'S', "strct_b_ladder"},
+                                                {'B', "strct_b_bridge"},
+                                                {'G', "strct_310_helix"},
+                                                {'I', "strct_pi_helix"},
+                                                {'E', "strct_b_ladder"},
+                                               };
   std::map<char, std::string> ptm_code_map = {{'N', "ptm_phosph0"},
                                               {'O', "ptm_phosph1"},
                                               {'P', "ptm_phosph2"},
@@ -38,12 +46,13 @@ namespace {
                                               {'a', "ptm_Oglyc1"},
                                               {'b', "ptm_Oglyc2"},
                                               {'c', "ptm_Oglyc3"},
-                                              {'d', "ptm_phosphP"}};
+                                              {'d', "ptm_phosphP"},
+                                              {'s', "ptm_cys_bridge0"}};
 }
 
 
 fasta::FastaData fasta::parse_fasta(std::string filename, int codon_length,
-    bool refine) {
+    bool refine, int refine_seq) {
   fs::path p(filename);
   if (!fs::exists(p)) {
     throw std::invalid_argument("File not found: " + filename);
@@ -59,14 +68,16 @@ fasta::FastaData fasta::parse_fasta(std::string filename, int codon_length,
       continue;
     }
 
-    if (in_sequence_section) {
-      assert(line.substr(0, 1) == ">");
-
+    if (in_sequence_section && line.substr(0, 1) == ">") {
       std::string description = line;
       std::getline(fastafile, line);
       line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
       fd.sequences.push_back(fasta::make_sequence(description, line,
                                                   codon_length));
+    } else if (in_sequence_section) {
+      int last_index = fd.sequences.size() - 1;
+      fasta::extend_sequence(fd.sequences[last_index], line, codon_length);
+
     } else {
       std::vector<std::string> result;
       boost::split(result, line, boost::is_any_of("\t "));
@@ -78,7 +89,7 @@ fasta::FastaData fasta::parse_fasta(std::string filename, int codon_length,
     }
   }
   fastafile.close();
-  if (refine && !check_length(fd.sequences)) {
+  if (refine && !check_length(fd.sequences, refine_seq)) {
         throw std::runtime_error("In the 'refine' mode all sequences should "
                                  "have the same length");
   }
@@ -133,6 +144,15 @@ fasta::Sequence fasta::make_sequence(
   }
   return s;
 }
+void fasta::extend_sequence(fasta::Sequence& seq,
+                     const std::string sequence_string,
+                     int codon_length) {
+  fasta::Sequence tmp_seq = fasta::make_sequence(sequence_string,
+      codon_length);
+  for (auto& res : tmp_seq.residues) {
+    seq.residues.push_back(res);
+  }
+}
 
 std::string fasta::make_string(const fasta::Sequence seq) {
   std::string result;
@@ -147,6 +167,10 @@ fasta::Residue fasta::make_residue(const std::string& codon) {
   if (codon.size() >= 5 && codon[4] != 'A') {
     features.push_back(ptm_code_map.at(codon[4]));
   }
+  if (codon.size() > 1
+      && strct_code_map.find(codon[1]) != strct_code_map.end()) {
+    features.push_back(strct_code_map.at(codon[1]));
+  }
   if (codon.size() >= 7 && codon.substr(5, 2) != "AA") {
     features.push_back("motif_" + codon.substr(5, 2));
   }
@@ -156,11 +180,14 @@ fasta::Residue fasta::make_residue(const std::string& codon) {
   return Residue(codon, features);
 }
 
-bool fasta::check_length(fasta::SequenceList sequences) {
+bool fasta::check_length(fasta::SequenceList sequences, int refine_seq) {
+  if (refine_seq == 0) {
+    refine_seq = sequences.size();
+  }
   bool result = true;
   size_t prev_length = sequences[0].residues.size();
-  size_t i = 1;
-  while (result && i < sequences.size()){
+  int i = 1;
+  while (result && i < refine_seq){
     size_t length = sequences[i].residues.size();
     if (length != prev_length) {
       result = false; 
