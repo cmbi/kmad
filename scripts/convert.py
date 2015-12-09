@@ -294,7 +294,8 @@ def get_predicted_motifs(sequence, slims_all_classes, seq_go_terms):
                 slim_id = entry[0]
                 try:
                     slim_go_terms = slims_all_classes[slim_id]["GO"]
-                    if set(seq_go_terms).intersection(set(slim_go_terms)):
+                    if (not seq_go_terms or
+                            set(seq_go_terms).intersection(set(slim_go_terms))):
                         if entry[3] == "False":
                             prob = 1 + 1/math.log(
                                 slims_all_classes[slim_id]["prob"], 10)
