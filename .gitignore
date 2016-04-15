@@ -37,6 +37,8 @@ autom4te.cache/traces*
 kmad
 test_kmad
 
+Makefile
+
 .DS_Store
 
 # vim
