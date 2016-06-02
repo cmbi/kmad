@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
   int motif_modifier = 3;
   int ptm_modifier = 10;
   int strct_modifier = 10;
-  std::map<std::string, double> probabilities;
+  std::unordered_map<std::string, double> probabilities;
   f_config::FeatureSettingsMap f_set;
   std::vector<std::string> feature_list;
   FeatureScores f_profile(feature_list, domain_modifier,
@@ -97,7 +97,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   int motif_modifier = 3;
   int ptm_modifier = 10;
   int strct_modifier = 10;
-  std::map<std::string, double> probabilities;
+  std::unordered_map<std::string, double> probabilities;
   f_config::FeatureSettingsMap f_set;
   std::vector<std::string> feature_list;
   FeatureScores f_profile(feature_list, domain_modifier,

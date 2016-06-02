@@ -16,7 +16,7 @@ class FeatureScores {
     FeatureScores(const std::vector<std::string> features,
                   double domain_modifier, double ptm_modifier,
                   double motif_modifier, double strct_modifier,
-                    std::map<std::string, double> motif_probabilities);
+                    std::unordered_map<std::string, double> motif_probabilities);
     ///
     /// updates the 'profile-like' feature scores based on an alignment
     ///
@@ -29,7 +29,7 @@ class FeatureScores {
     ///
     /// get the complete 'profile-like' matrix of feature scores
     ///
-    std::map<std::string, Scores> get_scores();
+    std::unordered_map<std::string, Scores> get_scores();
     ///
     /// get a single score (for a particular feature on a particular position)
     ///
@@ -41,11 +41,11 @@ class FeatureScores {
     double m_strct_modifier;
     double m_motif_modifier;
     std::vector<std::string> m_features;
-    std::map<std::string, double> m_motif_probabilities;
-    std::map<std::string, Scores> m_scores;
-    std::map<std::string, Occurences> m_occurences;
+    std::unordered_map<std::string, double> m_motif_probabilities;
+    std::unordered_map<std::string, Scores> m_scores;
+    std::unordered_map<std::string, Occurences> m_occurences;
 
-    std::map<std::string, Occurences> update_occurences(
+    std::unordered_map<std::string, Occurences> update_occurences(
         const fasta::SequenceList& sequences,
         const std::vector<double>& identities, const bool fade_out);
     double score_ptm(unsigned long position, std::string feat_name);

@@ -10,7 +10,7 @@
 
 namespace fs = boost::filesystem;
 namespace {
-  std::map<char, std::string> strct_code_map = {{'H', "strct_a_helix"},
+  std::unordered_map<char, std::string> strct_code_map = {{'H', "strct_a_helix"},
                                                 {'T', "strct_turn"},
                                                 {'S', "strct_b_ladder"},
                                                 {'B', "strct_b_bridge"},
@@ -18,7 +18,7 @@ namespace {
                                                 {'I', "strct_pi_helix"},
                                                 {'E', "strct_b_ladder"},
                                                };
-  std::map<char, std::string> ptm_code_map = {{'N', "ptm_phosph0"},
+  std::unordered_map<char, std::string> ptm_code_map = {{'N', "ptm_phosph0"},
                                               {'O', "ptm_phosph1"},
                                               {'P', "ptm_phosph2"},
                                               {'Q', "ptm_phosph3"},

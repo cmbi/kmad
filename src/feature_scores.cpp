@@ -7,7 +7,7 @@
 
 FeatureScores::FeatureScores(std::vector<std::string> features,
     double domain_modifier, double ptm_modifier, double motif_modifier,
-    double strct_modifier, std::map<std::string, double> motif_probabilities)
+    double strct_modifier, std::unordered_map<std::string, double> motif_probabilities)
 : m_domain_modifier(domain_modifier),
   m_ptm_modifier(ptm_modifier),
   m_strct_modifier(strct_modifier),
@@ -31,7 +31,7 @@ void FeatureScores::update_scores(const fasta::SequenceList& sequences,
     }
   }
   // create an empty score map 
-  std::map<std::string, Scores> scores;
+  std::unordered_map<std::string, Scores> scores;
   for (auto& f: m_features) {
     scores[f] = std::vector<double>(sequences[0].residues.size(), 0);
   }
@@ -56,10 +56,10 @@ void FeatureScores::update_scores(const fasta::SequenceList& sequences,
 }
 
 
-std::map<std::string, Occurences> FeatureScores::update_occurences(
+std::unordered_map<std::string, Occurences> FeatureScores::update_occurences(
     const fasta::SequenceList& sequences,
     const std::vector<double>& identities, const bool fade_out) {
-  std::map<std::string, Occurences> p;
+  std::unordered_map<std::string, Occurences> p;
   for (auto& f: m_features) {
     p[f] = std::vector<double>(sequences[0].residues.size(), 0);
   }
@@ -189,7 +189,7 @@ double FeatureScores::score_usr_feature(unsigned long position,
 }
 
 
-std::map<std::string, Scores> FeatureScores::get_scores() {
+std::unordered_map<std::string, Scores> FeatureScores::get_scores() {
   return m_scores;
 }
 

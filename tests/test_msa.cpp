@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
                                    "strct_b_ladder", "strct_b_bridge",
                                    "strct_310_helix", "strct_pi_helix",
                                    "strct_b_ladder"}; 
-  std::map<std::string, double> probabilities;
+  std::unordered_map<std::string, double> probabilities;
   f_config::FeatureSettingsMap f_set;
   fasta::SequenceList sequences = {s1, s2};
   int domain_modifier = 4;
@@ -144,7 +144,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_gapped_mode)
   bool one_round = false;
   seq_data::SequenceData sequence_data;
   FeatureNamesList feature_list;
-  std::map<std::string, double> probabilities;
+  std::unordered_map<std::string, double> probabilities;
   sequence_data.sequences = sequences;
   sequence_data.feature_list = feature_list;
   std::vector<fasta::SequenceList> alignment;
@@ -500,7 +500,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
   bool one_round = false;
   seq_data::SequenceData sequence_data;
   FeatureNamesList feature_list;
-  std::map<std::string, double> probabilities;
+  std::unordered_map<std::string, double> probabilities;
   std::string sbst_mat = "BLOSUM";
   bool first_gapped = true;
   sequence_data.feature_list = feature_list;
@@ -573,7 +573,7 @@ BOOST_AUTO_TEST_CASE(test_run_secondary_structure) {
                                    "strct_b_ladder", "strct_b_bridge",
                                    "strct_310_helix", "strct_pi_helix",
                                    "strct_b_ladder"}; 
-  std::map<std::string, double> probabilities;
+  std::unordered_map<std::string, double> probabilities;
   std::string sbst_mat = "DISORDER";
   bool first_gapped = true;
   sequence_data.feature_list = feature_list;

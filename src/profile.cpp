@@ -4,7 +4,7 @@
 
 #include <algorithm>
 
-typedef std::map<char, std::vector<double>> SimilarityScoresMap;
+typedef std::unordered_map<char, std::vector<double>> SimilarityScoresMap;
 namespace {
   static const std::vector<char> ALPHABET = {'A','R','N','D','C','Q','E','G',
                                              'H','I','L','K','M','F','P','S',

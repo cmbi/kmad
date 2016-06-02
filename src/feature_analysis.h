@@ -1,11 +1,11 @@
 #include "fasta.h"
 
 #include <iostream>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 namespace feature_analysis {
-  typedef std::map<std::string, std::vector<std::string>> CodesMap;
+  typedef std::unordered_map<std::string, std::vector<std::string>> CodesMap;
   
   struct ConsensusResidue {
     std::string amino_acid;

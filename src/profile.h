@@ -5,7 +5,7 @@
 
 
 namespace profile {
-  typedef std::map<char, std::vector<double>> ProfileMap;
+  typedef std::unordered_map<char, std::vector<double>> ProfileMap;
 
   ProfileMap create_profile(const fasta::SequenceList& sequences);
   ProfileMap create_score_profile(const fasta::SequenceList& sequences,

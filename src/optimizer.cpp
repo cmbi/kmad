@@ -9,7 +9,7 @@
 namespace sbst = substitution_matrix;
 
 namespace {
-  std::map<char, double> ptm_level_map = {{'0', 1},
+  std::unordered_map<char, double> ptm_level_map = {{'0', 1},
                                           {'1', 0.9},
                                           {'2', 0.8},
                                           {'3', 0.7},

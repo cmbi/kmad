@@ -3,7 +3,7 @@
 
 
 namespace substitution_matrix {
-  typedef std::map<char, std::vector<double>> SimilarityScoresMap;
+  typedef std::unordered_map<char, std::vector<double>> SimilarityScoresMap;
   static const std::vector<char> ALPHABET = {'A','R','N','D','C','Q','E','G',
                                              'H','I','L','K','M','F','P','S',
                                              'T','W','Y','V'};

@@ -81,7 +81,7 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
 
   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
 
-  std::map<std::string, double> probs = {{"motif_aa", 1.0},
+  std::unordered_map<std::string, double> probs = {{"motif_aa", 1.0},
                                          {"motif_ab", 0.5},
                                          {"motif_ac", 0.8}};
 
@@ -101,8 +101,8 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
   std::vector<double> identities(sequences.size(), 1.0);
   bool fade_out = false;
   f_profile.update_scores(sequences, s_map, identities, fade_out);
-  std::map<std::string, Scores> p = f_profile.get_scores();
-  std::map<std::string, Scores> expected_scores;
+  std::unordered_map<std::string, Scores> p = f_profile.get_scores();
+  std::unordered_map<std::string, Scores> expected_scores;
   expected_scores = {{"ptm_phosph0", {5.2, 8, 6, 4}},
                      {"ptm_phosph1", {4.68, 7.2, 5.4, 3.6}},
                      {"ptm_phosph2", {4.16, 6.4, 4.8, 3.2}},

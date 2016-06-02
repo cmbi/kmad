@@ -2,7 +2,7 @@
 #define F_CONFIG_H
 
 #include <libconfig.h++>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 typedef std::vector<std::string> FeatureNamesList;
@@ -45,8 +45,8 @@ namespace f_config
     std::vector<FeaturePositions> positions;
   };
 
-  typedef std::map<std::string, RawFeatureSettings> RawFeatureSettingsMap;
-  typedef std::map<std::string, FeatureSettings> FeatureSettingsMap;
+  typedef std::unordered_map<std::string, RawFeatureSettings> RawFeatureSettingsMap;
+  typedef std::unordered_map<std::string, FeatureSettings> FeatureSettingsMap;
 
   class ConfParser
   {

@@ -8,7 +8,7 @@
 namespace seq_data {
   struct SequenceData {
     fasta::SequenceList sequences;
-    std::map<std::string, double> probabilities;  
+    std::unordered_map<std::string, double> probabilities;  
     std::vector<std::string> feature_list;
   };
 

@@ -2,7 +2,7 @@
 #define FASTA_H
 
 #include <iostream>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 /// 
@@ -40,7 +40,7 @@ namespace fasta {
   ///
   struct FastaData {
     SequenceList sequences;
-    std::map<std::string, double> probabilities;
+    std::unordered_map<std::string, double> probabilities;
   };
 
   ///
