@@ -17,7 +17,7 @@ FeatureScores::FeatureScores(std::vector<std::string> features,
 {}
 
 
-void FeatureScores::update_scores(const fasta::SequenceList& sequences, 
+void FeatureScores::update_scores(const fasta::SequenceList& sequences,
     const f_config::FeatureSettingsMap& f_set,
     const std::vector<double>& identities,
     const bool fade_out) {
@@ -30,7 +30,7 @@ void FeatureScores::update_scores(const fasta::SequenceList& sequences,
       ++i;
     }
   }
-  // create an empty score map 
+  // create an empty score map
   std::unordered_map<std::string, Scores> scores;
   for (auto& f: m_features) {
     scores[f] = std::vector<double>(sequences[0].residues.size(), 0);
@@ -79,8 +79,8 @@ std::unordered_map<std::string, Occurences> FeatureScores::update_occurences(
 }
 
 
-double FeatureScores::score_ptm(unsigned long position, 
-                                  std::string ptm_name) {
+double FeatureScores::score_ptm(unsigned long position,
+                                const std::string& ptm_name) {
   double result  = 0;
   std::string ptm_type = ptm_name;
   //pop back last character to get just the ptm type
@@ -132,10 +132,10 @@ double FeatureScores::score_ptm(unsigned long position,
 }
 
 
-double FeatureScores::score_strct(unsigned long position, 
-                                  std::string strct_name) {
+double FeatureScores::score_strct(unsigned long position,
+                                  const std::string& strct_name) {
   double result = 0;
-  for (auto feat_it = m_occurences.begin(); 
+  for (auto feat_it = m_occurences.begin();
        feat_it != m_occurences.end(); ++feat_it) {
     if (feat_it->first == strct_name) {
       result += feat_it->second[position];
@@ -147,10 +147,10 @@ double FeatureScores::score_strct(unsigned long position,
 }
 
 
-double FeatureScores::score_domain(unsigned long position, 
-                                     std::string dom_name) {
+double FeatureScores::score_domain(unsigned long position,
+                                     const std::string& dom_name) {
   double result = 0;
-  for (auto feat_it = m_occurences.begin(); 
+  for (auto feat_it = m_occurences.begin();
        feat_it != m_occurences.end(); ++feat_it) {
     if (feat_it->first == dom_name) {
       result += feat_it->second[position];
@@ -163,7 +163,7 @@ double FeatureScores::score_domain(unsigned long position,
 
 
 double FeatureScores::score_motif(unsigned long position,
-                                    std::string feat_name) {
+                                    const std::string& feat_name) {
   double result = 0;
   result = m_occurences[feat_name][position] * m_motif_modifier \
            * m_motif_probabilities[feat_name];
@@ -172,8 +172,8 @@ double FeatureScores::score_motif(unsigned long position,
 
 
 double FeatureScores::score_usr_feature(unsigned long position,
-                                         std::string feat_name,
-                                         f_config::FeatureSettings settings) {
+                                         const std::string& feat_name,
+                                         const f_config::FeatureSettings& settings) {
   double result = 0;
   // features that add scores
   for (auto& feature : settings.add_features) {
