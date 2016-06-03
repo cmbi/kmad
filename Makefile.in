@@ -354,90 +354,90 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 shared_LDADD = $(BOOST_FILESYSTEM_LIB) \
-								$(BOOST_PROGRAM_OPTIONS_LIB) \
-								$(BOOST_REGEX_LIB) \
-								$(BOOST_SYSTEM_LIB) \
-								$(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
-								-lconfig++
+			$(BOOST_PROGRAM_OPTIONS_LIB) \
+			$(BOOST_REGEX_LIB) \
+			$(BOOST_SYSTEM_LIB) \
+			$(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
+			-lconfig++
 
 shared_SOURCES = src/compare_doubles.cpp \
-									src/fasta.cpp \
-									src/feature_analysis.cpp \
-									src/feature_scores.cpp \
-									src/f_config.cpp \
-									src/outfile.cpp \
-									src/optimizer.cpp \
-									src/profile.cpp \
-									src/scoring_matrix.cpp \
-									src/seq_data.cpp \
-									src/msa.cpp
+			src/fasta.cpp \
+			src/feature_analysis.cpp \
+			src/feature_scores.cpp \
+			src/f_config.cpp \
+			src/outfile.cpp \
+			src/optimizer.cpp \
+			src/profile.cpp \
+			src/scoring_matrix.cpp \
+			src/seq_data.cpp \
+			src/msa.cpp
 
 include_HEADERS = src/compare_doubles.h \
-									src/fasta.h \
-									src/feature_analysis.h \
-									src/feature_scores.h \
-									src/f_config.h \
-									src/outfile.h \
-									src/optimizer.h \
-									src/profile.h \
-									src/scoring_matrix.h \
-									src/seq_data.h \
-									src/substitution_matrix.h \
-									src/msa.h
+		  src/fasta.h \
+		  src/feature_analysis.h \
+		  src/feature_scores.h \
+		  src/f_config.h \
+		  src/outfile.h \
+		  src/optimizer.h \
+		  src/profile.h \
+		  src/scoring_matrix.h \
+		  src/seq_data.h \
+		  src/substitution_matrix.h \
+		  src/msa.h
 
 kmad_SOURCES = $(shared_SOURCES) \
-								src/kmad.cpp
+	       src/kmad.cpp
 
 kmad_LDADD = $(shared_LDADD)
 test_kmad_SOURCES = $(shared_SOURCES) \
-										tests/test_compare_doubles.cpp \
-										tests/test_config.cpp \
-										tests/test_fasta.cpp \
-										tests/test_seq_data.cpp \
-										tests/test_optimizer.cpp \
-										tests/test_profile.cpp \
-										tests/test_feature_analysis.cpp \
-										tests/test_feature_scores.cpp \
-										tests/test_scoring_matrix.cpp \
-										tests/test_msa.cpp \
-										tests/test_outfile.cpp
+		    tests/test_compare_doubles.cpp \
+		    tests/test_config.cpp \
+		    tests/test_fasta.cpp \
+		    tests/test_seq_data.cpp \
+		    tests/test_optimizer.cpp \
+		    tests/test_profile.cpp \
+		    tests/test_feature_analysis.cpp \
+		    tests/test_feature_scores.cpp \
+		    tests/test_scoring_matrix.cpp \
+		    tests/test_msa.cpp \
+		    tests/test_outfile.cpp
 
 EXTRA_DIST = tests/test_conf_file.cfg \
-						 tests/test_conffile_pattern.cfg \
-						 tests/test_conf_file_wrongformat.cfg \
-						 tests/test_conf_file_settingnotfound.cfg \
-						 tests/invalid_codon.fasta.7c \
-						 tests/TAU_SPECI.fasta.7c \
-						 tests/test_expected_feat.7c \
-						 tests/test_expected_nofeat.1c \
-						 tests/test_fasta_feat.7c \
-						 tests/test_fasta_nofeat.1c \
-						 tests/test_out_decoded.fasta_al \
-						 tests/test_out_encoded.fasta_al \
-						 tests/wrong_format.map \
-						 tests/wrong_format2.map \
-						 tests/wrong_format3.map \
-						 tests/wrong_probs_format.fasta.7c \
-						 tests/test.map
+	     tests/test_conffile_pattern.cfg \
+	     tests/test_conf_file_wrongformat.cfg \
+	     tests/test_conf_file_settingnotfound.cfg \
+	     tests/invalid_codon.fasta.7c \
+	     tests/TAU_SPECI.fasta.7c \
+	     tests/test_expected_feat.7c \
+	     tests/test_expected_nofeat.1c \
+	     tests/test_fasta_feat.7c \
+	     tests/test_fasta_nofeat.1c \
+	     tests/test_out_decoded.fasta_al \
+	     tests/test_out_encoded.fasta_al \
+	     tests/wrong_format.map \
+	     tests/wrong_format2.map \
+	     tests/wrong_format3.map \
+	     tests/wrong_probs_format.fasta.7c \
+	     tests/test.map
 
 test_kmad_LDADD = $(shared_LDADD)
 AUTOMAKE_OPTIONS = foreign
 @DEBUG_FALSE@AM_CPPFLAGS = -std=c++11 \
-@DEBUG_FALSE@							-pedantic \
-@DEBUG_FALSE@							-Wall \
-@DEBUG_FALSE@							-Werror \
-@DEBUG_FALSE@							-Wno-reorder \
-@DEBUG_FALSE@							$(BOOST_CPPFLAGS) \
-@DEBUG_FALSE@							-I$(srcdir)src/
+@DEBUG_FALSE@	      -pedantic \
+@DEBUG_FALSE@	      -Wall \
+@DEBUG_FALSE@	      -Werror \
+@DEBUG_FALSE@	      -Wno-reorder \
+@DEBUG_FALSE@	      $(BOOST_CPPFLAGS) \
+@DEBUG_FALSE@	      -I$(srcdir)src/
 
-@DEBUG_TRUE@AM_CPPFLAGS = -g3 -O0 \
-@DEBUG_TRUE@							-std=c++11 \
-@DEBUG_TRUE@							-pedantic \
-@DEBUG_TRUE@							-Wall \
-@DEBUG_TRUE@							-Werror \
-@DEBUG_TRUE@							-Wno-reorder \
-@DEBUG_TRUE@							$(BOOST_CPPFLAGS) \
-@DEBUG_TRUE@							-I$(srcdir)src/
+@DEBUG_TRUE@AM_CPPFLAGS = -g3 -O3 \
+@DEBUG_TRUE@	      -std=c++11 \
+@DEBUG_TRUE@	      -pedantic \
+@DEBUG_TRUE@	      -Wall \
+@DEBUG_TRUE@	      -Werror \
+@DEBUG_TRUE@	      -Wno-reorder \
+@DEBUG_TRUE@	      $(BOOST_CPPFLAGS) \
+@DEBUG_TRUE@	      -I$(srcdir)src/
 
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -1026,8 +1026,8 @@ uninstall-am: uninstall-binPROGRAMS uninstall-includeHEADERS
 
 
 @HAVE_CPPCHECK_TRUE@cppcheck:
-@HAVE_CPPCHECK_TRUE@		$(CPPCHECK) --quiet --std=c++11 --enable=all \
-@HAVE_CPPCHECK_TRUE@								--suppress=missingIncludeSystem $(srcdir)/src
+@HAVE_CPPCHECK_TRUE@	$(CPPCHECK) --quiet --std=c++11 --enable=all \
+@HAVE_CPPCHECK_TRUE@		--suppress=missingIncludeSystem $(srcdir)/src
 @HAVE_CPPCHECK_TRUE@check:	cppcheck
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

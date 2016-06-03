@@ -10,53 +10,32 @@
 
 namespace fs = boost::filesystem;
 namespace {
-  std::unordered_map<char, std::string> strct_code_map = {{'H', "strct_a_helix"},
-                                                {'T', "strct_turn"},
-                                                {'S', "strct_b_ladder"},
-                                                {'B', "strct_b_bridge"},
-                                                {'G', "strct_310_helix"},
-                                                {'I', "strct_pi_helix"},
-                                                {'E', "strct_b_ladder"},
-                                               };
-  std::unordered_map<char, std::string> ptm_code_map = {{'N', "ptm_phosph0"},
-                                              {'O', "ptm_phosph1"},
-                                              {'P', "ptm_phosph2"},
-                                              {'Q', "ptm_phosph3"},
-                                              {'B', "ptm_acet0"},
-                                              {'C', "ptm_acet1"},
-                                              {'D', "ptm_acet2"},
-                                              {'E', "ptm_acet3"},
-                                              {'F', "ptm_Nglyc0"},
-                                              {'G', "ptm_Nglyc1"},
-                                              {'H', "ptm_Nglyc2"},
-                                              {'I', "ptm_Nglyc3"},
-                                              {'J', "ptm_amid0"},
-                                              {'K', "ptm_amid1"},
-                                              {'L', "ptm_amid2"},
-                                              {'M', "ptm_amid3"},
-                                              {'R', "ptm_hydroxy0"},
-                                              {'S', "ptm_hydroxy1"},
-                                              {'T', "ptm_hydroxy2"},
-                                              {'U', "ptm_hydroxy3"},
-                                              {'V', "ptm_methyl0"},
-                                              {'W', "ptm_methyl1"},
-                                              {'X', "ptm_methyl2"},
-                                              {'Y', "ptm_methyl3"},
-                                              {'Z', "ptm_Oglyc0"},
-                                              {'a', "ptm_Oglyc1"},
-                                              {'b', "ptm_Oglyc2"},
-                                              {'c', "ptm_Oglyc3"},
-                                              {'d', "ptm_phosphP"},
-                                              {'s', "ptm_cys_bridge0"}};
+  std::unordered_map<char, std::string> strct_code_map = {
+          {'H', "strct_a_helix"}, {'T', "strct_turn"}, {'S', "strct_b_ladder"},
+          {'B', "strct_b_bridge"}, {'G', "strct_310_helix"}, {'I', "strct_pi_helix"},
+          {'E', "strct_b_ladder"},
+  };
+  std::unordered_map<char, std::string> ptm_code_map = {
+          {'N', "ptm_phosph0"}, {'O', "ptm_phosph1"}, {'P', "ptm_phosph2"},
+          {'Q', "ptm_phosph3"}, {'B', "ptm_acet0"}, {'C', "ptm_acet1"},
+          {'D', "ptm_acet2"}, {'E', "ptm_acet3"}, {'F', "ptm_Nglyc0"},
+          {'G', "ptm_Nglyc1"}, {'H', "ptm_Nglyc2"}, {'I', "ptm_Nglyc3"},
+          {'J', "ptm_amid0"}, {'K', "ptm_amid1"}, {'L', "ptm_amid2"},
+          {'M', "ptm_amid3"}, {'R', "ptm_hydroxy0"}, {'S', "ptm_hydroxy1"},
+          {'T', "ptm_hydroxy2"}, {'U', "ptm_hydroxy3"}, {'V', "ptm_methyl0"},
+          {'W', "ptm_methyl1"}, {'X', "ptm_methyl2"}, {'Y', "ptm_methyl3"},
+          {'Z', "ptm_Oglyc0"}, {'a', "ptm_Oglyc1"}, {'b', "ptm_Oglyc2"},
+          {'c', "ptm_Oglyc3"}, {'d', "ptm_phosphP"}, {'s', "ptm_cys_bridge0"}};
 }
 
 
-fasta::FastaData fasta::parse_fasta(std::string filename, int codon_length,
-    bool refine, int refine_seq) {
-  fs::path p(filename);
-  if (!fs::exists(p)) {
-    throw std::invalid_argument("File not found: " + filename);
-  }
+fasta::FastaData fasta::parse_fasta(
+        std::string filename, int codon_length, bool refine, int refine_seq) {
+
+        fs::path p(filename);
+        if (!fs::exists(p)) {
+                throw std::invalid_argument("File not found: " + filename);
+        }
 
   std::ifstream fastafile(filename.c_str());
   std::string line;
@@ -104,7 +83,7 @@ fasta::Sequence fasta::make_sequence(const std::string& description,
 {
   fasta::Sequence s;
   s.description = description;
-  
+
   for (unsigned i = 0; i < codons.size(); i += codon_length) {
     boost::regex re("[a-zA-Z0-9-]{" + std::to_string(codon_length) + "}");
     std::string codon = codons.substr(i, codon_length);
@@ -190,7 +169,7 @@ bool fasta::check_length(fasta::SequenceList sequences, int refine_seq) {
   while (result && i < refine_seq){
     size_t length = sequences[i].residues.size();
     if (length != prev_length) {
-      result = false; 
+      result = false;
     }
     ++i;
   }

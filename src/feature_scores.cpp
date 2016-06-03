@@ -48,7 +48,6 @@ void FeatureScores::update_scores(const fasta::SequenceList& sequences,
       }
       else if (feat.substr(0,3) == "USR") {
         scores[feat][i] = score_usr_feature(i, feat, f_set.at(feat));
-
       }
     }
   }
@@ -59,10 +58,12 @@ void FeatureScores::update_scores(const fasta::SequenceList& sequences,
 std::unordered_map<std::string, Occurences> FeatureScores::update_occurences(
     const fasta::SequenceList& sequences,
     const std::vector<double>& identities, const bool fade_out) {
+
   std::unordered_map<std::string, Occurences> p;
   for (auto& f: m_features) {
     p[f] = std::vector<double>(sequences[0].residues.size(), 0);
   }
+
   for (size_t i = 0; i < sequences[0].residues.size(); ++i) {
     for (size_t j = 0; j < sequences.size(); ++j) {
       for (auto& f : sequences[j].residues[i].features) {
@@ -105,30 +106,29 @@ double FeatureScores::score_ptm(unsigned long position,
                     + " ptmname: " + ptm_name;
     throw std::invalid_argument(msg);
   }
+  // get occurrence based score
   for (auto feat_it = m_occurences.begin();
        feat_it != m_occurences.end(); ++feat_it) {
     std::string i_name = feat_it->first;
-    std::string i_type = i_name;
-    // popping back last character, to get just the ptm type
-    // (without its level of annotation)
-    i_type.pop_back();
+    // get just the ptm type without its level of annotation (last char)
+    std::string i_type = i_name.substr(0, i_name.size() - 1);
     if (i_type == ptm_type) {
       char i_level = i_name.back();
+      double score = feat_it->second[position];
       if (i_level == '0') {
-        result += feat_it->second[position];
+        result += score;
       } else if (i_level == '1') {
-        result += feat_it->second[position] * 0.9;
+        result += score * 0.9;
       } else if (i_level == '2') {
-        result += feat_it->second[position] * 0.8;
+        result += score * 0.8;
       } else if (i_level == '3') {
-        result += feat_it->second[position] * 0.7;
+        result += score * 0.7;
       } else if (i_level == 'P') {
-        result += feat_it->second[position] * 0.3;
+        result += score * 0.3;
       }
     }
   }
-  result = result * ptm_score * m_ptm_modifier;
-  return result;
+  return result * ptm_score * m_ptm_modifier;
 }
 
 
@@ -147,8 +147,8 @@ double FeatureScores::score_strct(unsigned long position,
 }
 
 
-double FeatureScores::score_domain(unsigned long position,
-                                     const std::string& dom_name) {
+double FeatureScores::score_domain(
+                unsigned long position, const std::string& dom_name) {
   double result = 0;
   for (auto feat_it = m_occurences.begin();
        feat_it != m_occurences.end(); ++feat_it) {
@@ -162,28 +162,24 @@ double FeatureScores::score_domain(unsigned long position,
 }
 
 
-double FeatureScores::score_motif(unsigned long position,
-                                    const std::string& feat_name) {
-  double result = 0;
-  result = m_occurences[feat_name][position] * m_motif_modifier \
+double FeatureScores::score_motif(
+                unsigned long position, const std::string& feat_name) {
+  return m_occurences[feat_name][position] * m_motif_modifier \
            * m_motif_probabilities[feat_name];
-  return result;
 }
 
 
-double FeatureScores::score_usr_feature(unsigned long position,
-                                         const std::string& feat_name,
-                                         const f_config::FeatureSettings& settings) {
+double FeatureScores::score_usr_feature(
+                unsigned long position, const std::string& feat_name,
+                const f_config::FeatureSettings& settings) {
   double result = 0;
   // features that add scores
   for (auto& feature : settings.add_features) {
-    result += m_occurences[feature][position] \
-              * settings.add_score;
+    result += m_occurences[feature][position] * settings.add_score;
   }
   // features that subtract scores
   for (auto& feature : settings.subtract_features) {
-    result -= m_occurences[feature][position] \
-              * settings.subtract_score;
+    result -= m_occurences[feature][position] * settings.subtract_score;
   }
   return result;
 }
@@ -193,7 +189,7 @@ std::unordered_map<std::string, Scores> FeatureScores::get_scores() {
   return m_scores;
 }
 
-double FeatureScores::get_score(const std::string& feat_name,
-                                        unsigned long position) const {
+double FeatureScores::get_score(
+                const std::string& feat_name, unsigned long position) const {
   return m_scores.at(feat_name)[position];
 }
