@@ -37,16 +37,16 @@ void FeatureScores::update_scores(const fasta::SequenceList& sequences,
   }
   for (size_t i = 0; i < sequences[0].residues.size(); ++i) {
     for (auto &feat : m_features){
-      if (feat.substr(0,3) == "ptm") {
+      if (feat.substr(0, 3) == "ptm") {
         scores[feat][i] = score_ptm(i, feat);
-      } else if (feat.substr(0,6) == "domain") {
+      } else if (feat.substr(0, 6) == "domain") {
         scores[feat][i] = score_domain(i, feat);
-      } else if (feat.substr(0,5) == "motif") {
+      } else if (feat.substr(0, 5) == "motif") {
         scores[feat][i] = score_motif(i, feat);
-      } else if (feat.substr(0,5) == "strct") {
+      } else if (feat.substr(0, 5) == "strct") {
         scores[feat][i] = score_strct(i, feat);
       }
-      else if (feat.substr(0,3) == "USR") {
+      else if (feat.substr(0, 3) == "USR") {
         scores[feat][i] = score_usr_feature(i, feat, f_set.at(feat));
       }
     }
@@ -139,7 +139,7 @@ double FeatureScores::score_strct(unsigned long position,
        feat_it != m_occurences.end(); ++feat_it) {
     if (feat_it->first == strct_name) {
       result += feat_it->second[position];
-    } else if (feat_it->first.substr(0,5) == "strct") {
+    } else if (feat_it->first.substr(0, 5) == "strct") {
       result -= feat_it->second[position];
     }
   }
@@ -154,7 +154,7 @@ double FeatureScores::score_domain(
        feat_it != m_occurences.end(); ++feat_it) {
     if (feat_it->first == dom_name) {
       result += feat_it->second[position];
-    } else if (feat_it->first.substr(0,6) == "domain") {
+    } else if (feat_it->first.substr(0, 6) == "domain") {
       result -= feat_it->second[position];
     }
   }
