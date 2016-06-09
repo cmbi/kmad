@@ -14,62 +14,62 @@ BOOST_AUTO_TEST_SUITE(test_feature_scores)
 
 BOOST_AUTO_TEST_CASE(test_update_scores)
 {
-  FeatureNamesList feature_list = {"ptm_phosph0", "ptm_phosph1",
-                                   "ptm_phosph2", "ptm_phosph3",
-                                   "ptm_phosphP", "ptm_acet0",
-                                   "ptm_acet1", "ptm_acet2",
-                                   "ptm_acet3", "ptm_Nglyc0",
-                                   "ptm_Nglyc1", "ptm_Nglyc2",
-                                   "ptm_Nglyc3", "ptm_amid0",
-                                   "ptm_amid1", "ptm_amid2",
-                                   "ptm_amid3", "ptm_hydroxy0",
-                                   "ptm_hydroxy1", "ptm_hydroxy2",
-                                   "ptm_hydroxy3", "ptm_methyl0",
-                                   "ptm_methyl1", "ptm_methyl2",
-                                   "ptm_methyl3", "ptm_Oglyc0",
-                                   "ptm_Oglyc1", "ptm_Oglyc2",
-                                   "ptm_Oglyc3", "ptm_cys_bridge0",
-                                   "strct_a_helix", "strct_turn",
-                                   "strct_b_ladder", "strct_b_bridge",
-                                   "strct_310_helix", "strct_pi_helix",
-                                   "strct_b_ladder", "motif_aa", 
-                                   "motif_ab", "motif_ac",
-                                   "domain_aa", "domain_ac",
+  FeatureNamesList feature_list = {"p_phosph0", "p_phosph1",
+                                   "p_phosph2", "p_phosph3",
+                                   "p_phosphP", "p_acet0",
+                                   "p_acet1", "p_acet2",
+                                   "p_acet3", "p_Nglyc0",
+                                   "p_Nglyc1", "p_Nglyc2",
+                                   "p_Nglyc3", "p_amid0",
+                                   "p_amid1", "p_amid2",
+                                   "p_amid3", "p_hydroxy0",
+                                   "p_hydroxy1", "p_hydroxy2",
+                                   "p_hydroxy3", "p_methyl0",
+                                   "p_methyl1", "p_methyl2",
+                                   "p_methyl3", "p_Oglyc0",
+                                   "p_Oglyc1", "p_Oglyc2",
+                                   "p_Oglyc3", "p_cys_bridge0",
+                                   "s_a_helix", "s_turn",
+                                   "s_b_ladder", "s_b_bridge",
+                                   "s_310_helix", "s_pi_helix",
+                                   "s_b_ladder", "m_aa", 
+                                   "m_ab", "m_ac",
+                                   "d_aa", "d_ac",
                                    "USR_feature1", "USR_feature2"};
   
   // SEQUENCE S1
-  fasta::Residue r1_1("AAAAdaa", std::vector<std::string>({"ptm_phosphP",
-                                                          "motif_aa"}));
+  fasta::Residue r1_1("AAAAdaa", std::vector<std::string>({"p_phosphP",
+                                                          "m_aa"}));
   fasta::Residue r1_2("MAAAAAA", std::vector<std::string>({}));
-  fasta::Residue r1_3("EAaadaa", std::vector<std::string>({"domain_aa"}));
+  fasta::Residue r1_3("EAaadaa", std::vector<std::string>({"d_aa"}));
   fasta::Residue r1_4("LAAAAAA", std::vector<std::string>({}));
   // SEQUENCE S2
-  fasta::Residue r2_1("AAAAdaa", std::vector<std::string>({"ptm_phosphP",
-                                                          "motif_aa"}));
-  fasta::Residue r2_2("EAAAZAA", std::vector<std::string>({"ptm_phosph0"}));
-  fasta::Residue r2_3("EAaaZAA", std::vector<std::string>({"ptm_phosph0",
-                                                           "domain_aa"}));
-  fasta::Residue r2_4("KAAAZAA", std::vector<std::string>({"ptm_phosph0"}));
+  fasta::Residue r2_1("AAAAdaa", std::vector<std::string>({"p_phosphP",
+                                                          "m_aa"}));
+  fasta::Residue r2_2("EAAAZAA", std::vector<std::string>({"p_phosph0"}));
+  fasta::Residue r2_3("EAaaZAA", std::vector<std::string>({"p_phosph0",
+                                                           "d_aa"}));
+  fasta::Residue r2_4("KAAAZAA", std::vector<std::string>({"p_phosph0"}));
   // SEQUENCE S3
-  fasta::Residue r3_1("AAAAZaa", std::vector<std::string>({"ptm_phosph0",
-                                                           "motif_aa"}));
-  fasta::Residue r3_2("MAAAZAA", std::vector<std::string>({"ptm_phosph0"}));
-  fasta::Residue r3_3("EAacZAA", std::vector<std::string>({"ptm_phosph0",
-                                                           "domain_ac"}));
-  fasta::Residue r3_4("LAaaZaa", std::vector<std::string>({"ptm_phosph0",
-                                                           "motif_aa",
-                                                           "domain_aa"}));
+  fasta::Residue r3_1("AAAAZaa", std::vector<std::string>({"p_phosph0",
+                                                           "m_aa"}));
+  fasta::Residue r3_2("MAAAZAA", std::vector<std::string>({"p_phosph0"}));
+  fasta::Residue r3_3("EAacZAA", std::vector<std::string>({"p_phosph0",
+                                                           "d_ac"}));
+  fasta::Residue r3_4("LAaaZaa", std::vector<std::string>({"p_phosph0",
+                                                           "m_aa",
+                                                           "d_aa"}));
   // SEQUENCE S4
-  fasta::Residue r4_1("MAAAZab", std::vector<std::string>({"ptm_phosph0",
-                                                           "motif_ab"}));
-  fasta::Residue r4_2("MAAAZAA", std::vector<std::string>({"ptm_phosph0"}));
-  fasta::Residue r4_3("KAaaZAA", std::vector<std::string>({"ptm_phosph0",
-                                                           "domain_aa"}));
-  fasta::Residue r4_4("LAAAAaa", std::vector<std::string>({"motif_aa"}));
+  fasta::Residue r4_1("MAAAZab", std::vector<std::string>({"p_phosph0",
+                                                           "m_ab"}));
+  fasta::Residue r4_2("MAAAZAA", std::vector<std::string>({"p_phosph0"}));
+  fasta::Residue r4_3("KAaaZAA", std::vector<std::string>({"p_phosph0",
+                                                           "d_aa"}));
+  fasta::Residue r4_4("LAAAAaa", std::vector<std::string>({"m_aa"}));
   
   // SEQUENCE S5
-  fasta::Residue r5_1("AAAAAac", std::vector<std::string>({"motif_ac"}));
-  fasta::Residue r5_2("MAAAZAA", std::vector<std::string>({"ptm_phosph0"}));
+  fasta::Residue r5_1("AAAAAac", std::vector<std::string>({"m_ac"}));
+  fasta::Residue r5_2("MAAAZAA", std::vector<std::string>({"p_phosph0"}));
   fasta::Residue r5_3("AAAAAAA", std::vector<std::string>({"USR_feature2"}));
   fasta::Residue r5_4("LAAAAAA", std::vector<std::string>({"USR_feature1"}));
 
@@ -81,9 +81,9 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
 
   fasta::SequenceList sequences = {s1, s2, s3, s4, s5};
 
-  std::unordered_map<std::string, double> probs = {{"motif_aa", 1.0},
-                                         {"motif_ab", 0.5},
-                                         {"motif_ac", 0.8}};
+  std::unordered_map<std::string, double> probs = {{"m_aa", 1.0},
+                                         {"m_ab", 0.5},
+                                         {"m_ac", 0.8}};
 
   FeatureScores f_profile(feature_list, 4, 10, 3, 0, probs);
   f_config::FeatureSettings settings1;
@@ -103,48 +103,48 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
   f_profile.update_scores(sequences, s_map, identities, fade_out);
   std::unordered_map<std::string, Scores> p = f_profile.get_scores();
   std::unordered_map<std::string, Scores> expected_scores;
-  expected_scores = {{"ptm_phosph0", {5.2, 8, 6, 4}},
-                     {"ptm_phosph1", {4.68, 7.2, 5.4, 3.6}},
-                     {"ptm_phosph2", {4.16, 6.4, 4.8, 3.2}},
-                     {"ptm_phosph3", {3.64, 5.6, 4.2, 2.8}},
-                     {"ptm_phosphP", {1.56, 2.4, 1.8, 1.2}},
-                     {"ptm_acet0", {0, 0, 0, 0}},
-                     {"ptm_acet1", {0, 0, 0, 0}},
-                     {"ptm_acet2", {0, 0, 0, 0}},
-                     {"ptm_acet3", {0, 0, 0, 0}},
-                     {"ptm_Nglyc0", {0, 0, 0, 0}},
-                     {"ptm_Nglyc1", {0, 0, 0, 0}},
-                     {"ptm_Nglyc2", {0, 0, 0, 0}},
-                     {"ptm_Nglyc3", {0, 0, 0, 0}},
-                     {"ptm_amid0", {0, 0, 0, 0}},
-                     {"ptm_amid1", {0, 0, 0, 0}},
-                     {"ptm_amid2", {0, 0, 0, 0}},
-                     {"ptm_amid3", {0, 0, 0, 0}},
-                     {"ptm_hydroxy0", {0, 0, 0, 0}},
-                     {"ptm_hydroxy1", {0, 0, 0, 0}},
-                     {"ptm_hydroxy2", {0, 0, 0, 0}},
-                     {"ptm_hydroxy3", {0, 0, 0, 0}},
-                     {"ptm_methyl0", {0, 0, 0, 0}},
-                     {"ptm_methyl1", {0, 0, 0, 0}},
-                     {"ptm_methyl2", {0, 0, 0, 0}},
-                     {"ptm_methyl3", {0, 0, 0, 0}},
-                     {"ptm_Oglyc0", {0, 0, 0, 0}},
-                     {"ptm_Oglyc1", {0, 0, 0, 0}},
-                     {"ptm_Oglyc2", {0, 0, 0, 0}},
-                     {"ptm_Oglyc3", {0, 0, 0, 0}},
-                     {"ptm_cys_bridge0", {0, 0, 0, 0}},
-                     {"strct_a_helix", {0, 0, 0, 0}},
-                     {"strct_turn", {0, 0, 0, 0}},
-                     {"strct_b_ladder", {0, 0, 0, 0}},
-                     {"strct_b_bridge", {0, 0, 0, 0}},
-                     {"strct_310_helix", {0, 0, 0, 0}},
-                     {"strct_pi_helix", {0, 0, 0, 0}},
-                     {"strct_b_ladder", {0, 0, 0, 0}},
-                     {"motif_aa", {1.8, 0, 0, 1.2}},
-                     {"motif_ab", {0.3, 0, 0, 0}},
-                     {"motif_ac", {0.48, 0, 0, 0}},
-                     {"domain_aa", {0, 0, 1.6, 0.8}},
-                     {"domain_ac", {0, 0, -1.6, -0.8}},
+  expected_scores = {{"p_phosph0", {5.2, 8, 6, 4}},
+                     {"p_phosph1", {4.68, 7.2, 5.4, 3.6}},
+                     {"p_phosph2", {4.16, 6.4, 4.8, 3.2}},
+                     {"p_phosph3", {3.64, 5.6, 4.2, 2.8}},
+                     {"p_phosphP", {1.56, 2.4, 1.8, 1.2}},
+                     {"p_acet0", {0, 0, 0, 0}},
+                     {"p_acet1", {0, 0, 0, 0}},
+                     {"p_acet2", {0, 0, 0, 0}},
+                     {"p_acet3", {0, 0, 0, 0}},
+                     {"p_Nglyc0", {0, 0, 0, 0}},
+                     {"p_Nglyc1", {0, 0, 0, 0}},
+                     {"p_Nglyc2", {0, 0, 0, 0}},
+                     {"p_Nglyc3", {0, 0, 0, 0}},
+                     {"p_amid0", {0, 0, 0, 0}},
+                     {"p_amid1", {0, 0, 0, 0}},
+                     {"p_amid2", {0, 0, 0, 0}},
+                     {"p_amid3", {0, 0, 0, 0}},
+                     {"p_hydroxy0", {0, 0, 0, 0}},
+                     {"p_hydroxy1", {0, 0, 0, 0}},
+                     {"p_hydroxy2", {0, 0, 0, 0}},
+                     {"p_hydroxy3", {0, 0, 0, 0}},
+                     {"p_methyl0", {0, 0, 0, 0}},
+                     {"p_methyl1", {0, 0, 0, 0}},
+                     {"p_methyl2", {0, 0, 0, 0}},
+                     {"p_methyl3", {0, 0, 0, 0}},
+                     {"p_Oglyc0", {0, 0, 0, 0}},
+                     {"p_Oglyc1", {0, 0, 0, 0}},
+                     {"p_Oglyc2", {0, 0, 0, 0}},
+                     {"p_Oglyc3", {0, 0, 0, 0}},
+                     {"p_cys_bridge0", {0, 0, 0, 0}},
+                     {"s_a_helix", {0, 0, 0, 0}},
+                     {"s_turn", {0, 0, 0, 0}},
+                     {"s_b_ladder", {0, 0, 0, 0}},
+                     {"s_b_bridge", {0, 0, 0, 0}},
+                     {"s_310_helix", {0, 0, 0, 0}},
+                     {"s_pi_helix", {0, 0, 0, 0}},
+                     {"s_b_ladder", {0, 0, 0, 0}},
+                     {"m_aa", {1.8, 0, 0, 1.2}},
+                     {"m_ab", {0.3, 0, 0, 0}},
+                     {"m_ac", {0.48, 0, 0, 0}},
+                     {"d_aa", {0, 0, 1.6, 0.8}},
+                     {"d_ac", {0, 0, -1.6, -0.8}},
                      {"USR_feature2", {0, 0,  0.2, -0.2}},
                      {"USR_feature1", {0, 0, 0, 0.2}}};
   for (auto& feat: feature_list){
@@ -152,13 +152,13 @@ BOOST_AUTO_TEST_CASE(test_update_scores)
       BOOST_CHECK(std::abs(p[feat][i] - expected_scores[feat][i]) < 0.001);
     }
   }
-  feature_list = {"ptm_phosph9", "motif_aa", "domain_aa"};
+  feature_list = {"p_phosph9", "m_aa", "d_aa"};
   f_profile = FeatureScores(feature_list, 4, 10, 3, 0, probs);
   // SEQUENCE S1
-  r1_1 = fasta::Residue ("AAAAdaa", std::vector<std::string>({"ptm_phosph9",
-                                                              "motif_aa"}));
+  r1_1 = fasta::Residue ("AAAAdaa", std::vector<std::string>({"p_phosph9",
+                                                              "m_aa"}));
   r1_2 = fasta::Residue ("MAAAAAA", std::vector<std::string>({}));
-  r1_3 = fasta::Residue ("EAaadaa", std::vector<std::string>({"domain_aa"}));
+  r1_3 = fasta::Residue ("EAaadaa", std::vector<std::string>({"d_aa"}));
   r1_4 = fasta::Residue ("LAAAAAA", std::vector<std::string>({}));
   s1 = fasta::make_sequence({r1_1, r1_2, r1_3, r1_4});
   sequences = {s1};

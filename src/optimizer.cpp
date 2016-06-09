@@ -117,12 +117,12 @@ std::vector<fasta::SequenceList> optimizer::move_residues(
   std::vector<fasta::SequenceList> new_alignment = alignment;
   for (auto& i : move_data) {
     fasta::Residue tmp = new_alignment[0][i.seq_number].residues[i.new_position];
-    new_alignment[0][i.seq_number].residues[i.new_position] = 
+    new_alignment[0][i.seq_number].residues[i.new_position] =
       new_alignment[0][i.seq_number].residues[i.old_position];
     new_alignment[0][i.seq_number].residues[i.old_position] = tmp;
 
     tmp = new_alignment[1][i.seq_number].residues[i.new_position];
-    new_alignment[1][i.seq_number].residues[i.new_position] = 
+    new_alignment[1][i.seq_number].residues[i.new_position] =
       new_alignment[1][i.seq_number].residues[i.old_position];
     new_alignment[1][i.seq_number].residues[i.old_position] = tmp;
   }
@@ -133,19 +133,19 @@ std::vector<fasta::SequenceList> optimizer::move_residues(
 double optimizer::get_two_res_score(fasta::Residue res1, fasta::Residue res2,
   int res1_index, const sbst::SimilarityScoresMap* sim_scores,
   double domain_modifier, double motif_modifier, double ptm_modifier)
-{ 
+{
   double result = 0;
   char aa2 = res2.codon[0];
   if (sim_scores->find(aa2) != sim_scores->end() && res1_index >= 0) {
     result += sim_scores->at(aa2)[res1_index];
-  } 
+  }
   // else if (aa2 == 'B' && res1_index >= 0) {
   //   result += sim_scores->at('D')[res1_index] * 0.5
   //             + sim_scores->at('N')[res1_index] * 0.5;
   // } else if (aa2 == 'Z' && res1_index >= 0) {
   //   result += sim_scores->at('Q')[res1_index] * 0.5
   //             + sim_scores->at('E')[res1_index] * 0.5;
-  // } 
+  // }
   // else if ((aa2 == 'B' && res1.codon[0] == 'Z')
   //            || (aa2 == 'Z' && res1.codon[0] == 'B')) {
   //     result += 0.25 * (sim_scores->at('N')[5] + sim_scores->at('N')[6]
@@ -221,7 +221,7 @@ int optimizer::find_gap_end(const fasta::Sequence& seq, int start) {
   bool not_found = true;
   for(size_t i = start; not_found && i < seq.residues.size(); i++) {
     if (seq.residues[i].codon[0] != '-') {
-      not_found = false;  
+      not_found = false;
       gap_end = i - 1;
     }
   }
@@ -234,7 +234,7 @@ int optimizer::find_gap_start(const fasta::Sequence& seq, int gap_end) {
   bool not_found = true;
   for(size_t i = gap_end; not_found && i > 0; --i) {
     if (seq.residues[i].codon[0] != '-') {
-      not_found = false;  
+      not_found = false;
       gap_start = i + 1;
     }
   }
@@ -254,23 +254,23 @@ double optimizer::score_ptm(fasta::Residue res1, fasta::Residue res2,
   double multiplier1 = 0;
   double multiplier2 = 0;
   for (auto& f : res1.features) {
-    if (f.substr(0, 3) == "ptm") {
-      found1 = true; 
+    if (f.substr(0, 2) == "p_") {
+      found1 = true;
       ptm_name = f;
       ptm_level = ptm_name.substr(ptm_name.size() - 1, 1)[0];
       multiplier1 = ptm_level_map[ptm_level];
       ptm_type1 = ptm_name.substr(0, ptm_name.size() - 1);
-    } 
+    }
   }
   if (found1) {
     for (auto& f : res2.features) {
-      if (f.substr(0, 3) == "ptm") {
-        found2 = true; 
+      if (f.substr(0, 2) == "p_") {
+        found2 = true;
         ptm_name = f;
         ptm_level = ptm_name.substr(ptm_name.size() - 1, 1)[0];
         multiplier2 = ptm_level_map[ptm_level];
         ptm_type2 = ptm_name.substr(0, ptm_name.size() - 1);
-      } 
+      }
     }
     if (found2 && ptm_type1 == ptm_type2) {
       score = multiplier1 * multiplier2 * ptm_modifier;
@@ -288,14 +288,14 @@ double optimizer::score_motif(fasta::Residue res1, fasta::Residue res2,
   bool found1 = false;
   bool found2 = false;
   for (auto& f : res1.features) {
-    if (f.substr(0, 5) == "motif") {
+    if (f.substr(0, 2) == "m_") {
       name1 = f;
       found1 = true;
     }
   }
   if (found1) {
     for (auto& f : res2.features) {
-      if (f.substr(0, 5) == "motif") {
+      if (f.substr(0, 2) == "m_") {
         name2 = f;
         found2 = true;
       }
@@ -316,14 +316,14 @@ double optimizer::score_domain(fasta::Residue res1, fasta::Residue res2,
   bool found1 = false;
   bool found2 = false;
   for (auto& f : res1.features) {
-    if (f.substr(0, 6) == "domain") {
+    if (f.substr(0, 2) == "d_") {
       name1 = f;
       found1 = true;
     }
   }
   if (found1) {
     for (auto& f : res2.features) {
-      if (f.substr(0, 6) == "domain") {
+      if (f.substr(0, 2) == "d_") {
         name2 = f;
         found2 = true;
       }

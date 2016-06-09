@@ -11,21 +11,21 @@
 namespace fs = boost::filesystem;
 namespace {
   std::unordered_map<char, std::string> strct_code_map = {
-          {'H', "strct_a_helix"}, {'T', "strct_turn"}, {'S', "strct_b_ladder"},
-          {'B', "strct_b_bridge"}, {'G', "strct_310_helix"}, {'I', "strct_pi_helix"},
-          {'E', "strct_b_ladder"},
+          {'H', "s_a_helix"}, {'T', "s_turn"}, {'S', "s_b_ladder"},
+          {'B', "s_b_bridge"}, {'G', "s_310_helix"}, {'I', "s_pi_helix"},
+          {'E', "s_b_ladder"},
   };
   std::unordered_map<char, std::string> ptm_code_map = {
-          {'N', "ptm_phosph0"}, {'O', "ptm_phosph1"}, {'P', "ptm_phosph2"},
-          {'Q', "ptm_phosph3"}, {'B', "ptm_acet0"}, {'C', "ptm_acet1"},
-          {'D', "ptm_acet2"}, {'E', "ptm_acet3"}, {'F', "ptm_Nglyc0"},
-          {'G', "ptm_Nglyc1"}, {'H', "ptm_Nglyc2"}, {'I', "ptm_Nglyc3"},
-          {'J', "ptm_amid0"}, {'K', "ptm_amid1"}, {'L', "ptm_amid2"},
-          {'M', "ptm_amid3"}, {'R', "ptm_hydroxy0"}, {'S', "ptm_hydroxy1"},
-          {'T', "ptm_hydroxy2"}, {'U', "ptm_hydroxy3"}, {'V', "ptm_methyl0"},
-          {'W', "ptm_methyl1"}, {'X', "ptm_methyl2"}, {'Y', "ptm_methyl3"},
-          {'Z', "ptm_Oglyc0"}, {'a', "ptm_Oglyc1"}, {'b', "ptm_Oglyc2"},
-          {'c', "ptm_Oglyc3"}, {'d', "ptm_phosphP"}, {'s', "ptm_cys_bridge0"}};
+          {'N', "p_phosph0"}, {'O', "p_phosph1"}, {'P', "p_phosph2"},
+          {'Q', "p_phosph3"}, {'B', "p_acet0"}, {'C', "p_acet1"},
+          {'D', "p_acet2"}, {'E', "p_acet3"}, {'F', "p_Nglyc0"},
+          {'G', "p_Nglyc1"}, {'H', "p_Nglyc2"}, {'I', "p_Nglyc3"},
+          {'J', "p_amid0"}, {'K', "p_amid1"}, {'L', "p_amid2"},
+          {'M', "p_amid3"}, {'R', "p_hydroxy0"}, {'S', "p_hydroxy1"},
+          {'T', "p_hydroxy2"}, {'U', "p_hydroxy3"}, {'V', "p_methyl0"},
+          {'W', "p_methyl1"}, {'X', "p_methyl2"}, {'Y', "p_methyl3"},
+          {'Z', "p_Oglyc0"}, {'a', "p_Oglyc1"}, {'b', "p_Oglyc2"},
+          {'c', "p_Oglyc3"}, {'d', "p_phosphP"}, {'s', "p_cys_bridge0"}};
 }
 
 
@@ -64,7 +64,7 @@ fasta::FastaData fasta::parse_fasta(
       if (result.size() != 2) {
         throw std::runtime_error("Invalid probability format: " + line);
       }
-      fd.probabilities["motif_" + result[0]] = std::stod(result[1]);
+      fd.probabilities["m_" + result[0]] = std::stod(result[1]);
     }
   }
   fastafile.close();
@@ -151,10 +151,10 @@ fasta::Residue fasta::make_residue(const std::string& codon) {
     features.push_back(strct_code_map.at(codon[1]));
   }
   if (codon.size() >= 7 && codon.substr(5, 2) != "AA") {
-    features.push_back("motif_" + codon.substr(5, 2));
+    features.push_back("m_" + codon.substr(5, 2));
   }
   if (codon.size() >= 4 && codon.substr(2, 2) != "AA") {
-    features.push_back("domain_" + codon.substr(2, 2));
+    features.push_back("d_" + codon.substr(2, 2));
   }
   return Residue(codon, features);
 }
