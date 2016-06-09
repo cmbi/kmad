@@ -25,16 +25,16 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
   std::string sbst_mat = "BLOSUM";
   profile::ProfileMap profile = profile::create_score_profile(query_seq_list,
                                                               sbst_mat);
-  int domain_modifier = 4;
-  int motif_modifier = 3;
-  int ptm_modifier = 10;
-  int strct_modifier = 10;
+  int d_modifier = 4;
+  int m_modifier = 3;
+  int p_modifier = 10;
+  int s_modifier = 10;
   std::unordered_map<std::string, double> probabilities;
   f_config::FeatureSettingsMap f_set;
   std::vector<std::string> feature_list;
-  FeatureScores f_profile(feature_list, domain_modifier,
-                          ptm_modifier, motif_modifier,
-                          strct_modifier, probabilities);
+  FeatureScores f_profile(feature_list, d_modifier,
+                          p_modifier, m_modifier,
+                          s_modifier, probabilities);
   std::vector<double> identities(query_seq_list.size(), 1.0);
   bool fade_out = false;
   f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
@@ -93,16 +93,16 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   s2 = fasta::make_sequence("d", "ASLRP", codon_length);
   fasta::SequenceList query_seq_list = {s1};
   fasta::SequenceList sequences = {s1, s2};
-  int domain_modifier = 4;
-  int motif_modifier = 3;
-  int ptm_modifier = 10;
-  int strct_modifier = 10;
+  int d_modifier = 4;
+  int m_modifier = 3;
+  int p_modifier = 10;
+  int s_modifier = 10;
   std::unordered_map<std::string, double> probabilities;
   f_config::FeatureSettingsMap f_set;
   std::vector<std::string> feature_list;
-  FeatureScores f_profile(feature_list, domain_modifier,
-                          ptm_modifier, motif_modifier,
-                          strct_modifier,
+  FeatureScores f_profile(feature_list, d_modifier,
+                          p_modifier, m_modifier,
+                          s_modifier,
                           probabilities);
   std::vector<double> identities(query_seq_list.size(), 1.0);
   bool fade_out = false;
@@ -183,34 +183,34 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
     BOOST_CHECK_EQUAL(e_s2.residues[i].codon, result[1].residues[i].codon);
   }
   codon_length = 7;
-  feature_list = {"ptm_phosph0", "ptm_phosph1",
-                  "ptm_phosph2", "ptm_phosph3",
-                  "ptm_phosphP", "ptm_acet0",
-                  "ptm_acet1", "ptm_acet2",
-                  "ptm_acet3", "ptm_Nglyc0",
-                  "ptm_Nglyc1", "ptm_Nglyc2",
-                  "ptm_Nglyc3", "ptm_amid0",
-                  "ptm_amid1", "ptm_amid2",
-                  "ptm_amid3", "ptm_hydroxy0",
-                  "ptm_hydroxy1", "ptm_hydroxy2",
-                  "ptm_hydroxy3", "ptm_methyl0",
-                  "ptm_methyl1", "ptm_methyl2",
-                  "ptm_methyl3", "ptm_Oglyc0",
-                  "ptm_Oglyc1", "ptm_Oglyc2",
-                  "ptm_Oglyc3", "ptm_cys_bridge0", 
-                  "strct_a_helix", "strct_turn",
-                  "strct_b_ladder", "strct_b_bridge",
-                  "strct_310_helix", "strct_pi_helix",
-                  "strct_b_ladder",
-                  "motif_aa"};
+  feature_list = {"p_phosph0", "p_phosph1",
+                  "p_phosph2", "p_phosph3",
+                  "p_phosphP", "p_acet0",
+                  "p_acet1", "p_acet2",
+                  "p_acet3", "p_Nglyc0",
+                  "p_Nglyc1", "p_Nglyc2",
+                  "p_Nglyc3", "p_amid0",
+                  "p_amid1", "p_amid2",
+                  "p_amid3", "p_hydroxy0",
+                  "p_hydroxy1", "p_hydroxy2",
+                  "p_hydroxy3", "p_methyl0",
+                  "p_methyl1", "p_methyl2",
+                  "p_methyl3", "p_Oglyc0",
+                  "p_Oglyc1", "p_Oglyc2",
+                  "p_Oglyc3", "p_cys_bridge0", 
+                  "s_a_helix", "s_turn",
+                  "s_b_ladder", "s_b_bridge",
+                  "s_310_helix", "s_pi_helix",
+                  "s_b_ladder",
+                  "m_aa"};
   s1 = fasta::make_sequence("d", "TAAAZAATAAAZAARAAAAAARAAAAAARAAAAAADAAAAAA"
                                  "DAAAAAARAAAAAARAAAAAA", codon_length);
   s2 = fasta::make_sequence("d", "RAAAZAARAAAAaaRAAAAAAWAAAAAAWAAAAAARAAAAAA"
                                  "RAAAAAA", codon_length);
   query_seq_list = {s1};
-  f_profile = FeatureScores(feature_list, domain_modifier,
-                            ptm_modifier, motif_modifier,
-                            strct_modifier, probabilities);
+  f_profile = FeatureScores(feature_list, d_modifier,
+                            p_modifier, m_modifier,
+                            s_modifier, probabilities);
   f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
   profile = profile::create_score_profile(query_seq_list, sbst_mat);
   scores3 = ScoringMatrix(s1.residues.size(), s2.residues.size(), gap_open_pen,

@@ -63,10 +63,10 @@ int main(int argc, char *argv[]) {
       ("strct,s",
        po::value<double>(&strct_modifier)->default_value(4),
        "score for aligning secondary structure elements")
-      ("domain,d",
+      ("d,d",
        po::value<double>(&domain_modifier)->default_value(3),
        "score for aligning domains")
-      ("motif,m",
+      ("m,m",
        po::value<double>(&motif_modifier)->default_value(3),
                                  "probability multiplier for motifs")
       ("out-encoded",

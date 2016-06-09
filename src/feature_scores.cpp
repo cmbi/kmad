@@ -37,13 +37,13 @@ void FeatureScores::update_scores(const fasta::SequenceList& sequences,
   }
   for (size_t i = 0; i < sequences[0].residues.size(); ++i) {
     for (auto &feat : m_features){
-      if (feat.substr(0, 3) == "ptm") {
+      if (feat.substr(0, 2) == "p_") {
         scores[feat][i] = score_ptm(i, feat);
-      } else if (feat.substr(0, 6) == "domain") {
+      } else if (feat.substr(0, 2) == "d_") {
         scores[feat][i] = score_domain(i, feat);
-      } else if (feat.substr(0, 5) == "motif") {
+      } else if (feat.substr(0, 2) == "m_") {
         scores[feat][i] = score_motif(i, feat);
-      } else if (feat.substr(0, 5) == "strct") {
+      } else if (feat.substr(0, 2) == "s_") {
         scores[feat][i] = score_strct(i, feat);
       }
       else if (feat.substr(0, 3) == "USR") {
@@ -80,8 +80,8 @@ std::unordered_map<std::string, Occurences> FeatureScores::update_occurences(
 }
 
 
-double FeatureScores::score_ptm(unsigned long position,
-                                const std::string& ptm_name) {
+double FeatureScores::score_ptm(
+                unsigned long position, const std::string& ptm_name) {
   double result  = 0;
   std::string ptm_type = ptm_name;
   //pop back last character to get just the ptm type
@@ -139,7 +139,7 @@ double FeatureScores::score_strct(unsigned long position,
        feat_it != m_occurences.end(); ++feat_it) {
     if (feat_it->first == strct_name) {
       result += feat_it->second[position];
-    } else if (feat_it->first.substr(0, 5) == "strct") {
+    } else if (feat_it->first.substr(0, 2) == "s_") {
       result -= feat_it->second[position];
     }
   }
@@ -154,7 +154,7 @@ double FeatureScores::score_domain(
        feat_it != m_occurences.end(); ++feat_it) {
     if (feat_it->first == dom_name) {
       result += feat_it->second[position];
-    } else if (feat_it->first.substr(0, 6) == "domain") {
+    } else if (feat_it->first.substr(0, 2) == "d_") {
       result -= feat_it->second[position];
     }
   }

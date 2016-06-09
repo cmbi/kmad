@@ -20,11 +20,11 @@ BOOST_AUTO_TEST_CASE(test_parse_mapfile) {
                     std::runtime_error);
   feature_analysis::CodesMap cm = feature_analysis::parse_mapfile(
       "tests/test.map");
-  feature_analysis::CodesMap expected_cm = {{"motif_aa",
+  feature_analysis::CodesMap expected_cm = {{"m_aa",
                                              {"SOME_MOTIF_NAME", "KR."}},
-                                            {"domain_aa",
+                                            {"d_aa",
                                              {"SOME_DOMAIN_NAME"}},
-                                            {"domain_ab",
+                                            {"d_ab",
                                              {"SOME_DOMAIN_NAME_2"}}};
   BOOST_CHECK_EQUAL(expected_cm.size(), cm.size());
   for (auto feat_it = expected_cm.begin(); feat_it != expected_cm.end();
