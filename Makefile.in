@@ -422,14 +422,6 @@ EXTRA_DIST = tests/test_conf_file.cfg \
 
 test_kmad_LDADD = $(shared_LDADD)
 AUTOMAKE_OPTIONS = foreign
-@DEBUG_FALSE@AM_CPPFLAGS = -std=c++11 \
-@DEBUG_FALSE@	      -pedantic \
-@DEBUG_FALSE@	      -Wall \
-@DEBUG_FALSE@	      -Werror \
-@DEBUG_FALSE@	      -Wno-reorder \
-@DEBUG_FALSE@	      $(BOOST_CPPFLAGS) \
-@DEBUG_FALSE@	      -I$(srcdir)src/
-
 @DEBUG_TRUE@AM_CPPFLAGS = -g3 -O3 \
 @DEBUG_TRUE@	      -std=c++11 \
 @DEBUG_TRUE@	      -pedantic \
@@ -438,6 +430,23 @@ AUTOMAKE_OPTIONS = foreign
 @DEBUG_TRUE@	      -Wno-reorder \
 @DEBUG_TRUE@	      $(BOOST_CPPFLAGS) \
 @DEBUG_TRUE@	      -I$(srcdir)src/
+
+#AM_CPPFLAGS = -g3 -O3 \
+#              -std=c++11 \
+#              -pedantic \
+#              -Wall \
+#              -Werror \
+#              -Wno-reorder \
+#              $(BOOST_CPPFLAGS) \
+#              -I$(srcdir)src/
+@DEBUG_FALSE@AM_CXXFLAGS = -g3 -O3 \
+@DEBUG_FALSE@	      -std=c++11 \
+@DEBUG_FALSE@	      -pedantic \
+@DEBUG_FALSE@	      -Wall \
+@DEBUG_FALSE@	      -Werror \
+@DEBUG_FALSE@	      -Wno-reorder \
+@DEBUG_FALSE@	      $(BOOST_CPPFLAGS) \
+@DEBUG_FALSE@	      -I$(srcdir)src/
 
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am

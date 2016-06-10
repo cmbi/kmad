@@ -84,7 +84,7 @@ cppcheck:
 check:	cppcheck
 endif
 if DEBUG
-AM_CPPFLAGS = -g3 -O3 \
+AM_CXXFLAGS = -g3 -O0 \
 	      -std=c++11 \
 	      -pedantic \
 	      -Wall \
@@ -93,7 +93,8 @@ AM_CPPFLAGS = -g3 -O3 \
 	      $(BOOST_CPPFLAGS) \
 	      -I$(srcdir)src/
 else
-AM_CPPFLAGS = -std=c++11 \
+AM_CXXFLAGS = -O3 \
+	      -std=c++11 \
 	      -pedantic \
 	      -Wall \
 	      -Werror \
