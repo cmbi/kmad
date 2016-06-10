@@ -44,7 +44,7 @@ namespace optimizer {
   /// takes an alignment and residues to remove; returns an alignment with
   /// removed residues
   ///
-  std::vector<fasta::SequenceList> move_residues(
+  std::vector<fasta::SequenceList> remove_residues(
       const std::vector<fasta::SequenceList>& alignment,
       const std::vector<MoveData>& move_data);
 
