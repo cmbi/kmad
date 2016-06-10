@@ -250,9 +250,7 @@ double optimizer::score_ptm(fasta::Residue res1, fasta::Residue res2,
   std::string ptm_type2;
   char ptm_level;
   bool found1 = false;
-  bool found2 = false;
   double multiplier1 = 0;
-  double multiplier2 = 0;
   for (auto& f : res1.features) {
     if (f.substr(0, 2) == "p_") {
       found1 = true;
@@ -263,6 +261,8 @@ double optimizer::score_ptm(fasta::Residue res1, fasta::Residue res2,
     }
   }
   if (found1) {
+    bool found2 = false;
+    double multiplier2 = 0;
     for (auto& f : res2.features) {
       if (f.substr(0, 2) == "p_") {
         found2 = true;
@@ -286,7 +286,6 @@ double optimizer::score_motif(fasta::Residue res1, fasta::Residue res2,
   std::string name1;
   std::string name2;
   bool found1 = false;
-  bool found2 = false;
   for (auto& f : res1.features) {
     if (f.substr(0, 2) == "m_") {
       name1 = f;
@@ -294,6 +293,7 @@ double optimizer::score_motif(fasta::Residue res1, fasta::Residue res2,
     }
   }
   if (found1) {
+    bool found2 = false;
     for (auto& f : res2.features) {
       if (f.substr(0, 2) == "m_") {
         name2 = f;
@@ -314,7 +314,6 @@ double optimizer::score_domain(fasta::Residue res1, fasta::Residue res2,
   std::string name1;
   std::string name2;
   bool found1 = false;
-  bool found2 = false;
   for (auto& f : res1.features) {
     if (f.substr(0, 2) == "d_") {
       name1 = f;
@@ -322,6 +321,7 @@ double optimizer::score_domain(fasta::Residue res1, fasta::Residue res2,
     }
   }
   if (found1) {
+    bool found2 = false;
     for (auto& f : res2.features) {
       if (f.substr(0, 2) == "d_") {
         name2 = f;
