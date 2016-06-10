@@ -130,7 +130,7 @@ BOOST_AUTO_TEST_CASE(test_filter_move_data)
 }
 
 
-BOOST_AUTO_TEST_CASE(test_move_residues)
+BOOST_AUTO_TEST_CASE(test_remove_residues)
 {
   std::vector<fasta::SequenceList> alignment = {
     {fasta::make_sequence("AAE--AA", 1),
@@ -142,7 +142,7 @@ BOOST_AUTO_TEST_CASE(test_move_residues)
   std::vector<optimizer::MoveData> move_data = {
     optimizer::MoveData(0, 2, 4, 5)};
 
-  alignment = optimizer::move_residues(alignment, move_data);
+  alignment = optimizer::remove_residues(alignment, move_data);
 
   std::vector<std::string> result;
   for (auto& item : alignment) {
