@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa)
                                    "s_b_ladder", "s_b_bridge",
                                    "s_310_helix", "s_pi_helix",
                                    "s_b_ladder"};
-  std::unordered_map<std::string, double> probabilities;
+  // std::unordered_map<std::string, double> probabilities;
   f_config::FeatureSettingsMap f_set;
   fasta::SequenceList sequences = {s1, s2};
   int d_modifier = 4;
@@ -144,7 +144,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_gapped_mode)
   bool one_round = false;
   seq_data::SequenceData sequence_data;
   FeatureNamesList feature_list;
-  std::unordered_map<std::string, double> probabilities;
+  // std::unordered_map<std::string, double> probabilities;
   sequence_data.sequences = sequences;
   sequence_data.feature_list = feature_list;
   std::vector<fasta::SequenceList> alignment;
@@ -511,7 +511,7 @@ BOOST_AUTO_TEST_CASE(test_run_secondary_structure) {
           "p_Oglyc2", "p_Oglyc3", "p_cys_bridge0", "s_a_helix", "s_turn",
           "s_b_ladder", "s_b_bridge", "s_310_helix", "s_pi_helix",
           "s_b_ladder"};
-  std::unordered_map<std::string, double> probabilities;
+  // std::unordered_map<std::string, double> probabilities;
   std::string sbst_mat = "DISORDER";
   bool first_gapped = true;
   sequence_data.feature_list = feature_list;
