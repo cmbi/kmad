@@ -28,6 +28,7 @@ config.log
 autom4te.cache/
 autom4te.cache/output*
 autom4te.cache/traces*
+autom4te.cache/requests*
 
 
 # Executables
@@ -60,3 +61,6 @@ coverage.sh
 
 # rope
 .ropeproject/
+
+
+Makefile.in
