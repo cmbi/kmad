@@ -229,7 +229,6 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
   return {new_s1, new_s2};
 }
 
-
-SingleScoringMatrix ScoringMatrix::get_V_matrix() {
+std::vector<ScoringMatrixRow> ScoringMatrix::get_V_matrix() {
   return m_matrix_v;
 }
