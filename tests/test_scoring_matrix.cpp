@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
   s1 = fasta::make_sequence("d", "ASLKSLKPT", codon_length);
   s2 = fasta::make_sequence("d", "ASLRP", codon_length);
   fasta::SequenceList query_seq_list = {s1};
-  fasta::SequenceList sequences = {s1, s2};
+  // fasta::SequenceList sequences = {s1, s2};
   std::string sbst_mat = "BLOSUM";
   profile::ProfileMap profile = profile::create_score_profile(query_seq_list,
                                                               sbst_mat);
@@ -72,11 +72,11 @@ BOOST_AUTO_TEST_CASE(test_calculate_scores) {
   scores2.calculate_scores(s1, profile, f_profile, codon_length);
   matrix_V = scores2.get_V_matrix();
 
-  expected_V = {{0, -10000000, -10000000, -10000000, 
+  expected_V = {{0, -10000000, -10000000, -10000000,
                  -10000000, -10000000, -10000000,
                  -10000000, -10000000, -10000000},
                 {-10000000,  4,  0, -3, -4, -3, -6, -7, -8, -8},
-                {-10000000,  0,  8, -2, -2,  1, -5, -5, -7, -6}, 
+                {-10000000,  0,  8, -2, -2,  1, -5, -5, -7, -6},
                 {-10000000, -3, -2, 12,  1,  0,  5, -2, -4, -3},
                 {-10000000, -4, -3,  1, 14,  6,  4,  7,  2,  2},
                 {-10000000, -5, -4, -1,  6, 13,  6,  7, 14,  5}};
@@ -92,7 +92,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   s1 = fasta::make_sequence("d", "ASLKSLKPT", codon_length);
   s2 = fasta::make_sequence("d", "ASLRP", codon_length);
   fasta::SequenceList query_seq_list = {s1};
-  fasta::SequenceList sequences = {s1, s2};
+  // fasta::SequenceList sequences = {s1, s2};
   int d_modifier = 4;
   int m_modifier = 3;
   int p_modifier = 10;
@@ -197,7 +197,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
                   "p_methyl1", "p_methyl2",
                   "p_methyl3", "p_Oglyc0",
                   "p_Oglyc1", "p_Oglyc2",
-                  "p_Oglyc3", "p_cys_bridge0", 
+                  "p_Oglyc3", "p_cys_bridge0",
                   "s_a_helix", "s_turn",
                   "s_b_ladder", "s_b_bridge",
                   "s_310_helix", "s_pi_helix",
@@ -216,7 +216,7 @@ BOOST_AUTO_TEST_CASE(test_backtrace_alignment_path) {
   scores3 = ScoringMatrix(s1.residues.size(), s2.residues.size(), gap_open_pen,
                          end_pen, gap_ext_pen, no_feat);
    scores3.calculate_scores(s2, profile, f_profile, codon_length);
-  
+
   result = scores3.backtrace_alignment_path(s2, profile,
                                             f_profile,
                                             codon_length);

@@ -80,7 +80,7 @@ AUTOMAKE_OPTIONS = foreign
 if HAVE_CPPCHECK
 cppcheck:
 	$(CPPCHECK) --quiet --std=c++11 --enable=all \
-		--suppress=missingIncludeSystem $(srcdir)/src
+		--suppress=missingIncludeSystem --inline-suppr $(srcdir)/src
 check:	cppcheck
 endif
 if DEBUG
