@@ -5,7 +5,7 @@
 #include <algorithm>
 
 
-FeatureScores::FeatureScores(const std::vector<std::string>& features,
+FeatureScores::FeatureScores(std::vector<std::string> features,
     double domain_modifier, double ptm_modifier, double motif_modifier,
     double strct_modifier, std::unordered_map<std::string, double> motif_probabilities)
 : m_domain_modifier(domain_modifier),
@@ -185,11 +185,11 @@ double FeatureScores::score_usr_feature(
 }
 
 
+std::unordered_map<std::string, Scores> FeatureScores::get_scores() {
+  return m_scores;
+}
+
 double FeatureScores::get_score(
                 const std::string& feat_name, unsigned long position) const {
   return m_scores.at(feat_name)[position];
-}
-
-std::unordered_map<std::string, std::vector<double>> FeatureScores::get_scores() {
-        return m_scores;
 }

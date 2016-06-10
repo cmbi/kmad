@@ -13,7 +13,7 @@ class FeatureScores {
     ///
     /// costructor
     ///
-    FeatureScores(const std::vector<std::string>& features,
+    FeatureScores(const std::vector<std::string> features,
                   double domain_modifier, double ptm_modifier,
                   double motif_modifier, double strct_modifier,
                     std::unordered_map<std::string, double> motif_probabilities);

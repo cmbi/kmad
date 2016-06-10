@@ -14,7 +14,7 @@ namespace f_config
     std::vector<int> positions;
   };
   ///
-  /// Struct to hold the feature settings(for a single feature) in the same
+  /// Struct to hold the feature settings(for a single feature) in the same 
   /// structure as in the
   /// config file (get parsed to FeatureSettings)
   ///
@@ -55,7 +55,8 @@ namespace f_config
       /// take a configuration file name and returns processed map of feature
       /// settings - calls process_config(...) and process_settings(...)
       ///
-      static FeatureSettingsMap parse_conf_file(const std::string& filename);
+      static FeatureSettingsMap parse_conf_file(
+          const std::string& filename);
     private:
       static RawFeatureSettingsMap process_config(
           const libconfig::Config& cnfg);
@@ -64,7 +65,7 @@ namespace f_config
       /// by combining the different add_* and subtract_* elements
       ///
       static FeatureSettingsMap process_settings(
-          const RawFeatureSettingsMap& raw_feat_set);
+          const RawFeatureSettingsMap raw_feat_set);
   };
 }
 

@@ -83,7 +83,7 @@ f_config::RawFeatureSettingsMap f_config::ConfParser::process_config(
           feat_pos.positions.push_back(single_pos_set[k]);
         }
         for (auto& pos : feat_pos.positions) {
-          --pos;
+          --pos; 
         }
         feat_set.positions.push_back(feat_pos);
       }
@@ -100,10 +100,10 @@ f_config::RawFeatureSettingsMap f_config::ConfParser::process_config(
 
 
 f_config::FeatureSettingsMap f_config::ConfParser::process_settings(
-    const f_config::RawFeatureSettingsMap& raw_map) {
+    const f_config::RawFeatureSettingsMap raw_map) {
   f_config::FeatureSettingsMap processed_map;
   for (auto feat_it = raw_map.begin(); feat_it != raw_map.end(); ++feat_it) {
-     FeatureSettings processed_settings;
+     FeatureSettings processed_settings; 
      processed_settings.add_score = feat_it->second.add_score;
      processed_settings.subtract_score = feat_it->second.subtract_score;
      processed_settings.positions = feat_it->second.positions;
@@ -132,12 +132,12 @@ f_config::FeatureSettingsMap f_config::ConfParser::process_settings(
             ++feat_it_j) {
          if (feat_it_j->second.tag == feat_tag
              && std::find(feat_it->second.add_exceptions.begin(),
-                          feat_it->second.add_exceptions.end(),
-                          feat_it_j->first)
+                          feat_it->second.add_exceptions.end(), 
+                          feat_it_j->first) 
                 == feat_it->second.add_exceptions.end()
-             && std::find(processed_settings.add_features.begin(),
+             && std::find(processed_settings.add_features.begin(), 
                           processed_settings.add_features.end(),
-                          "USR_" + feat_it_j->first)
+                          "USR_" + feat_it_j->first) 
                 == processed_settings.add_features.end()) {
            processed_settings.add_features.push_back(
                "USR_" + feat_it_j->first);
@@ -151,11 +151,11 @@ f_config::FeatureSettingsMap f_config::ConfParser::process_settings(
          if (feat_it_j->second.tag == feat_tag
              && std::find(feat_it->second.subtract_exceptions.begin(),
                           feat_it->second.subtract_exceptions.end(),
-                          feat_it_j->first)
+                          feat_it_j->first) 
                 == feat_it->second.subtract_exceptions.end()
-             && std::find(processed_settings.subtract_features.begin(),
+             && std::find(processed_settings.subtract_features.begin(), 
                           processed_settings.subtract_features.end(),
-                          "USR_" + feat_it_j->first)
+                          "USR_" + feat_it_j->first) 
                 == processed_settings.subtract_features.end()) {
            processed_settings.subtract_features.push_back(
                "USR_" + feat_it_j->first);
@@ -163,7 +163,7 @@ f_config::FeatureSettingsMap f_config::ConfParser::process_settings(
        }
      }
      ///
-     /// add the feature to the new map
+     /// add the feature to the new map 
      ///
      processed_map["USR_" + feat_it->first] = processed_settings;
   }
