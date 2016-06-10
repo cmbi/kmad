@@ -104,15 +104,14 @@ fasta::Sequence fasta::make_sequence(const std::vector<Residue>& residue_list)
 }
 
 fasta::Sequence fasta::make_sequence(unsigned long sequence_length,
-                                     const fasta::Residue residue) {
+                                     const fasta::Residue& residue) {
   fasta::Sequence s;
   s.residues = std::vector<fasta::Residue>(sequence_length, residue);
   return s;
 }
 
-fasta::Sequence fasta::make_sequence(
-    const std::string sequence_string,
-    int codon_length) {
+fasta::Sequence fasta::make_sequence(const std::string& sequence_string,
+                int codon_length) {
   fasta::Sequence s;
   for (size_t i = 0; i < sequence_string.size(); ++i) {
     if (i % codon_length == 0) {
@@ -124,8 +123,7 @@ fasta::Sequence fasta::make_sequence(
   return s;
 }
 void fasta::extend_sequence(fasta::Sequence& seq,
-                     const std::string sequence_string,
-                     int codon_length) {
+                     const std::string& sequence_string, int codon_length) {
   fasta::Sequence tmp_seq = fasta::make_sequence(sequence_string,
       codon_length);
   for (auto& res : tmp_seq.residues) {
@@ -133,7 +131,7 @@ void fasta::extend_sequence(fasta::Sequence& seq,
   }
 }
 
-std::string fasta::make_string(const fasta::Sequence seq) {
+std::string fasta::make_string(const fasta::Sequence& seq) {
   std::string result;
   for (auto& residue : seq.residues) {
     result.push_back(residue.codon[0]);

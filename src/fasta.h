@@ -5,19 +5,19 @@
 #include <unordered_map>
 #include <vector>
 
-/// 
-///  Parses a fasta or semi-fasta(encoded) file to a vec of Sequence structs, 
-/// 
+///
+///  Parses a fasta or semi-fasta(encoded) file to a vec of Sequence structs,
+///
 namespace fasta {
 
   ///
   /// Holds a single residue codon, and a list of its features
   ///
   struct Residue {
-    Residue(std::string codon, std::vector<std::string> features) 
+    Residue(std::string codon, std::vector<std::string> features)
       : codon(codon),
         features(features) {}
-    Residue(std::string codon) : codon(codon) {}
+    explicit Residue(std::string codon) : codon(codon) {}
     Residue(){};
 
     std::string codon;
@@ -54,14 +54,14 @@ namespace fasta {
                          const std::string& codons, int codon_length);
   Sequence make_sequence(const std::vector<Residue>&);
   Sequence make_sequence(unsigned long sequence_length,
-                         const fasta::Residue residue);
-  Sequence make_sequence(const std::string sequence_string, int codon_length);
-  void extend_sequence(Sequence& seq, const std::string sequence_string,
+                         const fasta::Residue& residue);
+  Sequence make_sequence(const std::string& sequence_string, int codon_length);
+  void extend_sequence(Sequence& seq, const std::string& sequence_string,
                            int codon_length);
   ///
   /// converts a Sequence struct to a string
   ///
-  std::string make_string(const Sequence seq);
+  std::string make_string(const Sequence& seq);
   Residue make_residue(const std::string& codon);
   ///
   /// check if all sequence lengths are equal (for the refinement mode)
