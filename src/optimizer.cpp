@@ -25,7 +25,7 @@ std::vector<fasta::SequenceList> optimizer::optimize_alignment(
       alignment, domain_modifier, motif_modifier, ptm_modifier, sbst_mat);
   optimizer::filter_move_data(m);
   std::vector<fasta::SequenceList> new_alignment;
-  new_alignment = optimizer::remove_residues(alignment, m);
+  new_alignment = optimizer::move_residues(alignment, m);
   new_alignment = msa::remove_gapcolumns(new_alignment);
   return new_alignment;
 }
@@ -107,7 +107,7 @@ void optimizer::filter_move_data(
 }
 
 
-std::vector<fasta::SequenceList> optimizer::remove_residues(
+std::vector<fasta::SequenceList> optimizer::move_residues(
     const std::vector<fasta::SequenceList>& alignment,
     const std::vector<optimizer::MoveData>& move_data) {
 
