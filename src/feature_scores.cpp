@@ -190,8 +190,6 @@ double FeatureScores::get_score(
   return m_scores.at(feat_name)[position];
 }
 
-
-// cppcheck-suppress unusedFunction
 std::unordered_map<std::string, std::vector<double>> FeatureScores::get_scores() {
         return m_scores;
 }
