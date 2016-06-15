@@ -11,7 +11,8 @@
 namespace fasta {
 
   ///
-  /// Holds a single residue codon, and a list of its features
+  /// Holds a single residue codon (x characters that encode the amino acid and
+  ///  it's features), and a list of its features
   ///
   struct Residue {
     Residue(std::string codon, std::vector<std::string> features)
@@ -24,8 +25,8 @@ namespace fasta {
     std::vector<std::string> features;
   };
   ///
-  /// hodls description which is later used as a fasta header and a list of
-  /// residues
+  /// holds description which is later used as a fasta header and a list of
+  ///   residues
   ///
   struct Sequence {
     std::string description;
@@ -36,7 +37,7 @@ namespace fasta {
 
   ///
   /// holds all the data from the (semi)fasta file - sequences with their headers
-  /// and a list of motif probabilities
+  ///   and a list of motif probabilities
   ///
   struct FastaData {
     SequenceList sequences;
@@ -61,7 +62,7 @@ namespace fasta {
   ///
   /// converts a Sequence struct to a string
   ///
-  std::string make_string(const Sequence& seq);
+  std::string sequence_to_string(const Sequence& seq);
   Residue make_residue(const std::string& codon);
   ///
   /// check if all sequence lengths are equal (for the refinement mode)

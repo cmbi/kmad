@@ -131,7 +131,7 @@ void fasta::extend_sequence(fasta::Sequence& seq,
   }
 }
 
-std::string fasta::make_string(const fasta::Sequence& seq) {
+std::string fasta::sequence_to_string(const fasta::Sequence& seq) {
   std::string result;
   for (auto& residue : seq.residues) {
     result.push_back(residue.codon[0]);

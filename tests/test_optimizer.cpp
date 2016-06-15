@@ -147,7 +147,7 @@ BOOST_AUTO_TEST_CASE(test_remove_residues)
   std::vector<std::string> result;
   for (auto& item : alignment) {
     for (auto& seq : item) {
-      result.push_back(fasta::make_string(seq));
+      result.push_back(fasta::sequence_to_string(seq));
     }
   }
 
@@ -183,7 +183,7 @@ BOOST_AUTO_TEST_CASE(test_optimize_alignment)
   std::vector<std::string> result;
   for (auto& item : alignment) {
     for (auto& seq : item) {
-      result.push_back(fasta::make_string(seq));
+      result.push_back(fasta::sequence_to_string(seq));
     }
   }
 

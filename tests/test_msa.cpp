@@ -166,7 +166,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_gapped_mode)
   std::vector<std::string> result;
   for (auto& seqpair : alignment) {
     for (auto& seq : seqpair) {
-      result.push_back(fasta::make_string(seq));
+      result.push_back(fasta::sequence_to_string(seq));
     }
   }
   std::vector<std::string> expected = {
@@ -325,7 +325,7 @@ BOOST_AUTO_TEST_CASE(test_add_alignment) {
   std::vector<std::string> result_str;
   for (auto& seqset : result) {
     for (auto& seq : seqset) {
-      result_str.push_back(fasta::make_string(seq));
+      result_str.push_back(fasta::sequence_to_string(seq));
     }
   }
   BOOST_CHECK_EQUAL(result.size(), 3);
@@ -348,7 +348,7 @@ BOOST_AUTO_TEST_CASE(test_merge_alignments) {
   std::vector<std::string> result_str;
   for (auto& seqset : result) {
     for (auto& seq : seqset) {
-      result_str.push_back(fasta::make_string(seq));
+      result_str.push_back(fasta::sequence_to_string(seq));
     }
   }
   std::vector<std::string> expected = {"---AB--AD", "---ATSSA-", "TSBA---A-",
@@ -368,7 +368,7 @@ BOOST_AUTO_TEST_CASE(test_merge_alignments) {
   result_str.clear();
   for (auto& seqset : result) {
     for (auto& seq : seqset) {
-      result_str.push_back(fasta::make_string(seq));
+      result_str.push_back(fasta::sequence_to_string(seq));
     }
   }
   expected = {"---AB--ADC", "---ATSSA-C", "TSBA---A--", "---AB--ADC",
@@ -410,7 +410,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
   std::vector<std::string> result;
   for (auto& item : alignment) {
     for (auto& seq : item) {
-      result.push_back(fasta::make_string(seq));
+      result.push_back(fasta::sequence_to_string(seq));
     }
   }
   BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
@@ -425,7 +425,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
   result.clear();
   for (auto& item : alignment) {
     for (auto& seq : item) {
-      result.push_back(fasta::make_string(seq));
+      result.push_back(fasta::sequence_to_string(seq));
     }
   }
   expected = {"WFQIANWFQWFQLAN", "---------WFQLAN",
@@ -474,7 +474,7 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
   std::vector<std::string> result;
   for (auto& seqlist : alignment) {
     for (auto& seq : seqlist) {
-      result.push_back(fasta::make_string(seq));
+      result.push_back(fasta::sequence_to_string(seq));
     }
   }
   std::vector<std::string> expected = {
@@ -531,7 +531,7 @@ BOOST_AUTO_TEST_CASE(test_run_secondary_structure) {
   std::vector<std::string> result;
   for (auto& seqlist : alignment) {
     for (auto& seq : seqlist) {
-      result.push_back(fasta::make_string(seq));
+      result.push_back(fasta::sequence_to_string(seq));
     }
   }
   // std::vector<std::string> expected = {"GDNGEE--GEEE",

@@ -103,7 +103,7 @@ void seq_data::assign_feature_by_pattern(fasta::SequenceList& sequences,
   if (pattern.size() > 0) {
     boost::regex re(pattern);
     for (size_t i = 0; i < sequences.size(); ++i) {
-      std::string seq = fasta::make_string(sequences[i]);
+      std::string seq = fasta::sequence_to_string(sequences[i]);
       std::string seq_nogaps = seq;
       seq_nogaps.erase(std::remove(seq_nogaps.begin(), seq_nogaps.end(), '-'),
           seq_nogaps.end());
@@ -148,12 +148,12 @@ bool seq_data::compare_alignments(const std::vector<fasta::SequenceList>& al1,
   std::vector<std::string> al2_strings;
   for (auto& item : al1) {
     for (auto& seq : item) {
-      al1_strings.push_back(fasta::make_string(seq));
+      al1_strings.push_back(fasta::sequence_to_string(seq));
     }
   }
   for (auto& item : al2) {
     for (auto& seq : item) {
-      al2_strings.push_back(fasta::make_string(seq));
+      al2_strings.push_back(fasta::sequence_to_string(seq));
     }
   }
   if (al1_strings != al2_strings) {

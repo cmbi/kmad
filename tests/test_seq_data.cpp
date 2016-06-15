@@ -122,7 +122,7 @@ BOOST_AUTO_TEST_CASE(test_remove_gaps) {
   s = seq_data::remove_gaps(s);
   std::vector<std::string> result;
   for (auto& seq : s) {
-    result.push_back(fasta::make_string(seq));
+    result.push_back(fasta::sequence_to_string(seq));
   }
   std::vector<std::string> expected = {"ABADC", "ATSSAC", "BAA"};
   BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
@@ -134,7 +134,7 @@ BOOST_AUTO_TEST_CASE(test_remove_gaps) {
   s = seq_data::remove_gaps(s);
   result.clear();
   for (auto& seq : s) {
-    result.push_back(fasta::make_string(seq));
+    result.push_back(fasta::sequence_to_string(seq));
   }
   BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
                                 expected.begin(), expected.end());
