@@ -72,11 +72,6 @@ fasta::FastaData fasta::parse_fasta(std::string const& filename,
 
   // TODO: What happens if an exception is thrown before?
   fastafile.close();
-  if (refine && !check_length(fd.sequences, refine_seq_num)) {
-        throw std::runtime_error("In the 'refine' mode all sequences should "
-                                 "have the same length");
-  }
-
   return fd;
 }
 
@@ -135,14 +130,14 @@ fasta::Residue fasta::make_residue(const std::string& codon) {
   return Residue(codon, features);
 }
 
-bool fasta::check_length(fasta::SequenceList sequences, int refine_seq) {
-  if (refine_seq == 0) {
-    refine_seq = sequences.size();
+bool fasta::check_length(fasta::SequenceList const& sequences, int limit) {
+  if (limit == 0) {
+    limit = sequences.size();
   }
   bool result = true;
   size_t prev_length = sequences[0].residues.size();
   int i = 1;
-  while (result && i < refine_seq){
+  while (result && i < limit) {
     size_t length = sequences[i].residues.size();
     if (length != prev_length) {
       result = false;

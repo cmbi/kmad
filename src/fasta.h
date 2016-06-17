@@ -62,10 +62,11 @@ namespace fasta {
   ///
   std::string sequence_to_string(const Sequence& seq);
   Residue make_residue(const std::string& codon);
+
+  /// Check if all sequence lengths are equal (for the refinement mode)
   ///
-  /// check if all sequence lengths are equal (for the refinement mode)
-  ///
-  bool check_length(SequenceList sequences, int refine_seq);
+  /// \param[in] limit The number of sequence to include in the length check.
+  bool check_length(SequenceList const& sequences, int limit);
 }
 
 
