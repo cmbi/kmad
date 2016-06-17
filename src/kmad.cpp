@@ -1,6 +1,5 @@
 #include "f_config.h"
 #include "fasta.h"
-#include "feature_analysis.h"
 #include "msa.h"
 #include "outfile.h"
 #include "seq_data.h"
@@ -22,7 +21,7 @@ int main(int argc, char *argv[]) {
     double domain_modifier = 0;
     double motif_modifier = 0;
     double gap_ext_pen = 0;
-    double gap_open_pen;
+    double gap_open_pen = 0;
     double end_pen = 0;
     bool out_encoded = false;
     bool one_round = false;
@@ -34,11 +33,10 @@ int main(int argc, char *argv[]) {
     std::string filename;
     std::string output_prefix;
     std::string conf_file;
-    std::string mapfilename;
-    std::string out_cons_filename;
     std::string sbst_mat;
-    double conservation_cutoff;
+    double conservation_cutoff = 0;
 
+    // TODO: Try to improve readability
     po::options_description desc("Allowed options");
     desc.add_options()
       ("help,h", "produce help message")
@@ -79,12 +77,6 @@ int main(int argc, char *argv[]) {
       ("one-round, r", po::value<bool>(&one_round)->implicit_value(true)
                                                   ->default_value(false),
        "perform only one round of alignments (all against first)")
-      ("out-cons", po::value<std::string>(&out_cons_filename),
-        "feature consensus output file"
-      )
-      ("feat-map", po::value<std::string>(&mapfilename),
-       "feature map file" 
-      )
       ("feat_cutoff", po::value<double>(&conservation_cutoff)
           ->default_value(0.5),
        "conservation cutoff for the feature consensus")
@@ -124,6 +116,7 @@ int main(int argc, char *argv[]) {
       std::cout << desc << std::endl;
       std::exit(EXIT_SUCCESS);
     }
+
     // check if the obligatory parameters are provided
     if (vm.count("input") == 0 ||
         vm.count("gap_penalty") == 0 ||
@@ -134,6 +127,7 @@ int main(int argc, char *argv[]) {
     }
 
     // check if parameters are sane
+    // TODO: Can boost program options check these rule for us?
     if (codon_length < 1 || codon_length > 10) {
       std::cout << "Codon length ('-c' flag) should be between 1 and 10"
                 << std::endl;
@@ -152,12 +146,16 @@ int main(int argc, char *argv[]) {
                 << std::endl;
       std::exit(EXIT_FAILURE);
     }
-     
+
+    // Load custom feature settings
+
     f_config::FeatureSettingsMap f_set;
     // if the '--conf' option is chosen parse the configuration file
     if (vm.count("conf") == 1) {
       f_set = f_config::ConfParser::parse_conf_file(conf_file);
     }
+
+    // Load sequence data
 
     fasta::FastaData fasta_data;
     try {
@@ -168,15 +166,22 @@ int main(int argc, char *argv[]) {
       std::exit(EXIT_FAILURE);
     }
     bool gapped = false;
-    // combine data from fasta with data from the config file -> seq_data
-    seq_data::SequenceData sequence_data_plain = seq_data::process_fasta_data(
-        fasta_data, f_set, gapped);
-    // perform the alignment
+
+    // Combine sequence and feature settings
+    //
+    auto sequence_data_plain = seq_data::process_fasta_data(
+        fasta_data, f_set, gapped
+    );
+
+    // Perform the alignment
+
+    // TODO: Maybe we can use a design pattern here because the type of
+    // alignment depends on whether or not we will refine.
     std::vector<fasta::SequenceList> alignment;
     if (!refine) {
-      alignment = msa::run_msa(sequence_data_plain, 
+      alignment = msa::run_msa(sequence_data_plain,
                                f_set, gap_open_pen,
-                               gap_ext_pen, end_pen, domain_modifier, 
+                               gap_ext_pen, end_pen, domain_modifier,
                                motif_modifier, ptm_modifier, strct_modifier,
                                codon_length,
                                one_round, sbst_mat, first_gapped, optimize,
@@ -188,10 +193,10 @@ int main(int argc, char *argv[]) {
       if (refine_seq == 0) {
         refine_seq = fasta_data.sequences.size();
       }
-      alignment = msa::refine_alignment(sequence_data_plain, 
+      alignment = msa::refine_alignment(sequence_data_plain,
                                         sequence_data_alignment,
                                         f_set, gap_open_pen,
-                                        gap_ext_pen, end_pen, domain_modifier, 
+                                        gap_ext_pen, end_pen, domain_modifier,
                                         motif_modifier, ptm_modifier,
                                         strct_modifier,
                                         codon_length,
@@ -199,11 +204,15 @@ int main(int argc, char *argv[]) {
                                         optimize, fade_out, refine_seq, no_feat);
     }
 
-    // write alignment to file 
+    // Write alignment to file
+    // TODO: al_out_index is always 1. Also, what is it?
     int al_out_index = 1;
     if (first_gapped) {
-      first_gapped = 0; 
+      first_gapped = 0;
     }
+
+    // TODO: Probably can use a design pattern here. Encoding depends on user
+    // option. Strategy might fit.
     if (out_encoded) {
       outfile::write_encoded_alignment(alignment[al_out_index],
                                        sequence_data_plain,
@@ -212,18 +221,5 @@ int main(int argc, char *argv[]) {
       outfile::write_decoded_alignment(alignment[al_out_index],
                                        sequence_data_plain,
                                        output_prefix);
-    }
-    // analyze features in the alignment
-    if (vm.count("out-cons") != 0) {
-      if (vm.count("feat-map") == 0) {
-        mapfilename = filename.substr(0, filename.size() - 2) + "map";
-      }
-      feature_analysis::CodesMap codes_map = feature_analysis::parse_mapfile(
-          mapfilename);
-      feature_analysis::ConsensusSequence cons_seq;
-      cons_seq = feature_analysis::analyze_alignment(codes_map, alignment,
-                                                     conservation_cutoff);
-      feature_analysis::write_consensus_to_file(cons_seq,
-                                                out_cons_filename);
     }
 }

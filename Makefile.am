@@ -9,7 +9,6 @@ shared_LDADD	=	$(BOOST_FILESYSTEM_LIB) \
 
 shared_SOURCES	=	src/compare_doubles.cpp \
 			src/fasta.cpp \
-			src/feature_analysis.cpp \
 			src/feature_scores.cpp \
 			src/f_config.cpp \
 			src/outfile.cpp \
@@ -21,7 +20,6 @@ shared_SOURCES	=	src/compare_doubles.cpp \
 
 include_HEADERS = src/compare_doubles.h \
 		  src/fasta.h \
-		  src/feature_analysis.h \
 		  src/feature_scores.h \
 		  src/f_config.h \
 		  src/outfile.h \
@@ -45,7 +43,6 @@ test_kmad_SOURCES = $(shared_SOURCES) \
 		    tests/test_seq_data.cpp \
 		    tests/test_optimizer.cpp \
 		    tests/test_profile.cpp \
-		    tests/test_feature_analysis.cpp \
 		    tests/test_feature_scores.cpp \
 		    tests/test_scoring_matrix.cpp \
 		    tests/test_msa.cpp \

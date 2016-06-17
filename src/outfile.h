@@ -5,6 +5,9 @@
 #include "seq_data.h"
 
 
+// TODO: opposite of what fasta does. One write actual fasta, other
+//       writes custom fasta.
+
 namespace outfile{
   void write_encoded_alignment(const fasta::SequenceList& sequences,
                                const seq_data::SequenceData& sequence_data,

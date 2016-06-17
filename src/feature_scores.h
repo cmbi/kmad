@@ -8,6 +8,9 @@
 typedef std::vector<double> Occurences;
 typedef std::vector<double> Scores;
 
+
+// TODO: Maybe rename to FeatureProfile.
+// TODO: Consider decorating whatever comes in here (e.g. a decorated alignment. Just an idea, depends on lots)
 class FeatureScores {
   public:
     ///
@@ -28,7 +31,7 @@ class FeatureScores {
 
     ///
     /// get the complete 'profile-like' matrix of feature scores
-    ///
+    /// TODO: maybe remove, only used in tests
     std::unordered_map<std::string, Scores> get_scores();
     ///
     /// get a single score (for a particular feature on a particular position)
