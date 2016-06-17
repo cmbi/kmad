@@ -11,6 +11,9 @@ namespace msa {
   ///
   /// performs the full multiple sequence alignment, returns aligned sequences
   ///
+  /// TODO: Some parameters are part of standard GOTOH, others are additions
+  ///       for kmad implementation. This separation should be clearer.
+  ///
   std::vector<fasta::SequenceList> run_msa(
       const seq_data::SequenceData& sequence_data,
       const f_config::FeatureSettingsMap& f_set,
@@ -96,6 +99,8 @@ namespace msa {
   /// takes a sequence and profiles, returns an
   /// alignment of the two, with or without gaps in the first seq.
   ///
+  /// TODO: Fits better in scoring matrix, which should probably be renamed to
+  ///       PairwiseAligner
   fasta::SequenceList align_pairwise(const fasta::Sequence& input_sequence, 
                                      const profile::ProfileMap& profile, 
                                      const FeatureScores& f_profile,

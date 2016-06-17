@@ -2,6 +2,7 @@
 #define SBST_MAT_H
 
 
+// TODO: Look at Maarten's code to see what he did with this kind of stuff.
 namespace substitution_matrix {
   typedef std::unordered_map<char, std::vector<double>> SimilarityScoresMap;
   static const std::vector<char> ALPHABET = {'A','R','N','D','C','Q','E','G',

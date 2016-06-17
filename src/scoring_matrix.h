@@ -9,6 +9,7 @@ typedef std::vector<double> ScoringMatrixRow;
 typedef std::vector<ScoringMatrixRow> SingleScoringMatrix;
 typedef std::vector<int> ValueCoords;
 
+// TODO: Maybe rename to PairwiseAligner
 class ScoringMatrix {
 public:
   ///
@@ -33,11 +34,14 @@ public:
   /// traces back the alignment path in the scoring matrices
   ///
   fasta::SequenceList backtrace_alignment_path(
-      const fasta::Sequence& sequence, 
+      const fasta::Sequence& sequence,
       const profile::ProfileMap& profile,
       const FeatureScores& f_profile,
       int codon_length);
+  /// TODO: maybe remove, only used in tests
   SingleScoringMatrix get_V_matrix();
+
+  // TODO: except a method called `align`. align_pairwise from msa could be it.
 private:
   ///
   /// finds the best score either in the last column or in the last row of the
