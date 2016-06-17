@@ -36,17 +36,12 @@ BOOST_AUTO_TEST_CASE(test_parse_fasta)
 BOOST_AUTO_TEST_CASE(test_make_sequence)
 {
   fasta::Sequence s = fasta::make_sequence("desc", "AaaaaaBbbbbbCccccc", 6);
-
   BOOST_CHECK_EQUAL(s.residues.size(), 3);
-  s = fasta::make_sequence("ALSK", 1);
-  BOOST_CHECK_EQUAL(s.residues.size(), 4);
-  s = fasta::make_sequence("LAAACAAA", 4);
-  BOOST_CHECK_EQUAL(s.residues.size(), 2);
 }
 
 BOOST_AUTO_TEST_CASE(test_sequence_to_string)
 {
-  fasta::Sequence s = fasta::make_sequence("LSKAL", 1);
+  fasta::Sequence s = fasta::make_sequence("desc", "LSKAL", 1);
   std::string string_seq = fasta::sequence_to_string(s);
   std::string expected = "LSKAL";
   BOOST_CHECK_EQUAL(string_seq, expected);

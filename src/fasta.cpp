@@ -29,13 +29,14 @@ namespace {
 }
 
 
-fasta::FastaData fasta::parse_fasta(
-        std::string filename, int codon_length, bool refine, int refine_seq) {
-
-        fs::path p(filename);
-        if (!fs::exists(p)) {
-                throw std::invalid_argument("File not found: " + filename);
-        }
+fasta::FastaData fasta::parse_fasta(std::string const& filename,
+                                    int codon_length, bool refine,
+                                    int refine_seq_num)
+{
+  fs::path p(filename);
+  if (!fs::exists(p)) {
+    throw std::invalid_argument("File not found: " + filename);
+  }
 
   std::ifstream fastafile(filename.c_str());
   std::string line;
@@ -48,6 +49,8 @@ fasta::FastaData fasta::parse_fasta(
     }
 
     if (in_sequence_section && line.substr(0, 1) == ">") {
+      // TODO: Loop over lines to build entire codon string, then call
+      // make_sequence; remove extend_sequence.
       std::string description = line;
       std::getline(fastafile, line);
       line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
@@ -56,7 +59,6 @@ fasta::FastaData fasta::parse_fasta(
     } else if (in_sequence_section) {
       int last_index = fd.sequences.size() - 1;
       fasta::extend_sequence(fd.sequences[last_index], line, codon_length);
-
     } else {
       std::vector<std::string> result;
       boost::split(result, line, boost::is_any_of("\t "));
@@ -67,8 +69,10 @@ fasta::FastaData fasta::parse_fasta(
       fd.probabilities["m_" + result[0]] = std::stod(result[1]);
     }
   }
+
+  // TODO: What happens if an exception is thrown before?
   fastafile.close();
-  if (refine && !check_length(fd.sequences, refine_seq)) {
+  if (refine && !check_length(fd.sequences, refine_seq_num)) {
         throw std::runtime_error("In the 'refine' mode all sequences should "
                                  "have the same length");
   }
@@ -96,35 +100,9 @@ fasta::Sequence fasta::make_sequence(const std::string& description,
   return s;
 }
 
-fasta::Sequence fasta::make_sequence(const std::vector<Residue>& residue_list)
-{
-  fasta::Sequence s;
-  s.residues = residue_list;
-  return s;
-}
-
-fasta::Sequence fasta::make_sequence(unsigned long sequence_length,
-                                     const fasta::Residue& residue) {
-  fasta::Sequence s;
-  s.residues = std::vector<fasta::Residue>(sequence_length, residue);
-  return s;
-}
-
-fasta::Sequence fasta::make_sequence(const std::string& sequence_string,
-                int codon_length) {
-  fasta::Sequence s;
-  for (size_t i = 0; i < sequence_string.size(); ++i) {
-    if (i % codon_length == 0) {
-      std::string codon = sequence_string.substr(i, codon_length);
-      fasta::Residue res = fasta::make_residue(codon);
-      s.residues.push_back(res);
-    }
-  }
-  return s;
-}
 void fasta::extend_sequence(fasta::Sequence& seq,
                      const std::string& sequence_string, int codon_length) {
-  fasta::Sequence tmp_seq = fasta::make_sequence(sequence_string,
+  fasta::Sequence tmp_seq = fasta::make_sequence("", sequence_string,
       codon_length);
   for (auto& res : tmp_seq.residues) {
     seq.residues.push_back(res);

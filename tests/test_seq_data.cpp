@@ -17,7 +17,6 @@ BOOST_AUTO_TEST_SUITE(test_kman_suite)
 
 BOOST_AUTO_TEST_CASE(test_seq_data)
 {
-
   f_config::FeatureSettingsMap test_map;
   f_config::FeatureSettings test_settings;
   f_config::FeaturePositions positions1;
@@ -30,72 +29,36 @@ BOOST_AUTO_TEST_CASE(test_seq_data)
   test_map["USR_feature1"] = test_settings;
 
 
-  // SEQUENCE S1
-  fasta::Residue r1_1("AAAAdaa", std::vector<std::string>({"p_phosphP",
-                                                          "m_aa"}));
-  fasta::Residue r1_2("MAAAAAA", std::vector<std::string>({}));
-  fasta::Residue r1_3("EAaadaa", std::vector<std::string>({"d_aa"}));
-  fasta::Residue r1_4("LAAAAAA", std::vector<std::string>({}));
-  // SEQUENCE S2
-  fasta::Residue r2_1("AAAAdaa", std::vector<std::string>({"p_phosphP",
-                                                          "m_aa"}));
-  fasta::Residue r2_2("EAAAZAA", std::vector<std::string>({"p_phosph0"}));
-  fasta::Residue r2_3("EAaaZAA", std::vector<std::string>({"p_phosph0",
-                                                           "d_aa"}));
-  fasta::Residue r2_4("KAAAZAA", std::vector<std::string>({"p_phosph0"}));
-
-  fasta::Sequence s1 = fasta::make_sequence({r1_1, r1_2, r1_3, r1_4});
-  fasta::Sequence s2 = fasta::make_sequence({r2_1, r2_2, r2_3, r2_4});
-
+  //// SEQUENCE S1
+  std::string sequence1_str = "AAAAdaaMAAAAAAEAaadaaLAAAAAA";
+  std::string sequence2_str = "AAAAdaaEAAAZAAEAaaZAAKAAAZAA";
+  fasta::Sequence s1 = fasta::make_sequence("d", sequence1_str, 7);
+  fasta::Sequence s2 = fasta::make_sequence("d", sequence2_str, 7);
   fasta::SequenceList sequences = {s1, s2};
   fasta::FastaData test_data;
   test_data.sequences = sequences;
 
-  // SEQUENCE S1
-  fasta::Residue e1_1("AAAAdaa", std::vector<std::string>({"p_phosphP",
-                                                          "m_aa"}));
-  fasta::Residue e1_2("MAAAAAA", std::vector<std::string>({"USR_feature1"}));
-  fasta::Residue e1_3("EAaadaa", std::vector<std::string>({"d_aa",
-                                                           "USR_feature1"}));
-  fasta::Residue e1_4("LAAAAAA", std::vector<std::string>({}));
-  // SEQUENCE S2
-  fasta::Residue e2_1("AAAAdaa", std::vector<std::string>({"p_phosphP",
-                                                          "m_aa",
-                                                          "USR_feature1"}));
-  fasta::Residue e2_2("EAAAZAA", std::vector<std::string>({"p_phosph0"}));
-  fasta::Residue e2_3("EAaaZAA", std::vector<std::string>({"p_phosph0",
-                                                           "d_aa"}));
-  fasta::Residue e2_4("KAAAZAA", std::vector<std::string>({"p_phosph0"}));
-  fasta::Sequence exp_s1 = fasta::make_sequence({e1_1, e1_2, e1_3, e1_4});
-  fasta::Sequence exp_s2 = fasta::make_sequence({e2_1, e2_2, e2_3, e2_4});
+  std::string exp_sequence1_str = "AAAAdaaMAAAAAAEAaadaaLAAAAAA";
+  std::string exp_sequence2_str = "AAAAdaaEAAAZAAEAaaZAAKAAAZAA";
+  fasta::Sequence exp_s1 = fasta::make_sequence("d", exp_sequence1_str, 7);
+  fasta::Sequence exp_s2 = fasta::make_sequence("d", exp_sequence2_str, 7);
+  exp_s1.residues[1].features.push_back("USR_feature1");
+  exp_s1.residues[2].features.push_back("USR_feature1");
+  exp_s2.residues[0].features.push_back("USR_feature1");
   fasta::SequenceList expected_sequences = {exp_s1, exp_s2};
 
-  FeatureNamesList expected_feature_list = {"p_phosph0", "p_phosph1",
-                                            "p_phosph2", "p_phosph3",
-                                            "p_phosphP", "p_acet0",
-                                            "p_acet1", "p_acet2",
-                                            "p_acet3", "p_Nglyc0",
-                                            "p_Nglyc1", "p_Nglyc2",
-                                            "p_Nglyc3", "p_amid0",
-                                            "p_amid1", "p_amid2",
-                                            "p_amid3", "p_hydroxy0",
-                                            "p_hydroxy1", "p_hydroxy2",
-                                            "p_hydroxy3", "p_methyl0",
-                                            "p_methyl1", "p_methyl2",
-                                            "p_methyl3", "p_Oglyc0",
-                                            "p_Oglyc1", "p_Oglyc2",
-                                            "p_Oglyc3", "p_cys_bridge0",
-                                            "s_a_helix", "s_turn",
-                                            "s_b_ladder", "s_b_bridge",
-                                            "s_310_helix",
-                                            "s_pi_helix", "s_b_ladder",
-                                            "m_aa", "USR_feature1",
-                                            "d_aa"};
+  FeatureNamesList expected_feature_list = {
+      "p_phosph0", "p_phosph1", "p_phosph2", "p_phosph3", "p_phosphP",
+      "p_acet0", "p_acet1", "p_acet2", "p_acet3", "p_Nglyc0", "p_Nglyc1",
+      "p_Nglyc2", "p_Nglyc3", "p_amid0", "p_amid1", "p_amid2", "p_amid3",
+      "p_hydroxy0", "p_hydroxy1", "p_hydroxy2", "p_hydroxy3", "p_methyl0",
+      "p_methyl1", "p_methyl2", "p_methyl3", "p_Oglyc0", "p_Oglyc1",
+      "p_Oglyc2", "p_Oglyc3", "p_cys_bridge0", "s_a_helix", "s_turn",
+      "s_b_ladder", "s_b_bridge", "s_310_helix", "s_pi_helix", "s_b_ladder",
+      "m_aa", "USR_feature1", "d_aa"};
 
   bool gapped = true;
-  seq_data::SequenceData test_result = seq_data::process_fasta_data(test_data,
-                                                                    test_map,
-                                                                    gapped);
+  auto test_result = seq_data::process_fasta_data(test_data, test_map, gapped);
 
   BOOST_CHECK_EQUAL_COLLECTIONS(expected_feature_list.begin(),
                                 expected_feature_list.end(),
@@ -115,9 +78,9 @@ BOOST_AUTO_TEST_CASE(test_seq_data)
 
 
 BOOST_AUTO_TEST_CASE(test_remove_gaps) {
-  fasta::Sequence s1 = fasta::make_sequence("ABAD-C", 1);
-  fasta::Sequence s2 = fasta::make_sequence("ATSSAC", 1);
-  fasta::Sequence s3 = fasta::make_sequence("--BAA-", 1);
+  fasta::Sequence s1 = fasta::make_sequence("", "ABAD-C", 1);
+  fasta::Sequence s2 = fasta::make_sequence("", "ATSSAC", 1);
+  fasta::Sequence s3 = fasta::make_sequence("", "--BAA-", 1);
   fasta::SequenceList s = {s1, s2 , s3};
   s = seq_data::remove_gaps(s);
   std::vector<std::string> result;
@@ -127,9 +90,9 @@ BOOST_AUTO_TEST_CASE(test_remove_gaps) {
   std::vector<std::string> expected = {"ABADC", "ATSSAC", "BAA"};
   BOOST_CHECK_EQUAL_COLLECTIONS(result.begin(), result.end(),
                                 expected.begin(), expected.end());
-  s1 = fasta::make_sequence("ABADC", 1);
-  s2 = fasta::make_sequence("ATSSAC", 1);
-  s3 = fasta::make_sequence("BAA", 1);
+  s1 = fasta::make_sequence("", "ABADC", 1);
+  s2 = fasta::make_sequence("", "ATSSAC", 1);
+  s3 = fasta::make_sequence("", "BAA", 1);
   s = {s1, s2, s3};
   s = seq_data::remove_gaps(s);
   result.clear();
@@ -141,9 +104,9 @@ BOOST_AUTO_TEST_CASE(test_remove_gaps) {
 }
 
 BOOST_AUTO_TEST_CASE(test_assign_feature_by_pattern) {
-  fasta::Sequence s1 = fasta::make_sequence("ABADB-C", 1);
-  fasta::Sequence s2 = fasta::make_sequence("ATSS-AC", 1);
-  fasta::Sequence s3 = fasta::make_sequence("--B-AA-", 1);
+  fasta::Sequence s1 = fasta::make_sequence("", "ABADB-C", 1);
+  fasta::Sequence s2 = fasta::make_sequence("", "ATSS-AC", 1);
+  fasta::Sequence s3 = fasta::make_sequence("", "--B-AA-", 1);
   fasta::SequenceList s = {s1, s2 , s3};
   fasta::SequenceList e = {s1, s2 , s3};
   std::string pattern = "BA";

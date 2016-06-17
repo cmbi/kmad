@@ -131,26 +131,28 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
   //to know later where are the gaps in the profile
   fasta::Residue ala('A' + std::string(codon_length - 1, 'A'), {});
   fasta::Residue gap_residue('-' + std::string(codon_length - 1, 'A'), {});
-  fasta::Sequence profile_sequence;
-  profile_sequence = fasta::make_sequence(profile.begin()->second.size(),
-                                          ala);
-  // s2.insert(s2.begin(), gap_residue);
+
   fasta::Sequence new_s1;
   fasta::Sequence new_s2;
-  int i = profile_sequence.residues.size();
-  int j = sequence.residues.size();
+  const size_t profile_length = profile.begin()->second.size();
+  // TODO: i and j aren't great names...are they?
+  size_t i = profile_length;
+  size_t j = sequence.residues.size();
+
   //if bestScore isn't in the lower right corner, then add gaps
   //to new_s1 or new_s2
   ValueCoords best_score = find_best_score();
+
+  // TODO: comparing value to size of something? fishy!
   if (best_score[0] != (signed)m_matrix_v.size()-1
       || best_score[1] != (signed)m_matrix_v[0].size()-1) {
     i = best_score[0];
     j = best_score[1];
-    for (int k = profile_sequence.residues.size(); k > i; --k) {
-      new_s1.residues.push_back(profile_sequence.residues[k - 1]);
+    for (size_t k = profile_length; k > i; --k) {
+      new_s1.residues.push_back(ala);
       new_s2.residues.push_back(gap_residue);
     }
-    for (int k = sequence.residues.size(); k > j; --k) {
+    for (size_t k = sequence.residues.size(); k > j; --k) {
       new_s2.residues.push_back(sequence.residues[k - 1]);
       new_s1.residues.push_back(gap_residue);
     }
@@ -165,7 +167,7 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
   //trace back the matrix
   while (i > 0 || j > 0) {
     if (i > 0 && j > 0 && current_matrix == "V") {  //match/mismatch
-      new_res1 = profile_sequence.residues[i - 1];
+      new_res1 = ala;
       new_res2 = sequence.residues[j - 1];
       // double profile_score = profile.at(
       //     sequence.residues[j - 1].codon[0])[i - 1];
@@ -206,7 +208,7 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
       }
       --j;
     } else if (i > 0 && current_matrix == "H") {  //gap in profile
-      new_res1 = profile_sequence.residues[i - 1];
+      new_res1 = ala;
       new_res2 = gap_residue;
       if (compare_doubles::is_equal(m_matrix_h[i][j],
                                     m_matrix_v[i - 1][j] + m_gap_opening)) {

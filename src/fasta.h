@@ -5,10 +5,16 @@
 #include <unordered_map>
 #include <vector>
 
-///
-///  Parses a fasta or semi-fasta(encoded) file to a vec of Sequence structs,
-///
+/// Parses a fasta or semi-fasta(encoded) file to a vec of Sequence structs,
 namespace fasta {
+    // forward declaration
+    struct FastaData;
+
+    /// \brief Parses a 'fasta' file
+    FastaData parse_fasta(std::string const& filename, int codon_length,
+                          bool refine, int refine_seq_num);
+
+
 
   ///
   /// Holds a single residue codon (x characters that encode the amino acid and
@@ -24,6 +30,7 @@ namespace fasta {
     std::string codon;
     std::vector<std::string> features;
   };
+
   ///
   /// holds description which is later used as a fasta header and a list of
   ///   residues
@@ -44,21 +51,12 @@ namespace fasta {
     std::unordered_map<std::string, double> probabilities;
   };
 
-  ///
-  /// parses a 'fasta' file, returns a Sequences object,
-  /// writes motif ids and probabilities to ids and probs
-  ///
-  FastaData parse_fasta(std::string filename, int codonLength,
-                        bool refine, int refine_seq);
-
   Sequence make_sequence(const std::string& description,
                          const std::string& codons, int codon_length);
-  Sequence make_sequence(const std::vector<Residue>&);
-  Sequence make_sequence(unsigned long sequence_length,
-                         const fasta::Residue& residue);
-  Sequence make_sequence(const std::string& sequence_string, int codon_length);
+
+
   void extend_sequence(Sequence& seq, const std::string& sequence_string,
-                           int codon_length);
+                       int codon_length);
   ///
   /// converts a Sequence struct to a string
   ///
