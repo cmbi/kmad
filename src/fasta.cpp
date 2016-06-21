@@ -40,38 +40,56 @@ fasta::FastaData fasta::parse_fasta(std::string const& filename,
 
   std::ifstream fastafile(filename.c_str());
   std::string line;
+  std::string header;
+  std::string seq_line;
   bool in_sequence_section = true;
   fasta::FastaData fd;
   while (std::getline(fastafile, line)) {
-    if (line == std::string("## PROBABILITIES")) {
-      in_sequence_section = false;
-      continue;
+    if (line.substr(0, 1) == ">") {
+        if (!seq_line.empty()) {
+            auto sequence = fasta::make_sequence(
+                header, seq_line, codon_length
+            );
+            fd.sequences.push_back(sequence);
+        }
+        in_sequence_section = true;
+
+        // Parse header
+        line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
+        header = line;
+        continue;
     }
 
-    if (in_sequence_section && line.substr(0, 1) == ">") {
-      // TODO: Loop over lines to build entire codon string, then call
-      // make_sequence; remove extend_sequence.
-      std::string description = line;
-      std::getline(fastafile, line);
-      line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
-      fd.sequences.push_back(fasta::make_sequence(description, line,
-                                                  codon_length));
-    } else if (in_sequence_section) {
-      int last_index = fd.sequences.size() - 1;
-      fasta::extend_sequence(fd.sequences[last_index], line, codon_length);
-    } else {
-      std::vector<std::string> result;
-      boost::split(result, line, boost::is_any_of("\t "));
+    if (line.substr(0, 1) == "#") {
+        assert(!seq_line.empty());
 
-      if (result.size() != 2) {
-        throw std::runtime_error("Invalid probability format: " + line);
-      }
-      fd.probabilities["m_" + result[0]] = std::stod(result[1]);
+        auto sequence = fasta::make_sequence(header, seq_line, codon_length);
+        fd.sequences.push_back(sequence);
+        in_sequence_section = false;
+        continue;
+    }
+
+    if (in_sequence_section) {
+        line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
+        seq_line += line;
+    } else {
+        std::vector<std::string> result;
+        boost::split(result, line, boost::is_any_of("\t "));
+
+        if (result.size() != 2) {
+            throw std::runtime_error("Invalid probability format: " + line);
+        }
+        fd.probabilities["m_" + result[0]] = std::stod(result[1]);
     }
   }
 
-  // TODO: What happens if an exception is thrown before?
-  fastafile.close();
+  // If the file doesn't have a probability section, add the last sequence that
+  // was being processed.
+  if (in_sequence_section) {
+      auto sequence = fasta::make_sequence(header, seq_line, codon_length);
+      fd.sequences.push_back(sequence);
+  }
+
   return fd;
 }
 
@@ -86,6 +104,7 @@ fasta::Sequence fasta::make_sequence(const std::string& description,
   for (unsigned i = 0; i < codons.size(); i += codon_length) {
     boost::regex re("[a-zA-Z0-9-]{" + std::to_string(codon_length) + "}");
     std::string codon = codons.substr(i, codon_length);
+
     if (!boost::regex_match(codon, re)) {
       throw std::runtime_error("Invalid codon: " + codon);
     }
@@ -93,15 +112,6 @@ fasta::Sequence fasta::make_sequence(const std::string& description,
     s.residues.push_back(r);
   }
   return s;
-}
-
-void fasta::extend_sequence(fasta::Sequence& seq,
-                     const std::string& sequence_string, int codon_length) {
-  fasta::Sequence tmp_seq = fasta::make_sequence("", sequence_string,
-      codon_length);
-  for (auto& res : tmp_seq.residues) {
-    seq.residues.push_back(res);
-  }
 }
 
 std::string fasta::sequence_to_string(const fasta::Sequence& seq) {
