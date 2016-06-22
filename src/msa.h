@@ -1,7 +1,6 @@
 #ifndef MSA_H
 #define MSA_H
 
-#include "seq_data.h"
 #include "feature_scores.h"
 #include "f_config.h"
 #include "profile.h"
@@ -15,7 +14,7 @@ namespace msa {
   ///       for kmad implementation. This separation should be clearer.
   ///
   std::vector<fasta::SequenceList> run_msa(
-      const seq_data::SequenceData& sequence_data,
+      const fasta::FastaData& fasta_data,
       const f_config::FeatureSettingsMap& f_set,
       double gap_open_pen,
       double gap_ext_pen, double end_pen,
@@ -25,11 +24,11 @@ namespace msa {
       const std::string& sbst_mat, const bool first_gapped,
       const bool optimize, const bool fade_oup, const bool no_feat);
   ///
-  /// takes alignment (sequence_data) and refines it (two rounds)
+  /// takes alignment (fasta_data) and refines it (two rounds)
   ///
   std::vector<fasta::SequenceList> refine_alignment(
-      const seq_data::SequenceData& sequence_data_plain,
-      const seq_data::SequenceData& sequence_data_alignment,
+      const fasta::FastaData& fasta_data_plain,
+      const fasta::FastaData& fasta_data_alignment,
       const f_config::FeatureSettingsMap& f_set,
       double gap_open_pen,
       double gap_ext_pen, double end_pen,
@@ -44,7 +43,7 @@ namespace msa {
   /// calculates profile / based only on the query seq, then / aligns all
   /// sequences and calculates / identity of each sequence to the query seq.)
   std::vector<double> set_identities(
-      const seq_data::SequenceData& sequence_data,
+      const fasta::FastaData& fasta_data,
       const profile::ProfileMap& profile, FeatureScores& f_profile,
       double penalty, double endPenalty, double extensionPenalty,
       int codon_length, const bool no_feat);
@@ -53,14 +52,14 @@ namespace msa {
   /// performs one round of MSA with gaps in the first sequence
   ///
   std::vector<fasta::SequenceList> perform_msa_round_gapped(
-      const seq_data::SequenceData& sequence_data,
-      const seq_data::SequenceData& sequence_data_alignment,
+      const fasta::FastaData& fasta_data,
+      const fasta::FastaData& fasta_data_alignment,
       const profile::ProfileMap& profile,
       const FeatureScores& f_profile,
       double gap_open_pen, double end_pen,
-      double gap_ext_pen, 
+      double gap_ext_pen,
       double identity_cutoff,
-      int codon_length, 
+      int codon_length,
       const std::vector<double>& identities,
       int& prev_alignments,
       const f_config::FeatureSettingsMap& f_set,
@@ -71,14 +70,14 @@ namespace msa {
   /// performs one round of MSA without gaps in the first sequence
   ///
   std::vector<fasta::SequenceList> perform_msa_round_ungapped(
-      const seq_data::SequenceData& sequence_data,
-      const seq_data::SequenceData& sequence_data_alignment,
+      const fasta::FastaData& fasta_data,
+      const fasta::FastaData& fasta_data_alignment,
       const profile::ProfileMap& profile,
       const FeatureScores& f_profile,
       double gap_open_pen, double end_pen,
-      double gap_ext_pen, 
+      double gap_ext_pen,
       double identity_cutoff,
-      int codon_length, 
+      int codon_length,
       const std::vector<double>& identities,
       int& prev_alignments,
       const f_config::FeatureSettingsMap& f_set,
@@ -101,8 +100,8 @@ namespace msa {
   ///
   /// TODO: Fits better in scoring matrix, which should probably be renamed to
   ///       PairwiseAligner
-  fasta::SequenceList align_pairwise(const fasta::Sequence& input_sequence, 
-                                     const profile::ProfileMap& profile, 
+  fasta::SequenceList align_pairwise(const fasta::Sequence& input_sequence,
+                                     const profile::ProfileMap& profile,
                                      const FeatureScores& f_profile,
                                      double gap_open_pen, double end_pen,
                                      double gap_ext_pen, int codon_length,
@@ -114,7 +113,7 @@ namespace msa {
   /// @param alignedSequence sequence aligned to the profile with the gaps cut
   /// out (its length is equal to the profile's length)
   ///
-  double calc_identity(const fasta::Sequence& dummy_sequence, 
+  double calc_identity(const fasta::Sequence& dummy_sequence,
                        const fasta::Sequence& aligned_sequence,
                        const fasta::Sequence& query_sequence);
 
@@ -134,7 +133,7 @@ namespace msa {
       const std::vector<fasta::SequenceList>& pairwise_alignments);
   ///
   /// adds new sequence from pairwise alignment to a multiple alignment
-  /// 
+  ///
   std::vector<fasta::SequenceList> add_alignment(
       const std::vector<fasta::SequenceList>& multiple_alignment,
       const fasta::SequenceList& pairwise_alignment);
@@ -144,6 +143,11 @@ namespace msa {
   ///
   std::vector<fasta::SequenceList> remove_gapcolumns(
       std::vector<fasta::SequenceList> alignment);
+
+  /// \brief compares two alignments
+  //    return false if different true if the same
+  bool compare_alignments(const std::vector<fasta::SequenceList>& al1,
+      const std::vector<fasta::SequenceList>& al2);
 }
 
 #endif /* MSA_H */

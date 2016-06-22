@@ -5,7 +5,7 @@
 
 
 seq_data::SequenceData seq_data::process_fasta_data(
-    const fasta::FastaData& fasta_data, 
+    const fasta::FastaData& fasta_data,
     const f_config::FeatureSettingsMap& f_set, bool gapped) {
   seq_data::SequenceData s;
   s.probabilities = fasta_data.probabilities;
@@ -65,11 +65,11 @@ FeatureNamesList seq_data::make_feature_list(
                                    "s_a_helix", "s_turn",
                                    "s_b_ladder", "s_b_bridge",
                                    "s_310_helix", "s_pi_helix",
-                                   "s_b_ladder"}; 
+                                   "s_b_ladder"};
   for (auto& seq : sequences) {
     for (auto& res : seq.residues) {
       for (auto& feat_name : res.features) {
-        if (std::find(feature_list.begin(), feature_list.end(), feat_name) 
+        if (std::find(feature_list.begin(), feature_list.end(), feat_name)
             == feature_list.end()) {
           feature_list.push_back(feat_name);
         }
