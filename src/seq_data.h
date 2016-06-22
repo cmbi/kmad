@@ -10,7 +10,7 @@ namespace seq_data {
   // TODO: Probably not needed. Just add parsed config features to FastaData?
   struct SequenceData {
     fasta::SequenceList sequences;
-    std::unordered_map<std::string, double> probabilities;
+    std::unordered_map<std::string, double> probabilities; // TODO: duplicated from fastadata
     std::vector<std::string> feature_list;
   };
 

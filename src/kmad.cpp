@@ -15,7 +15,7 @@ namespace po = boost::program_options;
 
 int main(int argc, char *argv[]) {
     int codon_length = 0;
-    int refine_seq = 0;
+    int refine_limit = 0;
     double ptm_modifier = 0;
     double strct_modifier = 0;
     double domain_modifier = 0;
@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
                                          ->implicit_value(true),
        "take alignment as input and refine it"
       )
-      ("refine_seq", po::value<int>(&refine_seq)->default_value(0)
+      ("refine_limit", po::value<int>(&refine_limit)->default_value(0)
        )
       ("opt", po::value<bool>(&optimize)->default_value(false)
                                         ->implicit_value(true),
@@ -160,7 +160,7 @@ int main(int argc, char *argv[]) {
     fasta::FastaData fasta_data;
     try {
       fasta_data = fasta::parse_fasta(filename, codon_length, refine,
-          refine_seq);
+          refine_limit);
     } catch(const std::exception& e) {
       std::cerr << "Error: " << e.what() << std::endl;
       std::exit(EXIT_FAILURE);
@@ -190,8 +190,13 @@ int main(int argc, char *argv[]) {
       bool gapped = true;
       seq_data::SequenceData sequence_data_alignment = seq_data::process_fasta_data(
           fasta_data, f_set, gapped);
-      if (refine_seq == 0) {
-        refine_seq = fasta_data.sequences.size();
+      if (refine_limit == 0) {
+        refine_limit = fasta_data.sequences.size();
+      }
+
+      if (!check_length(fasta_data.sequences, refine_limit)) {
+        throw std::runtime_error("In the 'refine' mode all sequences should "
+                                 "have the same length");
       }
       alignment = msa::refine_alignment(sequence_data_plain,
                                         sequence_data_alignment,
@@ -201,7 +206,8 @@ int main(int argc, char *argv[]) {
                                         strct_modifier,
                                         codon_length,
                                         one_round, sbst_mat, first_gapped,
-                                        optimize, fade_out, refine_seq, no_feat);
+                                        optimize, fade_out, refine_limit,
+                                        no_feat);
     }
 
     // Write alignment to file

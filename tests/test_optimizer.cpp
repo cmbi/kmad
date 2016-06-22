@@ -11,13 +11,13 @@ BOOST_AUTO_TEST_SUITE(test_optimizer)
 
 BOOST_AUTO_TEST_CASE(test_find_gap_end)
 {
-  fasta::Sequence s = fasta::make_sequence("WF---F", 1);
+  fasta::Sequence s = fasta::make_sequence("", "WF---F", 1);
   BOOST_CHECK_EQUAL(optimizer::find_gap_end(s, 2), 4);
 
-  s = fasta::make_sequence("WF---", 1);
+  s = fasta::make_sequence("", "WF---", 1);
   BOOST_CHECK_EQUAL(optimizer::find_gap_end(s, 2), 5);
 
-  s = fasta::make_sequence("---WF", 1);
+  s = fasta::make_sequence("", "---WF", 1);
   BOOST_CHECK_EQUAL(optimizer::find_gap_end(s, 0), 2);
 
 }
@@ -25,21 +25,24 @@ BOOST_AUTO_TEST_CASE(test_find_gap_end)
 
 BOOST_AUTO_TEST_CASE(test_find_gap_start)
 {
-  fasta::Sequence s = fasta::make_sequence("WF---WF", 1);
+  fasta::Sequence s = fasta::make_sequence("", "WF---WF", 1);
   BOOST_CHECK_EQUAL(optimizer::find_gap_start(s, 4), 2);
 
-  s = fasta::make_sequence("---WF", 1);
+  s = fasta::make_sequence("", "---WF", 1);
   BOOST_CHECK_EQUAL(optimizer::find_gap_start(s, 2), -1);
 
-  s = fasta::make_sequence("WF---", 1);
+  s = fasta::make_sequence("", "WF---", 1);
   BOOST_CHECK_EQUAL(optimizer::find_gap_start(s, 4), 2);
 }
 
 BOOST_AUTO_TEST_CASE(test_single_move_score)
 {
-  std::vector<fasta::SequenceList> alignment = {{fasta::make_sequence("AAE--AA", 1),
-                                                 fasta::make_sequence("AAE-EAA", 1),
-                                                 fasta::make_sequence("AA--EAA", 1)}};
+  std::vector<fasta::SequenceList> alignment = {{
+      fasta::make_sequence("", "AAE--AA", 1),
+      fasta::make_sequence("", "AAE-EAA", 1),
+      fasta::make_sequence("", "AA--EAA", 1)
+  }};
+
   const sbst::SimilarityScoresMap* sim_scores = &sbst::BLOSUM;
   size_t seq_no = 0;
   int position = 2;
@@ -61,9 +64,9 @@ BOOST_AUTO_TEST_CASE(test_single_move_score)
                                    sim_scores, domain, motif, ptm);
 
   BOOST_CHECK_EQUAL(m.score_gain, 5);
-  alignment = {{fasta::make_sequence("AAE--", 1),
-                fasta::make_sequence("AAE-E", 1),
-                fasta::make_sequence("AA--E", 1)}};
+  alignment = {{fasta::make_sequence("", "AAE--", 1),
+                fasta::make_sequence("", "AAE-E", 1),
+                fasta::make_sequence("", "AA--E", 1)}};
   seq_no = 0;
   position = 2;
   side = "left";
@@ -72,9 +75,9 @@ BOOST_AUTO_TEST_CASE(test_single_move_score)
                                    sim_scores, domain, motif, ptm);
   BOOST_CHECK_EQUAL(m.score_gain, -5);
 
-  alignment = {{fasta::make_sequence("E--AA", 1),
-                fasta::make_sequence("E-EAA", 1),
-                fasta::make_sequence("--EAA", 1)}};
+  alignment = {{fasta::make_sequence("", "E--AA", 1),
+                fasta::make_sequence("", "E-EAA", 1),
+                fasta::make_sequence("", "--EAA", 1)}};
   seq_no = 2;
   position = 2;
   side = "right";
@@ -88,9 +91,9 @@ BOOST_AUTO_TEST_CASE(test_single_move_score)
 BOOST_AUTO_TEST_CASE(test_calculate_move_scores) 
 {
   std::vector<fasta::SequenceList> alignment = {{
-    fasta::make_sequence("AAE--AA", 1),
-    fasta::make_sequence("AAE-EAA", 1),
-    fasta::make_sequence("AA--EAA", 1)}};
+    fasta::make_sequence("", "AAE--AA", 1),
+    fasta::make_sequence("", "AAE-EAA", 1),
+    fasta::make_sequence("", "AA--EAA", 1)}};
 
   std::string sbst_mat = "BLOSUM";
   double domain = 0;
@@ -133,12 +136,12 @@ BOOST_AUTO_TEST_CASE(test_filter_move_data)
 BOOST_AUTO_TEST_CASE(test_remove_residues)
 {
   std::vector<fasta::SequenceList> alignment = {
-    {fasta::make_sequence("AAE--AA", 1),
-     fasta::make_sequence("AAE-EAA", 1),
-     fasta::make_sequence("AA--EAA", 1)},
-    {fasta::make_sequence("AAE--AA", 1),
-     fasta::make_sequence("AAE-EAA", 1),
-     fasta::make_sequence("AA--EAA", 1)}};
+    {fasta::make_sequence("", "AAE--AA", 1),
+     fasta::make_sequence("", "AAE-EAA", 1),
+     fasta::make_sequence("", "AA--EAA", 1)},
+    {fasta::make_sequence("", "AAE--AA", 1),
+     fasta::make_sequence("", "AAE-EAA", 1),
+     fasta::make_sequence("", "AA--EAA", 1)}};
   std::vector<optimizer::MoveData> move_data = {
     optimizer::MoveData(0, 2, 4, 5)};
 
@@ -165,12 +168,12 @@ BOOST_AUTO_TEST_CASE(test_remove_residues)
 BOOST_AUTO_TEST_CASE(test_optimize_alignment)
 {
   std::vector<fasta::SequenceList> alignment = {
-    {fasta::make_sequence("AAE--AA", 1),
-     fasta::make_sequence("AAE-EAA", 1),
-     fasta::make_sequence("AA--EAA", 1)},
-    {fasta::make_sequence("AAE--AA", 1),
-     fasta::make_sequence("AAE-EAA", 1),
-     fasta::make_sequence("AA--EAA", 1)}};
+    {fasta::make_sequence("", "AAE--AA", 1),
+     fasta::make_sequence("", "AAE-EAA", 1),
+     fasta::make_sequence("", "AA--EAA", 1)},
+    {fasta::make_sequence("", "AAE--AA", 1),
+     fasta::make_sequence("", "AAE-EAA", 1),
+     fasta::make_sequence("", "AA--EAA", 1)}};
 
 
   std::string sbst_mat = "BLOSUM";

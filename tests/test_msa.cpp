@@ -130,9 +130,9 @@ BOOST_AUTO_TEST_CASE(test_run_msa_gapped_mode)
 {
   f_config::FeatureSettingsMap f_set;
   fasta::SequenceList sequences;
-  sequences = {fasta::make_sequence("WWTWW", 1),
-               fasta::make_sequence("WTWRW", 1),
-               fasta::make_sequence("WRWTWRW", 1)};
+  sequences = {fasta::make_sequence("", "WWTWW", 1),
+               fasta::make_sequence("", "WTWRW", 1),
+               fasta::make_sequence("", "WRWTWRW", 1)};
   int d_modifier = 0;
   int m_modifier = 0;
   int p_modifier = 0;
@@ -310,10 +310,10 @@ BOOST_AUTO_TEST_CASE(test_count_alignments) {
 }
 
 BOOST_AUTO_TEST_CASE(test_add_alignment) {
-  fasta::Sequence prof1 = fasta::make_sequence("A-A-", 1);
-  fasta::Sequence s1 = fasta::make_sequence("ABAD", 1);
-  fasta::Sequence prof2 = fasta::make_sequence("A---A", 1);
-  fasta::Sequence s2 = fasta::make_sequence("ATSSA", 1);
+  fasta::Sequence prof1 = fasta::make_sequence("", "A-A-", 1);
+  fasta::Sequence s1 = fasta::make_sequence("", "ABAD", 1);
+  fasta::Sequence prof2 = fasta::make_sequence("", "A---A", 1);
+  fasta::Sequence s2 = fasta::make_sequence("", "ATSSA", 1);
   std::vector<fasta::SequenceList> input_multi = {{prof1, prof1},
                                                   {s1, s1}};
   fasta::SequenceList input_pairwise = {prof2, s2};
@@ -335,12 +335,12 @@ BOOST_AUTO_TEST_CASE(test_add_alignment) {
 }
 
 BOOST_AUTO_TEST_CASE(test_merge_alignments) {
-  fasta::Sequence prof1 = fasta::make_sequence("A-A-", 1);
-  fasta::Sequence s1 = fasta::make_sequence("ABAD", 1);
-  fasta::Sequence prof2 = fasta::make_sequence("A---A", 1);
-  fasta::Sequence s2 = fasta::make_sequence("ATSSA", 1);
-  fasta::Sequence prof3 = fasta::make_sequence("---AA", 1);
-  fasta::Sequence s3 = fasta::make_sequence("TSBAA", 1);
+  fasta::Sequence prof1 = fasta::make_sequence("", "A-A-", 1);
+  fasta::Sequence s1 = fasta::make_sequence("", "ABAD", 1);
+  fasta::Sequence prof2 = fasta::make_sequence("", "A---A", 1);
+  fasta::Sequence s2 = fasta::make_sequence("", "ATSSA", 1);
+  fasta::Sequence prof3 = fasta::make_sequence("", "---AA", 1);
+  fasta::Sequence s3 = fasta::make_sequence("", "TSBAA", 1);
   std::vector<fasta::SequenceList> input_alignments = {{prof1, prof2, prof3},
                                                        {s1, s2, s3}};
   std::vector<fasta::SequenceList> result = msa::merge_alignments(
@@ -356,12 +356,12 @@ BOOST_AUTO_TEST_CASE(test_merge_alignments) {
 
   BOOST_CHECK_EQUAL_COLLECTIONS(expected.begin(), expected.end(),
                                 result_str.begin(), result_str.end());
-  fasta::Sequence prof4 = fasta::make_sequence("A-A-A-", 1);
-  fasta::Sequence s4 = fasta::make_sequence("ABAD-C", 1);
-  fasta::Sequence prof5 = fasta::make_sequence("A---AA-", 1);
-  fasta::Sequence s5 = fasta::make_sequence("ATSSA-C", 1);
-  fasta::Sequence prof6 = fasta::make_sequence("---AAA", 1);
-  fasta::Sequence s6 = fasta::make_sequence("TSBAA-", 1);
+  fasta::Sequence prof4 = fasta::make_sequence("", "A-A-A-", 1);
+  fasta::Sequence s4 = fasta::make_sequence("", "ABAD-C", 1);
+  fasta::Sequence prof5 = fasta::make_sequence("", "A---AA-", 1);
+  fasta::Sequence s5 = fasta::make_sequence("", "ATSSA-C", 1);
+  fasta::Sequence prof6 = fasta::make_sequence("", "---AAA", 1);
+  fasta::Sequence s6 = fasta::make_sequence("", "TSBAA-", 1);
   input_alignments = {{prof4, prof5, prof6}, {s4, s5, s6}};
 
   result = msa::merge_alignments(input_alignments);
@@ -378,8 +378,8 @@ BOOST_AUTO_TEST_CASE(test_merge_alignments) {
 }
 
 BOOST_AUTO_TEST_CASE(test_run_msa_with_feature_pattern) {
-  fasta::Sequence s1 = fasta::make_sequence("WFQIANWFQWFQLAN", 1);
-  fasta::Sequence s2 = fasta::make_sequence("WFQLANWFQWF", 1);
+  fasta::Sequence s1 = fasta::make_sequence("", "WFQIANWFQWFQLAN", 1);
+  fasta::Sequence s2 = fasta::make_sequence("", "WFQLANWFQWF", 1);
   fasta::SequenceList s = {s1, s2};
   f_config::FeatureSettingsMap f_set;
   bool gapped = false;
@@ -438,11 +438,11 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
   f_config::FeatureSettingsMap f_set;
   fasta::SequenceList sequences;
   sequences = {
-          fasta::make_sequence("GDNGEEGEEE", 1),
-          fasta::make_sequence("GDNGEEGDQE", 1),
-          fasta::make_sequence("GDNGEEDGEEE", 1),
-          fasta::make_sequence("GDNGEEAEEA", 1),
-          fasta::make_sequence("GDNGEEAEAEEA", 1)};
+          fasta::make_sequence("", "GDNGEEGEEE", 1),
+          fasta::make_sequence("", "GDNGEEGDQE", 1),
+          fasta::make_sequence("", "GDNGEEDGEEE", 1),
+          fasta::make_sequence("", "GDNGEEAEEA", 1),
+          fasta::make_sequence("", "GDNGEEAEAEEA", 1)};
   int d_modifier = 0;
   int m_modifier = 0;
   int p_modifier = 0;
@@ -490,8 +490,8 @@ BOOST_AUTO_TEST_CASE(test_run_msa_sial_human) {
 BOOST_AUTO_TEST_CASE(test_run_secondary_structure) {
   f_config::FeatureSettingsMap f_set;
   fasta::SequenceList sequences;
-  sequences = {fasta::make_sequence("CAAAsAATAAAAAACAAAAAAWAAAAAA", 7),
-               fasta::make_sequence("CAAAsAAWAAAAAA", 7)};
+  sequences = {fasta::make_sequence("", "CAAAsAATAAAAAACAAAAAAWAAAAAA", 7),
+               fasta::make_sequence("", "CAAAsAAWAAAAAA", 7)};
   int d_modifier = 0;
   int m_modifier = 0;
   int p_modifier = 50;
