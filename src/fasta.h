@@ -74,6 +74,8 @@ namespace fasta {
     ///  e.g. for @sequence '--A' and @position 0 will return 2
     int find_real_pos(const std::string& sequence, int position);
 
+    /// creates a list of all features present in @sequences + default ptm
+    ///         features
     FeatureNamesList make_feature_list(const fasta::SequenceList& sequences);
 }
 
