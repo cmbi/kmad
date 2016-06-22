@@ -2,7 +2,6 @@
 #include "fasta.h"
 #include "msa.h"
 #include "outfile.h"
-#include "seq_data.h"
 
 #include <boost/program_options.hpp>
 #include <ctime>
@@ -74,7 +73,7 @@ int main(int argc, char *argv[]) {
       ("end,n",
        po::value<double>(&end_pen)->default_value(-0.1),
        "penalty for gaps at the end (and beginning)")
-      ("one-round, r", po::value<bool>(&one_round)->implicit_value(true)
+      ("one-round", po::value<bool>(&one_round)->implicit_value(true)
                                                   ->default_value(false),
        "perform only one round of alignments (all against first)")
       ("feat_cutoff", po::value<double>(&conservation_cutoff)
@@ -159,19 +158,16 @@ int main(int argc, char *argv[]) {
 
     fasta::FastaData fasta_data;
     try {
-      fasta_data = fasta::parse_fasta(filename, codon_length, refine,
-          refine_limit);
+      fasta_data = fasta::parse_fasta(filename, codon_length);
     } catch(const std::exception& e) {
       std::cerr << "Error: " << e.what() << std::endl;
       std::exit(EXIT_FAILURE);
     }
     bool gapped = false;
-
     // Combine sequence and feature settings
     //
-    auto sequence_data_plain = seq_data::process_fasta_data(
-        fasta_data, f_set, gapped
-    );
+    fasta::FastaData fasta_data_cfg = f_config::get_conf_data(
+      fasta_data, f_set, gapped);
 
     // Perform the alignment
 
@@ -179,17 +175,15 @@ int main(int argc, char *argv[]) {
     // alignment depends on whether or not we will refine.
     std::vector<fasta::SequenceList> alignment;
     if (!refine) {
-      alignment = msa::run_msa(sequence_data_plain,
-                               f_set, gap_open_pen,
-                               gap_ext_pen, end_pen, domain_modifier,
-                               motif_modifier, ptm_modifier, strct_modifier,
-                               codon_length,
-                               one_round, sbst_mat, first_gapped, optimize,
-                               fade_out, no_feat);
+      alignment = msa::run_msa(
+                      fasta_data, f_set, gap_open_pen, gap_ext_pen, end_pen,
+                      domain_modifier, motif_modifier, ptm_modifier,
+                      strct_modifier, codon_length, one_round, sbst_mat,
+                      first_gapped, optimize, fade_out, no_feat);
     } else {
-      bool gapped = true;
-      seq_data::SequenceData sequence_data_alignment = seq_data::process_fasta_data(
-          fasta_data, f_set, gapped);
+      gapped = true;
+      fasta::FastaData fasta_data_cfg_aligned = f_config::get_conf_data(
+        fasta_data, f_set, gapped);
       if (refine_limit == 0) {
         refine_limit = fasta_data.sequences.size();
       }
@@ -198,16 +192,11 @@ int main(int argc, char *argv[]) {
         throw std::runtime_error("In the 'refine' mode all sequences should "
                                  "have the same length");
       }
-      alignment = msa::refine_alignment(sequence_data_plain,
-                                        sequence_data_alignment,
-                                        f_set, gap_open_pen,
-                                        gap_ext_pen, end_pen, domain_modifier,
-                                        motif_modifier, ptm_modifier,
-                                        strct_modifier,
-                                        codon_length,
-                                        one_round, sbst_mat, first_gapped,
-                                        optimize, fade_out, refine_limit,
-                                        no_feat);
+      alignment = msa::refine_alignment(
+        fasta_data, fasta_data_cfg_aligned, f_set, gap_open_pen, gap_ext_pen,
+        end_pen, domain_modifier, motif_modifier, ptm_modifier, strct_modifier,
+        codon_length, one_round, sbst_mat, first_gapped, optimize, fade_out,
+        refine_limit, no_feat);
     }
 
     // Write alignment to file
@@ -220,12 +209,10 @@ int main(int argc, char *argv[]) {
     // TODO: Probably can use a design pattern here. Encoding depends on user
     // option. Strategy might fit.
     if (out_encoded) {
-      outfile::write_encoded_alignment(alignment[al_out_index],
-                                       sequence_data_plain,
+      outfile::write_encoded_alignment(alignment[al_out_index], fasta_data,
                                        output_prefix);
     } else {
-      outfile::write_decoded_alignment(alignment[al_out_index],
-                                       sequence_data_plain,
+      outfile::write_decoded_alignment(alignment[al_out_index], fasta_data,
                                        output_prefix);
     }
 }
