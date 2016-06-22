@@ -51,6 +51,7 @@ fasta::FastaData fasta::parse_fasta(std::string const& filename,
                 header, seq_line, codon_length
             );
             fd.sequences.push_back(sequence);
+            seq_line = "";
         }
         in_sequence_section = true;
 
