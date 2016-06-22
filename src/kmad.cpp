@@ -159,8 +159,7 @@ int main(int argc, char *argv[]) {
 
     fasta::FastaData fasta_data;
     try {
-      fasta_data = fasta::parse_fasta(filename, codon_length, refine,
-          refine_limit);
+      fasta_data = fasta::parse_fasta(filename, codon_length);
     } catch(const std::exception& e) {
       std::cerr << "Error: " << e.what() << std::endl;
       std::exit(EXIT_FAILURE);

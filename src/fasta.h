@@ -1,5 +1,6 @@
 #ifndef FASTA_H
 #define FASTA_H
+#include "f_config.h"
 
 #include <iostream>
 #include <unordered_map>
@@ -29,17 +30,19 @@ namespace fasta {
     typedef std::vector<fasta::Sequence> SequenceList;
 
     /// Holds all the data from the (semi)fasta file - sequences with their
-    /// headers and a list of motif probabilities
+    /// headers, list of motif probabilities, list of all features present
+    /// in the input
     struct FastaData {
         SequenceList sequences;
         std::unordered_map<std::string, double> probabilities;
+        std::vector<std::string> feature_list;
     };
 
     /// \brief Parses a 'fasta' file
     ///
-    /// \throws std::runtime_error TODO: ???when does it throw???
-    FastaData parse_fasta(std::string const& filename, int codon_length,
-                          bool refine, int refine_seq_num);
+    /// \throws std::runtime_error when motif probabilities format is incorrect
+    FastaData parse_fasta(std::string const& filename, int codon_length);
+
 
     /// Make a sequence
     Sequence make_sequence(const std::string& description,
@@ -55,6 +58,23 @@ namespace fasta {
     ///
     /// \param[in] limit The number of sequence to include in the length check.
     bool check_length(SequenceList const& sequences, int limit);
+
+    FastaData get_conf_data(const FastaData& fasta_data,
+                            const f_config::FeatureSettingsMap& f_set,
+                            bool gapped);
+    /// \brief Removes gaps from all sequences in the list
+    SequenceList remove_gaps(const SequenceList& sequences);
+
+    /// \brief add features based on the provided regular expression @pattern
+    void assign_feature_by_pattern(fasta::SequenceList& sequences,
+                                   const std::string& pattern,
+                                   const std::string& feat_name);
+
+    /// \brief find position in the alignment based on position in the sequence
+    ///  e.g. for @sequence '--A' and @position 0 will return 2
+    int find_real_pos(const std::string& sequence, int position);
+
+    FeatureNamesList make_feature_list(const fasta::SequenceList& sequences);
 }
 
 
