@@ -164,10 +164,10 @@ int main(int argc, char *argv[]) {
       std::exit(EXIT_FAILURE);
     }
     bool gapped = false;
-
     // Combine sequence and feature settings
     //
-    fasta_data = fasta::get_conf_data(fasta_data, f_set, gapped);
+    fasta::FastaData fasta_data_cfg = fasta::get_conf_data(
+      fasta_data, f_set, gapped);
 
     // Perform the alignment
 
@@ -181,9 +181,9 @@ int main(int argc, char *argv[]) {
                       strct_modifier, codon_length, one_round, sbst_mat,
                       first_gapped, optimize, fade_out, no_feat);
     } else {
-      bool gapped = true;
-      fasta::FastaData fasta_data_alignment = fasta::get_conf_data(
-          fasta_data, f_set, gapped);
+      gapped = true;
+      fasta::FastaData fasta_data_cfg_aligned = fasta::get_conf_data(
+        fasta_data, f_set, gapped);
       if (refine_limit == 0) {
         refine_limit = fasta_data.sequences.size();
       }
@@ -192,14 +192,11 @@ int main(int argc, char *argv[]) {
         throw std::runtime_error("In the 'refine' mode all sequences should "
                                  "have the same length");
       }
-      alignment = msa::refine_alignment(fasta_data, fasta_data_alignment,
-                                        f_set, gap_open_pen, gap_ext_pen,
-                                        end_pen, domain_modifier,
-                                        motif_modifier, ptm_modifier,
-                                        strct_modifier, codon_length,
-                                        one_round, sbst_mat, first_gapped,
-                                        optimize, fade_out, refine_limit,
-                                        no_feat);
+      alignment = msa::refine_alignment(
+        fasta_data, fasta_data_cfg_aligned, f_set, gap_open_pen, gap_ext_pen,
+        end_pen, domain_modifier, motif_modifier, ptm_modifier, strct_modifier,
+        codon_length, one_round, sbst_mat, first_gapped, optimize, fade_out,
+        refine_limit, no_feat);
     }
 
     // Write alignment to file
