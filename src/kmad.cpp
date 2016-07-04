@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
       ("end,n",
        po::value<double>(&end_pen)->default_value(-0.1),
        "penalty for gaps at the end (and beginning)")
-      ("one-round, r", po::value<bool>(&one_round)->implicit_value(true)
+      ("one-round", po::value<bool>(&one_round)->implicit_value(true)
                                                   ->default_value(false),
        "perform only one round of alignments (all against first)")
       ("feat_cutoff", po::value<double>(&conservation_cutoff)
