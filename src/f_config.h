@@ -5,6 +5,9 @@
 #include <unordered_map>
 #include <vector>
 
+#include "fasta.h"
+
+
 typedef std::vector<std::string> FeatureNamesList;
 namespace f_config
 {
@@ -47,6 +50,23 @@ namespace f_config
 
   typedef std::unordered_map<std::string, RawFeatureSettings> RawFeatureSettingsMap;
   typedef std::unordered_map<std::string, FeatureSettings> FeatureSettingsMap;
+
+  fasta::FastaData get_conf_data(const fasta::FastaData& fasta_data,
+                          const FeatureSettingsMap& f_set, bool gapped);
+
+  /// \brief add features based on the provided regular expression @pattern
+  void assign_feature_by_pattern(fasta::SequenceList& sequences,
+                                 const std::string& pattern,
+                                 const std::string& feat_name);
+
+  /// \brief find position in the alignment based on position in the sequence
+  ///  e.g. for @sequence '--A' and @position 0 will return 2
+  int find_real_pos(const std::string& sequence, int position);
+
+
+  /// creates a list of all features present in @sequences + default ptm
+  ///         features
+  FeatureNamesList make_feature_list(const fasta::SequenceList& sequences);
 
   class ConfParser
   {

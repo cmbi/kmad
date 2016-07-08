@@ -1,8 +1,8 @@
 #include "fasta.h"
 
 #include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
 #include <boost/regex.hpp>
+#include <boost/filesystem.hpp>
 
 #include <fstream>
 #include <sstream>
@@ -30,8 +30,7 @@ namespace {
 
 
 fasta::FastaData fasta::parse_fasta(std::string const& filename,
-                                    int codon_length, bool refine,
-                                    int refine_seq_num)
+                                    int codon_length)
 {
   fs::path p(filename);
   if (!fs::exists(p)) {
@@ -156,4 +155,20 @@ bool fasta::check_length(fasta::SequenceList const& sequences, int limit) {
     ++i;
   }
   return result;
+}
+
+fasta::SequenceList fasta::remove_gaps(
+    const fasta::SequenceList& sequences) {
+  fasta::SequenceList s = sequences;
+  for (auto& seq : s) {
+    seq.residues.clear();
+  }
+  for (size_t i = 0; i < sequences.size(); ++i) {
+    for (size_t j = 0; j < sequences[i].residues.size(); ++j) {
+      if (sequences[i].residues[j].codon[0] != '-') {
+        s[i].residues.push_back(sequences[i].residues[j]);
+      }
+    }
+  }
+  return s;
 }
