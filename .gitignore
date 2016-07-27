@@ -25,6 +25,9 @@ Makefile
 configure
 config.status
 config.log
+config.h
+config.h.in
+stamp-h1
 autom4te.cache/
 autom4te.cache/output*
 autom4te.cache/traces*
