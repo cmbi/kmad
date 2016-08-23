@@ -40,7 +40,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
 
 
       std::vector<fasta::SequenceList> alignment;
-      int alignments_number = 0;
+      auto alignments_number = 0;
       double cutoff = 0;
       // pointer to the function performing single round of msa, can be either
       // for gapped or ungapped first sequence
@@ -66,7 +66,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
       if (!one_round) {
         for (int i = 8; i >= 0; --i) {
           cutoff = double(i) / 10;
-          int prev_alignments = alignments_number;
+          auto prev_alignments = alignments_number;
           alignment = perform_msa_round_ptr(fasta_data, fasta_data, profile,
                                             f_profile, gap_open_pen,
                                             end_pen, gap_ext_pen, cutoff,
@@ -87,7 +87,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
       }
       // set alignments number to 0 to align (again)
       // all sequences to the profile
-      int iterations = 1;
+      auto iterations = 1;
       if (one_round) {
         iterations = 1;
       }
@@ -106,7 +106,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
         profile = profile::create_score_profile(alignment[0], sbst_mat);
       }
       if (optimize) {
-        int counter = 0;
+        auto counter = 0;
         std::vector<fasta::SequenceList> previous;
         while (!msa::compare_alignments(previous, alignment)
                 && counter < 15) {
@@ -175,7 +175,7 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
       // Align all sequences vs first to determine the identities
 
       std::vector<fasta::SequenceList> alignment;
-      int alignments_number = 0;
+      auto alignments_number = 0;
       double cutoff = 0;
       // pointer to the function performing single round of msa, can be either
       // for gapped or ungapped first sequence
@@ -225,7 +225,7 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
                                         alignments_number, f_set,
                                         alignment, refine_seq, no_feat);
       if (optimize) {
-        int counter = 0;
+        auto counter = 0;
         std::vector<fasta::SequenceList> previous;
         while (!compare_alignments(previous, alignment) && counter < 15) {
           previous = alignment;
@@ -251,7 +251,7 @@ std::vector<double> msa::set_identities(
   fasta::Sequence aligned_seq_uppercase;
   //pairwise alignment with lowercase characters where chars were removed
   fasta::Sequence aligned_seq_with_lower;
-  bool gapped = true;
+  auto gapped = true;
   for (size_t i = 1; i < fasta_data.sequences.size(); ++i) {
     // aligned_sequence: vector
     // first element is a dummy polyA sequence to indicate where are the gaps
@@ -275,7 +275,7 @@ double msa::calc_identity(const fasta::Sequence& dummy_sequence,
                           const fasta::Sequence& aligned_sequence,
                           const fasta::Sequence& query_sequence) {
   double identical_residues = 0;
-  int gap_count = 0;
+  auto gap_count = 0;
   // sequences should be aligned (therefore lengths should be equal)
   assert(aligned_sequence.residues.size() == dummy_sequence.residues.size());
   for (unsigned i = 0; i < aligned_sequence.residues.size(); ++i) {
@@ -293,8 +293,8 @@ double msa::calc_identity(const fasta::Sequence& dummy_sequence,
 fasta::SequenceList msa::remove_gaps(const fasta::SequenceList& alignment) {
   fasta::Sequence new_seq;
   fasta::SequenceList aligned_seq = {new_seq, new_seq};
-  char gap = '-';
-  bool lower_flag = false;
+  auto gap = '-';
+  auto lower_flag = false;
   for (size_t i = 0; i < alignment[0].residues.size(); ++i) {
     if (alignment[0].residues[i].codon[0] == gap) {
       if (aligned_seq[1].residues.size() > 0) {
@@ -335,7 +335,7 @@ fasta::SequenceList msa::align_pairwise(const fasta::Sequence& input_sequence,
                                         int codon_length,
                                         const bool first_gapped,
                                         const bool no_feat) {
-  int profile_length = profile.begin()->second.size();
+  auto profile_length = profile.begin()->second.size();
   ScoringMatrix scores(profile_length, input_sequence.residues.size(),
                        gap_open_pen, end_pen, gap_ext_pen, no_feat);
   scores.calculate_scores(input_sequence, profile, f_profile, codon_length);
@@ -376,7 +376,7 @@ std::vector<fasta::SequenceList> msa::perform_msa_round_ungapped(
       alignment[1].push_back(fasta_data_alignment.sequences[i]);
     }
   }
-  int next_alignments = count_alignments(identity_cutoff, identities);
+  auto next_alignments = count_alignments(identity_cutoff, identities);
   if (next_alignments > prev_alignments) {
     fasta::SequenceList aligned_seq;
     for (size_t i = start; i < fasta_data.sequences.size(); ++i) {
@@ -404,7 +404,7 @@ std::vector<fasta::SequenceList> msa::perform_msa_round_ungapped(
 
 int msa::count_alignments(double identity_cutoff,
                           const std::vector<double>& identities) {
-  int count = 0;
+  auto count = 0;
   for (auto& item: identities) {
     if (item >= identity_cutoff) {
       ++count;
@@ -464,10 +464,10 @@ std::vector<fasta::SequenceList> msa::merge_alignments(
   std::vector<fasta::SequenceList> multi_alignment;
   /// TODO: change it so that changing the format is no longer needed at the
   /// end of the function
-  multi_alignment = {{pairwise_alignments[0][0],
-                      pairwise_alignments[0][0]},
-                     {pairwise_alignments[1][0],
-                      pairwise_alignments[1][0]}};
+  multi_alignment = {
+          {pairwise_alignments[0][0], pairwise_alignments[0][0]},
+          {pairwise_alignments[1][0], pairwise_alignments[1][0]}
+  };
 
   assert(pairwise_alignments[0].size() == pairwise_alignments[1].size());
   for (size_t i = 1; i < pairwise_alignments[0].size(); ++i) {
@@ -494,10 +494,10 @@ std::vector<fasta::SequenceList> msa::add_alignment(
   fasta::Sequence s;
   std::vector<fasta::SequenceList> merged(multi_alignment.size() + 1,
                                           fasta::SequenceList(2, s));
-  int i = 0;
-  int j = 0;
-  const std::vector<fasta::Residue> *profile1 = &multi_alignment[0][0].residues;
-  const std::vector<fasta::Residue> *profile2 = &pairwise_alignment[0].residues;
+  auto i = 0;
+  auto j = 0;
+  const auto *profile1 = &multi_alignment[0][0].residues;
+  const auto *profile2 = &pairwise_alignment[0].residues;
   int length1 = profile1->size();
   int length2 = profile2->size();
 
@@ -550,10 +550,10 @@ std::vector<fasta::SequenceList> msa::remove_gapcolumns(
     std::vector<fasta::SequenceList> alignment)
 {
   std::vector<fasta::SequenceList> result = alignment;
-  int erased = 0;
+  auto erased = 0;
   for (size_t i = 0; i < alignment[0][0].residues.size(); ++i) {
     if (alignment[0][0].residues[i].codon[0] == '-') {
-      bool gaps = true;
+      auto gaps = true;
       size_t j = 1;
       while (gaps && j < alignment[0].size()) {
         if (alignment[0][j].residues[i].codon[0] != '-') {
@@ -578,7 +578,7 @@ std::vector<fasta::SequenceList> msa::remove_gapcolumns(
 
 bool msa::compare_alignments(const std::vector<fasta::SequenceList>& al1,
     const std::vector<fasta::SequenceList>& al2) {
-  bool result = true;
+  auto result = true;
   if (al1.size() != al2.size() || al1[0].size() != al2[0].size()) {
     result = false;
   }
