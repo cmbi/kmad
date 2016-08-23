@@ -162,7 +162,7 @@ int main(int argc, char *argv[]) {
       std::cerr << "Error: " << e.what() << std::endl;
       std::exit(EXIT_FAILURE);
     }
-    bool gapped = false;
+    auto gapped = false;
     // Combine sequence and feature settings
     //
     auto fasta_data_cfg = f_config::get_conf_data(
@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) {
 
     // Write alignment to file
     // TODO: al_out_index is always 1. Also, what is it?
-    int al_out_index = 1;
+    auto al_out_index = 1;
     if (first_gapped) {
       first_gapped = 0;
     }
