@@ -220,7 +220,7 @@ void f_config::assign_feature_by_pattern(fasta::SequenceList& sequences,
     for (size_t i = 0; i < sequences.size(); ++i) {
       //std::string seq = fasta::sequence_to_string(sequences[i]);
       auto seq = fasta::sequence_to_string(sequences[i]);
-      std::string seq_nogaps = seq;
+      auto seq_nogaps = seq;
       seq_nogaps.erase(std::remove(seq_nogaps.begin(), seq_nogaps.end(), '-'),
           seq_nogaps.end());
       for(auto it = boost::sregex_iterator(seq_nogaps.begin(), seq_nogaps.end(),
@@ -228,8 +228,8 @@ void f_config::assign_feature_by_pattern(fasta::SequenceList& sequences,
               it != boost::sregex_iterator();
                    ++it)
       {
-        int match_start = find_real_pos(seq, it->position());
-        int match_end = find_real_pos(seq, match_start + it->str().size());
+        auto match_start = find_real_pos(seq, it->position());
+        auto match_end = find_real_pos(seq, match_start + it->str().size());
         for (int j = match_start; j < match_end; ++j) {
           if (sequences[i].residues[j].codon[0] != '-') {
             sequences[i].residues[j].features.push_back(feat_name);
