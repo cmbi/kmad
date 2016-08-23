@@ -27,8 +27,7 @@ std::vector<fasta::SequenceList> msa::run_msa(
       // query_seq_list - the profiles are built based only on the first
       // sequence
       fasta::SequenceList query_seq_list = {fasta_data.sequences[0]};
-      profile::ProfileMap profile = profile::create_score_profile(
-          query_seq_list, sbst_mat);
+      auto profile = profile::create_score_profile(query_seq_list, sbst_mat);
       std::vector<double> identities = {1};
       if (!no_feat) {
         f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
@@ -147,12 +146,11 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
     const bool fade_out, int refine_seq, const bool no_feat)
 {
       fasta::SequenceList query_seq = {fasta_data_plain.sequences[0]};
-      profile::ProfileMap profile_single = profile::create_score_profile(
-          query_seq, sbst_mat);
-      FeatureScores f_profile_single(fasta_data_plain.feature_list,
-                                     domain_modifier, ptm_modifier,
-                                     motif_modifier, strct_modifier,
-                                     fasta_data_plain.probabilities);
+      auto profile_single = profile::create_score_profile(query_seq, sbst_mat);
+      FeatureScores f_profile_single(
+              fasta_data_plain.feature_list, domain_modifier, ptm_modifier,
+              motif_modifier, strct_modifier, fasta_data_plain.probabilities
+      );
       std::vector<double> identities = {1};
       f_profile_single.update_scores(query_seq, f_set, identities, fade_out);
       identities = msa::set_identities(fasta_data_plain, profile_single,
@@ -169,8 +167,7 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
         query_seq_list.push_back(fasta_data_alignment.sequences[i]);
       }
       // fasta::SequenceList query_seq_list = fasta_data_alignment.sequences;
-      profile::ProfileMap profile = profile::create_score_profile(
-          query_seq_list, sbst_mat);
+      auto profile = profile::create_score_profile(query_seq_list, sbst_mat);
       if (!no_feat) {
         f_profile.update_scores(query_seq_list, f_set, identities, fade_out);
       }
@@ -236,15 +233,6 @@ std::vector<fasta::SequenceList> msa::refine_alignment(
               motif_modifier, ptm_modifier, sbst_mat);
           ++counter;
         }
-        // f_profile.update_scores(alignment[0], f_set, identities, fade_out);
-        // profile = profile::create_score_profile(alignment[0], sbst_mat);
-        // alignments_number = 0;
-        // cutoff = 0;
-        // alignment = perform_msa_round_ptr(fasta_data_plain, profile,
-        //                                   f_profile, gap_open_pen,
-        //                                   end_pen, gap_ext_pen, cutoff,
-        //                                   codon_length, identities,
-        //                                   alignments_number, f_set, alignment);
       }
       return alignment;
 }
@@ -276,9 +264,8 @@ std::vector<double> msa::set_identities(
         gap_ext_pen, codon_length, gapped, no_feat);
 
 
-    double identity = msa::calc_identity(aligned_sequence[0],
-                                         aligned_sequence[1],
-                                         fasta_data.sequences[0]);
+    auto identity = msa::calc_identity(
+            aligned_sequence[0], aligned_sequence[1], fasta_data.sequences[0]);
     identities.push_back(identity);
   }
   return identities;
@@ -444,7 +431,7 @@ std::vector<fasta::SequenceList> msa::perform_msa_round_gapped(
     const bool no_feat)
 {
   std::vector<fasta::SequenceList> alignment = {{}, {}};
-  int next_alignments = count_alignments(identity_cutoff, identities);
+  auto next_alignments = count_alignments(identity_cutoff, identities);
   if (next_alignments > prev_alignments) {
     fasta::SequenceList aligned_seq;
     for (size_t i = 0; i < fasta_data.sequences.size(); ++i) {
