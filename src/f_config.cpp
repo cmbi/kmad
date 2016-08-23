@@ -218,7 +218,8 @@ void f_config::assign_feature_by_pattern(fasta::SequenceList& sequences,
   if (pattern.size() > 0) {
     boost::regex re(pattern);
     for (size_t i = 0; i < sequences.size(); ++i) {
-      std::string seq = fasta::sequence_to_string(sequences[i]);
+      //std::string seq = fasta::sequence_to_string(sequences[i]);
+      auto seq = fasta::sequence_to_string(sequences[i]);
       std::string seq_nogaps = seq;
       seq_nogaps.erase(std::remove(seq_nogaps.begin(), seq_nogaps.end(), '-'),
           seq_nogaps.end());

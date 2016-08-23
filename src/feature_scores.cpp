@@ -87,7 +87,7 @@ double FeatureScores::score_ptm(
   //pop back last character to get just the ptm type
   ptm_type.pop_back();
   // level of annotation - last character of feature's name
-  char ptm_level = ptm_name.back();
+  auto ptm_level = ptm_name.back();
   double ptm_score = 0.;
   // first set ptm_score based on annotation level of the query ptm
   if (ptm_level == '0') {

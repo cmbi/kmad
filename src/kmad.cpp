@@ -155,7 +155,6 @@ int main(int argc, char *argv[]) {
     }
 
     // Load sequence data
-
     fasta::FastaData fasta_data;
     try {
       fasta_data = fasta::parse_fasta(filename, codon_length);
@@ -166,7 +165,7 @@ int main(int argc, char *argv[]) {
     bool gapped = false;
     // Combine sequence and feature settings
     //
-    fasta::FastaData fasta_data_cfg = f_config::get_conf_data(
+    auto fasta_data_cfg = f_config::get_conf_data(
       fasta_data, f_set, gapped);
 
     // Perform the alignment
@@ -182,7 +181,7 @@ int main(int argc, char *argv[]) {
                       first_gapped, optimize, fade_out, no_feat);
     } else {
       gapped = true;
-      fasta::FastaData fasta_data_cfg_aligned = f_config::get_conf_data(
+      auto fasta_data_cfg_aligned = f_config::get_conf_data(
         fasta_data, f_set, gapped);
       if (refine_limit == 0) {
         refine_limit = fasta_data.sequences.size();
