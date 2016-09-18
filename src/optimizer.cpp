@@ -21,7 +21,7 @@ std::vector<fasta::SequenceList> optimizer::optimize_alignment(
     const std::vector<fasta::SequenceList>& alignment,
     double domain_modifier, double motif_modifier, double ptm_modifier,
     const std::string& sbst_mat) {
-  std::vector<optimizer::MoveData> m = optimizer::calculate_move_scores(
+  auto m = optimizer::calculate_move_scores(
       alignment, domain_modifier, motif_modifier, ptm_modifier, sbst_mat);
   optimizer::filter_move_data(m);
   std::vector<fasta::SequenceList> new_alignment;
@@ -36,7 +36,7 @@ std::vector<optimizer::MoveData> optimizer::calculate_move_scores(
     double domain_modifier, double motif_modifier, double ptm_modifier,
     const std::string& sbst_mat)
   {
-  size_t alignment_length = alignment[0][0].residues.size();
+  auto alignment_length = alignment[0][0].residues.size();
   std::vector<optimizer::MoveData> move_data;
   std::string side;
   const sbst::SimilarityScoresMap* sim_scores;
@@ -114,7 +114,7 @@ std::vector<fasta::SequenceList> optimizer::remove_residues(
   assert(alignment.size() == 2);
   assert(alignment[0].size() == alignment[1].size());
 
-  std::vector<fasta::SequenceList> new_alignment = alignment;
+  auto new_alignment = alignment;
   for (auto& i : move_data) {
     fasta::Residue tmp = new_alignment[0][i.seq_number].residues[i.new_position];
     new_alignment[0][i.seq_number].residues[i.new_position] =
@@ -135,30 +135,10 @@ double optimizer::get_two_res_score(fasta::Residue res1, fasta::Residue res2,
   double domain_modifier, double motif_modifier, double ptm_modifier)
 {
   double result = 0;
-  char aa2 = res2.codon[0];
+  auto aa2 = res2.codon[0];
   if (sim_scores->find(aa2) != sim_scores->end() && res1_index >= 0) {
     result += sim_scores->at(aa2)[res1_index];
   }
-  // else if (aa2 == 'B' && res1_index >= 0) {
-  //   result += sim_scores->at('D')[res1_index] * 0.5
-  //             + sim_scores->at('N')[res1_index] * 0.5;
-  // } else if (aa2 == 'Z' && res1_index >= 0) {
-  //   result += sim_scores->at('Q')[res1_index] * 0.5
-  //             + sim_scores->at('E')[res1_index] * 0.5;
-  // }
-  // else if ((aa2 == 'B' && res1.codon[0] == 'Z')
-  //            || (aa2 == 'Z' && res1.codon[0] == 'B')) {
-  //     result += 0.25 * (sim_scores->at('N')[5] + sim_scores->at('N')[6]
-  //                       + sim_scores->at('D')[5] + sim_scores->at('D')[6]);
-  // } else if (res1.codon[0] == 'Z'
-  //     && sim_scores->find(aa2) != sim_scores->end()) {
-  //   result += sim_scores->at(aa2)[5] * 0.5
-  //             + sim_scores->at(aa2)[6] * 0.5;
-  // } else if  (res1.codon[0] == 'B'
-  //     && sim_scores->find(aa2) != sim_scores->end()) {
-  //   result += sim_scores->at(aa2)[2] * 0.5
-  //             + sim_scores->at(aa2)[3] * 0.5;
-  // }
   result += optimizer::score_ptm(res1, res2, ptm_modifier);
   result += optimizer::score_domain(res1, res2, domain_modifier);
   result += optimizer::score_motif(res1, res2, motif_modifier);
@@ -172,13 +152,13 @@ optimizer::MoveData optimizer::single_move_score(
     const sbst::SimilarityScoresMap* sim_scores, double domain_modifier,
     double motif_modifier, double ptm_modifier) {
   double pre_score = 0;
-  fasta::Residue res1 = alignment[0][seq_number].residues[position];
-  char aa1 = res1.codon[0];
-  int index = (std::find(sbst::ALPHABET.begin(), sbst::ALPHABET.end(), aa1)
+  auto res1 = alignment[0][seq_number].residues[position];
+  auto aa1 = res1.codon[0];
+  auto index = (std::find(sbst::ALPHABET.begin(), sbst::ALPHABET.end(), aa1)
                - sbst::ALPHABET.begin());
 
   for (size_t i = 0; i < alignment[0].size(); ++i) {
-    fasta::Residue res2 = alignment[0][i].residues[position];
+    auto res2 = alignment[0][i].residues[position];
     if (i != seq_number && res2.codon[0] != '-') {
       pre_score += get_two_res_score(res1, res2, index, sim_scores,
                                      domain_modifier, motif_modifier,
@@ -218,7 +198,7 @@ optimizer::MoveData optimizer::single_move_score(
 
 int optimizer::find_gap_end(const fasta::Sequence& seq, int start) {
   int gap_end = seq.residues.size();
-  bool not_found = true;
+  auto not_found = true;
   for(size_t i = start; not_found && i < seq.residues.size(); i++) {
     if (seq.residues[i].codon[0] != '-') {
       not_found = false;
@@ -231,7 +211,7 @@ int optimizer::find_gap_end(const fasta::Sequence& seq, int start) {
 
 int optimizer::find_gap_start(const fasta::Sequence& seq, int gap_end) {
   int gap_start = -1;
-  bool not_found = true;
+  auto not_found = true;
   for(size_t i = gap_end; not_found && i > 0; --i) {
     if (seq.residues[i].codon[0] != '-') {
       not_found = false;
@@ -249,7 +229,7 @@ double optimizer::score_ptm(fasta::Residue res1, fasta::Residue res2,
   std::string ptm_type1;
   std::string ptm_type2;
   char ptm_level;
-  bool found1 = false;
+  auto found1 = false;
   double multiplier1 = 0;
   for (auto& f : res1.features) {
     if (f.substr(0, 2) == "p_") {
@@ -261,7 +241,7 @@ double optimizer::score_ptm(fasta::Residue res1, fasta::Residue res2,
     }
   }
   if (found1) {
-    bool found2 = false;
+    auto found2 = false;
     double multiplier2 = 0;
     for (auto& f : res2.features) {
       if (f.substr(0, 2) == "p_") {
@@ -285,7 +265,7 @@ double optimizer::score_motif(fasta::Residue res1, fasta::Residue res2,
   double score = 0;
   std::string name1;
   std::string name2;
-  bool found1 = false;
+  auto found1 = false;
   for (auto& f : res1.features) {
     if (f.substr(0, 2) == "m_") {
       name1 = f;
@@ -293,7 +273,7 @@ double optimizer::score_motif(fasta::Residue res1, fasta::Residue res2,
     }
   }
   if (found1) {
-    bool found2 = false;
+    auto found2 = false;
     for (auto& f : res2.features) {
       if (f.substr(0, 2) == "m_") {
         name2 = f;
@@ -313,7 +293,7 @@ double optimizer::score_domain(fasta::Residue res1, fasta::Residue res2,
   double score = 0;
   std::string name1;
   std::string name2;
-  bool found1 = false;
+  auto found1 = false;
   for (auto& f : res1.features) {
     if (f.substr(0, 2) == "d_") {
       name1 = f;
@@ -321,7 +301,7 @@ double optimizer::score_domain(fasta::Residue res1, fasta::Residue res2,
     }
   }
   if (found1) {
-    bool found2 = false;
+    auto found2 = false;
     for (auto& f : res2.features) {
       if (f.substr(0, 2) == "d_") {
         name2 = f;

@@ -41,7 +41,7 @@ fasta::FastaData fasta::parse_fasta(std::string const& filename,
   std::string line;
   std::string header;
   std::string seq_line;
-  bool in_sequence_section = true;
+  auto in_sequence_section = true;
   fasta::FastaData fd;
   while (std::getline(fastafile, line)) {
     if (line.substr(0, 1) == ">") {
@@ -103,7 +103,7 @@ fasta::Sequence fasta::make_sequence(const std::string& description,
 
   for (unsigned i = 0; i < codons.size(); i += codon_length) {
     boost::regex re("[a-zA-Z0-9-]{" + std::to_string(codon_length) + "}");
-    std::string codon = codons.substr(i, codon_length);
+    auto codon = codons.substr(i, codon_length);
 
     if (!boost::regex_match(codon, re)) {
       throw std::runtime_error("Invalid codon: " + codon);
@@ -144,11 +144,11 @@ bool fasta::check_length(fasta::SequenceList const& sequences, int limit) {
   if (limit == 0) {
     limit = sequences.size();
   }
-  bool result = true;
-  size_t prev_length = sequences[0].residues.size();
-  int i = 1;
+  auto result = true;
+  auto prev_length = sequences[0].residues.size();
+  auto i = 1;
   while (result && i < limit) {
-    size_t length = sequences[i].residues.size();
+    auto length = sequences[i].residues.size();
     if (length != prev_length) {
       result = false;
     }
@@ -159,7 +159,7 @@ bool fasta::check_length(fasta::SequenceList const& sequences, int limit) {
 
 fasta::SequenceList fasta::remove_gaps(
     const fasta::SequenceList& sequences) {
-  fasta::SequenceList s = sequences;
+  auto s = sequences;
   for (auto& seq : s) {
     seq.residues.clear();
   }

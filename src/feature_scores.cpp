@@ -87,7 +87,7 @@ double FeatureScores::score_ptm(
   //pop back last character to get just the ptm type
   ptm_type.pop_back();
   // level of annotation - last character of feature's name
-  char ptm_level = ptm_name.back();
+  auto ptm_level = ptm_name.back();
   double ptm_score = 0.;
   // first set ptm_score based on annotation level of the query ptm
   if (ptm_level == '0') {
@@ -109,11 +109,11 @@ double FeatureScores::score_ptm(
   // get occurrence based score
   for (auto feat_it = m_occurences.begin();
        feat_it != m_occurences.end(); ++feat_it) {
-    std::string i_name = feat_it->first;
+    auto i_name = feat_it->first;
     // get just the ptm type without its level of annotation (last char)
     std::string i_type = i_name.substr(0, i_name.size() - 1);
     if (i_type == ptm_type) {
-      char i_level = i_name.back();
+      auto i_level = i_name.back();
       double score = feat_it->second[position];
       if (i_level == '0') {
         result += score;

@@ -34,10 +34,9 @@ public:
   /// traces back the alignment path in the scoring matrices
   ///
   fasta::SequenceList backtrace_alignment_path(
-      const fasta::Sequence& sequence,
-      const profile::ProfileMap& profile,
-      const FeatureScores& f_profile,
-      int codon_length);
+      const fasta::Sequence& sequence, const profile::ProfileMap& profile,
+      const FeatureScores& f_profile, int codon_length
+  );
   /// TODO: maybe remove, only used in tests
   SingleScoringMatrix get_V_matrix();
 

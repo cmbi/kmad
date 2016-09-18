@@ -51,7 +51,7 @@ void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
       ///V
       // double profile_score =
       //   profile.at(sequence.residues[j - 1].codon[0])[i - 1];
-      double profile_score = profile::get_score(profile, i - 1,
+      auto profile_score = profile::get_score(profile, i - 1,
           sequence.residues[j - 1].codon[0]);
       double feature_score = 0;
       if (!m_no_feat) {
@@ -84,8 +84,8 @@ void ScoringMatrix::calculate_scores(const fasta::Sequence& sequence,
 
 
 ValueCoords ScoringMatrix::find_best_score() {
-  int max_i = m_matrix_v.size()-1;
-  int max_j = m_matrix_v[0].size()-1;
+  auto max_i = m_matrix_v.size()-1;
+  auto max_j = m_matrix_v[0].size()-1;
   int n = max_i; // last row of m_matrix_v
   int m = max_j; // last column of m_matrix_v
   double max_i_val = m_matrix_v[max_i][max_j];
@@ -134,14 +134,14 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
 
   fasta::Sequence new_s1;
   fasta::Sequence new_s2;
-  const size_t profile_length = profile.begin()->second.size();
+  const auto profile_length = profile.begin()->second.size();
   // TODO: i and j aren't great names...are they?
-  size_t i = profile_length;
-  size_t j = sequence.residues.size();
+  auto i = profile_length;
+  auto j = sequence.residues.size();
 
   //if bestScore isn't in the lower right corner, then add gaps
   //to new_s1 or new_s2
-  ValueCoords best_score = find_best_score();
+  auto best_score = find_best_score();
 
   // TODO: comparing value to size of something? fishy!
   if (best_score[0] != (signed)m_matrix_v.size()-1
@@ -171,7 +171,7 @@ fasta::SequenceList ScoringMatrix::backtrace_alignment_path(
       new_res2 = sequence.residues[j - 1];
       // double profile_score = profile.at(
       //     sequence.residues[j - 1].codon[0])[i - 1];
-      double profile_score = profile::get_score(profile, i - 1,
+      auto profile_score = profile::get_score(profile, i - 1,
           sequence.residues[j - 1].codon[0]);
       double feature_score = 0;
       if (!m_no_feat) {

@@ -49,13 +49,13 @@ namespace {
     {'S', { 3,  1,  4,  2,  2,  2,  1,  2,  1,  0,  0,  1, -1,  0,  2,  9,  4, -1,  0,  1}},
     {'T', { 4,  1,  3,  2,  1,  2,  1,  1,  1,  2,  1,  2,  1,  0,  2,  4, 10, -2,  0,  3}},
     {'W', {-1,  2, -2, -3,  3,  1, -2,  0,  1,  1,  2, -2,  0,  6, -1, -1, -2, 18,  6,  0}},
-    {'Y', { 0, -1,  1, -1,  2,  0, -2, -2,  4,  2,  2, -1,  0,  8, -2,  0,  0,  6, 14,  1}}, 
+    {'Y', { 0, -1,  1, -1,  2,  0, -2, -2,  4,  2,  2, -1,  0,  8, -2,  0,  0,  6, 14,  1}},
     {'V', { 3,  0,  0,  0,  1,  1,  0,  0,  0,  7,  4,  0,  3,  3,  1,  1,  3,  0,  1, 11}}};
 }
 
 profile::ProfileMap profile::create_score_profile(
     const fasta::SequenceList& sequences, const std::string& sbst_mat) {
-  profile::ProfileMap p = create_profile(sequences);
+  auto p = create_profile(sequences);
 
   // Convert the profile occurrences to probabilities.
   for (auto& occ: p) {
@@ -72,9 +72,9 @@ profile::ProfileMap profile::create_score_profile(
     sim_scores = &DISORDER;
   }
   for (unsigned i = 0; i < p['A'].size(); ++i) {
-    std::vector<double> score_column(ALPHABET.size(), 0); 
+    std::vector<double> score_column(ALPHABET.size(), 0);
     for (auto &prob: p) {
-      std::vector<double> sbst_column = sim_scores->at(prob.first);
+      auto sbst_column = sim_scores->at(prob.first);
       for (size_t k = 0; k < sbst_column.size(); ++k) {
         score_column[k] += sbst_column[k] * prob.second[i];
       }
@@ -101,8 +101,7 @@ profile::ProfileMap profile::create_score_profile(
 profile::ProfileMap profile::create_profile(
     const fasta::SequenceList& sequences) {
   profile::ProfileMap p;
-
-  // Initialise profile map with all letters  except for B, X, Z to 
+  // Initialise profile map with all letters  except for B, X, Z to
   // a vector of the correct
   // size, with all values set to 0.
   for (size_t i = 0; i < ALPHABET.size(); ++i) {
@@ -111,11 +110,7 @@ profile::ProfileMap profile::create_profile(
 
   for (size_t i = 0; i < sequences[0].residues.size(); ++i) {
     for (size_t j = 0; j < sequences.size(); ++j) {
-      char amino_acid = sequences[j].residues[i].codon[0];
-
-      // if (amino_acid == '-') {
-      //   continue;
-      // }
+      auto amino_acid = sequences[j].residues[i].codon[0];
 
       if (amino_acid == 'B') {
         assert(p.find('D') != p.end() && p.find('N') != p.end());
