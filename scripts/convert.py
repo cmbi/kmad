@@ -130,7 +130,7 @@ def check_id(uniprot_id, seq, swiss_fasta):
                               + uniprot_id + ".fasta")
         try:
             uni_seq = urllib2.urlopen(req).read()
-        except urllib2.HTTPError and httplib.BadStatusLine:
+        except (urllib2.HTTPError, httplib.BadStatusLine):
             print "No entry with ID: {}".format(uniprot_id)
         else:
             uni_seq = ''.join(uni_seq.splitlines()[1:])
@@ -153,7 +153,7 @@ def get_uniprot_txt(uniprot_id, swiss_txt):
             req = urllib2.Request("http://www.uniprot.org/uniprot/{}.txt".format(
                 uniprot_id))
             uniprot_dat = urllib2.urlopen(req).read().splitlines()
-        except urllib2.HTTPError and httplib.BadStatusLine:
+        except (urllib2.HTTPError, httplib.BadStatusLine):
             print "Couldn't find a uniprot entry for id {}".format(uniprot_id)
     for lineI in uniprot_dat:
         if lineI.startswith('FT'):
@@ -305,7 +305,7 @@ def get_predicted_motifs(sequence, slims_all_classes, seq_go_terms):
                                 probabilities.append(prob)
                 except KeyError:
                     print "Didn't find motif: {}".format(slim_id)
-    except urllib2.HTTPError and httplib.BadStatusLine:
+    except (urllib2.HTTPError, httplib.BadStatusLine):
         print "can't get predicted motifs"
     return [limits, elms_ids, probabilities]
 
