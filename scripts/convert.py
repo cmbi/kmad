@@ -113,7 +113,7 @@ def run_netphos(filename):
         for lineI in netPhosOut:
             if len(lineI.split()) > 0 and lineI.split()[-1] == 'YES':
                 phosphorylations.add(int(lineI.split()[2]))
-    except subprocess.CalledProcessError:
+    except (subprocess.CalledProcessError, OSError):
         print "Not running netphos"
     return list(phosphorylations)
 
