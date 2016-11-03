@@ -11,13 +11,13 @@ namespace optimizer {
 
   struct MoveData {
    MoveData(int seq_number, int old_position, int new_position,
-       double score_gain) 
+       double score_gain)
       : seq_number(seq_number),
         old_position(old_position),
         new_position(new_position),
         score_gain(score_gain) {}
    MoveData() {}
-   int seq_number; 
+   int seq_number;
    int old_position;
    int new_position;
    double score_gain;
@@ -49,7 +49,7 @@ namespace optimizer {
       const std::vector<MoveData>& move_data);
 
   ///
-  /// 
+  ///
   ///
   void filter_move_data(std::vector<MoveData>& move_data);
   bool reverse_sort(int i, int j);
@@ -65,13 +65,12 @@ namespace optimizer {
   int find_gap_start(const fasta::Sequence& seq, int start);
 
 
-  double get_two_res_score(fasta::Residue res1, fasta::Residue res2,
-                           int res1_index,
-                           const sbst::SimilarityScoresMap* sim_scores,
-                           double domain_modifier,
-                           double motif_modifier, 
-                           double ptm_modifier);
-  
+  double get_two_res_score(
+          fasta::Residue res1, fasta::Residue res2, int res1_index,
+          const sbst::SimilarityScoresMap* sim_scores, double domain_modifier,
+          double motif_modifier, double ptm_modifier
+  );
+
   double score_ptm(fasta::Residue res1, fasta::Residue res2,
                    double ptm_modifier);
 

@@ -155,7 +155,6 @@ int main(int argc, char *argv[]) {
     }
 
     // Load sequence data
-
     fasta::FastaData fasta_data;
     try {
       fasta_data = fasta::parse_fasta(filename, codon_length);
@@ -163,10 +162,10 @@ int main(int argc, char *argv[]) {
       std::cerr << "Error: " << e.what() << std::endl;
       std::exit(EXIT_FAILURE);
     }
-    bool gapped = false;
+    auto gapped = false;
     // Combine sequence and feature settings
     //
-    fasta::FastaData fasta_data_cfg = f_config::get_conf_data(
+    auto fasta_data_cfg = f_config::get_conf_data(
       fasta_data, f_set, gapped);
 
     // Perform the alignment
@@ -182,7 +181,7 @@ int main(int argc, char *argv[]) {
                       first_gapped, optimize, fade_out, no_feat);
     } else {
       gapped = true;
-      fasta::FastaData fasta_data_cfg_aligned = f_config::get_conf_data(
+      auto fasta_data_cfg_aligned = f_config::get_conf_data(
         fasta_data, f_set, gapped);
       if (refine_limit == 0) {
         refine_limit = fasta_data.sequences.size();
@@ -201,7 +200,7 @@ int main(int argc, char *argv[]) {
 
     // Write alignment to file
     // TODO: al_out_index is always 1. Also, what is it?
-    int al_out_index = 1;
+    auto al_out_index = 1;
     if (first_gapped) {
       first_gapped = 0;
     }
