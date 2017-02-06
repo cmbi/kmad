@@ -297,14 +297,14 @@ def get_predicted_motifs(sequence, slims_all_classes, seq_go_terms):
                     if (not seq_go_terms or
                             set(seq_go_terms).intersection(set(slim_go_terms))):
                         if entry[3] == "False":
-                            prob = 1 + 1/math.log(
+                            prob = 1 + 1 / math.log(
                                 slims_all_classes[slim_id]["prob"], 10)
                             if prob > 0:
                                 limits.append([int(entry[1]), int(entry[2])])
                                 elms_ids.append(entry[0])
                                 probabilities.append(prob)
                 except KeyError:
-                    print "Didn't find motif: {}".format(slim_id)
+                    logging.warning("Didn't find motif: %s", slim_id)
     except (urllib2.HTTPError, httplib.BadStatusLine):
         print "can't get predicted motifs"
     return [limits, elms_ids, probabilities]
