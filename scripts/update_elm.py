@@ -1,8 +1,10 @@
 #!/usr/bin/python
+import logging
 import os
 import re
 import requests
 import urllib2
+from BeautifulSoup import BeautifulSoup
 
 from lxml import html
 ################################################################################
@@ -20,16 +22,45 @@ from lxml import html
 #
 ################################################################################
 
+logging.basicConfig()
+_log = logging.getLogger(__name__)
 
-def get_motif_go_terms(elm_id):
-    page = requests.get("http://elm.eu.org/elms/elmPages/{}.html".format(
-        elm_id))
-    tree = html.fromstring(page.text)
-    go_terms = []
-    for i in tree.get_element_by_id('ElmDetailGoterms').iterlinks():
-        if i[2].startswith("http://www.ebi.ac.uk/QuickGO/GTerm?id=GO:"):
-            go_terms += [i[2].split(':')[2]]
-    return go_terms
+ELM_URL = "http://elm.eu.org"
+
+
+# def get_motif_go_terms(elm_id):
+#     page = requests.get("http://elm.eu.org/elms/elmPages/{}.html".format(
+#         elm_id))
+#     tree = html.fromstring(page.text)
+#     go_terms = []
+#     for i in tree.get_element_by_id('ElmDetailGoterms').iterlinks():
+#         if i[2].startswith("http://www.ebi.ac.uk/QuickGO/GTerm?id=GO:"):
+#             go_terms += [i[2].split(':')[2]]
+#     return go_terms
+
+
+def get_motif_go_terms(motif_id):
+    _log.debug("Getting GO terms for motif %s", motif_id)
+    url = os.path.join(ELM_URL, 'elms/{}.html'.format(motif_id))
+    try:
+        page = requests.get(url).text
+        soup = BeautifulSoup(page)
+        goterms_div = soup.find('div', {'id': 'ElmDetailGoterms'})
+        go_terms = set()
+        if goterms_div:
+            # need to get all links from the ElmDetailGoterms div
+            # - the GO term is extarcted from the link's url
+            links = goterms_div.findAll('a')
+            reg = re.compile('GTerm\?id=GO:(?P<go_term>[0-9]{7})')
+            for l in links:
+                for match in reg.finditer(str(l)):
+                    go_terms.add(match.groupdict('')['go_term'])
+        else:
+            _log.debug("No GO terms found for motif: %s", motif_id)
+        return go_terms
+    except (requests.ConnectionError, requests.HTTPError) as e:
+        _log.error("ELM returned an error: %s\nURL: %s", e, url)
+        raise e
 
 
 def find_children(goid, result, go_file):

@@ -1,3 +1,4 @@
 lxml==3.4.2
 requests==2.6.0
 jsonlibconfig==0.0.4
+BeautifulSoup==3.2.1
