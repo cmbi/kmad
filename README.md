@@ -14,14 +14,28 @@ To install the software you will need:
 
 
 # Installation
-1. KMAD
+1. Dependencies
+  - Linux: 
+          - boost libraries
+          `sudo aptitude install sudo aptitude install libboost1.49-dev 
+                libboost-program-options1.49-dev libboost-test1.49-dev
+                libboost-filesystem1.49-dev libboost-regex1.49-dev`
+         - libconfig++-dev
+            `sudo aptitude install libconfig++-dev`
+  - Mac OS (you will need MacPorts, can be downloaded from here: https://www.macports.org/): 
+          - boost libraries 
+            `sudo port install boost`
+         - libconfig++-dev:
+            `git clone //github.com/hyperrealm/libconfig; cd libconfig; autoreconf; ./configure; make; sudo make install`
+
+2. KMAD
 KMAD can be compiled and installed from the kmad directory (you will need
 the automake package to do this):
   `./configure; make; sudo make install`
-2. ELM update script (scripts/update_elm.py)
+3. ELM update script (scripts/update_elm.py)
 To be able to use the script for updating the ELM database run:
    `pip install -r requirements.txt` 
-3. convert script 
+4. convert script 
 To be able to annotate predicted phosphorylations you will need to install
 NetPhos. You can download it here:
 http://www.cbs.dtu.dk/services/NetPhos/
