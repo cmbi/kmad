@@ -175,7 +175,7 @@ int main(int argc, char *argv[]) {
     std::vector<fasta::SequenceList> alignment;
     if (!refine) {
       alignment = msa::run_msa(
-                      fasta_data, f_set, gap_open_pen, gap_ext_pen, end_pen,
+                      fasta_data_cfg, f_set, gap_open_pen, gap_ext_pen, end_pen,
                       domain_modifier, motif_modifier, ptm_modifier,
                       strct_modifier, codon_length, one_round, sbst_mat,
                       first_gapped, optimize, fade_out, no_feat);
@@ -208,10 +208,10 @@ int main(int argc, char *argv[]) {
     // TODO: Probably can use a design pattern here. Encoding depends on user
     // option. Strategy might fit.
     if (out_encoded) {
-      outfile::write_encoded_alignment(alignment[al_out_index], fasta_data,
+      outfile::write_encoded_alignment(alignment[al_out_index], fasta_data_cfg,
                                        output_prefix);
     } else {
-      outfile::write_decoded_alignment(alignment[al_out_index], fasta_data,
+      outfile::write_decoded_alignment(alignment[al_out_index], fasta_data_cfg,
                                        output_prefix);
     }
 }

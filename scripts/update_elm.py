@@ -4,8 +4,8 @@ import os
 import re
 import requests
 import urllib2
-from BeautifulSoup import BeautifulSoup
-
+# from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from lxml import html
 ################################################################################
 # Downloads and processes the ELM database
@@ -123,14 +123,15 @@ def update_elmdb(output_filename):
     outtext = ""
     go_families = dict()
     for i in elm_list[6:]:
-        lineI = re.split('\t|"', i)
-        elm_id = lineI[4]
-        pattern = lineI[10]
-        prob = lineI[13]
+        lineI = re.split('\t', i)
+        elm_id = lineI[1][1:-1]
+        pattern = lineI[4][1:-1]
+        prob = lineI[5][1:-1]
         motif_go_terms = get_motif_go_terms(elm_id)
         go_terms_extended = extend_go_terms(go_terms_list, motif_go_terms,
                                             go_families)
-        outtext += "{} {} {} {}\n".format(elm_id, pattern,
+
+        outtext += "{}\t{}\t{}\t{}\n".format(elm_id, pattern,
                                           prob, ' '.join(go_terms_extended))
     out = open(output_filename, 'w')
     out.write(outtext)
