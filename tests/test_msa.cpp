@@ -225,8 +225,7 @@ BOOST_AUTO_TEST_CASE(test_set_identities)
   std::vector<double> expected_identities = {1, 0.857};
   BOOST_CHECK_EQUAL(expected_identities.size(), result_identities.size());
   for (size_t i = 0; i < result_identities.size(); ++i) {
-    BOOST_CHECK(std::abs(result_identities[i] - expected_identities[i]
-                          < 0.0001));
+    BOOST_CHECK(std::abs(result_identities[i] - expected_identities[i]) < 0.0001);
   }
 }
 
