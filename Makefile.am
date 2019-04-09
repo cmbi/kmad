@@ -1,11 +1,18 @@
 bin_PROGRAMS	=	kmad test_kmad
 
-shared_LDADD	=	$(BOOST_FILESYSTEM_LIB) \
-			$(BOOST_PROGRAM_OPTIONS_LIB) \
-			$(BOOST_REGEX_LIB) \
-			$(BOOST_SYSTEM_LIB) \
-			$(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
+shared_LDADD	=	-lboost_filesystem \
+			-lboost_program_options  \
+			-lboost_regex \
+			-lboost_system \
+			-lboost_unit_test_framework \
 			-lconfig++
+
+#shared_LDADD	=	$(BOOST_FILESYSTEM_LIB) \
+#                        $(BOOST_PROGRAM_OPTIONS_LIB) \
+#                        $(BOOST_REGEX_LIB) \
+#                        $(BOOST_SYSTEM_LIB) \
+#                        $(BOOST_UNIT_TEST_FRAMEWORK_LIB) \
+#                        -lconfig++
 
 shared_SOURCES	=	src/compare_doubles.cpp \
 			src/fasta.cpp \
