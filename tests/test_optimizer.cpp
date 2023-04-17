@@ -4,7 +4,7 @@
 #include "src/optimizer.h"
 
 #include <boost/test/unit_test.hpp>
-#include <boost/test/auto_unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 
 namespace sbst = substitution_matrix;
 BOOST_AUTO_TEST_SUITE(test_optimizer)
